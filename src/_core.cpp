@@ -88,6 +88,7 @@ void bind_ecvl_core_iterators(std::function< pybind11::module &(std::string cons
 #include <ecvl/core/datatype.h>
 #include <ecvl/core/image.h>
 #include <ecvl/core/iterators.h>
+#include <image_addons.h>
 #include <iterator>
 #include <memory>
 #include <sstream> // __str__
@@ -147,6 +148,8 @@ void bind_ecvl_core_image(std::function< pybind11::module &(std::string const &n
 		cl.def("assign", (class ecvl::Image & (ecvl::Image::*)(class ecvl::Image)) &ecvl::Image::operator=, "C++: ecvl::Image::operator=(class ecvl::Image) --> class ecvl::Image &", pybind11::return_value_policy::automatic, pybind11::arg("rhs"));
 		cl.def("IsEmpty", (bool (ecvl::Image::*)() const) &ecvl::Image::IsEmpty, "To check whether the Image contains or not data, regardless the owning status. \n\nC++: ecvl::Image::IsEmpty() const --> bool");
 		cl.def("IsOwner", (bool (ecvl::Image::*)() const) &ecvl::Image::IsOwner, "To check whether the Image is owner of the data. \n\nC++: ecvl::Image::IsOwner() const --> bool");
+
+		image_addons(cl);
 	}
 	// ecvl::CopyImage(const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType) file:ecvl/core/image.h line:623
 	M("ecvl").def("CopyImage", [](const class ecvl::Image & a0, class ecvl::Image & a1) -> void { return ecvl::CopyImage(a0, a1); }, "", pybind11::arg("src"), pybind11::arg("dst"));
