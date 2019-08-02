@@ -15,3 +15,7 @@ RUN mkdir build && \
     cd build && \
     cmake -DECVL_BUILD_GUI=OFF .. && \
     make
+
+RUN cd build && make install && \
+    cp -rf install/include/ecvl /usr/local/include/ && \
+    cp install/lib/libECVL_CORE.a /usr/local/lib/

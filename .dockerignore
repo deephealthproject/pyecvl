@@ -2,3 +2,5 @@
 Dockerfile*
 README.md
 build_docker.sh
+generate_bindings.sh
+codegen

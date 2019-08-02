@@ -3,3 +3,4 @@
 set -euo pipefail
 
 docker build -t ecvl -f Dockerfile.ecvl .
+docker build -t pyecvl .
