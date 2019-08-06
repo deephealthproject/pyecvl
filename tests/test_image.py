@@ -1,4 +1,4 @@
-from pyecvl._core.ecvl import Image, DataType, ColorType, View_int8
+from pyecvl._core.ecvl import Image, DataType, ColorType, View_int8, Neg
 
 
 def test_empty():
@@ -18,4 +18,11 @@ def test_view():
     x = Image([5, 4, 3], DataType.int8, "xyc", ColorType.RGB)
     y = View_int8(x)
     y[1, 2, 0] = 36
-    assert y[1, 2, 0] == 36
+    y[3, 3, 2] = 48
+    y[4, 2, 1] = -127
+    y[3, 2, 0] = -128
+    Neg(x)
+    assert y[1, 2, 0] == -36
+    assert y[3, 3, 2] == -48
+    assert y[4, 2, 1] == 127
+    assert y[3, 2, 0] == -128
