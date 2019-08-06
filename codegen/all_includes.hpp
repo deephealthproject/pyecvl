@@ -2,3 +2,4 @@
 #include <ecvl/core/iterators.h>
 #include <ecvl/core/memorymanager.h>
 #include <ecvl/core/image.h>
+#include <view_ext.h>

@@ -14,6 +14,6 @@ pyecvl_mount=/pyecvl
 
 docker run --rm -v "${this_dir}":"${pyecvl_mount}" \
   -e BINDER_EXE='/binder/build/llvm-4.0.0/build_4.0.0*/bin/binder' \
-  -e ADD_INCLUDE="-I${pyecvl_mount}/third_party/ecvl/modules/core/include -I${pyecvl_mount}/include" \
+  -e ADD_INCLUDE="-I${pyecvl_mount}/third_party/ecvl/modules/core/include -I${pyecvl_mount}/include -I${pyecvl_mount}/src" \
   -w "${pyecvl_mount}"/codegen crs4/binder:2f3665b ./gen_bindings.sh
 cp codegen/bindings/_core.cpp src/
