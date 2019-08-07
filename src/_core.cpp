@@ -102,12 +102,12 @@ void bind_ecvl_core_iterators(std::function< pybind11::module &(std::string cons
 #include <ecvl/core/image.h>
 #include <ecvl/core/iterators.h>
 #include <image_addons.h>
+#include <image_ext.h>
 #include <iterator>
 #include <memory>
 #include <sstream> // __str__
 #include <string>
 #include <vector>
-#include <view_ext.h>
 #include <view_int8_addons.h>
 
 #include <pybind11/pybind11.h>
@@ -198,7 +198,7 @@ void bind_ecvl_core_image(std::function< pybind11::module &(std::string const &n
 	// ecvl::Neg(class ecvl::Image &) file:ecvl/core/arithmetic.h line:79
 	M("ecvl").def("Neg", (class ecvl::Image & (*)(class ecvl::Image &)) &ecvl::Neg, "In-place negation of an Image.  Neg\n\nThe Neg() function negates every value of an Image, and stores the\nthe result in the same image. The type of the image will not change.\n\n Image to be negated (in-place).\n\n Reference to the Image containing the result of the negation.\n\nC++: ecvl::Neg(class ecvl::Image &) --> class ecvl::Image &", pybind11::return_value_policy::automatic, pybind11::arg("img"));
 
-	{ // ecvl::View_int8 file:view_ext.h line:4
+	{ // ecvl::View_int8 file:image_ext.h line:4
 		pybind11::class_<ecvl::View_int8, std::shared_ptr<ecvl::View_int8>, ecvl::View<ecvl::DataType::int8>> cl(M("ecvl"), "View_int8", "");
 		pybind11::handle cl_type = cl;
 

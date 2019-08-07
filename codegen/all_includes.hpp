@@ -3,4 +3,4 @@
 #include <ecvl/core/memorymanager.h>
 #include <ecvl/core/image.h>
 #include <ecvl/core/arithmetic.h>
-#include <view_ext.h>
+#include <image_ext.h>
