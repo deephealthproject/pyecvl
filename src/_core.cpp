@@ -97,10 +97,12 @@ void bind_ecvl_core_iterators(std::function< pybind11::module &(std::string cons
 
 
 // File: ecvl/core/image.cpp
+#include <dummy.h>
 #include <ecvl/core/arithmetic.h>
 #include <ecvl/core/datatype.h>
 #include <ecvl/core/image.h>
 #include <ecvl/core/iterators.h>
+#include <func_binder.h>
 #include <image_addons.h>
 #include <image_ext.h>
 #include <iterator>
@@ -207,6 +209,9 @@ void bind_ecvl_core_image(std::function< pybind11::module &(std::string const &n
 
 		view_int8_addons(cl);
 	}
+	// ecvl::Dummy file:dummy.h line:4
+	ecvl::bind_ecvl_functions<pybind11::module>(M("ecvl"));
+
 }
 
 
