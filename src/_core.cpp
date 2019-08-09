@@ -81,6 +81,18 @@ void bind_ecvl_core_iterators(std::function< pybind11::module &(std::string cons
 		cl.def("__eq__", (bool (ecvl::Iterator<signed char>::*)(const struct ecvl::Iterator<signed char> &) const) &ecvl::Iterator<signed char>::operator==, "C++: ecvl::Iterator<signed char>::operator==(const struct ecvl::Iterator<signed char> &) const --> bool", pybind11::arg("rhs"));
 		cl.def("__ne__", (bool (ecvl::Iterator<signed char>::*)(const struct ecvl::Iterator<signed char> &) const) &ecvl::Iterator<signed char>::operator!=, "C++: ecvl::Iterator<signed char>::operator!=(const struct ecvl::Iterator<signed char> &) const --> bool", pybind11::arg("rhs"));
 	}
+	{ // ecvl::Iterator file:ecvl/core/iterators.h line:12
+		pybind11::class_<ecvl::Iterator<short>, std::shared_ptr<ecvl::Iterator<short>>> cl(M("ecvl"), "Iterator_short_t", "");
+		pybind11::handle cl_type = cl;
+
+		cl.def( pybind11::init( [](ecvl::Iterator<short> const &o){ return new ecvl::Iterator<short>(o); } ) );
+		cl.def_readwrite("pos_", &ecvl::Iterator<short>::pos_);
+		cl.def_readwrite("incrementor", &ecvl::Iterator<short>::incrementor);
+		cl.def("plus_plus", (struct ecvl::Iterator<short> & (ecvl::Iterator<short>::*)()) &ecvl::Iterator<short>::operator++, "C++: ecvl::Iterator<short>::operator++() --> struct ecvl::Iterator<short> &", pybind11::return_value_policy::automatic);
+		cl.def("__mul__", (short & (ecvl::Iterator<short>::*)() const) &ecvl::Iterator<short>::operator*, "C++: ecvl::Iterator<short>::operator*() const --> short &", pybind11::return_value_policy::automatic);
+		cl.def("__eq__", (bool (ecvl::Iterator<short>::*)(const struct ecvl::Iterator<short> &) const) &ecvl::Iterator<short>::operator==, "C++: ecvl::Iterator<short>::operator==(const struct ecvl::Iterator<short> &) const --> bool", pybind11::arg("rhs"));
+		cl.def("__ne__", (bool (ecvl::Iterator<short>::*)(const struct ecvl::Iterator<short> &) const) &ecvl::Iterator<short>::operator!=, "C++: ecvl::Iterator<short>::operator!=(const struct ecvl::Iterator<short> &) const --> bool", pybind11::arg("rhs"));
+	}
 	{ // ecvl::ConstIterator file:ecvl/core/iterators.h line:32
 		pybind11::class_<ecvl::ConstIterator<unsigned char>, std::shared_ptr<ecvl::ConstIterator<unsigned char>>> cl(M("ecvl"), "ConstIterator_unsigned_char_t", "");
 		pybind11::handle cl_type = cl;
@@ -110,6 +122,7 @@ void bind_ecvl_core_iterators(std::function< pybind11::module &(std::string cons
 #include <sstream> // __str__
 #include <string>
 #include <vector>
+#include <view_int16_addons.h>
 #include <view_int8_addons.h>
 
 #include <pybind11/pybind11.h>
@@ -193,6 +206,31 @@ void bind_ecvl_core_image(std::function< pybind11::module &(std::string const &n
 		cl.def("IsEmpty", (bool (ecvl::Image::*)() const) &ecvl::Image::IsEmpty, "To check whether the Image contains or not data, regardless the owning status. \n\nC++: ecvl::Image::IsEmpty() const --> bool");
 		cl.def("IsOwner", (bool (ecvl::Image::*)() const) &ecvl::Image::IsOwner, "To check whether the Image is owner of the data. \n\nC++: ecvl::Image::IsOwner() const --> bool");
 	}
+	{ // ecvl::View file:ecvl/core/image.h line:364
+		pybind11::class_<ecvl::View<ecvl::DataType::int16>, std::shared_ptr<ecvl::View<ecvl::DataType::int16>>, ecvl::Image> cl(M("ecvl"), "View_ecvl_DataType_int16_t", "");
+		pybind11::handle cl_type = cl;
+
+		cl.def( pybind11::init( [](){ return new ecvl::View<ecvl::DataType::int16>(); } ) );
+		cl.def( pybind11::init<class ecvl::Image &>(), pybind11::arg("img") );
+
+		cl.def( pybind11::init( [](ecvl::View<ecvl::DataType::int16> const &o){ return new ecvl::View<ecvl::DataType::int16>(o); } ) );
+		cl.def("Begin", (struct ecvl::Iterator<short> (ecvl::View<ecvl::DataType::int16>::*)()) &ecvl::View<ecvl::DataType::int16>::Begin, "C++: ecvl::View<ecvl::DataType::int16>::Begin() --> struct ecvl::Iterator<short>");
+		cl.def("End", (struct ecvl::Iterator<short> (ecvl::View<ecvl::DataType::int16>::*)()) &ecvl::View<ecvl::DataType::int16>::End, "C++: ecvl::View<ecvl::DataType::int16>::End() --> struct ecvl::Iterator<short>");
+		cl.def_readwrite("elemtype_", &ecvl::Image::elemtype_);
+		cl.def_readwrite("elemsize_", &ecvl::Image::elemsize_);
+		cl.def_readwrite("dims_", &ecvl::Image::dims_);
+		cl.def_readwrite("strides_", &ecvl::Image::strides_);
+		cl.def_readwrite("channels_", &ecvl::Image::channels_);
+		cl.def_readwrite("colortype_", &ecvl::Image::colortype_);
+		cl.def_readwrite("spacings_", &ecvl::Image::spacings_);
+		cl.def_readwrite("datasize_", &ecvl::Image::datasize_);
+		cl.def_readwrite("contiguous_", &ecvl::Image::contiguous_);
+		cl.def("Begin", (struct ecvl::ConstIterator<unsigned char> (ecvl::Image::*)() const) &ecvl::Image::Begin<unsigned char>, "C++: ecvl::Image::Begin() const --> struct ecvl::ConstIterator<unsigned char>");
+		cl.def("End", (struct ecvl::ConstIterator<unsigned char> (ecvl::Image::*)() const) &ecvl::Image::End<unsigned char>, "C++: ecvl::Image::End() const --> struct ecvl::ConstIterator<unsigned char>");
+		cl.def("assign", (class ecvl::Image & (ecvl::Image::*)(class ecvl::Image)) &ecvl::Image::operator=, "C++: ecvl::Image::operator=(class ecvl::Image) --> class ecvl::Image &", pybind11::return_value_policy::automatic, pybind11::arg("rhs"));
+		cl.def("IsEmpty", (bool (ecvl::Image::*)() const) &ecvl::Image::IsEmpty, "To check whether the Image contains or not data, regardless the owning status. \n\nC++: ecvl::Image::IsEmpty() const --> bool");
+		cl.def("IsOwner", (bool (ecvl::Image::*)() const) &ecvl::Image::IsOwner, "To check whether the Image is owner of the data. \n\nC++: ecvl::Image::IsOwner() const --> bool");
+	}
 	// ecvl::CopyImage(const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType) file:ecvl/core/image.h line:623
 	M("ecvl").def("CopyImage", [](const class ecvl::Image & a0, class ecvl::Image & a1) -> void { return ecvl::CopyImage(a0, a1); }, "", pybind11::arg("src"), pybind11::arg("dst"));
 	M("ecvl").def("CopyImage", (void (*)(const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType)) &ecvl::CopyImage, "Copies the source Image into the destination Image.\n\nThe CopyImage() procedure takes an Image and copies its data into the destination Image.\nSource and destination cannot be the same Image. Source cannot be a Image with DataType::none.\nThe optional new_type parameter can \nbe used to change the DataType of the destination Image. This function is mainly designed to \nchange the DataType of an Image, copying its data into a new Image or to copy an Image into a\nView as a patch. So if you just want to copy an Image as it is, use the copy constructor or = \ninstead. Anyway, the procedure will handle all the possible situations that may happen trying \nto avoid unnecessary allocations.\nWhen the DataType is not specified the function will have the following behaviors:\n    - if the destination Image is empty the source will be directly copied into the destination. \n    - if source and destination have different size in memory or different channels and the destination \n        is the owner of data, the procedure will overwrite the destination Image creating a new Image \n        (channels and dimensions will be the same of the source Image, pixels type (DataType) will be the \n        same of the destination Image if they are not none or the same of the source otherwise).\n    - if source and destination have different size in memory or different channels and the destination is not\n        the owner of data, the procedure will throw an exception.\n    - if source and destination have different color types and the destination is the owner of \n        data, the procedure produces a destination Image with the same color type of the source.\n    - if source and destination have different color types and the destination is not the owner \n        of data, the procedure will throw an exception.\n    - if source and destination are the same Image, there are two options. If new_type is the same of the two \n        Image(s) or it is DataType::none, nothing happens. Otherwise, an exception is thrown.\nWhen the DataType is specified the function will have the same behavior, but the destination Image will have \nthe specified DataType.\n\n Source Image to be copied into destination Image.\n\n Destination Image that will hold a copy of the source Image. Cannot be the source Image.\n\n Desired type for the destination Image after the copy. If none (default) the destination \n            Image will preserve its type if it is not empty, otherwise it will have the same type of the \n            source Image. \n\nC++: ecvl::CopyImage(const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("new_type"));
@@ -208,6 +246,15 @@ void bind_ecvl_core_image(std::function< pybind11::module &(std::string const &n
 
 
 		view_int8_addons(cl);
+	}
+	{ // ecvl::View_int16 file:image_ext.h line:8
+		pybind11::class_<ecvl::View_int16, std::shared_ptr<ecvl::View_int16>, ecvl::View<ecvl::DataType::int16>> cl(M("ecvl"), "View_int16", "");
+		pybind11::handle cl_type = cl;
+
+		cl.def( pybind11::init<class ecvl::Image &>(), pybind11::arg("img") );
+
+
+		view_int16_addons(cl);
 	}
 	// ecvl::Dummy file:dummy.h line:4
 	ecvl::bind_ecvl_functions<pybind11::module>(M("ecvl"));

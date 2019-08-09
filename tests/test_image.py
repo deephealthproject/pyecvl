@@ -1,5 +1,5 @@
 from pyecvl._core.ecvl import (
-    Image, DataType, ColorType, View_int8, Neg, RearrangeChannels
+    Image, DataType, ColorType, View_int8, View_int16, Neg, RearrangeChannels
 )
 
 
@@ -31,6 +31,19 @@ def test_view():
 
 
 def test_rearrange_channels():
-    img = Image([3, 4, 3, 2], DataType.int16, "cxyz", ColorType.RGB)
+    S = [3, 4, 3, 2]
+    img = Image(S, DataType.int16, "cxyz", ColorType.RGB)
+    view = View_int16(img)
+    for i in range(S[0]):
+        for j in range(S[1]):
+            for k in range(S[2]):
+                for l in range(S[3]):
+                    view[i, j, k, l] = (l + k * S[3] + j * S[2] * S[3] +
+                                        i * S[1] * S[2] * S[3])
     img2 = Image()
     RearrangeChannels(img, img2, "xyzc")
+    view2 = View_int16(img2)
+    assert view2[2, 0, 1, 0] == view[0, 2, 0, 1]
+    assert view2[3, 1, 1, 2] == view[2, 3, 1, 1]
+    assert view2[0, 2, 0, 1] == view[1, 0, 2, 0]
+    assert view2[1, 2, 0, 1] == view[1, 1, 2, 0]
