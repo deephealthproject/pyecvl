@@ -16,6 +16,7 @@ ${binder} \
   --root-module _core \
   --prefix "${this_dir}"/bindings/ \
   --bind ecvl \
+  --bind filesystem \
   --config config.cfg \
   --single-file \
   all_includes.hpp \

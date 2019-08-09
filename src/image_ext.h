@@ -9,4 +9,8 @@ namespace ecvl {
   public:
     View_int16(Image& img) : View<DataType::int16>(img) {}
   };
+  class View_uint8 : public View<DataType::uint8> {
+  public:
+    View_uint8(Image& img) : View<DataType::uint8>(img) {}
+  };
 }
