@@ -65,3 +65,34 @@ def test_numpy():
     assert view[[_ - 1 for _ in shape]] == v2
     view[0, 0, 0] = v2
     assert a[0, 0, 0] == v2
+    a.flat = 42
+    b = np.array(img, copy=True)
+    assert np.array_equal(a + img, a + b)
+
+
+def test_numpy_types():
+    shape, channels, color_type = [2, 3], "xy", ColorType.none
+    img = Image(shape, DataType.int8, channels, color_type)
+    a = np.array(img, copy=False)
+    assert a.dtype == np.int8
+    img = Image(shape, DataType.int16, channels, color_type)
+    a = np.array(img, copy=False)
+    assert a.dtype == np.int16
+    img = Image(shape, DataType.int32, channels, color_type)
+    a = np.array(img, copy=False)
+    assert a.dtype == np.int32
+    img = Image(shape, DataType.int64, channels, color_type)
+    a = np.array(img, copy=False)
+    assert a.dtype == np.int64
+    img = Image(shape, DataType.float32, channels, color_type)
+    a = np.array(img, copy=False)
+    assert a.dtype == np.float32
+    img = Image(shape, DataType.float64, channels, color_type)
+    a = np.array(img, copy=False)
+    assert a.dtype == np.float64
+    img = Image(shape, DataType.uint8, channels, color_type)
+    a = np.array(img, copy=False)
+    assert a.dtype == np.uint8
+    img = Image(shape, DataType.uint16, channels, color_type)
+    a = np.array(img, copy=False)
+    assert a.dtype == np.uint16
