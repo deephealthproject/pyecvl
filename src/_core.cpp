@@ -166,7 +166,7 @@ void bind_ecvl_core_image(std::function< pybind11::module &(std::string const &n
 ;
 
 	{ // ecvl::Image file:ecvl/core/image.h line:40
-		pybind11::class_<ecvl::Image, std::shared_ptr<ecvl::Image>> cl(M("ecvl"), "Image", "Image class");
+		pybind11::class_<ecvl::Image, std::shared_ptr<ecvl::Image>> cl(M("ecvl"), "Image", pybind11::buffer_protocol());
 		pybind11::handle cl_type = cl;
 
 		cl.def( pybind11::init( [](){ return new ecvl::Image(); } ) );

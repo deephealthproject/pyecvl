@@ -1,3 +1,5 @@
+import numpy as np
+
 from pyecvl._core.ecvl import (
     Image, DataType, ColorType, View_int8, View_int16, Neg, RearrangeChannels
 )
@@ -47,3 +49,19 @@ def test_rearrange_channels():
     assert view2[3, 1, 1, 2] == view[2, 3, 1, 1]
     assert view2[0, 2, 0, 1] == view[1, 0, 2, 0]
     assert view2[1, 2, 0, 1] == view[1, 1, 2, 0]
+
+
+def test_numpy():
+    shape = [2, 3, 4]
+    img = Image(shape, DataType.int16, "xy", ColorType.none)
+    view = View_int16(img)
+    a = np.array(img, copy=False)
+    assert list(a.shape) == shape
+    assert a.dtype == np.int16
+    v1, v2 = a[0, 0, 0] + 1, a[-1, -1, -1] + 1
+    a[0, 0, 0] = v1
+    assert view[0, 0, 0] == v1
+    a[-1, -1, -1] = v2
+    assert view[[_ - 1 for _ in shape]] == v2
+    view[0, 0, 0] = v2
+    assert a[0, 0, 0] == v2
