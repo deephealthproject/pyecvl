@@ -6,4 +6,3 @@
 #include <ecvl/core/filesystem.h>
 #include <ecvl/core/imgcodecs.h>
 #include <image_ext.h>
-#include <dummy.h>

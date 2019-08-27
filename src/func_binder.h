@@ -1,7 +1,7 @@
 #pragma once
+#include <pybind11/pybind11.h>
+#include <ecvl/core/image.h>
 
-namespace ecvl {
-  template<typename Module> void bind_ecvl_functions(Module &m) {
-    m.def("RearrangeChannels", &RearrangeChannels);
-  }
+void bind_ecvl_functions(pybind11::module &m) {
+  m.def("RearrangeChannels", &ecvl::RearrangeChannels);
 }

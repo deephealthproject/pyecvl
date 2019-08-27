@@ -1,6 +1,7 @@
 // File: ecvl/core/datatype.cpp
 #include <array>
 #include <ecvl/core/datatype.h>
+#include <func_binder.h>
 #include <sstream> // __str__
 
 #include <pybind11/pybind11.h>
@@ -18,6 +19,8 @@
 
 void bind_ecvl_core_datatype(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
+
+	bind_ecvl_functions(M("ecvl"));
 	// ecvl::DataType file:ecvl/core/datatype.h line:15
 	pybind11::enum_<ecvl::DataType>(M("ecvl"), "DataType", "DataType is an enum class which defines\ndata types allowed for images.\n\n  DataType")
 		.value("int8", ecvl::DataType::int8)
@@ -48,6 +51,7 @@ void bind_ecvl_core_datatype(std::function< pybind11::module &(std::string const
 #include <ecvl/core/datatype.h>
 #include <ecvl/core/image.h>
 #include <ecvl/core/iterators.h>
+#include <func_binder.h>
 #include <iterator>
 #include <memory>
 #include <sstream> // __str__
@@ -125,6 +129,7 @@ void bind_ecvl_core_iterators(std::function< pybind11::module &(std::string cons
 #include <ecvl/core/datatype.h>
 #include <ecvl/core/image.h>
 #include <ecvl/core/iterators.h>
+#include <func_binder.h>
 #include <image_addons.h>
 #include <iterator>
 #include <memory>
@@ -323,7 +328,6 @@ void bind_ecvl_core_filesystem(std::function< pybind11::module &(std::string con
 
 
 // File: ecvl/core/imgcodecs.cpp
-#include <dummy.h>
 #include <ecvl/core/datatype.h>
 #include <ecvl/core/filesystem.h>
 #include <ecvl/core/image.h>
@@ -388,9 +392,6 @@ void bind_ecvl_core_imgcodecs(std::function< pybind11::module &(std::string cons
 
 		view_uint8_addons(cl);
 	}
-	// ecvl::Dummy file:dummy.h line:4
-	ecvl::bind_ecvl_functions<pybind11::module>(M("ecvl"));
-
 }
 
 
