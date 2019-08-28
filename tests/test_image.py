@@ -72,27 +72,23 @@ def test_numpy():
 
 def test_numpy_types():
     shape, channels, color_type = [2, 3], "xy", ColorType.none
-    img = Image(shape, DataType.int8, channels, color_type)
-    a = np.array(img, copy=False)
-    assert a.dtype == np.int8
-    img = Image(shape, DataType.int16, channels, color_type)
-    a = np.array(img, copy=False)
-    assert a.dtype == np.int16
-    img = Image(shape, DataType.int32, channels, color_type)
-    a = np.array(img, copy=False)
-    assert a.dtype == np.int32
-    img = Image(shape, DataType.int64, channels, color_type)
-    a = np.array(img, copy=False)
-    assert a.dtype == np.int64
-    img = Image(shape, DataType.float32, channels, color_type)
-    a = np.array(img, copy=False)
-    assert a.dtype == np.float32
-    img = Image(shape, DataType.float64, channels, color_type)
-    a = np.array(img, copy=False)
-    assert a.dtype == np.float64
-    img = Image(shape, DataType.uint8, channels, color_type)
-    a = np.array(img, copy=False)
-    assert a.dtype == np.uint8
-    img = Image(shape, DataType.uint16, channels, color_type)
-    a = np.array(img, copy=False)
-    assert a.dtype == np.uint16
+    for dt_name in ("int8", "int16", "int32", "int64",
+                    "float32", "float64", "uint8", "uint16"):
+        np_dt = getattr(np, dt_name)
+        dt = getattr(DataType, dt_name)
+        img = Image(shape, dt, channels, color_type)
+        a = np.array(img, copy=False)
+        assert a.dtype == np_dt
+
+
+def test_image_from_array():
+    # TODO: check array data vs image data
+    channels, color_type = "xy", ColorType.none
+    for dt_name in ("int8", "int16", "int32", "int64",
+                    "float32", "float64", "uint8", "uint16"):
+        np_dt = getattr(np, dt_name)
+        dt = getattr(DataType, dt_name)
+        a = np.arange(12).reshape(3, 4).astype(np_dt)
+        img = Image(a, channels, color_type, [])
+        assert img.elemtype_ == dt
+        assert img.dims_ == list(a.shape)

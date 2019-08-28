@@ -43,4 +43,49 @@ cl.def_buffer([](ecvl::Image &img) -> pybind11::buffer_info { \
     img.dims_, \
     img.strides_ \
   ); \
+}); \
+ cl.def("__init__", [](ecvl::Image &img, pybind11::buffer b, std::string channels, ecvl::ColorType colortype, const std::vector<float>& spacings = std::vector<float>()) { \
+  pybind11::buffer_info info = b.request(); \
+  ecvl::DataType elemtype; \
+  if (info.format == "b") \
+    elemtype = ecvl::DataType::int8; \
+  else if (info.format == "h") \
+    elemtype = ecvl::DataType::int16; \
+  else if (info.format == "i") \
+    elemtype = ecvl::DataType::int32; \
+  else if (info.format == "q" || (info.format == "l" && info.itemsize == 8)) \
+    elemtype = ecvl::DataType::int64 ; \
+  else if (info.format == "f") \
+    elemtype = ecvl::DataType::float32; \
+  else if (info.format == "d") \
+    elemtype = ecvl::DataType::float64; \
+  else if (info.format == "B") \
+    elemtype = ecvl::DataType::uint8; \
+  else if (info.format == "H") \
+    elemtype = ecvl::DataType::uint16; \
+  else \
+    throw std::invalid_argument("unknown data type"); \
+  bool have_simple_strides = true; \
+  std::vector<ssize_t> simple_strides(info.ndim); \
+  ssize_t S = info.itemsize; \
+  for (int i = info.ndim - 1; i >=0; --i) { \
+    simple_strides[i] = S; \
+    S *= info.shape[i]; \
+  } \
+  for (int i = 0; i < info.ndim; ++i) { \
+    if (info.strides[i] != simple_strides[i]) { \
+	have_simple_strides = false; \
+	break; \
+    } \
+  } \
+  std::vector<int> shape(info.ndim); \
+  for (int i = 0; i < info.ndim; ++i) { \
+    shape[i] = info.shape[i]; \
+  } \
+  new(&img) ecvl::Image(shape, elemtype, channels, colortype, spacings); \
+  if (have_simple_strides) { \
+    std::copy((uint8_t*)info.ptr, ((uint8_t*)info.ptr) + img.datasize_, img.data_); \
+  } else { \
+    throw std::runtime_error("complex strides not supported"); \
+  } \
 });
