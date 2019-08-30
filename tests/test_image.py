@@ -57,14 +57,12 @@ def test_numpy():
     view = View_int16(img)
     a = np.array(img, copy=False)
     assert list(a.shape) == shape
+    assert list(a.strides) == img.strides_
     assert a.dtype == np.int16
-    v1, v2 = a[0, 0, 0] + 1, a[-1, -1, -1] + 1
-    a[0, 0, 0] = v1
-    assert view[0, 0, 0] == v1
-    a[-1, -1, -1] = v2
-    assert view[[_ - 1 for _ in shape]] == v2
-    view[0, 0, 0] = v2
-    assert a[0, 0, 0] == v2
+    for i in range(shape[0]):
+        for j in range(shape[1]):
+            for k in range(shape[2]):
+                assert a[i, j, k] == view[i, j, k]
     a.flat = 42
     b = np.array(img, copy=True)
     assert np.array_equal(a + img, a + b)
@@ -82,13 +80,21 @@ def test_numpy_types():
 
 
 def test_image_from_array():
-    # TODO: check array data vs image data
     channels, color_type = "xy", ColorType.none
     for dt_name in ("int8", "int16", "int32", "int64",
                     "float32", "float64", "uint8", "uint16"):
         np_dt = getattr(np, dt_name)
         dt = getattr(DataType, dt_name)
         a = np.arange(12).reshape(3, 4).astype(np_dt)
+        a = np.asfortranarray(a)
         img = Image(a, channels, color_type, [])
         assert img.elemtype_ == dt
         assert img.dims_ == list(a.shape)
+        assert img.strides_ == list(a.strides)
+    a = np.arange(12).reshape(3, 4).astype(np.int16)
+    a = np.asfortranarray(a)
+    img = Image(a, channels, color_type, [])
+    view = View_int16(img)
+    for i in range(3):
+        for j in range(4):
+            assert view[i, j] == a[i, j]

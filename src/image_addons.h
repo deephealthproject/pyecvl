@@ -65,16 +65,16 @@ cl.def_buffer([](ecvl::Image &img) -> pybind11::buffer_info { \
     elemtype = ecvl::DataType::uint16; \
   else \
     throw std::invalid_argument("unknown data type"); \
-  bool have_simple_strides = true; \
-  std::vector<ssize_t> simple_strides(info.ndim); \
+  bool f_contiguous = true; \
+  std::vector<ssize_t> f_contiguous_strides(info.ndim); \
   ssize_t S = info.itemsize; \
-  for (int i = info.ndim - 1; i >=0; --i) { \
-    simple_strides[i] = S; \
+  for (int i = 0; i < info.ndim; ++i) { \
+    f_contiguous_strides[i] = S; \
     S *= info.shape[i]; \
   } \
   for (int i = 0; i < info.ndim; ++i) { \
-    if (info.strides[i] != simple_strides[i]) { \
-	have_simple_strides = false; \
+    if (info.strides[i] != f_contiguous_strides[i]) { \
+	f_contiguous = false; \
 	break; \
     } \
   } \
@@ -83,9 +83,9 @@ cl.def_buffer([](ecvl::Image &img) -> pybind11::buffer_info { \
     shape[i] = info.shape[i]; \
   } \
   new(&img) ecvl::Image(shape, elemtype, channels, colortype, spacings); \
-  if (have_simple_strides) { \
+  if (f_contiguous) { \
     std::copy((uint8_t*)info.ptr, ((uint8_t*)info.ptr) + img.datasize_, img.data_); \
   } else { \
-    throw std::runtime_error("complex strides not supported"); \
+    throw std::runtime_error("data is not fortran-contiguous"); \
   } \
 });
