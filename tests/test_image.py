@@ -87,13 +87,13 @@ def test_image_from_array():
         dt = getattr(DataType, dt_name)
         a = np.arange(12).reshape(3, 4).astype(np_dt)
         a = np.asfortranarray(a)
-        img = Image(a, channels, color_type, [])
+        img = Image(a, channels, color_type)
         assert img.elemtype_ == dt
         assert img.dims_ == list(a.shape)
         assert img.strides_ == list(a.strides)
     a = np.arange(12).reshape(3, 4).astype(np.int16)
     a = np.asfortranarray(a)
-    img = Image(a, channels, color_type, [])
+    img = Image(a, channels, color_type)
     view = View_int16(img)
     for i in range(3):
         for j in range(4):

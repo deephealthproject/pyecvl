@@ -44,7 +44,7 @@ cl.def_buffer([](ecvl::Image &img) -> pybind11::buffer_info { \
     img.strides_ \
   ); \
 }); \
- cl.def("__init__", [](ecvl::Image &img, pybind11::buffer b, std::string channels, ecvl::ColorType colortype, const std::vector<float>& spacings = std::vector<float>()) { \
+ cl.def("__init__", [](ecvl::Image &img, pybind11::buffer b, std::string channels, ecvl::ColorType colortype, const std::vector<float>& spacings) { \
   pybind11::buffer_info info = b.request(); \
   ecvl::DataType elemtype; \
   if (info.format == "b") \
@@ -88,4 +88,6 @@ cl.def_buffer([](ecvl::Image &img) -> pybind11::buffer_info { \
   } else { \
     throw std::runtime_error("data is not fortran-contiguous"); \
   } \
-});
+}, \
+   pybind11::arg("buf"), pybind11::arg("channels"), pybind11::arg("colortype"), pybind11::arg("spacings") = std::vector<float>() \
+);
