@@ -2,7 +2,6 @@ import itertools
 import os
 
 import pyecvl._core.ecvl as ecvl
-import pyecvl._core.filesystem as filesystem
 
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -12,13 +11,13 @@ TEST_IMG = os.path.join(
 
 
 def main():
-    in_path = filesystem.path(TEST_IMG)
+    in_path = TEST_IMG
     img = ecvl.Image()
     ecvl.ImRead(in_path, img)
     view = ecvl.View_uint8(img)
     for idx in itertools.product(*[range(_) for _ in img.dims_]):
         view[idx] = min(view[idx] + 10, 255)
-    out_path = filesystem.path(os.path.basename(TEST_IMG))
+    out_path = os.path.basename(TEST_IMG)
     ecvl.ImWrite(out_path, img)
 
 

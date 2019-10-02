@@ -3,7 +3,7 @@ from distutils.core import setup, Extension
 import pybind11
 
 
-EXTRA_COMPILE_ARGS = ['-std=c++14']
+EXTRA_COMPILE_ARGS = ['-std=c++17']
 OPENCV_LIBS = [
     "opencv_aruco",
     "opencv_bgsegm",
@@ -57,7 +57,7 @@ ext = Extension(
         pybind11.get_include(),
         pybind11.get_include(user=True)
     ],
-    libraries=["ECVL_CORE"] + OPENCV_LIBS,
+    libraries=["ECVL_CORE", "stdc++fs"] + OPENCV_LIBS,
     extra_compile_args=EXTRA_COMPILE_ARGS,
 )
 
