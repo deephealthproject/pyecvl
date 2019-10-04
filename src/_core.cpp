@@ -75,8 +75,6 @@ void bind_ecvl_core_iterators(std::function< pybind11::module &(std::string cons
 {
 	{ // ecvl::Iterator file:ecvl/core/iterators.h line:12
 		pybind11::class_<ecvl::Iterator<unsigned char>, std::shared_ptr<ecvl::Iterator<unsigned char>>> cl(M("ecvl"), "Iterator_unsigned_char_t", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](ecvl::Iterator<unsigned char> const &o){ return new ecvl::Iterator<unsigned char>(o); } ) );
 		cl.def_readwrite("pos_", &ecvl::Iterator<unsigned char>::pos_);
 		cl.def_readwrite("incrementor", &ecvl::Iterator<unsigned char>::incrementor);
@@ -87,8 +85,6 @@ void bind_ecvl_core_iterators(std::function< pybind11::module &(std::string cons
 	}
 	{ // ecvl::Iterator file:ecvl/core/iterators.h line:12
 		pybind11::class_<ecvl::Iterator<signed char>, std::shared_ptr<ecvl::Iterator<signed char>>> cl(M("ecvl"), "Iterator_signed_char_t", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](ecvl::Iterator<signed char> const &o){ return new ecvl::Iterator<signed char>(o); } ) );
 		cl.def_readwrite("pos_", &ecvl::Iterator<signed char>::pos_);
 		cl.def_readwrite("incrementor", &ecvl::Iterator<signed char>::incrementor);
@@ -99,8 +95,6 @@ void bind_ecvl_core_iterators(std::function< pybind11::module &(std::string cons
 	}
 	{ // ecvl::Iterator file:ecvl/core/iterators.h line:12
 		pybind11::class_<ecvl::Iterator<short>, std::shared_ptr<ecvl::Iterator<short>>> cl(M("ecvl"), "Iterator_short_t", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](ecvl::Iterator<short> const &o){ return new ecvl::Iterator<short>(o); } ) );
 		cl.def_readwrite("pos_", &ecvl::Iterator<short>::pos_);
 		cl.def_readwrite("incrementor", &ecvl::Iterator<short>::incrementor);
@@ -111,8 +105,6 @@ void bind_ecvl_core_iterators(std::function< pybind11::module &(std::string cons
 	}
 	{ // ecvl::ConstIterator file:ecvl/core/iterators.h line:32
 		pybind11::class_<ecvl::ConstIterator<unsigned char>, std::shared_ptr<ecvl::ConstIterator<unsigned char>>> cl(M("ecvl"), "ConstIterator_unsigned_char_t", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](ecvl::ConstIterator<unsigned char> const &o){ return new ecvl::ConstIterator<unsigned char>(o); } ) );
 		cl.def_readwrite("pos_", &ecvl::ConstIterator<unsigned char>::pos_);
 		cl.def_readwrite("incrementor", &ecvl::ConstIterator<unsigned char>::incrementor);
@@ -153,8 +145,6 @@ void bind_ecvl_core_image(std::function< pybind11::module &(std::string const &n
 {
 	{ // ecvl::MetaData file:ecvl/core/image.h line:20
 		pybind11::class_<ecvl::MetaData, std::shared_ptr<ecvl::MetaData>> cl(M("ecvl"), "MetaData", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def("assign", (class ecvl::MetaData & (ecvl::MetaData::*)(const class ecvl::MetaData &)) &ecvl::MetaData::operator=, "C++: ecvl::MetaData::operator=(const class ecvl::MetaData &) --> class ecvl::MetaData &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 	}
 	// ecvl::ColorType file:ecvl/core/image.h line:30
@@ -171,8 +161,6 @@ void bind_ecvl_core_image(std::function< pybind11::module &(std::string const &n
 
 	{ // ecvl::Image file:ecvl/core/image.h line:54
 		pybind11::class_<ecvl::Image, std::shared_ptr<ecvl::Image>> cl(M("ecvl"), "Image", pybind11::buffer_protocol());
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new ecvl::Image(); } ) );
 		cl.def( pybind11::init( [](ecvl::Image const &o){ return new ecvl::Image(o); } ) );
 		cl.def_readwrite("elemtype_", &ecvl::Image::elemtype_);
@@ -249,8 +237,6 @@ void bind_ecvl_core_arithmetic(std::function< pybind11::module &(std::string con
 
 	{ // ecvl::View file:ecvl/core/image.h line:446
 		pybind11::class_<ecvl::View<ecvl::DataType::int8>, std::shared_ptr<ecvl::View<ecvl::DataType::int8>>, ecvl::Image> cl(M("ecvl"), "View_ecvl_DataType_int8_t", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new ecvl::View<ecvl::DataType::int8>(); } ) );
 		cl.def( pybind11::init<class ecvl::Image &>(), pybind11::arg("img") );
 
@@ -286,8 +272,6 @@ void bind_ecvl_core_arithmetic(std::function< pybind11::module &(std::string con
 	}
 	{ // ecvl::View file:ecvl/core/image.h line:446
 		pybind11::class_<ecvl::View<ecvl::DataType::int16>, std::shared_ptr<ecvl::View<ecvl::DataType::int16>>, ecvl::Image> cl(M("ecvl"), "View_ecvl_DataType_int16_t", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new ecvl::View<ecvl::DataType::int16>(); } ) );
 		cl.def( pybind11::init<class ecvl::Image &>(), pybind11::arg("img") );
 
@@ -323,8 +307,6 @@ void bind_ecvl_core_arithmetic(std::function< pybind11::module &(std::string con
 	}
 	{ // ecvl::View file:ecvl/core/image.h line:446
 		pybind11::class_<ecvl::View<ecvl::DataType::uint8>, std::shared_ptr<ecvl::View<ecvl::DataType::uint8>>, ecvl::Image> cl(M("ecvl"), "View_ecvl_DataType_uint8_t", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new ecvl::View<ecvl::DataType::uint8>(); } ) );
 		cl.def( pybind11::init<class ecvl::Image &>(), pybind11::arg("img") );
 
@@ -392,8 +374,6 @@ void bind_image_ext(std::function< pybind11::module &(std::string const &namespa
 {
 	{ // ecvl::View_int8 file:image_ext.h line:4
 		pybind11::class_<ecvl::View_int8, std::shared_ptr<ecvl::View_int8>, ecvl::View<ecvl::DataType::int8>> cl(M("ecvl"), "View_int8", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init<class ecvl::Image &>(), pybind11::arg("img") );
 
 
@@ -401,8 +381,6 @@ void bind_image_ext(std::function< pybind11::module &(std::string const &namespa
 	}
 	{ // ecvl::View_int16 file:image_ext.h line:8
 		pybind11::class_<ecvl::View_int16, std::shared_ptr<ecvl::View_int16>, ecvl::View<ecvl::DataType::int16>> cl(M("ecvl"), "View_int16", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init<class ecvl::Image &>(), pybind11::arg("img") );
 
 
@@ -410,8 +388,6 @@ void bind_image_ext(std::function< pybind11::module &(std::string const &namespa
 	}
 	{ // ecvl::View_uint8 file:image_ext.h line:12
 		pybind11::class_<ecvl::View_uint8, std::shared_ptr<ecvl::View_uint8>, ecvl::View<ecvl::DataType::uint8>> cl(M("ecvl"), "View_uint8", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init<class ecvl::Image &>(), pybind11::arg("img") );
 
 
