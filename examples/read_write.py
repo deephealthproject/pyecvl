@@ -1,6 +1,6 @@
-import itertools
 import os
 
+import numpy as np
 import pyecvl._core.ecvl as ecvl
 
 
@@ -10,13 +10,18 @@ TEST_IMG = os.path.join(
 )
 
 
+def inc_brightness(img, rate):
+    a = np.array(img, copy=False)
+    max_val = np.iinfo(a.dtype).max
+    a[a > max_val - rate] = max_val
+    a[a <= max_val - rate] += rate
+
+
 def main():
     in_path = TEST_IMG
     img = ecvl.Image()
     ecvl.ImRead(in_path, img)
-    view = ecvl.View_uint8(img)
-    for idx in itertools.product(*[range(_) for _ in img.dims_]):
-        view[idx] = min(view[idx] + 10, 255)
+    inc_brightness(img, 10)
     out_path = os.path.basename(TEST_IMG)
     ecvl.ImWrite(out_path, img)
 
