@@ -4,4 +4,4 @@
 #include <ecvl/core/image.h>
 #include <ecvl/core/imgcodecs.h>
 #include <ecvl/core/arithmetic.h>
-#include <image_ext.h>
+#include <image_ext.hpp>

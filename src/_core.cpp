@@ -1,7 +1,7 @@
 // File: ecvl/core/datatype.cpp
 #include <array>
 #include <ecvl/core/datatype.h>
-#include <func_binder.h>
+#include <func_binder.hpp>
 #include <sstream> // __str__
 
 #include <pybind11/pybind11.h>
@@ -51,7 +51,7 @@ void bind_ecvl_core_datatype(std::function< pybind11::module &(std::string const
 #include <ecvl/core/datatype.h>
 #include <ecvl/core/image.h>
 #include <ecvl/core/iterators.h>
-#include <func_binder.h>
+#include <func_binder.hpp>
 #include <iterator>
 #include <memory>
 #include <sstream> // __str__
@@ -120,8 +120,8 @@ void bind_ecvl_core_iterators(std::function< pybind11::module &(std::string cons
 #include <ecvl/core/datatype.h>
 #include <ecvl/core/image.h>
 #include <ecvl/core/iterators.h>
-#include <func_binder.h>
-#include <image_addons.h>
+#include <func_binder.hpp>
+#include <image_addons.hpp>
 #include <iterator>
 #include <memory>
 #include <sstream> // __str__
@@ -204,7 +204,7 @@ void bind_ecvl_core_image(std::function< pybind11::module &(std::string const &n
 #include <ecvl/core/datatype.h>
 #include <ecvl/core/image.h>
 #include <ecvl/core/iterators.h>
-#include <func_binder.h>
+#include <func_binder.hpp>
 #include <iterator>
 #include <memory>
 #include <sstream> // __str__
@@ -347,15 +347,15 @@ void bind_ecvl_core_arithmetic(std::function< pybind11::module &(std::string con
 #include <ecvl/core/datatype.h>
 #include <ecvl/core/image.h>
 #include <ecvl/core/iterators.h>
-#include <func_binder.h>
-#include <image_ext.h>
+#include <func_binder.hpp>
+#include <image_ext.hpp>
 #include <memory>
 #include <sstream> // __str__
 #include <string>
 #include <vector>
-#include <view_int16_addons.h>
-#include <view_int8_addons.h>
-#include <view_uint8_addons.h>
+#include <view_int16_addons.hpp>
+#include <view_int8_addons.hpp>
+#include <view_uint8_addons.hpp>
 
 #include <pybind11/pybind11.h>
 #include <functional>
@@ -372,21 +372,21 @@ void bind_ecvl_core_arithmetic(std::function< pybind11::module &(std::string con
 
 void bind_image_ext(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
-	{ // ecvl::View_int8 file:image_ext.h line:4
+	{ // ecvl::View_int8 file:image_ext.hpp line:4
 		pybind11::class_<ecvl::View_int8, std::shared_ptr<ecvl::View_int8>, ecvl::View<ecvl::DataType::int8>> cl(M("ecvl"), "View_int8", "");
 		cl.def( pybind11::init<class ecvl::Image &>(), pybind11::arg("img") );
 
 
 		view_int8_addons(cl);
 	}
-	{ // ecvl::View_int16 file:image_ext.h line:8
+	{ // ecvl::View_int16 file:image_ext.hpp line:8
 		pybind11::class_<ecvl::View_int16, std::shared_ptr<ecvl::View_int16>, ecvl::View<ecvl::DataType::int16>> cl(M("ecvl"), "View_int16", "");
 		cl.def( pybind11::init<class ecvl::Image &>(), pybind11::arg("img") );
 
 
 		view_int16_addons(cl);
 	}
-	{ // ecvl::View_uint8 file:image_ext.h line:12
+	{ // ecvl::View_uint8 file:image_ext.hpp line:12
 		pybind11::class_<ecvl::View_uint8, std::shared_ptr<ecvl::View_uint8>, ecvl::View<ecvl::DataType::uint8>> cl(M("ecvl"), "View_uint8", "");
 		cl.def( pybind11::init<class ecvl::Image &>(), pybind11::arg("img") );
 
