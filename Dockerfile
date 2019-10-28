@@ -12,5 +12,4 @@ COPY . /pyecvl
 
 WORKDIR /pyecvl
 
-RUN python3 setup.py build_ext -L /usr/lib/gcc/x86_64-linux-gnu/8 && \
-    python3 setup.py install
+RUN python3 setup.py install

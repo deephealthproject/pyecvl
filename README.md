@@ -98,21 +98,3 @@ python3 setup.py install
 Then, you can test your installation by running the PyECVL tests:
 
     pytest tests
-
-### Troubleshooting
-
-If you can build and install pyecvl as shown above, but importing the library
-fails with an undefined symbol error related to `std::filesystem`, e.g.:
-
-```
-undefined symbol: _ZNSt10filesystem7__cxx114path14_M_split_cmptsEv
-```
-
-Then the setup script could not find `libstdc++fs.a` on your system. In this
-case, try adding the directory path containing the library to the search list,
-for instance:
-
-```
-python3 setup.py build_ext -L /usr/lib/gcc/x86_64-linux-gnu/8
-python3 setup.py install
-```
