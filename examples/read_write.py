@@ -1,13 +1,13 @@
+"""\
+Reads an image, increases its brightness and saves the result.
+"""
+
+import argparse
 import os
+import sys
 
 import numpy as np
 import pyecvl._core.ecvl as ecvl
-
-
-THIS_DIR = os.path.dirname(os.path.abspath(__file__))
-TEST_IMG = os.path.join(
-    THIS_DIR, os.pardir, "third_party", "ecvl", "data", "test.jpg"
-)
 
 
 def inc_brightness(img, rate):
@@ -17,14 +17,18 @@ def inc_brightness(img, rate):
     a[a <= max_val - rate] += rate
 
 
-def main():
-    in_path = TEST_IMG
+def main(args):
+    # FIXME: why isn't std::invalid_argument being converted to a Python error?
+    if not os.path.isfile(args.in_fn):
+        raise RuntimeError("%s does not exist or is not a file" % args.in_fn)
     img = ecvl.Image()
-    ecvl.ImRead(in_path, img)
+    ecvl.ImRead(args.in_fn, img)
     inc_brightness(img, 10)
-    out_path = os.path.basename(TEST_IMG)
-    ecvl.ImWrite(out_path, img)
+    ecvl.ImWrite(args.out_fn, img)
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("in_fn", metavar="INPUT_PATH")
+    parser.add_argument("out_fn", metavar="OUTPUT_PATH")
+    main(parser.parse_args(sys.argv[1:]))

@@ -26,6 +26,4 @@ RUN mkdir build && \
     cmake -DECVL_BUILD_GUI=OFF -DECVL_DATASET_PARSER=ON .. && \
     make
 
-RUN cd build && make install && \
-    cp -rf install/include/ecvl /usr/local/include/ && \
-    cp install/lib/libECVL_CORE.a /usr/local/lib/
+RUN cd build && make install

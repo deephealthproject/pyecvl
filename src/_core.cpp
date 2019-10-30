@@ -177,7 +177,7 @@ void bind_ecvl_core_image(std::function< pybind11::module &(std::string const &n
 		cl.def("assign", (class ecvl::Image & (ecvl::Image::*)(class ecvl::Image)) &ecvl::Image::operator=, "C++: ecvl::Image::operator=(class ecvl::Image) --> class ecvl::Image &", pybind11::return_value_policy::automatic, pybind11::arg("rhs"));
 		cl.def("IsEmpty", (bool (ecvl::Image::*)() const) &ecvl::Image::IsEmpty, "To check whether the Image contains data or not, regardless of the owning status. \n\nC++: ecvl::Image::IsEmpty() const --> bool");
 		cl.def("IsOwner", (bool (ecvl::Image::*)() const) &ecvl::Image::IsOwner, "To check whether the Image is owner of the data. \n\nC++: ecvl::Image::IsOwner() const --> bool");
-		cl.def("Channels", (int (ecvl::Image::*)() const) &ecvl::Image::Channels, "Returns the number of Image channels. \n\nC++: ecvl::Image::Channels() const --> int");
+		cl.def("Channels", (int (ecvl::Image::*)() const) &ecvl::Image::Channels, "Returns the number of channels. \n\nC++: ecvl::Image::Channels() const --> int");
 		cl.def("Add", [](ecvl::Image &o, const class ecvl::Image & a0) -> void { return o.Add(a0); }, "", pybind11::arg("rhs"));
 		cl.def("Add", (void (ecvl::Image::*)(const class ecvl::Image &, bool)) &ecvl::Image::Add, "In-place addition of an Image. \n\nC++: ecvl::Image::Add(const class ecvl::Image &, bool) --> void", pybind11::arg("rhs"), pybind11::arg("saturate"));
 		cl.def("Sub", [](ecvl::Image &o, const class ecvl::Image & a0) -> void { return o.Sub(a0); }, "", pybind11::arg("rhs"));
@@ -200,16 +200,19 @@ void bind_ecvl_core_image(std::function< pybind11::module &(std::string const &n
 }
 
 
-// File: ecvl/core/arithmetic.cpp
+// File: ecvl/core/imgcodecs.cpp
+#include <bits/fs_path.h>
 #include <ecvl/core/arithmetic.h>
 #include <ecvl/core/datatype.h>
 #include <ecvl/core/image.h>
+#include <ecvl/core/imgcodecs.h>
 #include <ecvl/core/iterators.h>
 #include <func_binder.hpp>
 #include <iterator>
 #include <memory>
 #include <sstream> // __str__
 #include <string>
+#include <string_view>
 #include <vector>
 
 #include <pybind11/pybind11.h>
@@ -225,8 +228,15 @@ void bind_ecvl_core_image(std::function< pybind11::module &(std::string const &n
 	PYBIND11_MAKE_OPAQUE(std::shared_ptr<void>);
 #endif
 
-void bind_ecvl_core_arithmetic(std::function< pybind11::module &(std::string const &namespace_) > &M)
+void bind_ecvl_core_imgcodecs(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
+	// ecvl::ImageFormat file:ecvl/core/imgcodecs.h line:16
+	pybind11::enum_<ecvl::ImageFormat>(M("ecvl"), "ImageFormat", "ImageFormat is an enum class which defines\nthe images format to employ.\n\n  ImageFormat")
+		.value("DEFAULT", ecvl::ImageFormat::DEFAULT)
+		.value("NIFTI", ecvl::ImageFormat::NIFTI);
+
+;
+
 	// ecvl::Neg(class ecvl::Image &) file:ecvl/core/arithmetic.h line:26
 	M("ecvl").def("Neg", (class ecvl::Image & (*)(class ecvl::Image &)) &ecvl::Neg, "In-place negation of an Image.  Neg\n\nThe Neg() function negates every value of an Image, and stores the\nthe result in the same image. The type of the image will not change.\n\n Image to be negated (in-place).\n\n Reference to the Image containing the result of the negation.\n\nC++: ecvl::Neg(class ecvl::Image &) --> class ecvl::Image &", pybind11::return_value_policy::automatic, pybind11::arg("img"));
 
@@ -258,7 +268,7 @@ void bind_ecvl_core_arithmetic(std::function< pybind11::module &(std::string con
 		cl.def("assign", (class ecvl::Image & (ecvl::Image::*)(class ecvl::Image)) &ecvl::Image::operator=, "C++: ecvl::Image::operator=(class ecvl::Image) --> class ecvl::Image &", pybind11::return_value_policy::automatic, pybind11::arg("rhs"));
 		cl.def("IsEmpty", (bool (ecvl::Image::*)() const) &ecvl::Image::IsEmpty, "To check whether the Image contains data or not, regardless of the owning status. \n\nC++: ecvl::Image::IsEmpty() const --> bool");
 		cl.def("IsOwner", (bool (ecvl::Image::*)() const) &ecvl::Image::IsOwner, "To check whether the Image is owner of the data. \n\nC++: ecvl::Image::IsOwner() const --> bool");
-		cl.def("Channels", (int (ecvl::Image::*)() const) &ecvl::Image::Channels, "Returns the number of Image channels. \n\nC++: ecvl::Image::Channels() const --> int");
+		cl.def("Channels", (int (ecvl::Image::*)() const) &ecvl::Image::Channels, "Returns the number of channels. \n\nC++: ecvl::Image::Channels() const --> int");
 		cl.def("Add", [](ecvl::Image &o, const class ecvl::Image & a0) -> void { return o.Add(a0); }, "", pybind11::arg("rhs"));
 		cl.def("Add", (void (ecvl::Image::*)(const class ecvl::Image &, bool)) &ecvl::Image::Add, "In-place addition of an Image. \n\nC++: ecvl::Image::Add(const class ecvl::Image &, bool) --> void", pybind11::arg("rhs"), pybind11::arg("saturate"));
 		cl.def("Sub", [](ecvl::Image &o, const class ecvl::Image & a0) -> void { return o.Sub(a0); }, "", pybind11::arg("rhs"));
@@ -294,7 +304,7 @@ void bind_ecvl_core_arithmetic(std::function< pybind11::module &(std::string con
 		cl.def("assign", (class ecvl::Image & (ecvl::Image::*)(class ecvl::Image)) &ecvl::Image::operator=, "C++: ecvl::Image::operator=(class ecvl::Image) --> class ecvl::Image &", pybind11::return_value_policy::automatic, pybind11::arg("rhs"));
 		cl.def("IsEmpty", (bool (ecvl::Image::*)() const) &ecvl::Image::IsEmpty, "To check whether the Image contains data or not, regardless of the owning status. \n\nC++: ecvl::Image::IsEmpty() const --> bool");
 		cl.def("IsOwner", (bool (ecvl::Image::*)() const) &ecvl::Image::IsOwner, "To check whether the Image is owner of the data. \n\nC++: ecvl::Image::IsOwner() const --> bool");
-		cl.def("Channels", (int (ecvl::Image::*)() const) &ecvl::Image::Channels, "Returns the number of Image channels. \n\nC++: ecvl::Image::Channels() const --> int");
+		cl.def("Channels", (int (ecvl::Image::*)() const) &ecvl::Image::Channels, "Returns the number of channels. \n\nC++: ecvl::Image::Channels() const --> int");
 		cl.def("Add", [](ecvl::Image &o, const class ecvl::Image & a0) -> void { return o.Add(a0); }, "", pybind11::arg("rhs"));
 		cl.def("Add", (void (ecvl::Image::*)(const class ecvl::Image &, bool)) &ecvl::Image::Add, "In-place addition of an Image. \n\nC++: ecvl::Image::Add(const class ecvl::Image &, bool) --> void", pybind11::arg("rhs"), pybind11::arg("saturate"));
 		cl.def("Sub", [](ecvl::Image &o, const class ecvl::Image & a0) -> void { return o.Sub(a0); }, "", pybind11::arg("rhs"));
@@ -330,7 +340,7 @@ void bind_ecvl_core_arithmetic(std::function< pybind11::module &(std::string con
 		cl.def("assign", (class ecvl::Image & (ecvl::Image::*)(class ecvl::Image)) &ecvl::Image::operator=, "C++: ecvl::Image::operator=(class ecvl::Image) --> class ecvl::Image &", pybind11::return_value_policy::automatic, pybind11::arg("rhs"));
 		cl.def("IsEmpty", (bool (ecvl::Image::*)() const) &ecvl::Image::IsEmpty, "To check whether the Image contains data or not, regardless of the owning status. \n\nC++: ecvl::Image::IsEmpty() const --> bool");
 		cl.def("IsOwner", (bool (ecvl::Image::*)() const) &ecvl::Image::IsOwner, "To check whether the Image is owner of the data. \n\nC++: ecvl::Image::IsOwner() const --> bool");
-		cl.def("Channels", (int (ecvl::Image::*)() const) &ecvl::Image::Channels, "Returns the number of Image channels. \n\nC++: ecvl::Image::Channels() const --> int");
+		cl.def("Channels", (int (ecvl::Image::*)() const) &ecvl::Image::Channels, "Returns the number of channels. \n\nC++: ecvl::Image::Channels() const --> int");
 		cl.def("Add", [](ecvl::Image &o, const class ecvl::Image & a0) -> void { return o.Add(a0); }, "", pybind11::arg("rhs"));
 		cl.def("Add", (void (ecvl::Image::*)(const class ecvl::Image &, bool)) &ecvl::Image::Add, "In-place addition of an Image. \n\nC++: ecvl::Image::Add(const class ecvl::Image &, bool) --> void", pybind11::arg("rhs"), pybind11::arg("saturate"));
 		cl.def("Sub", [](ecvl::Image &o, const class ecvl::Image & a0) -> void { return o.Sub(a0); }, "", pybind11::arg("rhs"));
@@ -413,7 +423,7 @@ typedef std::function< pybind11::module & (std::string const &) > ModuleGetter;
 void bind_ecvl_core_datatype(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_ecvl_core_iterators(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_ecvl_core_image(std::function< pybind11::module &(std::string const &namespace_) > &M);
-void bind_ecvl_core_arithmetic(std::function< pybind11::module &(std::string const &namespace_) > &M);
+void bind_ecvl_core_imgcodecs(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_image_ext(std::function< pybind11::module &(std::string const &namespace_) > &M);
 
 
@@ -439,7 +449,7 @@ PYBIND11_MODULE(_core, root_module) {
 	bind_ecvl_core_datatype(M);
 	bind_ecvl_core_iterators(M);
 	bind_ecvl_core_image(M);
-	bind_ecvl_core_arithmetic(M);
+	bind_ecvl_core_imgcodecs(M);
 	bind_image_ext(M);
 
 }
@@ -449,7 +459,7 @@ PYBIND11_MODULE(_core, root_module) {
 // ecvl/core/datatype.cpp
 // ecvl/core/iterators.cpp
 // ecvl/core/image.cpp
-// ecvl/core/arithmetic.cpp
+// ecvl/core/imgcodecs.cpp
 // image_ext.cpp
 
 // Modules list file: /pyecvl/codegen/bindings/_core.modules
