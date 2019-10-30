@@ -1,7 +1,11 @@
+#include <opencv2/core/matx.hpp>
+#include <opencv2/core/types.hpp>
+#include <opencv2/core/mat.hpp>
 #include <ecvl/core/datatype.h>
 #include <ecvl/core/iterators.h>
 #include <ecvl/core/memorymanager.h>
 #include <ecvl/core/image.h>
+#include <ecvl/core/imgproc.h>
 #include <ecvl/core/imgcodecs.h>
 #include <ecvl/core/arithmetic.h>
 #include <image_ext.hpp>
