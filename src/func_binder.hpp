@@ -3,6 +3,7 @@
 #include <ecvl/core/image.h>
 #include <ecvl/core/imgcodecs.h>
 #include <ecvl/core/imgproc.h>
+#include <ecvl/eddl.h>
 
 void bind_ecvl_functions(pybind11::module &m) {
   m.def("RearrangeChannels", &ecvl::RearrangeChannels);
@@ -26,4 +27,6 @@ void bind_ecvl_functions(pybind11::module &m) {
   // imgproc: SeparableFilter2D
   m.def("SeparableFilter2D", [](const class ecvl::Image& src, class ecvl::Image& dst, const std::vector<double>& kerX, const std::vector<double>& kerY) -> void { return ecvl::SeparableFilter2D(src, dst, kerX, kerY); }, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("kerX"), pybind11::arg("kerY"));
   m.def("SeparableFilter2D", (void (*)(const class ecvl::Image&, class ecvl::Image&, const std::vector<double>&, const std::vector<double>&, enum ecvl::DataType)) &ecvl::SeparableFilter2D, "Convolves an Image with a couple of 1-dimensional kernels.\n\nC++: ecvl::SeparableFilter2D(const class ecvl::Image&, class ecvl::Image&, const std::vector<double>&, const std::vector<double>&, enum ecvl::DataType) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("kerX"), pybind11::arg("kerY"), pybind11::arg("type"));
+  // eddl: ImageToTensor
+  m.def("ImageToTensor", &ecvl::ImageToTensor);
 }
