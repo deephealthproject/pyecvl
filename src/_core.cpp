@@ -321,6 +321,100 @@ void bind_ecvl_core_imgcodecs(std::function< pybind11::module &(std::string cons
 	// ecvl::Or(const class ecvl::Image &, const class ecvl::Image &, class ecvl::Image &) file:ecvl/core/arithmetic.h line:500
 	M("ecvl").def("Or", (void (*)(const class ecvl::Image &, const class ecvl::Image &, class ecvl::Image &)) &ecvl::Or, "Boolean or between two binary ecvl::Image.\n\nPerforms boolean or between two ecvl::Image with DataType::uint8 and ColorType::GRAY.\nThe result is stored into dst.\n\n First ecvl::Image operand.\n\n Second ecvl::Image operand.\n\n Destination ecvl::Image.\n\n.\n\nC++: ecvl::Or(const class ecvl::Image &, const class ecvl::Image &, class ecvl::Image &) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"));
 
+}
+
+
+// File: ecvl/dataset_parser.cpp
+#include <bits/fs_path.h>
+#include <dataset_addons.hpp>
+#include <ecvl/core/datatype.h>
+#include <ecvl/core/image.h>
+#include <ecvl/core/iterators.h>
+#include <ecvl/dataset_parser.h>
+#include <func_binder.hpp>
+#include <memory>
+#include <sstream> // __str__
+#include <string>
+#include <string_view>
+#include <vector>
+
+#include <pybind11/pybind11.h>
+#include <functional>
+#include <string>
+#include <pybind11/stl.h>
+
+
+#ifndef BINDER_PYBIND11_TYPE_CASTER
+	#define BINDER_PYBIND11_TYPE_CASTER
+	PYBIND11_DECLARE_HOLDER_TYPE(T, std::shared_ptr<T>);
+	PYBIND11_DECLARE_HOLDER_TYPE(T, T*);
+	PYBIND11_MAKE_OPAQUE(std::shared_ptr<void>);
+#endif
+
+void bind_ecvl_dataset_parser(std::function< pybind11::module &(std::string const &namespace_) > &M)
+{
+	{ // ecvl::Sample file:ecvl/dataset_parser.h line:16
+		pybind11::class_<ecvl::Sample, std::shared_ptr<ecvl::Sample>> cl(M("ecvl"), "Sample", "");
+		cl.def( pybind11::init( [](){ return new ecvl::Sample(); } ) );
+		cl.def( pybind11::init( [](ecvl::Sample const &o){ return new ecvl::Sample(o); } ) );
+		cl.def_readwrite("location_", &ecvl::Sample::location_);
+		cl.def_readwrite("label_", &ecvl::Sample::label_);
+		cl.def_readwrite("label_path_", &ecvl::Sample::label_path_);
+		cl.def_readwrite("values_", &ecvl::Sample::values_);
+		cl.def("LoadImage", [](ecvl::Sample const &o) -> ecvl::Image { return o.LoadImage(); }, "");
+		cl.def("LoadImage", (class ecvl::Image (ecvl::Sample::*)(enum ecvl::ColorType) const) &ecvl::Sample::LoadImage, "C++: ecvl::Sample::LoadImage(enum ecvl::ColorType) const --> class ecvl::Image", pybind11::arg("ctype"));
+	}
+	{ // ecvl::Split file:ecvl/dataset_parser.h line:26
+		pybind11::class_<ecvl::Split, std::shared_ptr<ecvl::Split>> cl(M("ecvl"), "Split", "");
+		cl.def( pybind11::init( [](ecvl::Split const &o){ return new ecvl::Split(o); } ) );
+		cl.def( pybind11::init( [](){ return new ecvl::Split(); } ) );
+		cl.def_readwrite("training_", &ecvl::Split::training_);
+		cl.def_readwrite("validation_", &ecvl::Split::validation_);
+		cl.def_readwrite("test_", &ecvl::Split::test_);
+		cl.def("assign", (class ecvl::Split & (ecvl::Split::*)(const class ecvl::Split &)) &ecvl::Split::operator=, "C++: ecvl::Split::operator=(const class ecvl::Split &) --> class ecvl::Split &", pybind11::return_value_policy::automatic, pybind11::arg(""));
+	}
+	{ // ecvl::Dataset file:ecvl/dataset_parser.h line:33
+		pybind11::class_<ecvl::Dataset, std::shared_ptr<ecvl::Dataset>> cl(M("ecvl"), "Dataset", "");
+		cl.def( pybind11::init( [](){ return new ecvl::Dataset(); } ) );
+		cl.def( pybind11::init( [](ecvl::Dataset const &o){ return new ecvl::Dataset(o); } ) );
+		cl.def_readwrite("name_", &ecvl::Dataset::name_);
+		cl.def_readwrite("description_", &ecvl::Dataset::description_);
+		cl.def_readwrite("classes_", &ecvl::Dataset::classes_);
+		cl.def_readwrite("features_", &ecvl::Dataset::features_);
+		cl.def_readwrite("samples_", &ecvl::Dataset::samples_);
+		cl.def_readwrite("split_", &ecvl::Dataset::split_);
+
+		dataset_addons(cl);
+	}
+}
+
+
+// File: ecvl/core/image_1.cpp
+#include <ecvl/core/datatype.h>
+#include <ecvl/core/image.h>
+#include <ecvl/core/iterators.h>
+#include <func_binder.hpp>
+#include <iterator>
+#include <memory>
+#include <sstream> // __str__
+#include <string>
+#include <vector>
+
+#include <pybind11/pybind11.h>
+#include <functional>
+#include <string>
+#include <pybind11/stl.h>
+
+
+#ifndef BINDER_PYBIND11_TYPE_CASTER
+	#define BINDER_PYBIND11_TYPE_CASTER
+	PYBIND11_DECLARE_HOLDER_TYPE(T, std::shared_ptr<T>);
+	PYBIND11_DECLARE_HOLDER_TYPE(T, T*);
+	PYBIND11_MAKE_OPAQUE(std::shared_ptr<void>);
+#endif
+
+void bind_ecvl_core_image_1(std::function< pybind11::module &(std::string const &namespace_) > &M)
+{
 	{ // ecvl::View file:ecvl/core/image.h line:455
 		pybind11::class_<ecvl::View<ecvl::DataType::int8>, std::shared_ptr<ecvl::View<ecvl::DataType::int8>>, ecvl::Image> cl(M("ecvl"), "View_ecvl_DataType_int8_t", "");
 		cl.def( pybind11::init( [](){ return new ecvl::View<ecvl::DataType::int8>(); } ) );
@@ -429,40 +523,6 @@ void bind_ecvl_core_imgcodecs(std::function< pybind11::module &(std::string cons
 		cl.def("__imul__", (class ecvl::Image & (ecvl::Image::*)(const class ecvl::Image &)) &ecvl::Image::operator*=, "C++: ecvl::Image::operator*=(const class ecvl::Image &) --> class ecvl::Image &", pybind11::return_value_policy::automatic, pybind11::arg("rhs"));
 		cl.def("__idiv__", (class ecvl::Image & (ecvl::Image::*)(const class ecvl::Image &)) &ecvl::Image::operator/=, "C++: ecvl::Image::operator/=(const class ecvl::Image &) --> class ecvl::Image &", pybind11::return_value_policy::automatic, pybind11::arg("rhs"));
 	}
-}
-
-
-// File: ecvl/core/image_1.cpp
-#include <ecvl/core/datatype.h>
-#include <ecvl/core/image.h>
-#include <ecvl/core/iterators.h>
-#include <func_binder.hpp>
-#include <image_ext.hpp>
-#include <iterator>
-#include <memory>
-#include <sstream> // __str__
-#include <string>
-#include <vector>
-#include <view_float32_addons.hpp>
-#include <view_int16_addons.hpp>
-#include <view_int8_addons.hpp>
-#include <view_uint8_addons.hpp>
-
-#include <pybind11/pybind11.h>
-#include <functional>
-#include <string>
-#include <pybind11/stl.h>
-
-
-#ifndef BINDER_PYBIND11_TYPE_CASTER
-	#define BINDER_PYBIND11_TYPE_CASTER
-	PYBIND11_DECLARE_HOLDER_TYPE(T, std::shared_ptr<T>);
-	PYBIND11_DECLARE_HOLDER_TYPE(T, T*);
-	PYBIND11_MAKE_OPAQUE(std::shared_ptr<void>);
-#endif
-
-void bind_ecvl_core_image_1(std::function< pybind11::module &(std::string const &namespace_) > &M)
-{
 	{ // ecvl::View file:ecvl/core/image.h line:455
 		pybind11::class_<ecvl::View<ecvl::DataType::uint8>, std::shared_ptr<ecvl::View<ecvl::DataType::uint8>>, ecvl::Image> cl(M("ecvl"), "View_ecvl_DataType_uint8_t", "");
 		cl.def( pybind11::init( [](){ return new ecvl::View<ecvl::DataType::uint8>(); } ) );
@@ -499,6 +559,39 @@ void bind_ecvl_core_image_1(std::function< pybind11::module &(std::string const 
 		cl.def("__imul__", (class ecvl::Image & (ecvl::Image::*)(const class ecvl::Image &)) &ecvl::Image::operator*=, "C++: ecvl::Image::operator*=(const class ecvl::Image &) --> class ecvl::Image &", pybind11::return_value_policy::automatic, pybind11::arg("rhs"));
 		cl.def("__idiv__", (class ecvl::Image & (ecvl::Image::*)(const class ecvl::Image &)) &ecvl::Image::operator/=, "C++: ecvl::Image::operator/=(const class ecvl::Image &) --> class ecvl::Image &", pybind11::return_value_policy::automatic, pybind11::arg("rhs"));
 	}
+}
+
+
+// File: image_ext.cpp
+#include <ecvl/core/datatype.h>
+#include <ecvl/core/image.h>
+#include <ecvl/core/iterators.h>
+#include <func_binder.hpp>
+#include <image_ext.hpp>
+#include <memory>
+#include <sstream> // __str__
+#include <string>
+#include <vector>
+#include <view_float32_addons.hpp>
+#include <view_int16_addons.hpp>
+#include <view_int8_addons.hpp>
+#include <view_uint8_addons.hpp>
+
+#include <pybind11/pybind11.h>
+#include <functional>
+#include <string>
+#include <pybind11/stl.h>
+
+
+#ifndef BINDER_PYBIND11_TYPE_CASTER
+	#define BINDER_PYBIND11_TYPE_CASTER
+	PYBIND11_DECLARE_HOLDER_TYPE(T, std::shared_ptr<T>);
+	PYBIND11_DECLARE_HOLDER_TYPE(T, T*);
+	PYBIND11_MAKE_OPAQUE(std::shared_ptr<void>);
+#endif
+
+void bind_image_ext(std::function< pybind11::module &(std::string const &namespace_) > &M)
+{
 	{ // ecvl::View_int8 file:image_ext.hpp line:4
 		pybind11::class_<ecvl::View_int8, std::shared_ptr<ecvl::View_int8>, ecvl::View<ecvl::DataType::int8>> cl(M("ecvl"), "View_int8", "");
 		cl.def( pybind11::init<class ecvl::Image &>(), pybind11::arg("img") );
@@ -544,7 +637,9 @@ void bind_ecvl_core_datatype(std::function< pybind11::module &(std::string const
 void bind_ecvl_core_image(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_ecvl_core_imgproc(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_ecvl_core_imgcodecs(std::function< pybind11::module &(std::string const &namespace_) > &M);
+void bind_ecvl_dataset_parser(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_ecvl_core_image_1(std::function< pybind11::module &(std::string const &namespace_) > &M);
+void bind_image_ext(std::function< pybind11::module &(std::string const &namespace_) > &M);
 
 
 PYBIND11_MODULE(_core, root_module) {
@@ -570,7 +665,9 @@ PYBIND11_MODULE(_core, root_module) {
 	bind_ecvl_core_image(M);
 	bind_ecvl_core_imgproc(M);
 	bind_ecvl_core_imgcodecs(M);
+	bind_ecvl_dataset_parser(M);
 	bind_ecvl_core_image_1(M);
+	bind_image_ext(M);
 
 }
 
@@ -580,7 +677,9 @@ PYBIND11_MODULE(_core, root_module) {
 // ecvl/core/image.cpp
 // ecvl/core/imgproc.cpp
 // ecvl/core/imgcodecs.cpp
+// ecvl/dataset_parser.cpp
 // ecvl/core/image_1.cpp
+// image_ext.cpp
 
 // Modules list file: /pyecvl/codegen/bindings/_core.modules
 // ecvl 
