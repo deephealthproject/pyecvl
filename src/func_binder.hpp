@@ -36,4 +36,11 @@ void bind_ecvl_functions(pybind11::module &m) {
   m.def("TensorToImage", [](Tensor* t, ecvl::ColorType c_type) {
     return ecvl::TensorToImage(t, c_type);
   });
+  // eddl: TensorToView
+  m.def("TensorToView", [](Tensor* t) {
+    return ecvl::TensorToView(t);
+  });
+  m.def("TensorToView", [](Tensor* t, ecvl::ColorType c_type) {
+    return ecvl::TensorToView(t, c_type);
+  });
 }
