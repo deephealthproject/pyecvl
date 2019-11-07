@@ -29,4 +29,11 @@ void bind_ecvl_functions(pybind11::module &m) {
   m.def("SeparableFilter2D", (void (*)(const class ecvl::Image&, class ecvl::Image&, const std::vector<double>&, const std::vector<double>&, enum ecvl::DataType)) &ecvl::SeparableFilter2D, "Convolves an Image with a couple of 1-dimensional kernels.\n\nC++: ecvl::SeparableFilter2D(const class ecvl::Image&, class ecvl::Image&, const std::vector<double>&, const std::vector<double>&, enum ecvl::DataType) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("kerX"), pybind11::arg("kerY"), pybind11::arg("type"));
   // eddl: ImageToTensor
   m.def("ImageToTensor", &ecvl::ImageToTensor);
+  // eddl: TensorToImage
+  m.def("TensorToImage", [](Tensor* t) {
+    return ecvl::TensorToImage(t);
+  });
+  m.def("TensorToImage", [](Tensor* t, ecvl::ColorType c_type) {
+    return ecvl::TensorToImage(t, c_type);
+  });
 }
