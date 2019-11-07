@@ -26,7 +26,6 @@
 void bind_ecvl_core_datatype(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
 
-	bind_ecvl_functions(M("ecvl"));
 	// ecvl::DataType file:ecvl/core/datatype.h line:15
 	pybind11::enum_<ecvl::DataType>(M("ecvl"), "DataType", "DataType is an enum class which defines\ndata types allowed for images.\n\n  DataType")
 		.value("int8", ecvl::DataType::int8)
@@ -620,6 +619,7 @@ void bind_image_ext(std::function< pybind11::module &(std::string const &namespa
 
 		view_uint8_addons(cl);
 	}
+	bind_ecvl_functions(M("ecvl"));
 }
 
 

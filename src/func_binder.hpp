@@ -43,4 +43,38 @@ void bind_ecvl_functions(pybind11::module &m) {
   m.def("TensorToView", [](Tensor* t, ecvl::ColorType c_type) {
     return ecvl::TensorToView(t, c_type);
   });
+  // eddl: DLDataset
+  pybind11::class_<ecvl::DLDataset, std::shared_ptr<ecvl::DLDataset>, ecvl::Dataset> cl(m, "DLDataset", "");
+  cl.def(pybind11::init([](const std::string& filename, int batch_size, std::string split) { return new ecvl::DLDataset(filename, batch_size, split); }));
+  cl.def(pybind11::init([](const std::string& filename, int batch_size, std::string split, ecvl::ColorType ctype) { return new ecvl::DLDataset(filename, batch_size, split, ctype); }));
+  cl.def_readwrite("batch_size_", &ecvl::DLDataset::batch_size_);
+  cl.def_readwrite("current_batch_", &ecvl::DLDataset::current_batch_);
+  cl.def_readwrite("n_channels_", &ecvl::DLDataset::n_channels_);
+  cl.def_readwrite("ctype_", &ecvl::DLDataset::ctype_);
+  cl.def_readwrite("split_str_", &ecvl::DLDataset::split_str_);
+  // eddl: TrainingToTensor
+  m.def("TrainingToTensor", [](const ecvl::Dataset& dataset, const std::vector<int>& size, Tensor* images, Tensor* labels) {
+    return ecvl::TrainingToTensor(dataset, size, images, labels);
+  });
+  m.def("TrainingToTensor", [](const ecvl::Dataset& dataset, const std::vector<int>& size, Tensor* images, Tensor* labels, ecvl::ColorType ctype) {
+    return ecvl::TrainingToTensor(dataset, size, images, labels, ctype);
+  });
+  // eddl: ValidationToTensor
+  m.def("ValidationToTensor", [](const ecvl::Dataset& dataset, const std::vector<int>& size, Tensor* images, Tensor* labels) {
+    return ecvl::ValidationToTensor(dataset, size, images, labels);
+  });
+  m.def("ValidationToTensor", [](const ecvl::Dataset& dataset, const std::vector<int>& size, Tensor* images, Tensor* labels, ecvl::ColorType ctype) {
+    return ecvl::ValidationToTensor(dataset, size, images, labels, ctype);
+  });
+  // eddl: TestToTensor
+  m.def("TestToTensor", [](const ecvl::Dataset& dataset, const std::vector<int>& size, Tensor* images, Tensor* labels) {
+    return ecvl::TestToTensor(dataset, size, images, labels);
+  });
+  m.def("TestToTensor", [](const ecvl::Dataset& dataset, const std::vector<int>& size, Tensor* images, Tensor* labels, ecvl::ColorType ctype) {
+    return ecvl::TestToTensor(dataset, size, images, labels, ctype);
+  });
+  // eddl: LoadBatch
+  m.def("LoadBatch", [](ecvl::DLDataset& dataset, const std::vector<int>& size, Tensor* images, Tensor* labels) {
+    return ecvl::LoadBatch(dataset, size, images, labels);
+  });
 }

@@ -28,4 +28,7 @@ ${binder} \
 # add buffer_protocol annotation
 sed -i -f add_annotation.sed bindings/_core.cpp
 
+# move custom binding code to the end
+python3 move_custom_binder.py
+
 popd
