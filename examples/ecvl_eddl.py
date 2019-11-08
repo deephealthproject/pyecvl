@@ -8,7 +8,6 @@ import sys
 
 import pyecvl._core.ecvl as ecvl
 import pyeddl._core.eddlT as eddlT
-from pyeddl._core import Tensor
 
 
 def main(args):
@@ -38,14 +37,13 @@ def main(args):
     print("Executing LoadBatch")
     ecvl.LoadBatch(d, size, x_train, y_train)
 
-    # Load all the split (e.g., Test) images in x_test and corresponding
-    # labels in y_test
-    x_test = Tensor()
-    y_test = Tensor()
+    # Load test images in x_test and corresponding labels in y_test
     print("Executing TestToTensor")
-    ecvl.TestToTensor(d, size, x_test, y_test, ecvl.ColorType.GRAY)
-
-    print("All done")
+    x_test, y_test = ecvl.TestToTensor(d, size, ecvl.ColorType.GRAY)
+    print("x_test info:")
+    eddlT.info(x_test)
+    print("y_test info:")
+    eddlT.info(y_test)
 
 
 if __name__ == "__main__":

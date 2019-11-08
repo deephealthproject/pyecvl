@@ -53,25 +53,43 @@ void bind_ecvl_functions(pybind11::module &m) {
   cl.def_readwrite("ctype_", &ecvl::DLDataset::ctype_);
   cl.def_readwrite("split_str_", &ecvl::DLDataset::split_str_);
   // eddl: TrainingToTensor
-  m.def("TrainingToTensor", [](const ecvl::Dataset& dataset, const std::vector<int>& size, Tensor* images, Tensor* labels) {
-    return ecvl::TrainingToTensor(dataset, size, images, labels);
+  m.def("TrainingToTensor", [](const ecvl::Dataset& dataset, const std::vector<int>& size) -> pybind11::tuple {
+    Tensor* images;
+    Tensor* labels;
+    ecvl::TrainingToTensor(dataset, size, images, labels);
+    return pybind11::make_tuple(images, labels);
   });
-  m.def("TrainingToTensor", [](const ecvl::Dataset& dataset, const std::vector<int>& size, Tensor* images, Tensor* labels, ecvl::ColorType ctype) {
-    return ecvl::TrainingToTensor(dataset, size, images, labels, ctype);
+  m.def("TrainingToTensor", [](const ecvl::Dataset& dataset, const std::vector<int>& size, ecvl::ColorType ctype) -> pybind11::tuple {
+    Tensor* images;
+    Tensor* labels;
+    ecvl::TrainingToTensor(dataset, size, images, labels, ctype);
+    return pybind11::make_tuple(images, labels);
   });
   // eddl: ValidationToTensor
-  m.def("ValidationToTensor", [](const ecvl::Dataset& dataset, const std::vector<int>& size, Tensor* images, Tensor* labels) {
-    return ecvl::ValidationToTensor(dataset, size, images, labels);
+  m.def("ValidationToTensor", [](const ecvl::Dataset& dataset, const std::vector<int>& size) -> pybind11::tuple {
+    Tensor* images;
+    Tensor* labels;
+    ecvl::ValidationToTensor(dataset, size, images, labels);
+    return pybind11::make_tuple(images, labels);
   });
-  m.def("ValidationToTensor", [](const ecvl::Dataset& dataset, const std::vector<int>& size, Tensor* images, Tensor* labels, ecvl::ColorType ctype) {
-    return ecvl::ValidationToTensor(dataset, size, images, labels, ctype);
+  m.def("ValidationToTensor", [](const ecvl::Dataset& dataset, const std::vector<int>& size, ecvl::ColorType ctype) -> pybind11::tuple {
+    Tensor* images;
+    Tensor* labels;
+    ecvl::ValidationToTensor(dataset, size, images, labels, ctype);
+    return pybind11::make_tuple(images, labels);
   });
   // eddl: TestToTensor
-  m.def("TestToTensor", [](const ecvl::Dataset& dataset, const std::vector<int>& size, Tensor* images, Tensor* labels) {
-    return ecvl::TestToTensor(dataset, size, images, labels);
+  m.def("TestToTensor", [](const ecvl::Dataset& dataset, const std::vector<int>& size) -> pybind11::tuple {
+    Tensor* images;
+    Tensor* labels;
+    ecvl::TestToTensor(dataset, size, images, labels);
+    return pybind11::make_tuple(images, labels);
   });
-  m.def("TestToTensor", [](const ecvl::Dataset& dataset, const std::vector<int>& size, Tensor* images, Tensor* labels, ecvl::ColorType ctype) {
-    return ecvl::TestToTensor(dataset, size, images, labels, ctype);
+  m.def("TestToTensor", [](const ecvl::Dataset& dataset, const std::vector<int>& size, ecvl::ColorType ctype) -> pybind11::tuple {
+    Tensor* images;
+    Tensor* labels;
+    ecvl::TestToTensor(dataset, size, images, labels, ctype);
+    return pybind11::make_tuple(images, labels);
   });
   // eddl: LoadBatch
   m.def("LoadBatch", [](ecvl::DLDataset& dataset, const std::vector<int>& size, Tensor* images, Tensor* labels) {
