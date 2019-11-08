@@ -45,6 +45,7 @@ def main(args):
     )
     print(eddl.summary(net))
 
+    print("Reading dataset")
     d = ecvl.DLDataset(args.in_ds, args.batch_size, "training", ctype)
     x_train = eddlT.create([args.batch_size, d.n_channels_, size[0], size[1]])
     y_train = eddlT.create([args.batch_size, len(d.classes_)])
@@ -64,8 +65,8 @@ def main(args):
         d.split_.training_ = s
         d.current_batch_ = 0
         for j in range(num_batches):
-            print("Epoch %d/%d (batch %d/%d)" %
-                  (i + 1, args.epochs, j + 1, num_batches))
+            print("Epoch %d/%d (batch %d/%d) - " %
+                  (i + 1, args.epochs, j + 1, num_batches), end="")
             ecvl.LoadBatch(d, size, x_train, y_train)
             x_train.div_(255.0)
             tx, ty = [x_train], [y_train]
@@ -81,7 +82,10 @@ def main(args):
                     "categorical accuracy",  # net.metrics[k].name
                     total_metric[k] / (args.batch_size * (j + 1))
                 ))
-                net.fiterr[p] = net.fiterr[p + 1] = 0.0
+                # net.fiterr[p] = net.fiterr[p + 1] = 0.0
+                fiterr = net.fiterr
+                fiterr[p] = fiterr[p + 1] = 0.0
+                net.fiterr = fiterr
                 p += 2
             d.current_batch_ += 1
 
