@@ -52,6 +52,8 @@ void bind_ecvl_functions(pybind11::module &m) {
   cl.def_readwrite("n_channels_", &ecvl::DLDataset::n_channels_);
   cl.def_readwrite("ctype_", &ecvl::DLDataset::ctype_);
   cl.def_readwrite("split_str_", &ecvl::DLDataset::split_str_);
+  cl.def("GetSplit", &ecvl::DLDataset::GetSplit);
+  cl.def("SetSplit", &ecvl::DLDataset::SetSplit);
   // eddl: TrainingToTensor
   m.def("TrainingToTensor", [](const ecvl::Dataset& dataset, const std::vector<int>& size) -> pybind11::tuple {
     Tensor* images;
