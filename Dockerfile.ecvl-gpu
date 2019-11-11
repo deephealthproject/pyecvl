@@ -1,0 +1,54 @@
+FROM nvidia/cuda:10.1-devel
+
+RUN \
+    export DEBIAN_FRONTEND=noninteractive \
+ && apt-get update -y -q \
+ && apt-get install -y --no-install-recommends \
+        build-essential \
+        gcc-8 \
+        g++-8 \
+        libopencv-dev \
+        libwxgtk3.0-dev \
+        wget \
+ && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 70 \
+   --slave /usr/bin/g++ g++ /usr/bin/g++-7 \
+   --slave /usr/bin/x86_64-linux-gnu-gcc x86_64-linux-gnu-gcc /usr/bin/x86_64-linux-gnu-gcc-7 \
+   --slave /usr/bin/x86_64-linux-gnu-g++ x86_64-linux-gnu-g++ /usr/bin/x86_64-linux-gnu-g++-7 \
+ && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 80 \
+   --slave /usr/bin/g++ g++ /usr/bin/g++-8 \
+   --slave /usr/bin/x86_64-linux-gnu-gcc x86_64-linux-gnu-gcc /usr/bin/x86_64-linux-gnu-gcc-8 \
+   --slave /usr/bin/x86_64-linux-gnu-g++ x86_64-linux-gnu-g++ /usr/bin/x86_64-linux-gnu-g++-8 \
+ && apt-get clean
+
+
+# Install CMake
+RUN wget https://cmake.org/files/v3.14/cmake-3.14.5-Linux-x86_64.tar.gz && \
+    tar xf cmake-3.14.5-Linux-x86_64.tar.gz && \
+    cp -rf cmake-3.14.5-Linux-x86_64/bin /usr/ && \
+    cp -rf cmake-3.14.5-Linux-x86_64/share /usr/ && \
+    rm -rf cmake-3.14.5-Linux-x86_64.tar.gz cmake-3.14.5-Linux-x86_64
+
+
+# Install EDDL. Assumes recursive submodule update.
+COPY third_party/pyeddl/third_party/eddl /eddl
+WORKDIR /eddl
+
+RUN mkdir build && \
+    cd build && \
+    cmake -D BUILD_TARGET=GPU -D BUILD_TESTS=ON -D EDDL_SHARED=ON .. && \
+    make -j$(nproc)
+
+RUN cd build && make install && \
+    cp -rf install/include/eddl /usr/local/include/ && \
+    cp -rf install/include/third_party/eigen/Eigen /usr/local/include/ && \
+    cp install/lib/libeddl.so /usr/local/lib
+
+
+# Install ECVL with EDDL support. Assumes recursive submodule update.
+COPY third_party/ecvl /ecvl
+WORKDIR /ecvl
+RUN mkdir build && \
+    cd build && \
+    cmake -DECVL_BUILD_GUI=OFF -DECVL_DATASET_PARSER=ON -DECVL_BUILD_EDDL=ON -DEDDL_DIR=/eddl/build/install .. && \
+    make -j$(nproc) && \
+    make install
