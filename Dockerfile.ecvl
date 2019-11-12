@@ -7,6 +7,7 @@ RUN \
         gcc-8 \
         g++-8 \
         libopencv-dev \
+        libopenslide-dev \
         libwxgtk3.0-dev \
         wget \
  && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 70 \
@@ -40,6 +41,6 @@ COPY third_party/ecvl /ecvl
 WORKDIR /ecvl
 RUN mkdir build && \
     cd build && \
-    cmake -DECVL_BUILD_GUI=OFF -DECVL_DATASET_PARSER=ON -DECVL_BUILD_EDDL=ON -DEDDL_DIR=/eddl/build/install .. && \
+    cmake -DECVL_BUILD_GUI=OFF -DECVL_WITH_OPENSLIDE=ON -DECVL_DATASET_PARSER=ON -DECVL_BUILD_EDDL=ON -DEDDL_DIR=/eddl/build/install .. && \
     make -j$(nproc) && \
     make install

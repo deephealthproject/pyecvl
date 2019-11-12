@@ -4,6 +4,7 @@
 #include <ecvl/core/imgcodecs.h>
 #include <ecvl/core/imgproc.h>
 #include <ecvl/eddl.h>
+#include <ecvl/core/support_openslide.h>
 
 void bind_ecvl_functions(pybind11::module &m) {
   m.def("RearrangeChannels", &ecvl::RearrangeChannels);
@@ -102,5 +103,9 @@ void bind_ecvl_functions(pybind11::module &m) {
   // eddl: LoadBatch
   m.def("LoadBatch", [](ecvl::DLDataset& dataset, const std::vector<int>& size, Tensor* images, Tensor* labels) {
     return ecvl::LoadBatch(dataset, size, images, labels);
+  });
+  // support_openslide: HamamatsuRead
+  m.def("HamamatsuRead", [](std::string& filename, ecvl::Image& dst, const int level, const std::vector<int>& dims) {
+    return ecvl::HamamatsuRead(filename, dst, level, dims);
   });
 }
