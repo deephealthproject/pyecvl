@@ -307,7 +307,8 @@ void bind_ecvl_core_imgcodecs(std::function< pybind11::module &(std::string cons
 	// ecvl::ImageFormat file:ecvl/core/imgcodecs.h line:16
 	pybind11::enum_<ecvl::ImageFormat>(M("ecvl"), "ImageFormat", "ImageFormat is an enum class which defines\nthe images format to employ.\n\n  ImageFormat")
 		.value("DEFAULT", ecvl::ImageFormat::DEFAULT)
-		.value("NIFTI", ecvl::ImageFormat::NIFTI);
+		.value("NIFTI", ecvl::ImageFormat::NIFTI)
+		.value("DICOM", ecvl::ImageFormat::DICOM);
 
 ;
 
