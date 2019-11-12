@@ -10,8 +10,14 @@ void bind_ecvl_functions(pybind11::module &m) {
   m.def("ImRead", [](const std::string& filename, ecvl::Image& dst) -> bool {
 	  return ecvl::ImRead(filename, dst);
       });
+  m.def("ImRead", [](const std::string& filename, ecvl::Image& dst, ecvl::ImageFormat f) -> bool {
+	  return ecvl::ImRead(filename, dst, f);
+      });
   m.def("ImWrite", [](const std::string& filename, ecvl::Image& src) -> bool {
 	  return ecvl::ImWrite(filename, src);
+      });
+  m.def("ImWrite", [](const std::string& filename, ecvl::Image& src, ecvl::ImageFormat f) -> bool {
+	  return ecvl::ImWrite(filename, src, f);
       });
   // imgproc: ResizeDim
   m.def("ResizeDim", [](const class ecvl::Image& src, class ecvl::Image& dst, const std::vector<int>& newdims) -> void { return ecvl::ResizeDim(src, dst, newdims); }, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("newdims"));
