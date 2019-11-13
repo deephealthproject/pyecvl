@@ -48,7 +48,11 @@ OPENCV_LIBS = [
     "opencv_xphoto",
 ]
 ECVL_LIBS = ["ECVL_EDDL", "DATASET_PARSER", "ECVL_CORE"]
-ALL_LIBS = ECVL_LIBS + ["stdc++fs"] + OPENCV_LIBS + ["yaml-cpp", "eddl"]
+ALL_LIBS = ECVL_LIBS + ["stdc++fs"] + OPENCV_LIBS + [
+    "yaml-cpp",
+    "eddl",
+    "openslide",
+]
 
 
 ext = Extension(

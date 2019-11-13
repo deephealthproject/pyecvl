@@ -70,21 +70,15 @@ https://github.com/deephealthproject/ecvl. Here is a sample build sequence:
 cd third_party/ecvl
 mkdir build
 cd build
-cmake -DECVL_BUILD_GUI=OFF ..
+cmake -DECVL_WITH_OPENSLIDE=ON -DECVL_DATASET_PARSER=ON -DECVL_BUILD_EDDL=ON ..
 make
 make install
 ```
 
-Make sure ECVL installation artifacts are in "standard" system locations. You
-might need to copy them from the `third_party/ecvl/build/install` directory
-created as a result of the ECVL installation process described above. For
-instance:
+Make sure ECVL installation artifacts are in "standard" system locations, such
+as `/usr/local/include` and `/usr/local/lib`. The ECVL installation procedure
+should automatically take care of this.
 
-```
-cd third_party/ecvl/build
-cp -rf install/include/ecvl /usr/local/include/
-cp install/lib/libECVL_CORE.a /usr/local/lib/
-```
 
 ### PyECVL installation
 
