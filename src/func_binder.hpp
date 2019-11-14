@@ -108,4 +108,10 @@ void bind_ecvl_functions(pybind11::module &m) {
   m.def("OpenSlideRead", [](std::string& filename, ecvl::Image& dst, const int level, const std::vector<int>& dims) {
     return ecvl::OpenSlideRead(filename, dst, level, dims);
   });
+  // support_openslide: OpenSlideGetLevels
+  m.def("OpenSlideGetLevels", [](std::string& filename) -> std::vector<std::array<int, 2>> {
+    std::vector<std::array<int, 2>> levels;
+    ecvl::OpenSlideGetLevels(filename, levels);
+    return levels;
+  });
 }
