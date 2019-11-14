@@ -18,7 +18,9 @@ pipeline {
 				sh 'apt-get -y update && apt-get -y install --no-install-recommends python3-dev python3-pip'
 				sh 'python3 -m pip install --upgrade --no-cache-dir setuptools pip numpy pybind11 pytest'
 				sh 'python3 setup.py install'
-				sh 'cd third_party/pyeddl && python3 setup.py install'
+				dir("third_party/pyeddl") {
+				    sh 'python3 setup.py install'
+				}
                             }
                         }
                         stage('Test') {
