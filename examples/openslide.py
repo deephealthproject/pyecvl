@@ -18,7 +18,7 @@ def main(args):
     level = 0  # image level to extract
     dims = [11978, 30243, 3341, 3797]  # [x, y, w, h] region to read
     print("Reading %s" % args.in_fn)
-    ecvl.HamamatsuRead(args.in_fn, img, level, dims)
+    ecvl.OpenSlideRead(args.in_fn, img, level, dims)
     out_fn = "%s.png" % head
     print("Writing %s" % out_fn)
     ecvl.ImWrite(out_fn, img)

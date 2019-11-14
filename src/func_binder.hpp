@@ -104,8 +104,8 @@ void bind_ecvl_functions(pybind11::module &m) {
   m.def("LoadBatch", [](ecvl::DLDataset& dataset, const std::vector<int>& size, Tensor* images, Tensor* labels) {
     return ecvl::LoadBatch(dataset, size, images, labels);
   });
-  // support_openslide: HamamatsuRead
-  m.def("HamamatsuRead", [](std::string& filename, ecvl::Image& dst, const int level, const std::vector<int>& dims) {
-    return ecvl::HamamatsuRead(filename, dst, level, dims);
+  // support_openslide: OpenSlideRead
+  m.def("OpenSlideRead", [](std::string& filename, ecvl::Image& dst, const int level, const std::vector<int>& dims) {
+    return ecvl::OpenSlideRead(filename, dst, level, dims);
   });
 }

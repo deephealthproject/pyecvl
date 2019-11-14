@@ -47,7 +47,7 @@ OPENCV_LIBS = [
     "opencv_xobjdetect",
     "opencv_xphoto",
 ]
-ECVL_LIBS = ["ECVL_EDDL", "DATASET_PARSER", "ECVL_CORE"]
+ECVL_LIBS = ["ecvl_eddl", "dataset_parser", "ecvl_core"]
 ALL_LIBS = ECVL_LIBS + ["stdc++fs"] + OPENCV_LIBS + [
     "yaml-cpp",
     "eddl",
