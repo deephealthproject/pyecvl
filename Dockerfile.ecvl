@@ -41,6 +41,12 @@ COPY third_party/ecvl /ecvl
 WORKDIR /ecvl
 RUN mkdir build && \
     cd build && \
-    cmake -DECVL_BUILD_GUI=OFF -DECVL_WITH_OPENSLIDE=ON -DECVL_DATASET_PARSER=ON -DECVL_BUILD_EDDL=ON -DEDDL_DIR=/eddl/build/install .. && \
+    cmake \
+      -DECVL_BUILD_GUI=OFF \
+      -DECVL_WITH_DICOM=ON \
+      -DECVL_WITH_OPENSLIDE=ON \
+      -DECVL_DATASET_PARSER=ON \
+      -DECVL_BUILD_EDDL=ON \
+      -DEDDL_DIR=/eddl/build/install .. && \
     make -j$(nproc) && \
     make install

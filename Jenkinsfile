@@ -30,7 +30,7 @@ pipeline {
 				sh 'pytest tests'
 				sh 'python3 examples/dataset.py /ecvl/build/mnist/mnist.yml'
 				sh 'python3 examples/ecvl_eddl.py /ecvl/data/test.jpg /ecvl/build/mnist/mnist.yml'
-				sh 'python3 examples/img_format.py /ecvl/data/nifti/LR_nifti.nii'
+				sh 'python3 examples/img_format.py /ecvl/data/nifti/LR_nifti.nii /ecvl/data/isic_dicom/ISIC_0000008.dcm'
 				sh 'python3 examples/imgproc.py /ecvl/data/test.jpg'
 				sh 'python3 examples/openslide.py /ecvl/data/hamamatsu/10-B1-TALG.ndpi'
 				sh 'python3 examples/read_write.py /ecvl/data/test.jpg test_mod.jpg'

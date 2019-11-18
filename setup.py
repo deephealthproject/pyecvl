@@ -3,7 +3,7 @@ from distutils.core import setup, Extension
 import pybind11
 
 
-EXTRA_COMPILE_ARGS = ['-std=c++17', '-fvisibility=hidden']
+EXTRA_COMPILE_ARGS = ['-std=c++17', '-fvisibility=hidden', '-DECVL_WITH_DICOM']
 OPENCV_LIBS = [
     "opencv_aruco",
     "opencv_bgsegm",
@@ -47,12 +47,21 @@ OPENCV_LIBS = [
     "opencv_xobjdetect",
     "opencv_xphoto",
 ]
-ECVL_LIBS = ["ecvl_eddl", "dataset_parser", "ecvl_core"]
-ALL_LIBS = ECVL_LIBS + ["stdc++fs"] + OPENCV_LIBS + [
-    "yaml-cpp",
-    "eddl",
-    "openslide",
+DICOM_LIBS = [
+    "dcmdata",
+    "dcmimage",
+    "dcmimgle",
+    "dcmjpeg",
+    "i2d",
+    "ijg8",
+    "ijg12",
+    "ijg16",
+    "oflog",
+    "ofstd",
 ]
+ECVL_LIBS = ["ecvl_eddl", "dataset_parser", "ecvl_core"]
+OTHER_LIBS = ["stdc++fs", "eddl", "openslide", "yaml-cpp"]
+ALL_LIBS = ECVL_LIBS + OPENCV_LIBS + DICOM_LIBS + OTHER_LIBS
 
 
 ext = Extension(
