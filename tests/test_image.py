@@ -20,6 +20,7 @@ def test_five_dims():
 
 def test_view():
     x = Image([5, 4, 3], DataType.int8, "xyc", ColorType.RGB)
+    assert x.Channels() == 3
     y = View_int8(x)
     y[1, 2, 0] = 36
     y[3, 3, 2] = 48
@@ -98,3 +99,39 @@ def test_image_from_array():
     for i in range(3):
         for j in range(4):
             assert view[i, j] == a[i, j]
+
+
+def test_add():
+    x = Image([2, 4, 3], DataType.int8, "xyc", ColorType.RGB)
+    y = Image([2, 4, 3], DataType.int8, "xyc", ColorType.RGB)
+    a = np.array(x, copy=False)
+    b = np.array(y, copy=False)
+    a.fill(10)
+    b.fill(3)
+    x.Add(y)
+    assert (a == 13).all()
+    a.fill(10)
+    b.fill(118)
+    x.Add(y)
+    assert (a == 127).all()
+    a.fill(10)
+    x.Add(y, saturate=False)
+    assert (a == -128).all()
+
+
+def test_sub():
+    x = Image([2, 4, 3], DataType.int8, "xyc", ColorType.RGB)
+    y = Image([2, 4, 3], DataType.int8, "xyc", ColorType.RGB)
+    a = np.array(x, copy=False)
+    b = np.array(y, copy=False)
+    a.fill(-10)
+    b.fill(3)
+    x.Sub(y)
+    assert (a == -13).all()
+    a.fill(-10)
+    b.fill(119)
+    x.Sub(y)
+    assert (a == -128).all()
+    a.fill(-10)
+    x.Sub(y, saturate=False)
+    assert (a == 127).all()
