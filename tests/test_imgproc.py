@@ -1,3 +1,4 @@
+import numpy as np
 import pyecvl._core.ecvl as ecvl
 
 
@@ -23,15 +24,76 @@ def test_ResizeScale():
     assert tmp.dims_[:2] == [10, 20]
 
 
+def test_Flip2D():
+    dims = [20, 40, 3]
+    img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    tmp = ecvl.Image()
+    ecvl.Flip2D(img, tmp)
+    assert tmp.dims_ == img.dims_
+
+
+def test_Mirror2D():
+    dims = [20, 40, 3]
+    img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    tmp = ecvl.Image()
+    ecvl.Mirror2D(img, tmp)
+    assert tmp.dims_ == img.dims_
+
+
 def test_Rotate2D():
     dims = [20, 40, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     tmp = ecvl.Image()
-    angle, center, scale, interp = 9, [5, 5], 1.5, ecvl.InterpolationType.cubic
+    angle, center, scale, interp = 9, [5, 5], 1.5, ecvl.InterpolationType.area
     ecvl.Rotate2D(img, tmp, angle)
     ecvl.Rotate2D(img, tmp, angle, center)
     ecvl.Rotate2D(img, tmp, angle, center, scale)
     ecvl.Rotate2D(img, tmp, angle, center, scale, interp)
+
+
+def test_RotateFullImage2D():
+    dims = [20, 40, 3]
+    img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    tmp = ecvl.Image()
+    angle, scale, interp = 9, 1.5, ecvl.InterpolationType.lanczos4
+    ecvl.RotateFullImage2D(img, tmp, angle)
+    ecvl.RotateFullImage2D(img, tmp, angle, scale)
+    ecvl.RotateFullImage2D(img, tmp, angle, scale, interp)
+
+
+def test_ChangeColorSpace():
+    dims = [20, 40, 3]
+    img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    tmp = ecvl.Image()
+    new_color = ecvl.ColorType.GRAY
+    ecvl.ChangeColorSpace(img, tmp, new_color)
+    assert tmp.colortype_ == new_color
+    assert tmp.dims_[-1] == 1
+
+
+def test_Threshold():
+    dims = [20, 40, 1]
+    img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.GRAY)
+    thr = ecvl.OtsuThreshold(img)
+    tmp = ecvl.Image()
+    ttype = ecvl.ThresholdingType.BINARY_INV
+    ecvl.Threshold(img, tmp, thr, 255)
+    ecvl.Threshold(img, tmp, thr, 255, ttype)
+
+
+def test_Filter2D():
+    dims = [20, 40, 3]
+    img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    tmp = ecvl.Image()
+    # kernel must be float64, "xyc" and with one color channel
+    kernel = ecvl.Image(
+        [3, 3, 1], ecvl.DataType.float64, "xyc", ecvl.ColorType.GRAY
+    )
+    a = np.array(kernel, copy=False)
+    a.fill(0.11)
+    dtype = ecvl.DataType.uint16
+    ecvl.Filter2D(img, tmp, kernel)
+    ecvl.Filter2D(img, tmp, kernel, dtype)
 
 
 def test_SeparableFilter2D():
@@ -41,3 +103,36 @@ def test_SeparableFilter2D():
     kerX, kerY, dtype = [1, 2, 1], [1, 0, -1], ecvl.DataType.uint16
     ecvl.SeparableFilter2D(img, tmp, kerX, kerY)
     ecvl.SeparableFilter2D(img, tmp, kerX, kerY, dtype)
+
+
+def test_GaussianBlur():
+    dims = [20, 40, 3]
+    img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    tmp = ecvl.Image()
+    sigmaY = 0.2
+    ecvl.GaussianBlur(img, tmp, 5, 5, 0.1)
+    ecvl.GaussianBlur(img, tmp, 5, 5, 0.1, sigmaY)
+
+
+def test_AdditiveLaplaceNoise():
+    dims = [20, 40, 3]
+    img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    tmp = ecvl.Image()
+    stddev = 255 * 0.05
+    ecvl.AdditiveLaplaceNoise(img, tmp, stddev)
+
+
+def test_GammaContrast():
+    dims = [20, 40, 3]
+    img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    tmp = ecvl.Image()
+    gamma = 3
+    ecvl.GammaContrast(img, tmp, gamma)
+
+
+def test_CoarseDropout():
+    dims = [20, 40, 3]
+    img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    tmp = ecvl.Image()
+    prob, drop_size, per_channel = 0.5, 0.1, True
+    ecvl.CoarseDropout(img, tmp, prob, drop_size, per_channel)
