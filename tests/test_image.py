@@ -1,7 +1,8 @@
 import numpy as np
 
 from pyecvl._core.ecvl import (
-    Image, DataType, ColorType, View_int8, View_int16, Neg, RearrangeChannels
+    Image, DataType, ColorType, View_int8, View_int16, Neg, RearrangeChannels,
+    CopyImage
 )
 
 
@@ -175,3 +176,29 @@ def test_div():
     b.fill(2)
     x.Div(y)
     assert (a == 5).all()
+
+
+def test_copy_image():
+    dims, dtype, ch, ctype = [2, 4, 3], DataType.int8, "xyc", ColorType.RGB
+    x = Image(dims, dtype, ch, ctype)
+    a = np.array(x, copy=False)
+    a.fill(3)
+    # without dtype arg
+    y = Image()
+    CopyImage(x, y)
+    assert y.dims_ == dims
+    assert y.elemtype_ == dtype
+    assert y.channels_ == ch
+    assert y.colortype_ == ctype
+    b = np.array(y, copy=False)
+    assert (b == 3).all()
+    # with dtype arg
+    new_dtype = DataType.float32
+    y = Image()
+    CopyImage(x, y, new_dtype)
+    assert y.dims_ == dims
+    assert y.elemtype_ == new_dtype
+    assert y.channels_ == ch
+    assert y.colortype_ == ctype
+    b = np.array(y, copy=False)
+    assert (b == 3).all()
