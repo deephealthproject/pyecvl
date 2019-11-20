@@ -21,7 +21,9 @@ def test_five_dims():
 def test_view():
     x = Image([5, 4, 3], DataType.int8, "xyc", ColorType.RGB)
     assert x.Channels() == 3
+    assert x.IsOwner()
     y = View_int8(x)
+    assert not y.IsOwner()
     y[1, 2, 0] = 36
     y[3, 3, 2] = 48
     y[4, 2, 1] = -127
@@ -111,6 +113,9 @@ def test_add():
     x.Add(y)
     assert (a == 13).all()
     a.fill(10)
+    x += y
+    assert (a == 13).all()
+    a.fill(10)
     b.fill(118)
     x.Add(y)
     assert (a == 127).all()
@@ -129,9 +134,44 @@ def test_sub():
     x.Sub(y)
     assert (a == -13).all()
     a.fill(-10)
+    x -= y
+    assert (a == -13).all()
+    a.fill(-10)
     b.fill(119)
     x.Sub(y)
     assert (a == -128).all()
     a.fill(-10)
     x.Sub(y, saturate=False)
     assert (a == 127).all()
+
+
+def test_mul():
+    x = Image([2, 4, 3], DataType.int8, "xyc", ColorType.RGB)
+    y = Image([2, 4, 3], DataType.int8, "xyc", ColorType.RGB)
+    a = np.array(x, copy=False)
+    b = np.array(y, copy=False)
+    a.fill(16)
+    b.fill(3)
+    x.Mul(y)
+    assert (a == 48).all()
+    a.fill(16)
+    x *= y
+    assert (a == 48).all()
+    a.fill(16)
+    b.fill(8)
+    x.Mul(y)
+    assert (a == 127).all()
+    a.fill(16)
+    x.Mul(y, saturate=False)
+    assert (a == -128).all()
+
+
+def test_div():
+    x = Image([2, 4, 3], DataType.int8, "xyc", ColorType.RGB)
+    y = Image([2, 4, 3], DataType.int8, "xyc", ColorType.RGB)
+    a = np.array(x, copy=False)
+    b = np.array(y, copy=False)
+    a.fill(11)
+    b.fill(2)
+    x.Div(y)
+    assert (a == 5).all()
