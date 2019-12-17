@@ -28,12 +28,8 @@ WORKDIR /eddl
 RUN mkdir build && \
     cd build && \
     cmake -D BUILD_TESTS=ON -D EDDL_SHARED=ON .. && \
-    make -j$(nproc)
-
-RUN cd build && make install && \
-    cp -rf install/include/eddl /usr/local/include/ && \
-    cp -rf install/include/third_party/eigen/Eigen /usr/local/include/ && \
-    cp install/lib/libeddl.so /usr/local/lib
+    make -j$(nproc) && \
+    make install
 
 
 # Install ECVL with EDDL support. Assumes recursive submodule update.
@@ -46,7 +42,6 @@ RUN mkdir build && \
       -DECVL_WITH_DICOM=ON \
       -DECVL_WITH_OPENSLIDE=ON \
       -DECVL_DATASET_PARSER=ON \
-      -DECVL_BUILD_EDDL=ON \
-      -DEDDL_DIR=/eddl/build/install .. && \
+      -DECVL_BUILD_EDDL=ON .. && \
     make -j$(nproc) && \
     make install

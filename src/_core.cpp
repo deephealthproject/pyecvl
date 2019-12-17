@@ -353,7 +353,7 @@ void bind_ecvl_core_imgcodecs(std::function< pybind11::module &(std::string cons
 
 void bind_ecvl_dataset_parser(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
-	{ // ecvl::Sample file:ecvl/dataset_parser.h line:16
+	{ // ecvl::Sample file:ecvl/dataset_parser.h line:15
 		pybind11::class_<ecvl::Sample, std::shared_ptr<ecvl::Sample>> cl(M("ecvl"), "Sample", "");
 		cl.def( pybind11::init( [](){ return new ecvl::Sample(); } ) );
 		cl.def( pybind11::init( [](ecvl::Sample const &o){ return new ecvl::Sample(o); } ) );
@@ -362,9 +362,10 @@ void bind_ecvl_dataset_parser(std::function< pybind11::module &(std::string cons
 		cl.def_readwrite("label_path_", &ecvl::Sample::label_path_);
 		cl.def_readwrite("values_", &ecvl::Sample::values_);
 		cl.def("LoadImage", [](ecvl::Sample const &o) -> ecvl::Image { return o.LoadImage(); }, "");
-		cl.def("LoadImage", (class ecvl::Image (ecvl::Sample::*)(enum ecvl::ColorType) const) &ecvl::Sample::LoadImage, "C++: ecvl::Sample::LoadImage(enum ecvl::ColorType) const --> class ecvl::Image", pybind11::arg("ctype"));
+		cl.def("LoadImage", [](ecvl::Sample const &o, enum ecvl::ColorType const & a0) -> ecvl::Image { return o.LoadImage(a0); }, "", pybind11::arg("ctype"));
+		cl.def("LoadImage", (class ecvl::Image (ecvl::Sample::*)(enum ecvl::ColorType, const bool &) const) &ecvl::Sample::LoadImage, "C++: ecvl::Sample::LoadImage(enum ecvl::ColorType, const bool &) const --> class ecvl::Image", pybind11::arg("ctype"), pybind11::arg("is_gt"));
 	}
-	{ // ecvl::Split file:ecvl/dataset_parser.h line:26
+	{ // ecvl::Split file:ecvl/dataset_parser.h line:25
 		pybind11::class_<ecvl::Split, std::shared_ptr<ecvl::Split>> cl(M("ecvl"), "Split", "");
 		cl.def( pybind11::init( [](ecvl::Split const &o){ return new ecvl::Split(o); } ) );
 		cl.def( pybind11::init( [](){ return new ecvl::Split(); } ) );
@@ -373,7 +374,7 @@ void bind_ecvl_dataset_parser(std::function< pybind11::module &(std::string cons
 		cl.def_readwrite("test_", &ecvl::Split::test_);
 		cl.def("assign", (class ecvl::Split & (ecvl::Split::*)(const class ecvl::Split &)) &ecvl::Split::operator=, "C++: ecvl::Split::operator=(const class ecvl::Split &) --> class ecvl::Split &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 	}
-	{ // ecvl::Dataset file:ecvl/dataset_parser.h line:33
+	{ // ecvl::Dataset file:ecvl/dataset_parser.h line:32
 		pybind11::class_<ecvl::Dataset, std::shared_ptr<ecvl::Dataset>> cl(M("ecvl"), "Dataset", "");
 		cl.def( pybind11::init( [](){ return new ecvl::Dataset(); } ) );
 		cl.def( pybind11::init( [](ecvl::Dataset const &o){ return new ecvl::Dataset(o); } ) );
