@@ -9,41 +9,7 @@ import sys
 import pyecvl._core.ecvl as ecvl
 import pyeddl._core.eddl as eddl
 import pyeddl._core.eddlT as eddlT
-
-
-TRMODE = 1
-
-
-def VGG16(in_layer, num_classes):
-    x = in_layer
-    x = eddl.Activation(eddl.Conv(x, 64, [3, 3]), "relu")
-    x = eddl.MaxPool(
-        eddl.Activation(eddl.Conv(x, 64, [3, 3]), "relu"), [2, 2], [2, 2]
-    )
-    x = eddl.Activation(eddl.Conv(x, 128, [3, 3]), "relu")
-    x = eddl.MaxPool(
-        eddl.Activation(eddl.Conv(x, 128, [3, 3]), "relu"), [2, 2], [2, 2]
-    )
-    x = eddl.Activation(eddl.Conv(x, 256, [3, 3]), "relu")
-    x = eddl.Activation(eddl.Conv(x, 256, [3, 3]), "relu")
-    x = eddl.MaxPool(
-        eddl.Activation(eddl.Conv(x, 256, [3, 3]), "relu"), [2, 2], [2, 2]
-    )
-    x = eddl.Activation(eddl.Conv(x, 512, [3, 3]), "relu")
-    x = eddl.Activation(eddl.Conv(x, 512, [3, 3]), "relu")
-    x = eddl.MaxPool(
-        eddl.Activation(eddl.Conv(x, 512, [3, 3]), "relu"), [2, 2], [2, 2]
-    )
-    x = eddl.Activation(eddl.Conv(x, 512, [3, 3]), "relu")
-    x = eddl.Activation(eddl.Conv(x, 512, [3, 3]), "relu")
-    x = eddl.MaxPool(
-        eddl.Activation(eddl.Conv(x, 512, [3, 3]), "relu"), [2, 2], [2, 2]
-    )
-    x = eddl.Reshape(x, [-1])
-    x = eddl.Activation(eddl.Dense(x, 4096), "relu")
-    x = eddl.Activation(eddl.Dense(x, 4096), "relu")
-    x = eddl.Activation(eddl.Dense(x, num_classes), "softmax")
-    return x
+from models import VGG16
 
 
 def main(args):
@@ -58,62 +24,46 @@ def main(args):
         eddl.sgd(0.001, 0.9),
         ["soft_cross_entropy"],
         ["categorical_accuracy"],
-        eddl.CS_GPU([1]) if args.gpu else eddl.CS_CPU(4)
+        eddl.CS_GPU([1]) if args.gpu else eddl.CS_CPU()
     )
-    print(eddl.summary(net))
+    eddl.summary(net)
 
     print("Reading dataset")
     d = ecvl.DLDataset(args.in_ds, args.batch_size, "training")
     x_train = eddlT.create([args.batch_size, d.n_channels_, size[0], size[1]])
     y_train = eddlT.create([args.batch_size, len(d.classes_)])
-    eddl.resize_model(net, args.batch_size)
-    eddl.set_mode(net, TRMODE)
-    total_loss = [0]
-    total_metric = [0]
     num_samples = len(d.GetSplit())
     num_batches = num_samples // args.batch_size
     indices = list(range(args.batch_size))
 
     for i in range(args.epochs):
-        total_loss[0] = 0.0
-        total_metric[0] = 0.0
+        eddl.reset_loss(net)
         s = d.GetSplit()
         random.shuffle(s)
         d.split_.training_ = s
         d.current_batch_ = 0
         for j in range(num_batches):
             print("Epoch %d/%d (batch %d/%d) - " %
-                  (i + 1, args.epochs, j + 1, num_batches), end="")
+                  (i + 1, args.epochs, j + 1, num_batches), end="", flush=True)
             ecvl.LoadBatch(d, size, x_train, y_train)
             x_train.div_(255.0)
             tx, ty = [x_train], [y_train]
             eddl.train_batch(net, tx, ty, indices)
-            p = 0
-            for k in range(len(ty)):
-                total_loss[k] += net.fiterr[p]
-                total_metric[k] += net.fiterr[p + 1]
-                print("%s(%s=%.3f, %s=%.3f)" % (
-                    net.lout[k].name,
-                    "soft_cross_entropy",  # net.losses[k].name
-                    total_loss[k] / (args.batch_size * (j + 1)),
-                    "categorical accuracy",  # net.metrics[k].name
-                    total_metric[k] / (args.batch_size * (j + 1))
-                ))
-                # net.fiterr[p] = net.fiterr[p + 1] = 0.0
-                fiterr = net.fiterr
-                fiterr[p] = fiterr[p + 1] = 0.0
-                net.fiterr = fiterr
-                p += 2
+            eddl.print_loss(net, j)
+            print()
             d.current_batch_ += 1
 
-    eddl.save(net, "isic_classification_checkpoint.bin")
-    del(x_train)
-    del(y_train)
+    eddl.save(net, "isic_classification_checkpoint.bin", "bin")
 
+    print("Evaluation")
     d.SetSplit("test")
-    x_test, y_test = ecvl.TestToTensor(d, size)
-    x_test.div_(255.0)
-    eddl.evaluate(net, [x_test], [y_test])
+    num_samples = len(d.GetSplit())
+    num_batches = num_samples // args.batch_size
+    for i in range(num_batches):
+        print("batch %d / %d - " % (i, num_batches), end="", flush=True)
+        ecvl.LoadBatch(d, size, x_train, y_train)
+        x_train.div_(255.0)
+        eddl.evaluate(net, [x_train], [y_train])
 
 
 if __name__ == "__main__":
