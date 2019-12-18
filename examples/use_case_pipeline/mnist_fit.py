@@ -7,20 +7,7 @@ import sys
 
 import pyecvl._core.ecvl as ecvl
 import pyeddl._core.eddl as eddl
-
-
-def LeNet(in_layer, num_classes):
-    x = in_layer
-    x = eddl.MaxPool(
-        eddl.Activation(eddl.Conv(x, 20, [5, 5]), "relu"), [2, 2], [2, 2]
-    )
-    x = eddl.MaxPool(
-        eddl.Activation(eddl.Conv(x, 50, [5, 5]), "relu"), [2, 2], [2, 2]
-    )
-    x = eddl.Reshape(x, [-1])
-    x = eddl.Activation(eddl.Dense(x, 500), "relu")
-    x = eddl.Activation(eddl.Dense(x, num_classes), "softmax")
-    return x
+from models import LeNet
 
 
 def main(args):
@@ -36,16 +23,16 @@ def main(args):
         eddl.sgd(0.001, 0.9),
         ["soft_cross_entropy"],
         ["categorical_accuracy"],
-        eddl.CS_GPU([1]) if args.gpu else eddl.CS_CPU(4)
+        eddl.CS_GPU([1]) if args.gpu else eddl.CS_CPU()
     )
-    print(eddl.summary(net))
+    eddl.summary(net)
 
     print("Reading dataset")
     d = ecvl.Dataset(args.in_ds)
     x_train, y_train = ecvl.TrainingToTensor(d, size, ctype)
     x_train.div_(255.0)
     eddl.fit(net, [x_train], [y_train], args.batch_size, args.epochs)
-    eddl.save(net, "mnist_checkpoint.bin")
+    eddl.save(net, "mnist_checkpoint.bin", "bin")
 
     x_test, y_test = ecvl.TestToTensor(d, size, ctype)
     x_test.div_(255.0)

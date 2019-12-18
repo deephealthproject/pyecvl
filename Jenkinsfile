@@ -7,7 +7,7 @@ pipeline {
                     agent {
                         docker {
                             label 'docker'
-                            image 'simleo/ecvl:c811985-v1'
+                            image 'simleo/ecvl:af6001e'
                             args '-u root:root'
                         }
                     }
