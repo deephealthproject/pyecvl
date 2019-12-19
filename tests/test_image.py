@@ -90,13 +90,24 @@ def test_image_from_array():
         np_dt = getattr(np, dt_name)
         dt = getattr(DataType, dt_name)
         a = np.arange(12).reshape(3, 4).astype(np_dt)
-        a = np.asfortranarray(a)
+        b = np.asfortranarray(a)
+        img = Image(b, channels, color_type)
+        assert img.elemtype_ == dt
+        assert img.dims_ == list(b.shape)
+        assert img.strides_ == list(b.strides)
+        # check construction from c-style array
         img = Image(a, channels, color_type)
         assert img.elemtype_ == dt
         assert img.dims_ == list(a.shape)
-        assert img.strides_ == list(a.strides)
+        assert img.strides_ == list(b.strides)
     a = np.arange(12).reshape(3, 4).astype(np.int16)
-    a = np.asfortranarray(a)
+    b = np.asfortranarray(a)
+    img = Image(b, channels, color_type)
+    view = View_int16(img)
+    for i in range(3):
+        for j in range(4):
+            assert view[i, j] == b[i, j]
+    # check construction from c-style array
     img = Image(a, channels, color_type)
     view = View_int16(img)
     for i in range(3):
