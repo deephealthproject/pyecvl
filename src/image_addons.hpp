@@ -1,6 +1,20 @@
 #pragma once
 
 #include <pybind11/pybind11.h>
+#include <pybind11/numpy.h>
+
+
+ecvl::Image* bufToImg(const pybind11::buffer_info& b,
+                      const ecvl::DataType& elemtype,
+                      const std::string& channels,
+                      const ecvl::ColorType& colortype,
+                      const std::vector<float>& spacings) {
+    std::vector<int> shape(b.shape.begin(), b.shape.end());
+    auto img = new ecvl::Image(shape, elemtype, channels, colortype, spacings);
+    std::copy((uint8_t*)b.ptr, ((uint8_t*)b.ptr) + img->datasize_, img->data_);
+    return img;
+}
+
 
 template <typename type_, typename... options>
 void image_addons(pybind11::class_<type_, options...> &cl) {
@@ -49,53 +63,28 @@ void image_addons(pybind11::class_<type_, options...> &cl) {
             img.strides_
         );
     });
-    cl.def("__init__", [](ecvl::Image &img, pybind11::buffer b,
-                          std::string channels, ecvl::ColorType colortype,
-                          const std::vector<float>& spacings) {
-        pybind11::buffer_info info = b.request();
-        ecvl::DataType elemtype;
-        if (info.format == "b")
-            elemtype = ecvl::DataType::int8;
-        else if (info.format == "h")
-            elemtype = ecvl::DataType::int16;
-        else if (info.format == "i")
-            elemtype = ecvl::DataType::int32;
-        else if (info.format == "q" ||
-                 (info.format == "l" && info.itemsize == 8))
-            elemtype = ecvl::DataType::int64 ;
-        else if (info.format == "f")
-            elemtype = ecvl::DataType::float32;
-        else if (info.format == "d")
-            elemtype = ecvl::DataType::float64;
-        else if (info.format == "B")
-            elemtype = ecvl::DataType::uint8;
-        else if (info.format == "H")
-            elemtype = ecvl::DataType::uint16;
-        else
-            throw std::invalid_argument("unknown data type");
-        bool f_contiguous = true;
-        std::vector<ssize_t> f_contiguous_strides(info.ndim);
-        ssize_t S = info.itemsize;
-        for (int i = 0; i < info.ndim; ++i) {
-            f_contiguous_strides[i] = S;
-            S *= info.shape[i];
-        }
-        for (int i = 0; i < info.ndim; ++i) {
-            if (info.strides[i] != f_contiguous_strides[i]) {
-                f_contiguous = false;
-                break;
-            }
-        }
-        std::vector<int> shape(info.ndim);
-        for (int i = 0; i < info.ndim; ++i) {
-            shape[i] = info.shape[i];
-        }
-        new(&img) ecvl::Image(shape, elemtype, channels, colortype, spacings);
-        if (f_contiguous) {
-            std::copy((uint8_t*)info.ptr,
-		      ((uint8_t*)info.ptr) + img.datasize_, img.data_);
-        } else {
-            throw std::runtime_error("data is not fortran-contiguous");
-        }
-    }, pybind11::arg("buf"), pybind11::arg("channels"), pybind11::arg("colortype"), pybind11::arg("spacings") = std::vector<float>());
+    cl.def(pybind11::init([](pybind11::array_t<std::int8_t, pybind11::array::f_style> array, std::string channels, ecvl::ColorType colortype, const std::vector<float>& spacings) {
+        return bufToImg(array.request(), ecvl::DataType::int8, channels, colortype, spacings);
+    }), pybind11::arg("buf"), pybind11::arg("channels"), pybind11::arg("colortype"), pybind11::arg("spacings") = std::vector<float>());
+    cl.def(pybind11::init([](pybind11::array_t<std::int16_t, pybind11::array::f_style> array, std::string channels, ecvl::ColorType colortype, const std::vector<float>& spacings) {
+        return bufToImg(array.request(), ecvl::DataType::int16, channels, colortype, spacings);
+    }), pybind11::arg("buf"), pybind11::arg("channels"), pybind11::arg("colortype"), pybind11::arg("spacings") = std::vector<float>());
+    cl.def(pybind11::init([](pybind11::array_t<std::int32_t, pybind11::array::f_style> array, std::string channels, ecvl::ColorType colortype, const std::vector<float>& spacings) {
+        return bufToImg(array.request(), ecvl::DataType::int32, channels, colortype, spacings);
+    }), pybind11::arg("buf"), pybind11::arg("channels"), pybind11::arg("colortype"), pybind11::arg("spacings") = std::vector<float>());
+    cl.def(pybind11::init([](pybind11::array_t<std::int64_t, pybind11::array::f_style> array, std::string channels, ecvl::ColorType colortype, const std::vector<float>& spacings) {
+        return bufToImg(array.request(), ecvl::DataType::int64, channels, colortype, spacings);
+    }), pybind11::arg("buf"), pybind11::arg("channels"), pybind11::arg("colortype"), pybind11::arg("spacings") = std::vector<float>());
+    cl.def(pybind11::init([](pybind11::array_t<std::uint8_t, pybind11::array::f_style> array, std::string channels, ecvl::ColorType colortype, const std::vector<float>& spacings) {
+        return bufToImg(array.request(), ecvl::DataType::uint8, channels, colortype, spacings);
+    }), pybind11::arg("buf"), pybind11::arg("channels"), pybind11::arg("colortype"), pybind11::arg("spacings") = std::vector<float>());
+    cl.def(pybind11::init([](pybind11::array_t<std::uint16_t, pybind11::array::f_style> array, std::string channels, ecvl::ColorType colortype, const std::vector<float>& spacings) {
+        return bufToImg(array.request(), ecvl::DataType::uint16, channels, colortype, spacings);
+    }), pybind11::arg("buf"), pybind11::arg("channels"), pybind11::arg("colortype"), pybind11::arg("spacings") = std::vector<float>());
+    cl.def(pybind11::init([](pybind11::array_t<float, pybind11::array::f_style> array, std::string channels, ecvl::ColorType colortype, const std::vector<float>& spacings) {
+        return bufToImg(array.request(), ecvl::DataType::float32, channels, colortype, spacings);
+    }), pybind11::arg("buf"), pybind11::arg("channels"), pybind11::arg("colortype"), pybind11::arg("spacings") = std::vector<float>());
+    cl.def(pybind11::init([](pybind11::array_t<double, pybind11::array::f_style> array, std::string channels, ecvl::ColorType colortype, const std::vector<float>& spacings) {
+        return bufToImg(array.request(), ecvl::DataType::float64, channels, colortype, spacings);
+    }), pybind11::arg("buf"), pybind11::arg("channels"), pybind11::arg("colortype"), pybind11::arg("spacings") = std::vector<float>());
 }
