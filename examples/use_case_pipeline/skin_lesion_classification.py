@@ -59,11 +59,13 @@ def main(args):
     d.SetSplit("test")
     num_samples = len(d.GetSplit())
     num_batches = num_samples // args.batch_size
+    d.current_batch_ = 0
     for i in range(num_batches):
         print("batch %d / %d - " % (i, num_batches), end="", flush=True)
         ecvl.LoadBatch(d, size, x_train, y_train)
         x_train.div_(255.0)
         eddl.evaluate(net, [x_train], [y_train])
+        d.current_batch_ += 1
 
 
 if __name__ == "__main__":
