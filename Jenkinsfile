@@ -18,8 +18,10 @@ pipeline {
 				sh 'apt-get -y update && apt-get -y install --no-install-recommends python3-dev python3-pip git'
 				sh 'git submodule update --init --recursive third_party/pyeddl'
 				sh 'python3 -m pip install --upgrade --no-cache-dir setuptools pip numpy pybind11 pytest'
+				sh 'rm -rf build'
 				sh 'python3 setup.py install'
 				dir("third_party/pyeddl") {
+				    sh 'rm -rf build'
 				    sh 'python3 setup.py install'
 				}
                             }
