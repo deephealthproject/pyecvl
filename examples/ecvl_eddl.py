@@ -26,20 +26,21 @@ def main(args):
 
     batch_size = 64
     print("Creating a DLDataset")
-    d = ecvl.DLDataset(args.in_ds, batch_size, "training", ecvl.ColorType.GRAY)
-    size = [28, 28]
+    d = ecvl.DLDataset(args.in_ds, batch_size, [28, 56], ecvl.ColorType.GRAY)
     print("Create x_train and y_train")
-    x_train = eddlT.create([batch_size, d.n_channels_, size[0], size[1]])
+    x_train = eddlT.create(
+        [batch_size, d.n_channels_, d.resize_dims_[0], d.resize_dims_[1]]
+    )
     y_train = eddlT.create([batch_size, len(d.classes_)])
 
     # Load a batch of d.batch_size_ images into x_train and corresponding
     # labels in y_train. Images are resized to the dimensions specified in size
     print("Executing LoadBatch")
-    ecvl.LoadBatch(d, size, x_train, y_train)
+    d.LoadBatch(x_train, y_train)
 
     # Load test images in x_test and corresponding labels in y_test
     print("Executing TestToTensor")
-    x_test, y_test = ecvl.TestToTensor(d, size, ecvl.ColorType.GRAY)
+    x_test, y_test = ecvl.TestToTensor(d, d.resize_dims_, ecvl.ColorType.GRAY)
     print("x_test info:")
     eddlT.info(x_test)
     print("y_test info:")

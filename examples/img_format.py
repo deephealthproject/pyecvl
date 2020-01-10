@@ -16,11 +16,11 @@ def nifti_io(fn):
     head, ext = os.path.splitext(os.path.basename(fn))
     img = ecvl.Image()
     print("Reading %s" % fn)
-    ecvl.ImRead(fn, img, ecvl.ImageFormat.NIFTI)
+    ecvl.NiftiRead(fn, img)
     ecvl.GammaContrast(img, img, 3)
     out_fn = "%s_gamma%s" % (head, ext)
     print("Saving %s" % out_fn)
-    ecvl.ImWrite(out_fn, img, ecvl.ImageFormat.NIFTI)
+    ecvl.NiftiWrite(out_fn, img)
 
 
 def dicom_io(fn):
@@ -30,14 +30,14 @@ def dicom_io(fn):
     head, ext = os.path.splitext(os.path.basename(fn))
     img = ecvl.Image()
     print("Reading %s" % fn)
-    ecvl.ImRead(fn, img, ecvl.ImageFormat.DICOM)
+    ecvl.DicomRead(fn, img)
     ecvl.ChangeColorSpace(img, img, ecvl.ColorType.GRAY)
     thresh = ecvl.OtsuThreshold(img)
     maxval = 255
     ecvl.Threshold(img, img, thresh, maxval)
     out_fn = "%s_threshold%s" % (head, ext)
     print("Saving %s" % out_fn)
-    ecvl.ImWrite(out_fn, img, ecvl.ImageFormat.DICOM)
+    ecvl.DicomWrite(out_fn, img)
 
 
 def main(args):
