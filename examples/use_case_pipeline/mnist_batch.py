@@ -30,7 +30,7 @@ def main(args):
     eddl.summary(net)
 
     print("Reading dataset")
-    d = ecvl.DLDataset(args.in_ds, args.batch_size, "training", ctype)
+    d = ecvl.DLDataset(args.in_ds, args.batch_size, size, ctype)
     x_train = eddlT.create([args.batch_size, d.n_channels_, size[0], size[1]])
     y_train = eddlT.create([args.batch_size, len(d.classes_)])
     num_samples = len(d.GetSplit())
@@ -42,17 +42,16 @@ def main(args):
         s = d.GetSplit()
         random.shuffle(s)
         d.split_.training_ = s
-        d.current_batch_ = 0
+        d.ResetCurrentBatch()
         for j in range(num_batches):
             print("Epoch %d/%d (batch %d/%d) - " %
                   (i + 1, args.epochs, j + 1, num_batches), end="", flush=True)
-            ecvl.LoadBatch(d, size, x_train, y_train)
+            d.LoadBatch(x_train, y_train)
             x_train.div_(255.0)
             tx, ty = [x_train], [y_train]
             eddl.train_batch(net, tx, ty, indices)
             eddl.print_loss(net, j)
             print()
-            d.current_batch_ += 1
 
     eddl.save(net, "mnist_checkpoint.bin", "bin")
 
@@ -60,13 +59,12 @@ def main(args):
     d.SetSplit("test")
     num_samples = len(d.GetSplit())
     num_batches = num_samples // args.batch_size
-    d.current_batch_ = 0
+    d.ResetCurrentBatch()
     for i in range(num_batches):
         print("batch %d / %d - " % (i, num_batches), end="", flush=True)
-        ecvl.LoadBatch(d, size, x_train, y_train)
+        d.LoadBatch(x_train, y_train)
         x_train.div_(255.0)
         eddl.evaluate(net, [x_train], [y_train])
-        d.current_batch_ += 1
 
 
 if __name__ == "__main__":
