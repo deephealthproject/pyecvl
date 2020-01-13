@@ -122,6 +122,14 @@ def test_AdditiveLaplaceNoise():
     ecvl.AdditiveLaplaceNoise(img, tmp, stddev)
 
 
+def test_AdditivePoissonNoise():
+    dims = [20, 40, 3]
+    img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    tmp = ecvl.Image()
+    lambda_ = 2.0
+    ecvl.AdditivePoissonNoise(img, tmp, lambda_)
+
+
 def test_GammaContrast():
     dims = [20, 40, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
@@ -136,3 +144,27 @@ def test_CoarseDropout():
     tmp = ecvl.Image()
     prob, drop_size, per_channel = 0.5, 0.1, True
     ecvl.CoarseDropout(img, tmp, prob, drop_size, per_channel)
+
+
+def test_IntegralImage():
+    dims = [20, 40, 1]
+    img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.GRAY)
+    tmp = ecvl.Image()
+    dst_type = ecvl.DataType.float64
+    ecvl.IntegralImage(img, tmp)
+    ecvl.IntegralImage(img, tmp, dst_type)
+
+
+def test_NonMaximaSuppression():
+    dims = [20, 40, 1]
+    img = ecvl.Image(dims, ecvl.DataType.int32, "xyc", ecvl.ColorType.GRAY)
+    tmp = ecvl.Image()
+    ecvl.NonMaximaSuppression(img, tmp)
+
+
+def test_GetMaxN():
+    a = np.asfortranarray(np.zeros(12, dtype=np.int32).reshape(3, 4, 1))
+    a[0, 1] = 3
+    a[1, 2] = 4
+    img = ecvl.Image(a, "xyc", ecvl.ColorType.GRAY)
+    assert sorted(ecvl.GetMaxN(img, 2)) == [[0, 1], [1, 2]]
