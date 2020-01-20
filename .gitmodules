@@ -1,6 +1,6 @@
 [submodule "third_party/ecvl"]
 	path = third_party/ecvl
-	url = https://github.com:deephealthproject/ecvl
+	url = https://github.com/deephealthproject/ecvl
 [submodule "third_party/pyeddl"]
 	path = third_party/pyeddl
 	url = https://github.com/deephealthproject/pyeddl
