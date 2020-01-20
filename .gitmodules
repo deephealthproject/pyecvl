@@ -1,8 +1,6 @@
 [submodule "third_party/ecvl"]
 	path = third_party/ecvl
 	url = git@github.com:deephealthproject/ecvl.git
-	shallow = true
 [submodule "third_party/pyeddl"]
 	path = third_party/pyeddl
 	url = https://github.com/deephealthproject/pyeddl
-	shallow = true
