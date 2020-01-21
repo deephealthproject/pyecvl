@@ -85,6 +85,19 @@ Then, you can test your installation by running the PyECVL tests:
     pytest tests
 
 
+### Disabling unwanted modules
+
+By default, PyECVL assumes a complete ECVL installation, including optional
+modules (except for the GUI), and builds bindings for all of them. You can
+disable support for specific modules via environment variables. For instance,
+suppose you installed ECVL without openslide support: by default, PyECVL will
+try to build the bindings for openslide-specific ECVL tools and link the
+openslide library, which might not even be present on your system. To avoid
+this, set the `ECVL_WITH_OPENSLIDE` environment variable to `OFF` (or `FALSE`)
+before building PyECVL. Similarly, you can turn off DICOM and EDDL support by
+setting `ECVL_WITH_DICOM` and `ECVL_EDDL` to `OFF`.
+
+
 ### ECVL installed in an arbitrary directory
 
 The above installation instructions assume ECVL has been installed in standard
