@@ -28,7 +28,7 @@ DICOM_LIBS = [
     "ofstd",
 ]
 ECVL_LIBS = ["ecvl_eddl", "dataset_parser", "ecvl_core"]
-OTHER_LIBS = ["stdc++fs", "eddl", "openslide", "yaml-cpp"]
+OTHER_LIBS = ["stdc++fs", "eddl", "yaml-cpp"]
 ALL_LIBS = ECVL_LIBS + OPENCV_LIBS + OTHER_LIBS
 INCLUDE_DIRS = [
     "src",
@@ -53,6 +53,10 @@ ECVL_WITH_DICOM = to_bool(os.getenv("ECVL_WITH_DICOM", "ON"))
 if ECVL_WITH_DICOM:
     EXTRA_COMPILE_ARGS.append('-DECVL_WITH_DICOM')
     ALL_LIBS.extend(DICOM_LIBS)
+ECVL_WITH_OPENSLIDE = to_bool(os.getenv("ECVL_WITH_OPENSLIDE", "ON"))
+if ECVL_WITH_OPENSLIDE:
+    EXTRA_COMPILE_ARGS.append('-DECVL_WITH_OPENSLIDE')
+    ALL_LIBS.append("openslide")
 
 
 ext = Extension(

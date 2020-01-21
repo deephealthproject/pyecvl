@@ -4,7 +4,9 @@
 #include <ecvl/core/imgcodecs.h>
 #include <ecvl/core/imgproc.h>
 #include <ecvl/eddl.h>
+#ifdef ECVL_WITH_OPENSLIDE
 #include <ecvl/core/support_openslide.h>
+#endif
 #include <ecvl/core/support_nifti.h>
 #ifdef ECVL_WITH_DICOM
 #include <ecvl/core/support_dcmtk.h>
@@ -131,6 +133,7 @@ void bind_ecvl_functions(pybind11::module &m) {
     ecvl::TestToTensor(dataset, size, images, labels, ctype);
     return pybind11::make_tuple(images, labels);
   });
+#ifdef ECVL_WITH_OPENSLIDE
   // support_openslide: OpenSlideRead
   m.def("OpenSlideRead", [](std::string& filename, ecvl::Image& dst, const int level, const std::vector<int>& dims) {
     return ecvl::OpenSlideRead(filename, dst, level, dims);
@@ -141,6 +144,7 @@ void bind_ecvl_functions(pybind11::module &m) {
     ecvl::OpenSlideGetLevels(filename, levels);
     return levels;
   });
+#endif
   // support_nifti: NiftiRead
   m.def("NiftiRead", [](const std::string& filename, ecvl::Image& dst) {
     return ecvl::NiftiRead(filename, dst);
