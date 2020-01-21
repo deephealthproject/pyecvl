@@ -1,51 +1,19 @@
+import os
 from distutils.core import setup, Extension
 
 import pybind11
 
 
-EXTRA_COMPILE_ARGS = ['-std=c++17', '-fvisibility=hidden', '-DECVL_WITH_DICOM']
+def to_bool(s):
+    s = s.lower()
+    return s != "off" and s != "false"
+
+
+EXTRA_COMPILE_ARGS = ['-std=c++17', '-fvisibility=hidden']
 OPENCV_LIBS = [
-    "opencv_aruco",
-    "opencv_bgsegm",
-    "opencv_bioinspired",
-    "opencv_calib3d",
-    "opencv_ccalib",
     "opencv_core",
-    "opencv_datasets",
-    "opencv_dpm",
-    "opencv_face",
-    "opencv_features2d",
-    "opencv_flann",
-    "opencv_freetype",
-    "opencv_fuzzy",
-    "opencv_hdf",
-    "opencv_highgui",
     "opencv_imgcodecs",
     "opencv_imgproc",
-    "opencv_line_descriptor",
-    "opencv_ml",
-    "opencv_objdetect",
-    "opencv_optflow",
-    "opencv_phase_unwrapping",
-    "opencv_photo",
-    "opencv_plot",
-    "opencv_reg",
-    "opencv_rgbd",
-    "opencv_saliency",
-    "opencv_shape",
-    "opencv_stereo",
-    "opencv_stitching",
-    "opencv_structured_light",
-    "opencv_superres",
-    "opencv_surface_matching",
-    "opencv_text",
-    "opencv_video",
-    "opencv_videoio",
-    "opencv_videostab",
-    "opencv_viz",
-    "opencv_ximgproc",
-    "opencv_xobjdetect",
-    "opencv_xphoto",
 ]
 DICOM_LIBS = [
     "dcmdata",
@@ -59,19 +27,48 @@ DICOM_LIBS = [
     "oflog",
     "ofstd",
 ]
-ECVL_LIBS = ["ecvl_eddl", "dataset_parser", "ecvl_core"]
-OTHER_LIBS = ["stdc++fs", "eddl", "openslide", "yaml-cpp"]
-ALL_LIBS = ECVL_LIBS + OPENCV_LIBS + DICOM_LIBS + OTHER_LIBS
+ECVL_LIBS = ["dataset_parser", "ecvl_core"]
+OTHER_LIBS = ["stdc++fs", "yaml-cpp"]
+ALL_LIBS = ECVL_LIBS + OPENCV_LIBS + OTHER_LIBS
+INCLUDE_DIRS = [
+    "src",
+    pybind11.get_include(),
+    pybind11.get_include(user=True)
+]
+LIBRARY_DIRS = []
+RUNTIME_LIBRARY_DIRS = []
+EDDL_DIR = os.getenv("EDDL_DIR")
+if EDDL_DIR:
+    INCLUDE_DIRS.append(os.path.join(EDDL_DIR, "include"))
+    LIBRARY_DIRS.append(os.path.join(EDDL_DIR, "lib"))
+    RUNTIME_LIBRARY_DIRS.append(os.path.join(EDDL_DIR, "lib"))
+ECVL_DIR = os.getenv("ECVL_DIR")
+if ECVL_DIR:
+    INCLUDE_DIRS.append(os.path.join(ECVL_DIR, "include"))
+    LIBRARY_DIRS.append(os.path.join(ECVL_DIR, "lib"))
+    RUNTIME_LIBRARY_DIRS.append(os.path.join(ECVL_DIR, "lib"))
+
+# optional modules, on by default. Set env var to "OFF" or "FALSE" to disable
+ECVL_WITH_DICOM = to_bool(os.getenv("ECVL_WITH_DICOM", "ON"))
+if ECVL_WITH_DICOM:
+    EXTRA_COMPILE_ARGS.append('-DECVL_WITH_DICOM')
+    ALL_LIBS.extend(DICOM_LIBS)
+ECVL_WITH_OPENSLIDE = to_bool(os.getenv("ECVL_WITH_OPENSLIDE", "ON"))
+if ECVL_WITH_OPENSLIDE:
+    EXTRA_COMPILE_ARGS.append('-DECVL_WITH_OPENSLIDE')
+    ALL_LIBS.append("openslide")
+ECVL_EDDL = to_bool(os.getenv("ECVL_EDDL", "ON"))
+if ECVL_EDDL:
+    EXTRA_COMPILE_ARGS.append('-DECVL_EDDL')
+    ALL_LIBS.extend(["ecvl_eddl", "eddl"])
 
 
 ext = Extension(
     "pyecvl._core",
     sources=["src/_core.cpp"],
-    include_dirs=[
-        "src",
-        pybind11.get_include(),
-        pybind11.get_include(user=True)
-    ],
+    include_dirs=INCLUDE_DIRS,
+    library_dirs=LIBRARY_DIRS,
+    runtime_library_dirs=RUNTIME_LIBRARY_DIRS,
     libraries=ALL_LIBS,
     extra_compile_args=EXTRA_COMPILE_ARGS,
 )

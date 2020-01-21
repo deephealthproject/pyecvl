@@ -1,5 +1,6 @@
+import pytest
 import pyecvl._core.ecvl as ecvl
-import pyeddl._core.eddlT as eddlT
+eddlT = pytest.importorskip("pyeddl._core.eddlT")
 
 
 def test_ImageToTensor():
