@@ -6,7 +6,9 @@
 #include <ecvl/eddl.h>
 #include <ecvl/core/support_openslide.h>
 #include <ecvl/core/support_nifti.h>
+#ifdef ECVL_WITH_DICOM
 #include <ecvl/core/support_dcmtk.h>
+#endif
 
 void bind_ecvl_functions(pybind11::module &m) {
   m.def("RearrangeChannels", [](const ecvl::Image& src, ecvl::Image& dst, const std::string& channels) {
@@ -147,6 +149,7 @@ void bind_ecvl_functions(pybind11::module &m) {
   m.def("NiftiWrite", [](const std::string& filename, ecvl::Image& src) {
     return ecvl::NiftiWrite(filename, src);
   });
+#ifdef ECVL_WITH_DICOM
   // support_dcmtk: DicomRead
   m.def("DicomRead", [](const std::string& filename, ecvl::Image& dst) {
     return ecvl::DicomRead(filename, dst);
@@ -155,4 +158,5 @@ void bind_ecvl_functions(pybind11::module &m) {
   m.def("DicomWrite", [](const std::string& filename, ecvl::Image& src) {
     return ecvl::DicomWrite(filename, src);
   });
+#endif
 }

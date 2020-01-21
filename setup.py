@@ -4,7 +4,12 @@ from distutils.core import setup, Extension
 import pybind11
 
 
-EXTRA_COMPILE_ARGS = ['-std=c++17', '-fvisibility=hidden', '-DECVL_WITH_DICOM']
+def to_bool(s):
+    s = s.lower()
+    return s != "off" and s != "false"
+
+
+EXTRA_COMPILE_ARGS = ['-std=c++17', '-fvisibility=hidden']
 OPENCV_LIBS = [
     "opencv_core",
     "opencv_imgcodecs",
@@ -24,7 +29,7 @@ DICOM_LIBS = [
 ]
 ECVL_LIBS = ["ecvl_eddl", "dataset_parser", "ecvl_core"]
 OTHER_LIBS = ["stdc++fs", "eddl", "openslide", "yaml-cpp"]
-ALL_LIBS = ECVL_LIBS + OPENCV_LIBS + DICOM_LIBS + OTHER_LIBS
+ALL_LIBS = ECVL_LIBS + OPENCV_LIBS + OTHER_LIBS
 INCLUDE_DIRS = [
     "src",
     pybind11.get_include(),
@@ -42,6 +47,12 @@ if ECVL_DIR:
     INCLUDE_DIRS.append(os.path.join(ECVL_DIR, "include"))
     LIBRARY_DIRS.append(os.path.join(ECVL_DIR, "lib"))
     RUNTIME_LIBRARY_DIRS.append(os.path.join(ECVL_DIR, "lib"))
+
+# optional modules, on by default. Set env var to "OFF" or "FALSE" to disable
+ECVL_WITH_DICOM = to_bool(os.getenv("ECVL_WITH_DICOM", "ON"))
+if ECVL_WITH_DICOM:
+    EXTRA_COMPILE_ARGS.append('-DECVL_WITH_DICOM')
+    ALL_LIBS.extend(DICOM_LIBS)
 
 
 ext = Extension(

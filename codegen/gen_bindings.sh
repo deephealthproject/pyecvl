@@ -23,7 +23,7 @@ ${binder} \
   all_includes.hpp \
   -- -std=c++17 \
   ${add_inc} \
-  -DNDEBUG -DECVL_WITH_DICOM
+  -DNDEBUG
 
 # add buffer_protocol annotation
 sed -i -f add_annotation.sed bindings/_core.cpp
