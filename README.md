@@ -7,11 +7,13 @@
 
 ## Quick start
 
+The following assumes you have ECVL already installed in "standard"
+system paths (e.g., `/usr/local/include`, `/usr/local/lib`).
+
     git clone --recurse-submodules https://github.com/deephealthproject/pyecvl.git
     cd pyecvl
     python3 -m pip install numpy pybind11 pytest
     python3 setup.py install
-    pytest tests
 
 See [full installation instructions below](#installation).
 
@@ -19,16 +21,8 @@ See [full installation instructions below](#installation).
 ## Getting started
 
 ```python
-import os
-
 import numpy as np
 import pyecvl._core.ecvl as ecvl
-
-
-THIS_DIR = os.path.dirname(os.path.abspath(__file__))
-TEST_IMG = os.path.join(
-    THIS_DIR, os.pardir, "third_party", "ecvl", "data", "test.jpg"
-)
 
 
 def inc_brightness(img, rate):
@@ -39,12 +33,10 @@ def inc_brightness(img, rate):
 
 
 def main():
-    in_path = TEST_IMG
     img = ecvl.Image()
-    ecvl.ImRead(in_path, img)
+    ecvl.ImRead("test.jpg", img)
     inc_brightness(img, 10)
-    out_path = os.path.basename(TEST_IMG)
-    ecvl.ImWrite(out_path, img)
+    ecvl.ImWrite("test_mod.jpg", img)
 
 
 if __name__ == "__main__":
@@ -69,17 +61,14 @@ Complete ECVL installation instructions are available at
 https://github.com/deephealthproject/ecvl. Here is a sample build sequence:
 
 ```
+git clone --recurse-submodules https://github.com/deephealthproject/pyecvl.git
 cd third_party/ecvl
 mkdir build
 cd build
-cmake -DECVL_WITH_OPENSLIDE=ON -DECVL_DATASET_PARSER=ON -DECVL_BUILD_EDDL=ON ..
+cmake -DECVL_WITH_DICOM=ON -DECVL_WITH_OPENSLIDE=ON -DECVL_DATASET_PARSER=ON -DECVL_BUILD_EDDL=ON ..
 make
 make install
 ```
-
-Make sure ECVL installation artifacts are in "standard" system locations, such
-as `/usr/local/include` and `/usr/local/lib`. The ECVL installation procedure
-should automatically take care of this.
 
 
 ### PyECVL installation
@@ -94,3 +83,34 @@ python3 setup.py install
 Then, you can test your installation by running the PyECVL tests:
 
     pytest tests
+
+
+### ECVL installed in an arbitrary directory
+
+The above installation instructions assume ECVL has been installed in standard
+system paths. However, ECVL can be installed in an arbitrary directory,
+for instance:
+
+```
+cd third_party/ecvl
+mkdir build
+cd build
+cmake -DCMAKE_INSTALL_PREFIX=/home/myuser/ecvl -DECVL_WITH_DICOM=ON -DECVL_WITH_OPENSLIDE=ON -DECVL_DATASET_PARSER=ON -DECVL_BUILD_EDDL=ON ..
+make
+make install
+```
+
+You can tell the PyECVL setup script about this via the `ECVL_DIR` environment
+variable:
+
+```
+export ECVL_DIR=/home/myuser/ecvl
+python3 setup.py install
+```
+
+In this way, `setup.py` will look for additional include files in
+`/home/myuser/ecvl/include` and for additional libraries in
+`/home/myuser/ecvl/lib`.
+
+Similarly, if EDDL is installed in an arbitrary path, you can tell the setup
+script via the `EDDL_DIR` environment variable.
