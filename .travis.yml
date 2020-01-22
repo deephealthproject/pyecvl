@@ -9,6 +9,7 @@ before_install: pip install flake8
 before_script: flake8 -v .
 
 script:
+  - sed -i 's/ECVL_BUILD_EDDL=ON/ECVL_BUILD_EDDL=ON -DECVL_BUILD_EXAMPLES=OFF/' Dockerfile.ecvl
   - docker build -t ecvl -f Dockerfile.ecvl .
   - docker build -t pyecvl .
   - docker run --rm pyecvl bash -c "pytest tests"
