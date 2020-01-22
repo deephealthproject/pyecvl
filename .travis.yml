@@ -1,0 +1,23 @@
+language: python
+python: "3.6"
+cache: pip
+sudo: required
+services: docker
+
+before_install: pip install flake8
+
+before_script: flake8 -v .
+
+script:
+  - sed -i 's/ECVL_BUILD_EDDL=ON/ECVL_BUILD_EDDL=ON -DECVL_BUILD_EXAMPLES=OFF/' Dockerfile.ecvl
+  - docker build -t ecvl -f Dockerfile.ecvl .
+  - docker build -t pyecvl .
+  - docker run --rm pyecvl bash -c "pytest tests"
+
+deploy:
+  provider: pypi
+  user: "${CI_USER}"
+  password: "${CI_PASS}"
+  on:
+    repo: simleo/pyecvl
+    tags: true
