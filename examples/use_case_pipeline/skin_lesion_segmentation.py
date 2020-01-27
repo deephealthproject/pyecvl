@@ -114,11 +114,13 @@ def main(args):
                 iou = evaluator.BinaryIoU(a, b)
                 print("- IoU: %.6g " % iou, end="", flush=True)
                 if (args.out_dir):
+                    a[a >= 0.5] = 1
+                    a[a < 0.5] = 0
                     img_t = ecvl.TensorToView(img)
                     ImageSqueeze(img_t)
                     img.mult_(255.)
                     output_fn = os.path.join(
-                        args.out_dir, "batch_%d_output.png" % j
+                        args.out_dir, "batch_%d_%d_output.png" % (j, k)
                     )
                     ecvl.ImWrite(output_fn, img_t)
                     if i == 0:
@@ -126,7 +128,7 @@ def main(args):
                         ImageSqueeze(gt_t)
                         gt.mult_(255.)
                         gt_fn = os.path.join(
-                            args.out_dir, "batch_%d_gt.png" % j
+                            args.out_dir, "batch_%d_%d_gt.png" % (j, k)
                         )
                         ecvl.ImWrite(gt_fn, gt_t)
             print()
