@@ -54,6 +54,15 @@ def main(args):
     ecvl.Threshold(tmp, tmp, thr, 255)
     ecvl.ImWrite("%s_threshold%s" % (head, ext), tmp)
 
+    print("Labeling connected components")
+    labels = ecvl.Image()
+    ecvl.ConnectedComponentsLabeling(tmp, labels)
+    ecvl.ImWrite("%s_labels%s" % (head, ext), labels)
+
+    print("Finding contours")
+    contours = ecvl.FindContours(tmp)
+    print("  [%r ... %r]" % (contours[0], contours[-1]))
+
     print("Applying filter")
     # kernel must be float64, "xyc" and with one color channel
     kernel = ecvl.Image(
