@@ -9,7 +9,6 @@ RUN \
         g++-8 \
         libopencv-dev \
         libopenslide-dev \
-        libwxgtk3.0-dev \
         wget \
  && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 70 \
    --slave /usr/bin/g++ g++ /usr/bin/g++-7 \
@@ -48,7 +47,7 @@ WORKDIR /ecvl
 RUN mkdir build && \
     cd build && \
     cmake \
-      -DECVL_BUILD_GUI=OFF \
+      -DECVL_BUILD_EXAMPLES=ON \
       -DECVL_WITH_DICOM=ON \
       -DECVL_WITH_OPENSLIDE=ON \
       -DECVL_DATASET_PARSER=ON \

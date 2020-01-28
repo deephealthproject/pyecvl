@@ -44,6 +44,12 @@ void bind_ecvl_functions(pybind11::module &m) {
   m.def("SeparableFilter2D", (void (*)(const class ecvl::Image&, class ecvl::Image&, const std::vector<double>&, const std::vector<double>&, enum ecvl::DataType)) &ecvl::SeparableFilter2D, "Convolves an Image with a couple of 1-dimensional kernels.\n\nC++: ecvl::SeparableFilter2D(const class ecvl::Image&, class ecvl::Image&, const std::vector<double>&, const std::vector<double>&, enum ecvl::DataType) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("kerX"), pybind11::arg("kerY"), pybind11::arg("type"));
   // imgproc: GetMaxN
   m.def("GetMaxN", (std::vector<std::array<int, 2>> (*)(const class ecvl::Image&, size_t)) &ecvl::GetMaxN, "Get the n maximum values that are in the source Image.\n\nC++: ecvl::GetMaxN(const class ecvl::Image&, size_t) --> std::vector<std::array<int, 2>>", pybind11::arg("src"), pybind11::arg("n"));
+  // imgproc: FindContours
+  m.def("FindContours", [](const class ecvl::Image& src) -> std::vector<std::vector<std::array<int, 2>>> {
+	  std::vector<std::vector<ecvl::Point2i>> contours;
+	  ecvl::FindContours(src, contours);
+	  return contours;
+      }, "Find contours in a binary image");
 #ifdef ECVL_EDDL
   // eddl: ImageToTensor
   m.def("ImageToTensor", [](const ecvl::Image& img) {

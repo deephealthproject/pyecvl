@@ -168,3 +168,16 @@ def test_GetMaxN():
     a[1, 2] = 4
     img = ecvl.Image(a, "xyc", ecvl.ColorType.GRAY)
     assert sorted(ecvl.GetMaxN(img, 2)) == [[0, 1], [1, 2]]
+
+
+def test_ConnectedComponentsLabeling():
+    dims = [20, 40, 1]
+    img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.GRAY)
+    tmp = ecvl.Image()
+    ecvl.ConnectedComponentsLabeling(img, tmp)
+
+
+def test_FindContours():
+    dims = [20, 40, 1]
+    img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.GRAY)
+    ecvl.FindContours(img)
