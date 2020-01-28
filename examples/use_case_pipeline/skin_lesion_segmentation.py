@@ -139,7 +139,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("in_ds", metavar="INPUT_DATASET")
     parser.add_argument("--epochs", type=int, metavar="INT", default=20)
-    parser.add_argument("--batch-size", type=int, metavar="INT", default=2)
+    parser.add_argument("--batch-size", type=int, metavar="INT", default=8)
     parser.add_argument("--gpu", action="store_true")
     parser.add_argument("--out-dir", metavar="DIR", help="save images here")
     main(parser.parse_args(sys.argv[1:]))
