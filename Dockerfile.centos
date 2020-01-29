@@ -1,0 +1,24 @@
+FROM ecvl-centos
+
+RUN yum -y install https://centos7.iuscommunity.org/ius-release.rpm
+
+RUN yum -y install python36u-devel python36u-pip
+
+SHELL ["/usr/bin/scl", "enable", "devtoolset-8"]
+
+RUN pip3 install --upgrade --no-cache-dir \
+      setuptools pip numpy pybind11 pytest
+
+
+# Install PyEDDL. Assumes recursive submodule update.
+COPY third_party/pyeddl /pyeddl
+WORKDIR /pyeddl
+RUN python3 setup.py install
+
+
+# Install PyECVL. Assumes recursive submodule update.
+COPY . /pyecvl
+WORKDIR /pyecvl
+ENV ECVL_WITH_OPENSLIDE="off"
+ENV LD_LIBRARY_PATH="/usr/local/lib:/usr/local/lib64:${LD_LIBRARY_PATH}"
+RUN python3 setup.py install

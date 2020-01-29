@@ -1,0 +1,50 @@
+FROM centos:7
+
+RUN yum -y install centos-release-scl && \
+    yum -y install devtoolset-8-gcc devtoolset-8-gcc-c++ wget unzip
+
+RUN wget https://cmake.org/files/v3.14/cmake-3.14.5-Linux-x86_64.tar.gz && \
+    tar xf cmake-3.14.5-Linux-x86_64.tar.gz && \
+    cp -rf cmake-3.14.5-Linux-x86_64/bin /usr/ && \
+    cp -rf cmake-3.14.5-Linux-x86_64/share /usr/ && \
+    rm -rf cmake-3.14.5-Linux-x86_64.tar.gz cmake-3.14.5-Linux-x86_64
+
+WORKDIR /opencv
+RUN wget http://github.com/opencv/opencv/archive/3.4.9.zip
+RUN unzip 3.4.9.zip && \
+    cd opencv-3.4.9 && \
+    mkdir build
+
+RUN yum -y install make
+
+SHELL ["/usr/bin/scl", "enable", "devtoolset-8"]
+WORKDIR /opencv/opencv-3.4.9/build
+RUN cmake -DCMAKE_BUILD_TYPE=RELEASE -DBUILD_LIST=core,imgproc,imgcodecs -DBUILD_opencv_apps=OFF -DBUILD_opencv_java_bindings_generator=OFF -DBUILD_opencv_python3=OFF -DBUILD_opencv_python_bindings_generator=OFF -DBUILD_opencv_python_tests=OFF -DBUILD_EXAMPLES=OFF -DBUILD_DOCS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_ZLIB=OFF -DBUILD_JPEG=ON -DBUILD_PNG=ON -DBUILD_TIFF=ON -DWITH_FFMPEG=OFF -DWITH_OPENCL=OFF -DWITH_QT=OFF -DWITH_IPP=OFF -DWITH_MATLAB=OFF -DWITH_OPENGL=OFF -DWITH_TIFF=ON -DWITH_TBB=OFF -DWITH_V4L=OFF -DWITH_LAPACK=OFF -DINSTALL_C_EXAMPLES=OFF -DINSTALL_PYTHON_EXAMPLES=OFF -DWITH_OPENEXR=OFF .. && \
+    make -j$(nproc) && \
+    make install
+
+
+# Install EDDL. Assumes recursive submodule update.
+COPY third_party/pyeddl/third_party/eddl /eddl
+WORKDIR /eddl
+
+RUN mkdir build && \
+    cd build && \
+    cmake -D BUILD_TESTS=ON -D EDDL_SHARED=ON .. && \
+    make -j$(nproc) && \
+    make install
+
+
+# Install ECVL with EDDL support. Assumes recursive submodule update.
+COPY third_party/ecvl /ecvl
+WORKDIR /ecvl
+RUN mkdir build && \
+    cd build && \
+    cmake \
+      -DECVL_BUILD_EXAMPLES=ON \
+      -DECVL_WITH_DICOM=ON \
+      -DECVL_WITH_OPENSLIDE=OFF \
+      -DECVL_DATASET_PARSER=ON \
+      -DECVL_BUILD_EDDL=ON .. && \
+    make -j$(nproc) && \
+    make install
