@@ -24,20 +24,16 @@ See [full installation instructions below](#installation).
 import numpy as np
 import pyecvl._core.ecvl as ecvl
 
-
 def inc_brightness(img, rate):
     a = np.array(img, copy=False)
     max_val = np.iinfo(a.dtype).max
     a[a > max_val - rate] = max_val
     a[a <= max_val - rate] += rate
 
-
 def main():
-    img = ecvl.Image()
-    ecvl.ImRead("test.jpg", img)
+    img = ecvl.ImRead("test.jpg")
     inc_brightness(img, 10)
     ecvl.ImWrite("test_mod.jpg", img)
-
 
 if __name__ == "__main__":
     main()

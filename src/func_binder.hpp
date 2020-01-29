@@ -19,14 +19,24 @@ void bind_ecvl_functions(pybind11::module &m) {
     ecvl::RearrangeChannels(src, dst, channels);
   });
   m.def("RearrangeChannels", (void (*)(const ecvl::Image&, ecvl::Image&, const std::string&, ecvl::DataType)) &ecvl::RearrangeChannels, "C++: ecvl::RearrangeChannels(const ecvl::Image&, ecvl::Image&, const std::string&, ecvl::DataType) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("channels"), pybind11::arg("new_type"));
-  m.def("ImRead", [](const std::string& filename, ecvl::Image& dst) -> bool {
-	  return ecvl::ImRead(filename, dst);
+  m.def("ImRead", [](const std::string& filename) -> ecvl::Image {
+	  ecvl::Image dst;
+	  if (!ecvl::ImRead(filename, dst)) {
+	      throw std::runtime_error("Can't read " + filename);
+	  }
+	  return dst;
       });
-  m.def("ImRead", [](const std::string& filename, ecvl::Image& dst, ecvl::ImReadMode flags) -> bool {
-	  return ecvl::ImRead(filename, dst, flags);
+  m.def("ImRead", [](const std::string& filename, ecvl::ImReadMode flags) -> ecvl::Image {
+	  ecvl::Image dst;
+	  if (!ecvl::ImRead(filename, dst, flags)) {
+	      throw std::runtime_error("Can't read " + filename);
+	  }
+	  return dst;
       });
-  m.def("ImWrite", [](const std::string& filename, ecvl::Image& src) -> bool {
-	  return ecvl::ImWrite(filename, src);
+  m.def("ImWrite", [](const std::string& filename, ecvl::Image& src) -> void {
+	  if (!ecvl::ImWrite(filename, src)) {
+	      throw std::runtime_error("Can't write " + filename);
+	  }
       });
   // imgproc: ResizeDim
   m.def("ResizeDim", [](const class ecvl::Image& src, class ecvl::Image& dst, const std::vector<int>& newdims) -> void { return ecvl::ResizeDim(src, dst, newdims); }, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("newdims"));
@@ -145,8 +155,12 @@ void bind_ecvl_functions(pybind11::module &m) {
 #endif
 #ifdef ECVL_WITH_OPENSLIDE
   // support_openslide: OpenSlideRead
-  m.def("OpenSlideRead", [](std::string& filename, ecvl::Image& dst, const int level, const std::vector<int>& dims) {
-    return ecvl::OpenSlideRead(filename, dst, level, dims);
+  m.def("OpenSlideRead", [](std::string& filename, const int level, const std::vector<int>& dims) -> ecvl::Image {
+    ecvl::Image dst;
+    if (!ecvl::OpenSlideRead(filename, dst, level, dims)) {
+	throw std::runtime_error("Can't read " + filename);
+    }
+    return dst;
   });
   // support_openslide: OpenSlideGetLevels
   m.def("OpenSlideGetLevels", [](std::string& filename) -> std::vector<std::array<int, 2>> {
@@ -156,21 +170,33 @@ void bind_ecvl_functions(pybind11::module &m) {
   });
 #endif
   // support_nifti: NiftiRead
-  m.def("NiftiRead", [](const std::string& filename, ecvl::Image& dst) {
-    return ecvl::NiftiRead(filename, dst);
+  m.def("NiftiRead", [](const std::string& filename) -> ecvl::Image {
+    ecvl::Image dst;
+    if (!ecvl::NiftiRead(filename, dst)) {
+      throw std::runtime_error("Can't read " + filename);
+    }
+    return dst;
   });
   // support_nifti: NiftiWrite
   m.def("NiftiWrite", [](const std::string& filename, ecvl::Image& src) {
-    return ecvl::NiftiWrite(filename, src);
+    if (!ecvl::NiftiWrite(filename, src)) {
+      throw std::runtime_error("Can't write " + filename);
+    }
   });
 #ifdef ECVL_WITH_DICOM
   // support_dcmtk: DicomRead
-  m.def("DicomRead", [](const std::string& filename, ecvl::Image& dst) {
-    return ecvl::DicomRead(filename, dst);
+  m.def("DicomRead", [](const std::string& filename) -> ecvl::Image {
+    ecvl::Image dst;
+    if (!ecvl::DicomRead(filename, dst)) {
+      throw std::runtime_error("Can't read " + filename);
+    }
+    return dst;
   });
   // support_dcmtk: DicomWrite
   m.def("DicomWrite", [](const std::string& filename, ecvl::Image& src) {
-    return ecvl::DicomWrite(filename, src);
+    if (!ecvl::DicomWrite(filename, src)) {
+      throw std::runtime_error("Can't write " + filename);
+    }
   });
 #endif
 }

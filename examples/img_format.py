@@ -10,13 +10,9 @@ import pyecvl._core.ecvl as ecvl
 
 
 def nifti_io(fn):
-    # FIXME: why isn't std::invalid_argument being converted to a Python error?
-    if not os.path.isfile(fn):
-        raise RuntimeError("%s does not exist or is not a file" % fn)
     head, ext = os.path.splitext(os.path.basename(fn))
-    img = ecvl.Image()
     print("Reading %s" % fn)
-    ecvl.NiftiRead(fn, img)
+    img = ecvl.NiftiRead(fn)
     ecvl.GammaContrast(img, img, 3)
     out_fn = "%s_gamma%s" % (head, ext)
     print("Saving %s" % out_fn)
@@ -24,13 +20,9 @@ def nifti_io(fn):
 
 
 def dicom_io(fn):
-    # FIXME: why isn't std::invalid_argument being converted to a Python error?
-    if not os.path.isfile(fn):
-        raise RuntimeError("%s does not exist or is not a file" % fn)
     head, ext = os.path.splitext(os.path.basename(fn))
-    img = ecvl.Image()
     print("Reading %s" % fn)
-    ecvl.DicomRead(fn, img)
+    img = ecvl.DicomRead(fn)
     ecvl.ChangeColorSpace(img, img, ecvl.ColorType.GRAY)
     thresh = ecvl.OtsuThreshold(img)
     maxval = 255

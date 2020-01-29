@@ -11,12 +11,9 @@ import pyecvl._core.ecvl as ecvl
 
 
 def main(args):
-    # FIXME: why isn't std::invalid_argument being converted to a Python error?
-    if not os.path.isfile(args.in_fn):
-        raise RuntimeError("%s does not exist or is not a file" % args.in_fn)
     head, ext = os.path.splitext(os.path.basename(args.in_fn))
-    img, tmp = ecvl.Image(), ecvl.Image()
-    ecvl.ImRead(args.in_fn, img)
+    tmp = ecvl.Image()
+    img = ecvl.ImRead(args.in_fn)
 
     print("Resizing image by new width, height")
     ecvl.ResizeDim(img, tmp, [225, 300], ecvl.InterpolationType.nearest)

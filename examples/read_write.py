@@ -3,7 +3,6 @@ Reads an image, increases its brightness and saves the result.
 """
 
 import argparse
-import os
 import sys
 
 import numpy as np
@@ -18,11 +17,7 @@ def inc_brightness(img, rate):
 
 
 def main(args):
-    # FIXME: why isn't std::invalid_argument being converted to a Python error?
-    if not os.path.isfile(args.in_fn):
-        raise RuntimeError("%s does not exist or is not a file" % args.in_fn)
-    img = ecvl.Image()
-    ecvl.ImRead(args.in_fn, img)
+    img = ecvl.ImRead(args.in_fn)
     inc_brightness(img, 10)
     ecvl.ImWrite(args.out_fn, img)
 

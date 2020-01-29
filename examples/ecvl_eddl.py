@@ -3,7 +3,6 @@ ECVL-EDDL interaction.
 """
 
 import argparse
-import os
 import sys
 
 import pyecvl._core.ecvl as ecvl
@@ -11,11 +10,7 @@ import pyeddl._core.eddlT as eddlT
 
 
 def main(args):
-    # FIXME: why isn't std::invalid_argument being converted to a Python error?
-    if not os.path.isfile(args.in_img):
-        raise RuntimeError("%s does not exist or is not a file" % args.in_img)
-    img = ecvl.Image()
-    ecvl.ImRead(args.in_img, img)
+    img = ecvl.ImRead(args.in_img)
     print("Executing ImageToTensor")
     t = ecvl.ImageToTensor(img)
     eddlT.div_(t, 128)
