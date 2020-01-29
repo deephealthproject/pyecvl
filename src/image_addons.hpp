@@ -44,7 +44,11 @@ void image_addons(pybind11::class_<type_, options...> &cl) {
            pybind11::arg("channels"), pybind11::arg("colortype"),
            pybind11::arg("spacings") = std::vector<float>(),
            pybind11::keep_alive<1, 2>(), pybind11::keep_alive<1, 6>());
+    // def_buffer will be run by numpy, so exceptions will crash the program
     cl.def_buffer([](ecvl::Image &img) -> pybind11::buffer_info {
+        if (img.IsEmpty()) {
+            throw std::invalid_argument("image is empty");
+        }
         std::string fmt;
         switch (img.elemtype_) {
         case ecvl::DataType::int8:
