@@ -1,8 +1,20 @@
-# PyECVL
+<div align="center">
+  <img src="https://raw.githubusercontent.com/deephealthproject/pyecvl/master/docs/logo.png" height="320" width="260">
+</div>
+
+-----------------
+
 
 [![Build Status](https://jenkins-master-deephealth-unix01.ing.unimore.it/badge/job/DeepHealth/job/pyecvl/job/master/linux_end?)](https://jenkins-master-deephealth-unix01.ing.unimore.it/job/DeepHealth/job/pyecvl/job/master/)
 
 **PyECVL** is a Python wrapper for [ECVL](https://github.com/deephealthproject/ecvl), the European Computer Vision Library.
+
+
+Each PyECVL version requires a specific ECVL version:
+
+PyECVL version | ECVL version |
+-------------- | ------------ |
+0.1.0          | 0.1.0        |
 
 
 ## Quick start
