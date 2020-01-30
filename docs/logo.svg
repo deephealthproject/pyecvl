@@ -13,13 +13,16 @@
    id="Layer_1"
    x="0px"
    y="0px"
-   width="260"
-   height="320"
-   viewBox="0 0 260 320"
+   width="185"
+   height="220"
+   viewBox="0 0 185 220"
    enable-background="new 0 0 1000 1000"
    xml:space="preserve"
    sodipodi:docname="logo.svg"
-   inkscape:version="0.92.3 (2405546, 2018-03-11)"><metadata
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   inkscape:export-filename="/home/simleo/git/pyecvl/docs/logo.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"><metadata
    id="metadata94"><rdf:RDF><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
          rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
@@ -218,9 +221,9 @@
    inkscape:window-height="1148"
    id="namedview90"
    showgrid="false"
-   inkscape:zoom="0.944"
-   inkscape:cx="652.96471"
-   inkscape:cy="196.5549"
+   inkscape:zoom="1.888"
+   inkscape:cx="276.25631"
+   inkscape:cy="80.786988"
    inkscape:window-x="1115"
    inkscape:window-y="89"
    inkscape:window-maximized="0"
@@ -230,15 +233,16 @@
    fit-margin-right="2"
    fit-margin-bottom="3" />
 <rect
-   x="-369.9946"
+   x="-408.39615"
    width="1000"
    height="1000"
    id="rect2"
-   y="-319.3093"
+   y="-366.37564"
    style="fill:none" />
+
 <g
    id="g5309"
-   transform="translate(-369.99459,-319.30931)"><path
+   transform="matrix(0.7,0,0,0.7,-257.49987,-222.90465)"><path
      d="m 432.598,370.746 c 4.724,8.533 18.287,12.014 23.936,11.408 27.093,-2.893 54.76,19.715 53.82,43.979 -0.507,13.107 -11.107,27.294 -30.387,29.042 -13.743,1.247 -20.206,17.322 -12.123,30.18 9.326,14.842 30.597,13.682 35.561,-1.938 1.299,-4.086 0.755,-7.847 0.457,-9.869 -1.746,-12.062 -0.518,-18.962 5.055,-28.398 0.293,-0.493 7.362,-12.121 23.803,-11.347 0.9,0.046 0.99,0.049 1.081,0.055 20.104,2.849 36.003,19.714 39.56,41.964 2.787,17.449 14.166,24.837 20.469,22.069 7.318,-3.219 8.475,-19.802 -0.412,-31.726 -4.207,-5.639 -8.4,-6.737 -8.441,-6.746 -16.644,-3.507 -32.659,-25.03 -37.531,-35.77 -10.719,-23.629 -2.956,-37.517 10.716,-35.196 4.578,0.776 15.307,2.594 5.55,-10.987 -8.574,-11.941 -26.493,-21.742 -27.565,-13.049 -1.131,9.164 9.26,16.19 4.825,25.971 -1.553,3.426 -8.135,8.175 -19.888,7.22 -0.896,-0.055 -0.987,-0.062 -1.078,-0.065 -20.99,-2.646 -41.017,-15.213 -49.834,-31.273 -4.358,-7.936 -14.416,-12.729 -25.63,-12.198 -14.519,1.643 -15.032,11.102 -11.944,16.674"
      id="path9"
      style="fill:url(#SVGID_1_)"
@@ -274,12 +278,11 @@
      d="m 469.669,332.76 c 7.81,7.457 27.242,11.031 26.663,4.908 -0.396,-4.148 -10.625,-10.529 -21.56,-11.789 -9.463,-0.597 -7.963,3.734 -5.854,6.112 0.219,0.239 0.519,0.544 0.751,0.769"
      id="path65"
      style="fill:url(#SVGID_9_)"
-     inkscape:connector-curvature="0" /></g>
-<flowRoot
+     inkscape:connector-curvature="0" /></g><flowRoot
    xml:space="preserve"
    id="flowRoot5268-3"
    style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:64px;line-height:125%;font-family:'Baekmuk Gulim';-inkscape-font-specification:'Baekmuk Gulim, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:2px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#145073;fill-opacity:1;stroke:#145073;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-   transform="translate(-717.51756,-497.46712)"><flowRegion
+   transform="matrix(0.7,0,0,0.7,-500.76595,-353.61511)"><flowRegion
      id="flowRegion5270-6"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:64px;font-family:'Baekmuk Gulim';-inkscape-font-specification:'Baekmuk Gulim, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:2px;writing-mode:lr-tb;text-anchor:start;fill:#145073;fill-opacity:1;stroke:#145073;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"><rect
        id="rect5272-1"
@@ -290,7 +293,7 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:64px;font-family:'Baekmuk Gulim';-inkscape-font-specification:'Baekmuk Gulim, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:2px;writing-mode:lr-tb;text-anchor:start;fill:#145073;fill-opacity:1;stroke:#145073;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" /></flowRegion><flowPara
      id="flowPara5274-0"
      style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:64px;font-family:'Baekmuk Gulim';-inkscape-font-specification:'Baekmuk Gulim, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:1px;writing-mode:lr-tb;text-anchor:start;fill:#145073;fill-opacity:1;stroke:#145073;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1">Py</flowPara></flowRoot><flowRoot
-   transform="translate(-178.87459,-520.99153)"
+   transform="matrix(0.7,0,0,0.7,-123.71587,-370.0822)"
    xml:space="preserve"
    id="flowRoot5268-1-0"
    style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:64px;line-height:125%;font-family:'Baekmuk Gulim';-inkscape-font-specification:'Baekmuk Gulim, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#2fb0cd;fill-opacity:1;stroke:#2fb0cd;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"><flowRegion
