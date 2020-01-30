@@ -18,10 +18,15 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+"""\
+PyECVL is a Python wrapper for ECVL, the European Computer Vision Library.
+"""
+
 import os
-from distutils.core import setup, Extension
+from setuptools import setup, Extension
 
 import pybind11
+from pyecvl.version import VERSION
 
 
 def to_bool(s):
@@ -96,6 +101,23 @@ ext = Extension(
 
 setup(
     name="pyecvl",
+    version=VERSION,
+    url="https://github.com/deephealthproject/pyecvl",
+    description="Python wrapper for ECVL",
+    long_description=__doc__,
+    author="Simone Leo",
+    author_email="<simone.leo@crs4.it>",
+    license="MIT",
+    platforms=["Linux"],
+    classifiers=[
+        "Programming Language :: Python :: 3.6",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: POSIX :: Linux",
+        "Topic :: Scientific/Engineering",
+        "Intended Audience :: Science/Research",
+    ],
     packages=["pyecvl"],
-    ext_modules=[ext]
+    ext_modules=[ext],
+    install_requires=["setuptools", "pybind11", "numpy"],
+    zip_safe=False,
 )
