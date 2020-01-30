@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/deephealthproject/pyecvl/master/docs/logo.png" height="320" width="260">
+  <img src="https://raw.githubusercontent.com/deephealthproject/pyecvl/master/docs/logo.png" height="220" width="185">
 </div>
 
 -----------------
