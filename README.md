@@ -10,11 +10,14 @@
 **PyECVL** is a Python wrapper for [ECVL](https://github.com/deephealthproject/ecvl), the European Computer Vision Library.
 
 
-Each PyECVL version requires a specific ECVL version:
+Each PyECVL version requires a specific ECVL version. If you are installing
+PyECVL with EDDL support (on by default), you also need to install
+[PyEDDL](https://github.com/deephealthproject/pyeddl). The following table
+shows the required ECVL and PyEDDL versions for each PyECVL version:
 
-PyECVL version | ECVL version |
--------------- | ------------ |
-0.1.0          | 0.1.0        |
+PyECVL version | ECVL version | PyEDDL version |
+-------------- | ------------ | -------------- |
+0.1.0          | 0.1.0        | 0.1.0          |
 
 
 ## Quick start
@@ -22,10 +25,9 @@ PyECVL version | ECVL version |
 The following assumes you have ECVL already installed in "standard"
 system paths (e.g., `/usr/local/include`, `/usr/local/lib`).
 
-    git clone --recurse-submodules https://github.com/deephealthproject/pyecvl.git
-    cd pyecvl
     python3 -m pip install numpy pybind11 pytest
-    python3 setup.py install
+    python3 -m pip install pyeddl==0.1.0
+    python3 -m pip install pyecvl==0.1.0
 
 See [full installation instructions below](#installation).
 
@@ -60,6 +62,7 @@ if __name__ == "__main__":
 - ECVL
 - NumPy
 - pybind11
+- pyeddl (not needed if building with `ECVL_EDDL` set to `OFF`)
 - pytest (if you want to run the tests)
 
 
@@ -81,16 +84,36 @@ make install
 
 ### PyECVL installation
 
-Install PyECVL as follows:
+Install requirements:
 
 ```
 python3 -m pip install numpy pybind11 pytest
+
+```
+
+Install PyECVL:
+
+```
+python3 -m pip install pyecvl
+```
+
+Or, from the pyecvl git repository:
+
+```
 python3 setup.py install
 ```
 
-Then, you can test your installation by running the PyECVL tests:
+Then, you can test your installation by running the tests. From the pyecvl git
+repository:
 
     pytest tests
+
+If you are installing with EDDL support (on by default), you also need to
+install a specific version of pyeddl (see the table above). For instance:
+
+```
+python3 -m pip install pyecvl==0.1.0
+```
 
 
 ### Disabling unwanted modules
