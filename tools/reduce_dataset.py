@@ -27,14 +27,11 @@ With --check, check a previous dataset reduction instead.
 import argparse
 import io
 import os
+import random
 import yaml
 
 Loader = getattr(yaml, "CLoader", "Loader")
 Dumper = getattr(yaml, "CDumper", "Dumper")
-
-
-def approx(a, b, tol=1e-6):
-    return abs(a - b) <= tol
 
 
 def get_splits(doc):
@@ -52,16 +49,19 @@ def check(args):
     with io.open(args.output_file, "rt") as f:
         out_doc = yaml.load(f, Loader)
     images, out_images = doc["images"], out_doc["images"]
-    assert approx(len(images) * args.fraction, len(out_images))
     assert set([_["location"] for _ in out_images]).issubset(
         [_["location"] for _ in images]
     )
-    splits, out_splits = get_splits(doc), get_splits(out_doc)
-    assert splits.keys() == out_splits.keys()
-    for k, out_v in out_splits.items():
-        v = splits[k]
-        assert approx(len(v) * args.fraction, len(out_v))
-        assert set(out_v).issubset(v)
+    if "split" in doc:
+        assert "split" in out_doc
+        splits, out_splits = get_splits(doc), get_splits(out_doc)
+        assert splits.keys() == out_splits.keys()
+        for k, out_v in out_splits.items():
+            v = splits[k]
+            assert set(out_v).issubset(v)
+            assert abs(len(out_v) - args.fraction * len(v)) <= 1
+    else:
+        assert abs(len(out_images) - args.fraction * len(images)) <= 1
 
 
 def dump(doc, f):
@@ -81,12 +81,12 @@ def reduce_dataset(args):
         training = split.get("training", [])
         validation = split.get("validation", [])
         test = split.get("test", [])
-        n_tr = round(args.fraction * len(training))
-        n_val = round(args.fraction * len(validation))
-        n_test = round(args.fraction * len(test))
-        out_tr = [images[_] for _ in training[:n_tr]]
-        out_val = [images[_] for _ in validation[:n_val]]
-        out_test = [images[_] for _ in test[:n_test]]
+        n_tr = max(round(args.fraction * len(training)), 1)
+        n_val = max(round(args.fraction * len(validation)), 1)
+        n_test = max(round(args.fraction * len(test)), 1)
+        out_tr = [images[_] for _ in random.sample(training, n_tr)]
+        out_val = [images[_] for _ in random.sample(validation, n_val)]
+        out_test = [images[_] for _ in random.sample(test, n_test)]
         doc["images"] = out_tr + out_val + out_test
         doc["split"]["training"] = list(range(n_tr))
         doc["split"]["validation"] = list(range(n_tr, n_tr + n_val))
