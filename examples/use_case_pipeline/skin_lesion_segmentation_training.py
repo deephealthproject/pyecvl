@@ -33,8 +33,8 @@ import pyeddl._core.eddl as eddl
 import pyeddl._core.eddlT as eddlT
 import random
 
-from examples.use_case_pipeline import utils
-from examples.use_case_pipeline.models import SegNet
+import utils
+from models import SegNet
 
 
 def main(args):

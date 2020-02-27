@@ -31,7 +31,7 @@ import pyeddl._core.eddl as eddl
 import pyeddl._core.eddlT as eddlT
 import random
 
-from examples.use_case_pipeline.models import VGG16
+from models import VGG16
 
 
 def main(args):

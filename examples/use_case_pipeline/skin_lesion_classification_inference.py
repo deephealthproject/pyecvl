@@ -32,8 +32,8 @@ import pyecvl._core.ecvl as ecvl
 import pyeddl._core.eddl as eddl
 import pyeddl._core.eddlT as eddlT
 
-from examples.use_case_pipeline import utils
-from examples.use_case_pipeline.models import VGG16
+import utils
+from models import VGG16
 
 
 def main(args):
@@ -61,7 +61,7 @@ def main(args):
     if not os.path.exists(args.ckpts):
         print('Checkpoint "{}" must exist.'.format(args.ckpts))
         exit(1)
-    eddl.load(net, args.ckpts)
+    eddl.load(net, args.ckpts, "bin")
 
     eddl.summary(net)
 
