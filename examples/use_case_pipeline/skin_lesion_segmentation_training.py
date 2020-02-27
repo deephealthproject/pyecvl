@@ -21,7 +21,8 @@
 """\
 Skin lesion segmentation training example.
 
-More information and checkpoints available at https://github.com/deephealthproject/use_case_pipeline
+More information and checkpoints available at
+https://github.com/deephealthproject/use_case_pipeline
 """
 
 import argparse
@@ -77,7 +78,8 @@ def main(args):
     best_miou = 0.
     print("Starting training")
     for e in range(args.epochs):
-        print("Epoch {:d}/{:d} - Training".format(e + 1, args.epochs), flush=True)
+        print("Epoch {:d}/{:d} - Training".format(e + 1, args.epochs),
+              flush=True)
         d.SetSplit("training")
         eddl.reset_loss(net)
         s = d.GetSplit()
@@ -85,7 +87,8 @@ def main(args):
         d.split_.training_ = s
         d.ResetAllBatches()
         for b in range(num_batches_train):
-            print("Epoch {:d}/{:d} (batch {:d}/{:d}) - ".format(e + 1, args.epochs, b + 1, num_batches_train), end="",
+            print("Epoch {:d}/{:d} (batch {:d}/{:d}) - ".format(
+                e + 1, args.epochs, b + 1, num_batches_train), end="",
                   flush=True)
             d.LoadBatch(x, y)
             x.div_(255.0)
@@ -98,7 +101,8 @@ def main(args):
         evaluator.ResetEval()
         print("Epoch %d/%d - Evaluation" % (e + 1, args.epochs), flush=True)
         for b in range(num_batches_validation):
-            print("Epoch {:d}/{:d} (batch {:d}/{:d}) ".format(e + 1, args.epochs, b + 1, num_batches_validation),
+            print("Epoch {:d}/{:d} (batch {:d}/{:d}) ".format(
+                e + 1, args.epochs, b + 1, num_batches_validation),
                   end="", flush=True)
             d.LoadBatch(x, y)
             x.div_(255.0)
@@ -108,7 +112,8 @@ def main(args):
             for k in range(args.batch_size):
                 img = eddlT.select(output, k)
                 gt = eddlT.select(y, k)
-                img_np, gt_np = np.array(img, copy=False), np.array(gt, copy=False)
+                img_np, gt_np = np.array(img, copy=False), np.array(
+                    gt, copy=False)
                 iou = evaluator.BinaryIoU(img_np, gt_np)
                 print("- IoU: %.6g " % iou, end="", flush=True)
                 if args.out_dir:

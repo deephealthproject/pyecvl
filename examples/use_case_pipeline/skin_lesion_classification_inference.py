@@ -21,7 +21,8 @@
 """\
 Skin lesion classification inference example.
 
-More information and checkpoints available at https://github.com/deephealthproject/use_case_pipeline
+More information and checkpoints available at
+https://github.com/deephealthproject/use_case_pipeline
 """
 
 import argparse
@@ -76,7 +77,8 @@ def main(args):
     num_batches = num_samples // args.batch_size
     d.ResetCurrentBatch()
     for b in range(num_batches):
-        print("Batch {:d}/{:d} - ".format(b + 1, num_batches), end="", flush=True)
+        print("Batch {:d}/{:d} - ".format(b + 1, num_batches), end="",
+              flush=True)
 
         d.LoadBatch(x_train, y_train)
         x_train.div_(255.0)
@@ -95,7 +97,8 @@ def main(args):
                 pred = np.argmax(pred).item()
                 image_Im = ecvl.TensorToImage(image)
                 utils.ImageSqueeze(image_Im)
-                ecvl.ImWrite('{}/{}/img_{}_gt_class_{}.png'.format(args.out_dir, pred, j + b * args.batch_size, gt),
+                ecvl.ImWrite('{}/{}/img_{}_gt_class_{}.png'.format(
+                    args.out_dir, pred, j + b * args.batch_size, gt),
                              image_Im)
 
 
@@ -103,7 +106,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("in_ds", metavar="INPUT_DATASET")
     parser.add_argument("ckpts", metavar='CHECKPOINTS_PATH',
-                        default='./isic_class_VGG16_sgd_lr_0.001_momentum_0.9_loss_sce_size_224_epoch_48.bin')
+                        default='./isic_class_VGG16_sgd_lr_0.001_momentum'
+                        '_0.9_loss_sce_size_224_epoch_48.bin')
     parser.add_argument("--batch-size", type=int, metavar="INT", default=12)
     parser.add_argument("--gpu", action="store_true")
     parser.add_argument("--out-dir", metavar="DIR", help="save images here")

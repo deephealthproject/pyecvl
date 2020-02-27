@@ -21,7 +21,8 @@
 """\
 Skin lesion classification training example.
 
-More information and checkpoints available at https://github.com/deephealthproject/use_case_pipeline
+More information and checkpoints available at
+https://github.com/deephealthproject/use_case_pipeline
 """
 
 import argparse
@@ -65,7 +66,8 @@ def main(args):
     indices = list(range(args.batch_size))
 
     for e in range(args.epochs):
-        print("Epoch {:d}/{:d} - Training".format(e + 1, args.epochs), flush=True)
+        print("Epoch {:d}/{:d} - Training".format(e + 1, args.epochs),
+              flush=True)
         d.SetSplit("training")
         eddl.reset_loss(net)
         s = d.GetSplit()
@@ -73,7 +75,8 @@ def main(args):
         d.split_.training_ = s
         d.ResetCurrentBatch()
         for b in range(num_batches_train):
-            print("Epoch {:d}/{:d} (batch {:d}/{:d}) - ".format(e + 1, args.epochs, b + 1, num_batches_train), end="",
+            print("Epoch {:d}/{:d} (batch {:d}/{:d}) - ".format(
+                e + 1, args.epochs, b + 1, num_batches_train), end="",
                   flush=True)
             d.LoadBatch(x_train, y_train)
             x_train.div_(255.0)
@@ -86,7 +89,8 @@ def main(args):
         d.SetSplit("validation")
         d.ResetCurrentBatch()
         for b in range(num_batches_val):
-            print("Epoch {:d}/{:d} (batch {:d}/{:d}) - ".format(e + 1, args.epochs, b + 1, num_batches_val), end="",
+            print("Epoch {:d}/{:d} (batch {:d}/{:d}) - ".format(
+                e + 1, args.epochs, b + 1, num_batches_val), end="",
                   flush=True)
             d.LoadBatch(x_train, y_train)
             x_train.div_(255.0)

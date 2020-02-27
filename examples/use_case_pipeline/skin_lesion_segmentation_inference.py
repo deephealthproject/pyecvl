@@ -21,7 +21,8 @@
 """\
 Skin lesion segmentation inference example.
 
-More information and checkpoints available at https://github.com/deephealthproject/use_case_pipeline
+More information and checkpoints available at
+https://github.com/deephealthproject/use_case_pipeline
 """
 
 import argparse
@@ -77,7 +78,8 @@ def main(args):
 
     evaluator = utils.Evaluator()
     for b in range(num_batches_validation):
-        print("Batch {:d}/{:d} ".format(b + 1, num_batches_validation), end="", flush=True)
+        print("Batch {:d}/{:d} ".format(
+            b + 1, num_batches_validation), end="", flush=True)
         d.LoadBatch(x, y)
         x.div_(255.0)
         y.div_(255.0)
@@ -112,7 +114,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("in_ds", metavar="INPUT_DATASET")
     parser.add_argument("ckpts", metavar='CHECKPOINTS_PATH',
-                        default='./isic_segm_segnet_adam_lr_0.0001_loss_ce_size_192_epoch_24.bin')
+                        default='./isic_segm_segnet_adam_lr_0.0001_loss_'
+                        'ce_size_192_epoch_24.bin')
     parser.add_argument("--batch-size", type=int, metavar="INT", default=8)
     parser.add_argument("--gpu", action="store_true")
     parser.add_argument("--out-dir", metavar="DIR", help="save images here")
