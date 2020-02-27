@@ -40,10 +40,16 @@ def main(args):
     print("  validation:", len(d.split_.validation_))
     print("  test:", len(d.split_.test_))
     print("loading first sample image")
+    print("  location:", d.samples_[0].location_)
     img = d.samples_[0].LoadImage()
     out_path = "img0.png"
     print("saving first sample image as", out_path)
     ecvl.ImWrite(out_path, img)
+
+    # check setter for completeness, but why would anyone want to do this?
+    loc = "/foo/bar"
+    d.samples_[0].location_ = loc
+    assert d.samples_[0].location_ == loc
 
 
 if __name__ == "__main__":

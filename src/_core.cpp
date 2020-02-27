@@ -345,6 +345,7 @@ void bind_ecvl_core_imgcodecs(std::function< pybind11::module &(std::string cons
 #include <ecvl/dataset_parser.h>
 #include <func_binder.hpp>
 #include <memory>
+#include <sample_addons.hpp>
 #include <sstream> // __str__
 #include <string>
 #include <string_view>
@@ -376,6 +377,8 @@ void bind_ecvl_dataset_parser(std::function< pybind11::module &(std::string cons
 		cl.def("LoadImage", [](ecvl::Sample const &o) -> ecvl::Image { return o.LoadImage(); }, "");
 		cl.def("LoadImage", [](ecvl::Sample const &o, enum ecvl::ColorType const & a0) -> ecvl::Image { return o.LoadImage(a0); }, "", pybind11::arg("ctype"));
 		cl.def("LoadImage", (class ecvl::Image (ecvl::Sample::*)(enum ecvl::ColorType, const bool &) const) &ecvl::Sample::LoadImage, "Return an Image of the dataset.\n\n    The LoadImage() function opens the sample image, from `location_` or `label_path_` depending on `is_gt` parameter.\n\n    \n ecvl::ColorType of the returned Image.\n    \n\n Whether to load the sample image or its ground truth.\n\n    \n Image containing the loaded sample.\n\nC++: ecvl::Sample::LoadImage(enum ecvl::ColorType, const bool &) const --> class ecvl::Image", pybind11::arg("ctype"), pybind11::arg("is_gt"));
+
+		sample_addons(cl);
 	}
 	{ // ecvl::Split file:ecvl/dataset_parser.h line:59
 		pybind11::class_<ecvl::Split, std::shared_ptr<ecvl::Split>> cl(M("ecvl"), "Split", "Splits of a dataset.\n\nThis class provides the splits a dataset can have: training, validation, and test.\n\n Split");
@@ -605,28 +608,28 @@ void bind_ecvl_core_image_1(std::function< pybind11::module &(std::string const 
 
 void bind_image_ext(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
-	{ // ecvl::View_int8 file:image_ext.hpp line:4
+	{ // ecvl::View_int8 file:image_ext.hpp line:24
 		pybind11::class_<ecvl::View_int8, std::shared_ptr<ecvl::View_int8>, ecvl::View<ecvl::DataType::int8>> cl(M("ecvl"), "View_int8", "");
 		cl.def( pybind11::init<class ecvl::Image &>(), pybind11::arg("img") );
 
 
 		view_int8_addons(cl);
 	}
-	{ // ecvl::View_int16 file:image_ext.hpp line:8
+	{ // ecvl::View_int16 file:image_ext.hpp line:28
 		pybind11::class_<ecvl::View_int16, std::shared_ptr<ecvl::View_int16>, ecvl::View<ecvl::DataType::int16>> cl(M("ecvl"), "View_int16", "");
 		cl.def( pybind11::init<class ecvl::Image &>(), pybind11::arg("img") );
 
 
 		view_int16_addons(cl);
 	}
-	{ // ecvl::View_float32 file:image_ext.hpp line:12
+	{ // ecvl::View_float32 file:image_ext.hpp line:32
 		pybind11::class_<ecvl::View_float32, std::shared_ptr<ecvl::View_float32>, ecvl::View<ecvl::DataType::float32>> cl(M("ecvl"), "View_float32", "");
 		cl.def( pybind11::init<class ecvl::Image &>(), pybind11::arg("img") );
 
 
 		view_float32_addons(cl);
 	}
-	{ // ecvl::View_uint8 file:image_ext.hpp line:16
+	{ // ecvl::View_uint8 file:image_ext.hpp line:36
 		pybind11::class_<ecvl::View_uint8, std::shared_ptr<ecvl::View_uint8>, ecvl::View<ecvl::DataType::uint8>> cl(M("ecvl"), "View_uint8", "");
 		cl.def( pybind11::init<class ecvl::Image &>(), pybind11::arg("img") );
 
