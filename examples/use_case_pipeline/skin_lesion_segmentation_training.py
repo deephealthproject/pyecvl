@@ -19,49 +19,22 @@
 # SOFTWARE.
 
 """\
-Skin lesion segmentation example.
+Skin lesion segmentation training example.
+
+More information and checkpoints available at https://github.com/deephealthproject/use_case_pipeline
 """
 
 import argparse
-import os
-import random
-import sys
 
 import numpy as np
+import os
 import pyecvl._core.ecvl as ecvl
 import pyeddl._core.eddl as eddl
 import pyeddl._core.eddlT as eddlT
-from models import SegNet
+import random
 
-
-class Evaluator():
-
-    def __init__(self):
-        self.eps = 1e-06
-        self.buf = []
-
-    def ResetEval(self):
-        self.buf = []
-
-    def BinaryIoU(self, a, b):
-        intersection = np.logical_and(a >= 0.5, b >= 0.5).sum()
-        union = np.logical_or(a >= 0.5, b >= 0.5).sum()
-        rval = (intersection + self.eps) / (union + self.eps)
-        self.buf.append(rval)
-        return rval
-
-    def MIoU(self):
-        if not self.buf:
-            return 0
-        return sum(self.buf) / len(self.buf)
-
-
-def ImageSqueeze(img):
-    k = img.dims_.index(1)
-    img.dims_ = [_ for i, _ in enumerate(img.dims_) if i != k]
-    img.strides_ = [_ for i, _ in enumerate(img.strides_) if i != k]
-    k = img.channels_.find("z")
-    img.channels_ = "".join([_ for i, _ in enumerate(img.channels_) if i != k])
+from examples.use_case_pipeline import utils
+from examples.use_case_pipeline.models import SegNet
 
 
 def main(args):
@@ -77,16 +50,19 @@ def main(args):
         eddl.adam(0.0001),
         ["cross_entropy"],
         ["mean_squared_error"],
-        eddl.CS_GPU([1]) if args.gpu else eddl.CS_CPU()
     )
+
+    if args.gpu:
+        eddl.toGPU(net, [1])
+
     eddl.summary(net)
 
     print("Reading dataset")
     d = ecvl.DLDataset(args.in_ds, args.batch_size, size)
     x = eddlT.create([args.batch_size, d.n_channels_, size[0], size[1]])
     y = eddlT.create([args.batch_size, 1, size[0], size[1]])
-    num_samples = len(d.GetSplit())
-    num_batches = num_samples // args.batch_size
+    num_samples_train = len(d.GetSplit())
+    num_batches_train = num_samples_train // args.batch_size
     d.SetSplit("validation")
     num_samples_validation = len(d.GetSplit())
     num_batches_validation = num_samples_validation // args.batch_size
@@ -97,30 +73,32 @@ def main(args):
             os.makedirs(args.out_dir)
         except FileExistsError:
             pass
-    evaluator = Evaluator()
+    evaluator = utils.Evaluator()
+    best_miou = 0.
     print("Starting training")
-    for i in range(args.epochs):
+    for e in range(args.epochs):
+        print("Epoch {:d}/{:d} - Training".format(e + 1, args.epochs), flush=True)
         d.SetSplit("training")
         eddl.reset_loss(net)
         s = d.GetSplit()
         random.shuffle(s)
         d.split_.training_ = s
         d.ResetAllBatches()
-        for j in range(num_batches):
-            print("Epoch %d/%d (batch %d/%d) - " %
-                  (i + 1, args.epochs, j + 1, num_batches), end="", flush=True)
+        for b in range(num_batches_train):
+            print("Epoch {:d}/{:d} (batch {:d}/{:d}) - ".format(e + 1, args.epochs, b + 1, num_batches_train), end="",
+                  flush=True)
             d.LoadBatch(x, y)
             x.div_(255.0)
             y.div_(255.0)
             tx, ty = [x], [y]
             eddl.train_batch(net, tx, ty, indices)
-            eddl.print_loss(net, j)
+            eddl.print_loss(net, b)
             print()
         d.SetSplit("validation")
         evaluator.ResetEval()
-        for j in range(num_batches_validation):
-            print("Validation - Epoch %d/%d (batch %d/%d) " %
-                  (i + 1, args.epochs, j + 1, num_batches_validation),
+        print("Epoch %d/%d - Evaluation" % (e + 1, args.epochs), flush=True)
+        for b in range(num_batches_validation):
+            print("Epoch {:d}/{:d} (batch {:d}/{:d}) ".format(e + 1, args.epochs, b + 1, num_batches_validation),
                   end="", flush=True)
             d.LoadBatch(x, y)
             x.div_(255.0)
@@ -130,29 +108,33 @@ def main(args):
             for k in range(args.batch_size):
                 img = eddlT.select(output, k)
                 gt = eddlT.select(y, k)
-                a, b = np.array(img, copy=False), np.array(gt, copy=False)
-                iou = evaluator.BinaryIoU(a, b)
+                img_np, gt_np = np.array(img, copy=False), np.array(gt, copy=False)
+                iou = evaluator.BinaryIoU(img_np, gt_np)
                 print("- IoU: %.6g " % iou, end="", flush=True)
-                if (args.out_dir):
-                    a[a >= 0.5] = 1
-                    a[a < 0.5] = 0
+                if args.out_dir:
+                    img_np[img_np >= 0.5] = 1
+                    img_np[img_np < 0.5] = 0
                     img_t = ecvl.TensorToView(img)
-                    ImageSqueeze(img_t)
+                    utils.ImageSqueeze(img_t)
                     img.mult_(255.)
                     output_fn = os.path.join(
-                        args.out_dir, "batch_%d_%d_output.png" % (j, k)
+                        args.out_dir, "batch_%d_%d_output.png" % (b, k)
                     )
                     ecvl.ImWrite(output_fn, img_t)
-                    if i == 0:
+                    if e == 0:
                         gt_t = ecvl.TensorToView(gt)
-                        ImageSqueeze(gt_t)
+                        utils.ImageSqueeze(gt_t)
                         gt.mult_(255.)
                         gt_fn = os.path.join(
-                            args.out_dir, "batch_%d_%d_gt.png" % (j, k)
+                            args.out_dir, "batch_%d_%d_gt.png" % (b, k)
                         )
                         ecvl.ImWrite(gt_fn, gt_t)
             print()
-        print("MIoU: %.6g" % evaluator.MIoU())
+        current_miou = evaluator.MIoU()
+        print("MIoU: %.6g" % current_miou)
+        if best_miou < current_miou:
+            best_miou = current_miou
+            eddl.save(net, "isic_segm_checkpoint.bin", "bin")
 
 
 if __name__ == "__main__":
@@ -162,4 +144,4 @@ if __name__ == "__main__":
     parser.add_argument("--batch-size", type=int, metavar="INT", default=8)
     parser.add_argument("--gpu", action="store_true")
     parser.add_argument("--out-dir", metavar="DIR", help="save images here")
-    main(parser.parse_args(sys.argv[1:]))
+    main(parser.parse_args())
