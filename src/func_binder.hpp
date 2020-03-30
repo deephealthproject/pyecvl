@@ -24,6 +24,7 @@
 #include <ecvl/core/imgcodecs.h>
 #include <ecvl/core/imgproc.h>
 #ifdef ECVL_EDDL
+#include <ecvl/augmentations.h>
 #include <ecvl/support_eddl.h>
 #endif
 #ifdef ECVL_WITH_OPENSLIDE
@@ -81,6 +82,19 @@ void bind_ecvl_functions(pybind11::module &m) {
 	  return contours;
       }, "Find contours in a binary image");
 #ifdef ECVL_EDDL
+
+  // augmentations: AugmentationParam
+  {
+  pybind11::class_<ecvl::AugmentationParam, std::shared_ptr<ecvl::AugmentationParam>> cl(m, "AugmentationParam", "Augmentations parameters. This class represent the augmentations parameters which must be randomly generated in a specific range.");
+  cl.def(pybind11::init([](){ return new ecvl::AugmentationParam(); }));
+  cl.def( pybind11::init<const double, const double>(), pybind11::arg("min"), pybind11::arg("max"));
+  cl.def_readwrite("min_", &ecvl::AugmentationParam::min_);
+  cl.def_readwrite("max_", &ecvl::AugmentationParam::max_);
+  cl.def_readwrite("value_", &ecvl::AugmentationParam::value_);
+  cl.def("GenerateValue", (void (ecvl::AugmentationParam::*)()) &ecvl::AugmentationParam::GenerateValue, "Generate the random value between min_ and max_.");
+  cl.def_static("SetSeed", (void (*)(unsigned int)) &ecvl::AugmentationParam::SetSeed, "Set a fixed seed for the random generated values. Useful to reproduce experiments with same augmentations.", pybind11::arg("seed"));
+  }
+
   // eddl: ImageToTensor
   m.def("ImageToTensor", [](const ecvl::Image& img) {
     Tensor* t;
