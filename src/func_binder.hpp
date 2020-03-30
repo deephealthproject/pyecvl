@@ -24,7 +24,7 @@
 #include <ecvl/core/imgcodecs.h>
 #include <ecvl/core/imgproc.h>
 #ifdef ECVL_EDDL
-#include <ecvl/eddl.h>
+#include <ecvl/support_eddl.h>
 #endif
 #ifdef ECVL_WITH_OPENSLIDE
 #include <ecvl/core/support_openslide.h>
@@ -87,91 +87,42 @@ void bind_ecvl_functions(pybind11::module &m) {
     ecvl::ImageToTensor(img, t);
     return t;
   });
-  m.def("ImageToTensor", [](ecvl::Image& img, int offset) {
+  m.def("ImageToTensor", [](const ecvl::Image& img, int offset) {
     Tensor* t;
     ecvl::ImageToTensor(img, t, offset);
     return t;
   });
-  // eddl: TensorToImage
+  // support_eddl: TensorToImage
   m.def("TensorToImage", [](Tensor* t) {
     ecvl::Image img;
     ecvl::TensorToImage(t, img);
     return img;
   });
-  m.def("TensorToImage", [](Tensor* t, ecvl::ColorType c_type) {
-    ecvl::Image img;
-    ecvl::TensorToImage(t, img, c_type);
-    return img;
-  });
-  // eddl: TensorToView
+  // support_eddl: TensorToView
   m.def("TensorToView", [](Tensor* t) {
     ecvl::View<ecvl::DataType::float32> view;
     ecvl::TensorToView(t, view);
     return view;
   });
-  m.def("TensorToView", [](Tensor* t, ecvl::ColorType c_type) {
-    ecvl::View<ecvl::DataType::float32> view;
-    ecvl::TensorToView(t, view, c_type);
-    return view;
-  });
-  // eddl: DLDataset
-  pybind11::class_<ecvl::DLDataset, std::shared_ptr<ecvl::DLDataset>, ecvl::Dataset> cl(m, "DLDataset", "");
-  cl.def(pybind11::init([](const std::string& filename, const int batch_size, const std::vector<int>& resize_dims) { return new ecvl::DLDataset(filename, batch_size, resize_dims); }));
-  cl.def(pybind11::init([](const std::string& filename, const int batch_size, const std::vector<int>& resize_dims, ecvl::ColorType ctype) { return new ecvl::DLDataset(filename, batch_size, resize_dims, ctype); }));
-  cl.def(pybind11::init([](const std::string& filename, const int batch_size, const std::vector<int>& resize_dims, ecvl::ColorType ctype, ecvl::ColorType ctype_gt) { return new ecvl::DLDataset(filename, batch_size, resize_dims, ctype, ctype_gt); }));
-  cl.def_readwrite("batch_size_", &ecvl::DLDataset::batch_size_);
-  cl.def_readwrite("n_channels_", &ecvl::DLDataset::n_channels_);
-  cl.def_readwrite("current_split_", &ecvl::DLDataset::current_split_);
-  cl.def_readwrite("resize_dims_", &ecvl::DLDataset::resize_dims_);
-  cl.def_readwrite("current_batch_", &ecvl::DLDataset::current_batch_);
-  cl.def_readwrite("ctype_", &ecvl::DLDataset::ctype_);
-  cl.def_readwrite("ctype_gt_", &ecvl::DLDataset::ctype_gt_);
-  cl.def("GetSplit", &ecvl::DLDataset::GetSplit);
-  cl.def("ResetCurrentBatch", &ecvl::DLDataset::ResetCurrentBatch);
-  cl.def("ResetAllBatches", &ecvl::DLDataset::ResetAllBatches);
-  cl.def("SetSplit", &ecvl::DLDataset::SetSplit);
-  cl.def("LoadBatch", [](ecvl::DLDataset& d, Tensor* images, Tensor* labels) {
-    d.LoadBatch(images, labels);
-  });
-  // eddl: TrainingToTensor
-  m.def("TrainingToTensor", [](const ecvl::Dataset& dataset, const std::vector<int>& size) -> pybind11::tuple {
-    Tensor* images;
-    Tensor* labels;
-    ecvl::TrainingToTensor(dataset, size, images, labels);
-    return pybind11::make_tuple(images, labels);
-  });
-  m.def("TrainingToTensor", [](const ecvl::Dataset& dataset, const std::vector<int>& size, ecvl::ColorType ctype) -> pybind11::tuple {
-    Tensor* images;
-    Tensor* labels;
-    ecvl::TrainingToTensor(dataset, size, images, labels, ctype);
-    return pybind11::make_tuple(images, labels);
-  });
-  // eddl: ValidationToTensor
-  m.def("ValidationToTensor", [](const ecvl::Dataset& dataset, const std::vector<int>& size) -> pybind11::tuple {
-    Tensor* images;
-    Tensor* labels;
-    ecvl::ValidationToTensor(dataset, size, images, labels);
-    return pybind11::make_tuple(images, labels);
-  });
-  m.def("ValidationToTensor", [](const ecvl::Dataset& dataset, const std::vector<int>& size, ecvl::ColorType ctype) -> pybind11::tuple {
-    Tensor* images;
-    Tensor* labels;
-    ecvl::ValidationToTensor(dataset, size, images, labels, ctype);
-    return pybind11::make_tuple(images, labels);
-  });
-  // eddl: TestToTensor
-  m.def("TestToTensor", [](const ecvl::Dataset& dataset, const std::vector<int>& size) -> pybind11::tuple {
-    Tensor* images;
-    Tensor* labels;
-    ecvl::TestToTensor(dataset, size, images, labels);
-    return pybind11::make_tuple(images, labels);
-  });
-  m.def("TestToTensor", [](const ecvl::Dataset& dataset, const std::vector<int>& size, ecvl::ColorType ctype) -> pybind11::tuple {
-    Tensor* images;
-    Tensor* labels;
-    ecvl::TestToTensor(dataset, size, images, labels, ctype);
-    return pybind11::make_tuple(images, labels);
-  });
+  // support_eddl: DLDataset
+  // pybind11::class_<ecvl::DLDataset, std::shared_ptr<ecvl::DLDataset>, ecvl::Dataset> cl(m, "DLDataset", "");
+  // cl.def(pybind11::init([](const std::string& filename, const int batch_size, const std::vector<int>& resize_dims) { return new ecvl::DLDataset(filename, batch_size, resize_dims); }));
+  // cl.def(pybind11::init([](const std::string& filename, const int batch_size, const std::vector<int>& resize_dims, ecvl::ColorType ctype) { return new ecvl::DLDataset(filename, batch_size, resize_dims, ctype); }));
+  // cl.def(pybind11::init([](const std::string& filename, const int batch_size, const std::vector<int>& resize_dims, ecvl::ColorType ctype, ecvl::ColorType ctype_gt) { return new ecvl::DLDataset(filename, batch_size, resize_dims, ctype, ctype_gt); }));
+  // cl.def_readwrite("batch_size_", &ecvl::DLDataset::batch_size_);
+  // cl.def_readwrite("n_channels_", &ecvl::DLDataset::n_channels_);
+  // cl.def_readwrite("current_split_", &ecvl::DLDataset::current_split_);
+  // cl.def_readwrite("resize_dims_", &ecvl::DLDataset::resize_dims_);
+  // cl.def_readwrite("current_batch_", &ecvl::DLDataset::current_batch_);
+  // cl.def_readwrite("ctype_", &ecvl::DLDataset::ctype_);
+  // cl.def_readwrite("ctype_gt_", &ecvl::DLDataset::ctype_gt_);
+  // cl.def("GetSplit", &ecvl::DLDataset::GetSplit);
+  // cl.def("ResetCurrentBatch", &ecvl::DLDataset::ResetCurrentBatch);
+  // cl.def("ResetAllBatches", &ecvl::DLDataset::ResetAllBatches);
+  // cl.def("SetSplit", &ecvl::DLDataset::SetSplit);
+  // cl.def("LoadBatch", [](ecvl::DLDataset& d, Tensor* images, Tensor* labels) {
+  //   d.LoadBatch(images, labels);
+  // });
 #endif
 #ifdef ECVL_WITH_OPENSLIDE
   // support_openslide: OpenSlideRead

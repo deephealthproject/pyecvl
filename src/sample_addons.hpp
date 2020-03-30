@@ -24,14 +24,22 @@
 #include <ecvl/dataset_parser.h>
 
 
-std::string getSampleLocation(ecvl::Sample &s) {
-    std::string loc = s.location_;
+std::vector<std::string> getSampleLocation(ecvl::Sample &s) {
+    std::vector<std::string> loc;
+    for (const auto &path: s.location_) {
+	loc.push_back(std::string(path));
+    }
     return loc;
 }
 
-void setSampleLocation(ecvl::Sample &s, std::string loc) {
-    s.location_ = loc;
+void setSampleLocation(ecvl::Sample &s, std::vector<std::string> loc) {
+    std::vector<std::filesystem::path> location_;
+    for (const auto &str: loc) {
+	location_.push_back(std::filesystem::path(str));
+    }
+    s.location_ = location_;
 }
+
 
 template <typename type_, typename... options>
 void sample_addons(pybind11::class_<type_, options...> &cl) {

@@ -47,7 +47,7 @@ def main(args):
     ecvl.ImWrite(out_path, img)
 
     # check setter for completeness, but why would anyone want to do this?
-    loc = "/foo/bar"
+    loc = ["/foo/bar"]
     d.samples_[0].location_ = loc
     assert d.samples_[0].location_ == loc
 

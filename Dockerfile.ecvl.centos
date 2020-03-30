@@ -44,7 +44,7 @@ RUN mkdir build && \
       -DECVL_BUILD_EXAMPLES=ON \
       -DECVL_WITH_DICOM=ON \
       -DECVL_WITH_OPENSLIDE=OFF \
-      -DECVL_DATASET_PARSER=ON \
+      -DECVL_DATASET=ON \
       -DECVL_BUILD_EDDL=ON .. && \
     make -j$(nproc) && \
     make install
