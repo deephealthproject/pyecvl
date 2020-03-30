@@ -35,6 +35,26 @@
 #include <ecvl/core/support_dcmtk.h>
 #endif
 
+
+class PyAugmentation : public ecvl::Augmentation {
+public:
+    using ecvl::Augmentation::Augmentation;
+
+    void RealApply(ecvl::Image& img, const ecvl::Image& gt = ecvl::Image()) override {
+	PYBIND11_OVERLOAD_PURE(void, ecvl::Augmentation, RealApply, img, gt);
+    }
+};
+
+
+std::vector<ecvl::Augmentation*> getAugs(ecvl::SequentialAugmentationContainer &c) {
+    std::vector<ecvl::Augmentation*> rval;
+    for (const auto &aug: c.augs_) {
+	rval.push_back(aug.get());
+    }
+    return rval;
+}
+
+
 void bind_ecvl_functions(pybind11::module &m) {
   m.def("RearrangeChannels", [](const ecvl::Image& src, ecvl::Image& dst, const std::string& channels) {
     ecvl::RearrangeChannels(src, dst, channels);
@@ -94,8 +114,39 @@ void bind_ecvl_functions(pybind11::module &m) {
   cl.def("GenerateValue", (void (ecvl::AugmentationParam::*)()) &ecvl::AugmentationParam::GenerateValue, "Generate the random value between min_ and max_.");
   cl.def_static("SetSeed", (void (*)(unsigned int)) &ecvl::AugmentationParam::SetSeed, "Set a fixed seed for the random generated values. Useful to reproduce experiments with same augmentations.", pybind11::arg("seed"));
   }
+  // augmentations: Augmentation
+  {
+  pybind11::class_<ecvl::Augmentation, std::unique_ptr<ecvl::Augmentation, pybind11::nodelete>, PyAugmentation> cl(m, "Augmentation", "Abstract class which represent a generic Augmentation function.");
+  cl.def(pybind11::init<>());
+  cl.def_readwrite("params_", &ecvl::Augmentation::params_);
+  cl.def("Apply", [](ecvl::Augmentation &o, class ecvl::Image & a0) -> void { return o.Apply(a0); }, "", pybind11::arg("img"));
+  cl.def("Apply", (void (ecvl::Augmentation::*)(class ecvl::Image &, const class ecvl::Image &)) &ecvl::Augmentation::Apply, "Generate the random value for each parameter and call the specialized augmentation functions.", pybind11::arg("img"), pybind11::arg("gt"));
+  }
+  // augmentations::SequentialAugmentationContainer
+  {
+  pybind11::class_<ecvl::SequentialAugmentationContainer, std::unique_ptr<ecvl::SequentialAugmentationContainer, pybind11::nodelete>, ecvl::Augmentation> cl(m, "SequentialAugmentationContainer", "Represents a container for multiple augmentations which will be sequentially applied to the Dataset images.");
+  cl.def_property_readonly("augs_", getAugs, pybind11::return_value_policy::reference);
+  cl.def(pybind11::init<>());
+  cl.def(pybind11::init<const std::vector<ecvl::Augmentation*>&>());
+  cl.def("Add", (void (ecvl::SequentialAugmentationContainer::*)(ecvl::Augmentation*)) &ecvl::SequentialAugmentationContainer::Add, "ecvl::Add(ecvl::Augmentation*) --> void", pybind11::arg("aug"));
+  }
+  // augmentations: AugFlip
+  {
+  pybind11::class_<ecvl::AugFlip, std::unique_ptr<ecvl::AugFlip, pybind11::nodelete>, ecvl::Augmentation> cl(m, "AugFlip", "Augmentation wrapper for ecvl::Flip2D.");
+  cl.def(pybind11::init<const double &>(), pybind11::arg("p"));
+  }
 
-  // eddl: ImageToTensor
+
+  // support_eddl: DatasetAugmentations
+  {
+  pybind11::class_<ecvl::DatasetAugmentations, std::shared_ptr<ecvl::DatasetAugmentations>> cl(m, "DatasetAugmentations", "Dataset Augmentations. Represents the augmentations which will be applied to each split.");
+  cl.def(pybind11::init<>());
+  cl.def(pybind11::init<std::array<ecvl::Augmentation*, 3>>());
+  cl.def("Apply", [](ecvl::DatasetAugmentations &o, enum ecvl::SplitType const & a0, class ecvl::Image & a1) -> void { return o.Apply(a0, a1); }, "", pybind11::arg("st"), pybind11::arg("img"));
+  cl.def("Apply", (void (ecvl::DatasetAugmentations::*)(enum ecvl::SplitType, class ecvl::Image &, const class ecvl::Image &)) &ecvl::DatasetAugmentations::Apply, "C++: ecvl::DatasetAugmentations::Apply(enum ecvl::SplitType, class ecvl::Image &, const class ecvl::Image &) --> void", pybind11::arg("st"), pybind11::arg("img"), pybind11::arg("gt"));
+  }
+
+  // support_eddl: ImageToTensor
   m.def("ImageToTensor", [](const ecvl::Image& img) {
     Tensor* t;
     ecvl::ImageToTensor(img, t);
