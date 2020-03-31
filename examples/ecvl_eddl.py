@@ -31,9 +31,16 @@ import pyeddl._core.eddlT as eddlT
 
 def main(args):
     img = ecvl.ImRead(args.in_img)
+    augs = ecvl.SequentialAugmentationContainer([
+        # TODO: add more aug types
+        ecvl.AugFlip(0.5)
+    ])
+    ecvl.AugmentationParam.SetSeed(0)
+    augs.Apply(img)
     print("Executing ImageToTensor")
     t = ecvl.ImageToTensor(img)
     eddlT.div_(t, 128)
+    eddlT.mult_(t, 128)
     print("Executing TensorToImage")
     img = ecvl.TensorToImage(t)
     print("Executing TensorToView")
@@ -41,25 +48,29 @@ def main(args):
 
     batch_size = 64
     print("Creating a DLDataset")
-    d = ecvl.DLDataset(args.in_ds, batch_size, [28, 56], ecvl.ColorType.GRAY)
-    print("Create x_train and y_train")
-    x_train = eddlT.create(
+    # TODO: create a dataset with augmentations
+    d = ecvl.DLDataset(args.in_ds, batch_size)
+    print("Create x and y")
+    x = eddlT.create(
         [batch_size, d.n_channels_, d.resize_dims_[0], d.resize_dims_[1]]
     )
-    y_train = eddlT.create([batch_size, len(d.classes_)])
+    y = eddlT.create([batch_size, len(d.classes_)])
 
-    # Load a batch of d.batch_size_ images into x_train and corresponding
-    # labels in y_train. Images are resized to the dimensions specified in size
-    print("Executing LoadBatch")
-    d.LoadBatch(x_train, y_train)
+    # Load a batch of d.batch_size_ images into x and corresponding labels
+    # into y.
+    print("Executing LoadBatch on training set")
+    d.LoadBatch(x, y)
 
-    # Load test images in x_test and corresponding labels in y_test
-    print("Executing TestToTensor")
-    x_test, y_test = ecvl.TestToTensor(d, d.resize_dims_, ecvl.ColorType.GRAY)
-    print("x_test info:")
-    eddlT.info(x_test)
-    print("y_test info:")
-    eddlT.info(y_test)
+    # Change colortype and channels
+    img = ecvl.TensorToImage(x)
+    img.colortype_ = ecvl.ColorType.GRAY
+    img.channels_ = "xyc"
+
+    # Switch to Test split and load a batch of images
+    print("Executing LoadBatch on test set")
+    d.SetSplit(ecvl.SplitType.test)
+    d.LoadBatch(x, y)
+
 
 
 if __name__ == "__main__":

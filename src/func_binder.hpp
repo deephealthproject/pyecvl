@@ -136,14 +136,42 @@ void bind_ecvl_functions(pybind11::module &m) {
   cl.def(pybind11::init<const double &>(), pybind11::arg("p"));
   }
 
-
   // support_eddl: DatasetAugmentations
   {
   pybind11::class_<ecvl::DatasetAugmentations, std::shared_ptr<ecvl::DatasetAugmentations>> cl(m, "DatasetAugmentations", "Dataset Augmentations. Represents the augmentations which will be applied to each split.");
-  cl.def(pybind11::init<>());
   cl.def(pybind11::init<std::array<ecvl::Augmentation*, 3>>());
   cl.def("Apply", [](ecvl::DatasetAugmentations &o, enum ecvl::SplitType const & a0, class ecvl::Image & a1) -> void { return o.Apply(a0, a1); }, "", pybind11::arg("st"), pybind11::arg("img"));
   cl.def("Apply", (void (ecvl::DatasetAugmentations::*)(enum ecvl::SplitType, class ecvl::Image &, const class ecvl::Image &)) &ecvl::DatasetAugmentations::Apply, "C++: ecvl::DatasetAugmentations::Apply(enum ecvl::SplitType, class ecvl::Image &, const class ecvl::Image &) --> void", pybind11::arg("st"), pybind11::arg("img"), pybind11::arg("gt"));
+  }
+
+  // support_eddl: DLDataset
+  {
+  pybind11::class_<ecvl::DLDataset, std::shared_ptr<ecvl::DLDataset>, ecvl::Dataset> cl(m, "DLDataset", "Extends the DeepHealth Dataset with deep learning specific members");
+  cl.def(pybind11::init([](const std::string& filename, const int batch_size) { return new ecvl::DLDataset(filename, batch_size); }));
+  // cl.def(pybind11::init([](const std::string& filename, const int batch_size, ecvl::DatasetAugmentations augs) { return new ecvl::DLDataset(filename, batch_size, augs); }));
+  // cl.def(pybind11::init([](const std::string& filename, const int batch_size, ecvl::DatasetAugmentations augs, ecvl::ColorType ctype) { return new ecvl::DLDataset(filename, batch_size, augs, ctype); }));
+  // cl.def(pybind11::init([](const std::string& filename, const int batch_size, ecvl::DatasetAugmentations augs, ecvl::ColorType ctype, ecvl::ColorType ctype_gt) { return new ecvl::DLDataset(filename, batch_size, augs, ctype, ctype_gt); }));
+  // cl.def(pybind11::init([](const std::string& filename, const int batch_size, ecvl::DatasetAugmentations augs, ecvl::ColorType ctype, ecvl::ColorType ctype_gt, bool verify) { return new ecvl::DLDataset(filename, batch_size, augs, ctype, ctype_gt, verify); }));
+  cl.def_readwrite("batch_size_", &ecvl::DLDataset::batch_size_);
+  cl.def_readwrite("n_channels_", &ecvl::DLDataset::n_channels_);
+  cl.def_readwrite("n_channels_gt_", &ecvl::DLDataset::n_channels_gt_);
+  cl.def_readwrite("current_split_", &ecvl::DLDataset::current_split_);
+  cl.def_readwrite("resize_dims_", &ecvl::DLDataset::resize_dims_);
+  cl.def_readwrite("current_batch_", &ecvl::DLDataset::current_batch_);
+  cl.def_readwrite("ctype_", &ecvl::DLDataset::ctype_);
+  cl.def_readwrite("ctype_gt_", &ecvl::DLDataset::ctype_gt_);
+  // cl.def_readwrite("augs_", &ecvl::DLDataset::augs_);
+  cl.def("GetSplit", (std::vector<int>& (ecvl::DLDataset::*)()) &ecvl::DLDataset::GetSplit, "C++: ecvl::DLDataset::GetSplit() --> std::vector<int>&");
+  cl.def("GetSplit", (std::vector<int>& (ecvl::DLDataset::*)(const ecvl::SplitType&)) &ecvl::DLDataset::GetSplit, "C++: ecvl::DLDataset::GetSplit(const ecvl::SplitType&) --> std::vector<int>&");
+  cl.def("ResetCurrentBatch", &ecvl::DLDataset::ResetCurrentBatch);
+  cl.def("ResetAllBatches", &ecvl::DLDataset::ResetAllBatches);
+  cl.def("SetSplit", &ecvl::DLDataset::SetSplit);
+  cl.def("LoadBatch", [](ecvl::DLDataset& d, Tensor* images, Tensor* labels) {
+    d.LoadBatch(images, labels);
+  });
+  cl.def("LoadBatch", [](ecvl::DLDataset& d, Tensor* images) {
+    d.LoadBatch(images);
+  });
   }
 
   // support_eddl: ImageToTensor
@@ -169,25 +197,6 @@ void bind_ecvl_functions(pybind11::module &m) {
     ecvl::TensorToView(t, view);
     return view;
   });
-  // support_eddl: DLDataset
-  // pybind11::class_<ecvl::DLDataset, std::shared_ptr<ecvl::DLDataset>, ecvl::Dataset> cl(m, "DLDataset", "");
-  // cl.def(pybind11::init([](const std::string& filename, const int batch_size, const std::vector<int>& resize_dims) { return new ecvl::DLDataset(filename, batch_size, resize_dims); }));
-  // cl.def(pybind11::init([](const std::string& filename, const int batch_size, const std::vector<int>& resize_dims, ecvl::ColorType ctype) { return new ecvl::DLDataset(filename, batch_size, resize_dims, ctype); }));
-  // cl.def(pybind11::init([](const std::string& filename, const int batch_size, const std::vector<int>& resize_dims, ecvl::ColorType ctype, ecvl::ColorType ctype_gt) { return new ecvl::DLDataset(filename, batch_size, resize_dims, ctype, ctype_gt); }));
-  // cl.def_readwrite("batch_size_", &ecvl::DLDataset::batch_size_);
-  // cl.def_readwrite("n_channels_", &ecvl::DLDataset::n_channels_);
-  // cl.def_readwrite("current_split_", &ecvl::DLDataset::current_split_);
-  // cl.def_readwrite("resize_dims_", &ecvl::DLDataset::resize_dims_);
-  // cl.def_readwrite("current_batch_", &ecvl::DLDataset::current_batch_);
-  // cl.def_readwrite("ctype_", &ecvl::DLDataset::ctype_);
-  // cl.def_readwrite("ctype_gt_", &ecvl::DLDataset::ctype_gt_);
-  // cl.def("GetSplit", &ecvl::DLDataset::GetSplit);
-  // cl.def("ResetCurrentBatch", &ecvl::DLDataset::ResetCurrentBatch);
-  // cl.def("ResetAllBatches", &ecvl::DLDataset::ResetAllBatches);
-  // cl.def("SetSplit", &ecvl::DLDataset::SetSplit);
-  // cl.def("LoadBatch", [](ecvl::DLDataset& d, Tensor* images, Tensor* labels) {
-  //   d.LoadBatch(images, labels);
-  // });
 #endif
 #ifdef ECVL_WITH_OPENSLIDE
   // support_openslide: OpenSlideRead
