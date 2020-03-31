@@ -148,10 +148,22 @@ void bind_ecvl_functions(pybind11::module &m) {
   {
   pybind11::class_<ecvl::DLDataset, std::shared_ptr<ecvl::DLDataset>, ecvl::Dataset> cl(m, "DLDataset", "Extends the DeepHealth Dataset with deep learning specific members");
   cl.def(pybind11::init([](const std::string& filename, const int batch_size) { return new ecvl::DLDataset(filename, batch_size); }));
-  // cl.def(pybind11::init([](const std::string& filename, const int batch_size, ecvl::DatasetAugmentations augs) { return new ecvl::DLDataset(filename, batch_size, augs); }));
-  // cl.def(pybind11::init([](const std::string& filename, const int batch_size, ecvl::DatasetAugmentations augs, ecvl::ColorType ctype) { return new ecvl::DLDataset(filename, batch_size, augs, ctype); }));
-  // cl.def(pybind11::init([](const std::string& filename, const int batch_size, ecvl::DatasetAugmentations augs, ecvl::ColorType ctype, ecvl::ColorType ctype_gt) { return new ecvl::DLDataset(filename, batch_size, augs, ctype, ctype_gt); }));
-  // cl.def(pybind11::init([](const std::string& filename, const int batch_size, ecvl::DatasetAugmentations augs, ecvl::ColorType ctype, ecvl::ColorType ctype_gt, bool verify) { return new ecvl::DLDataset(filename, batch_size, augs, ctype, ctype_gt, verify); }));
+  cl.def(pybind11::init([](const std::string& filename, const int batch_size, std::array<ecvl::Augmentation*, 3> augs) {
+    ecvl::DatasetAugmentations da(augs);
+    return new ecvl::DLDataset(filename, batch_size, std::move(da));
+  }));
+  cl.def(pybind11::init([](const std::string& filename, const int batch_size, std::array<ecvl::Augmentation*, 3> augs, ecvl::ColorType ctype) {
+    ecvl::DatasetAugmentations da(augs);
+    return new ecvl::DLDataset(filename, batch_size, std::move(da), ctype);
+  }));
+  cl.def(pybind11::init([](const std::string& filename, const int batch_size, std::array<ecvl::Augmentation*, 3> augs, ecvl::ColorType ctype, ecvl::ColorType ctype_gt) {
+    ecvl::DatasetAugmentations da(augs);
+    return new ecvl::DLDataset(filename, batch_size, std::move(da), ctype, ctype_gt);
+  }));
+  cl.def(pybind11::init([](const std::string& filename, const int batch_size, std::array<ecvl::Augmentation*, 3> augs, ecvl::ColorType ctype, ecvl::ColorType ctype_gt, bool verify) {
+    ecvl::DatasetAugmentations da(augs);
+    return new ecvl::DLDataset(filename, batch_size, std::move(da), ctype, ctype_gt, verify);
+  }));
   cl.def_readwrite("batch_size_", &ecvl::DLDataset::batch_size_);
   cl.def_readwrite("n_channels_", &ecvl::DLDataset::n_channels_);
   cl.def_readwrite("n_channels_gt_", &ecvl::DLDataset::n_channels_gt_);

@@ -46,10 +46,19 @@ def main(args):
     print("Executing TensorToView")
     ecvl.TensorToView(t)
 
+    training_augs = ecvl.SequentialAugmentationContainer([
+        # TODO: add more aug types
+        ecvl.AugFlip(0.5)
+    ])
+    test_augs = ecvl.SequentialAugmentationContainer([
+        # TODO: add more aug types
+        ecvl.AugFlip(0.5)
+    ])
+    ds_augs = [training_augs, None, test_augs]
+
     batch_size = 64
     print("Creating a DLDataset")
-    # TODO: create a dataset with augmentations
-    d = ecvl.DLDataset(args.in_ds, batch_size)
+    d = ecvl.DLDataset(args.in_ds, batch_size, ds_augs, ecvl.ColorType.GRAY)
     print("Create x and y")
     x = eddlT.create(
         [batch_size, d.n_channels_, d.resize_dims_[0], d.resize_dims_[1]]
@@ -57,7 +66,8 @@ def main(args):
     y = eddlT.create([batch_size, len(d.classes_)])
 
     # Load a batch of d.batch_size_ images into x and corresponding labels
-    # into y.
+    # into y. Images are resized to the dimensions specified in the
+    # augmentations chain
     print("Executing LoadBatch on training set")
     d.LoadBatch(x, y)
 
@@ -70,7 +80,6 @@ def main(args):
     print("Executing LoadBatch on test set")
     d.SetSplit(ecvl.SplitType.test)
     d.LoadBatch(x, y)
-
 
 
 if __name__ == "__main__":
