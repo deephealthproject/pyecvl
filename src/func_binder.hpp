@@ -101,6 +101,10 @@ void bind_ecvl_functions(pybind11::module &m) {
 	  ecvl::FindContours(src, contours);
 	  return contours;
       }, "Find contours in a binary image");
+  m.def("Stack", (void (*)(const std::vector<ecvl::Image>&, class ecvl::Image &)) &ecvl::Stack, "Stack a sequence of Images along a new depth dimension (images dimensions must match)", pybind11::arg("src"), pybind11::arg("dst"));
+  m.def("HConcat", (void (*)(const std::vector<ecvl::Image>&, class ecvl::Image &)) &ecvl::HConcat, "Horizontal concatenation of images (with the same number of rows)", pybind11::arg("src"), pybind11::arg("dst"));
+  m.def("VConcat", (void (*)(const std::vector<ecvl::Image>&, class ecvl::Image &)) &ecvl::VConcat, "Vertical concatenation of images (with the same number of columns)", pybind11::arg("src"), pybind11::arg("dst"));
+
 #ifdef ECVL_EDDL
 
   // augmentations: AugmentationParam

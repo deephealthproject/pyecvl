@@ -132,6 +132,7 @@ def test_GaussianBlur():
     sigmaY = 0.2
     ecvl.GaussianBlur(img, tmp, 5, 5, 0.1)
     ecvl.GaussianBlur(img, tmp, 5, 5, 0.1, sigmaY)
+    ecvl.GaussianBlur(img, tmp, 0.2)  # alt overload
 
 
 def test_AdditiveLaplaceNoise():
@@ -201,3 +202,36 @@ def test_FindContours():
     dims = [20, 40, 1]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.GRAY)
     ecvl.FindContours(img)
+
+
+def test_HConcat():
+    img1 = ecvl.Image(
+        [20, 40, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR
+    )
+    img2 = ecvl.Image(
+        [40, 40, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR
+    )
+    tmp = ecvl.Image()
+    ecvl.HConcat([img1, img2], tmp)
+
+
+def test_VConcat():
+    img1 = ecvl.Image(
+        [20, 40, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR
+    )
+    img2 = ecvl.Image(
+        [20, 20, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR
+    )
+    tmp = ecvl.Image()
+    ecvl.VConcat([img1, img2], tmp)
+
+
+def test_Stack():
+    img1 = ecvl.Image(
+        [20, 40, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR
+    )
+    img2 = ecvl.Image(
+        [20, 40, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR
+    )
+    tmp = ecvl.Image()
+    ecvl.Stack([img1, img2], tmp)

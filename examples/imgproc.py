@@ -113,8 +113,29 @@ def main(args):
     ecvl.CoarseDropout(img, tmp, prob, drop_size, per_channel)
     ecvl.ImWrite("%s_coarse_dropout%s" % (head, ext), tmp)
 
+    print("Horizontal concatenation")
+    images = [ecvl.ImRead(args.in_fn), ecvl.ImRead(args.in_fn_2)]
+    new_h = int(images[0].dims_[1] / images[1].dims_[1] * images[1].dims_[0])
+    ecvl.ResizeDim(images[1], images[1], [new_h, images[0].dims_[1]])
+    ecvl.HConcat(images, tmp)
+    ecvl.ImWrite("hconcat.png", tmp)
+
+    print("Vertical concatenation")
+    images = [ecvl.ImRead(args.in_fn), ecvl.ImRead(args.in_fn_2)]
+    new_w = int(images[0].dims_[0] / images[1].dims_[0] * images[1].dims_[1])
+    ecvl.ResizeDim(images[1], images[1], [images[0].dims_[0], new_w])
+    ecvl.VConcat(images, tmp)
+    ecvl.ImWrite("vconcat.png", tmp)
+
+    print("Stack along depth dimension")
+    images = [ecvl.ImRead(args.in_fn), ecvl.ImRead(args.in_fn_2)]
+    ecvl.ResizeDim(images[1], images[1],
+                   [images[0].dims_[0], images[0].dims_[1]])
+    ecvl.Stack(images, tmp)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("in_fn", metavar="INPUT_PATH")
+    parser.add_argument("in_fn_2", metavar="INPUT_PATH_2")
     main(parser.parse_args(sys.argv[1:]))
