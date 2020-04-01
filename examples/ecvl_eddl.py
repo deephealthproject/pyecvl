@@ -32,8 +32,14 @@ import pyeddl._core.eddlT as eddlT
 def main(args):
     img = ecvl.ImRead(args.in_img)
     augs = ecvl.SequentialAugmentationContainer([
-        # TODO: add more aug types
-        ecvl.AugFlip(0.5)
+        ecvl.AugRotate([-5, 5]),
+        ecvl.AugMirror(.5),
+        ecvl.AugFlip(.5),
+        ecvl.AugGammaContrast([3, 5]),
+        ecvl.AugAdditiveLaplaceNoise([0, 0.2 * 255]),
+        ecvl.AugCoarseDropout([0, 0.55], [0.02, 0.1], 0.5),
+        ecvl.AugAdditivePoissonNoise([0, 40]),
+        ecvl.AugResizeDim([500, 500]),
     ])
     ecvl.AugmentationParam.SetSeed(0)
     augs.Apply(img)
@@ -47,12 +53,14 @@ def main(args):
     ecvl.TensorToView(t)
 
     training_augs = ecvl.SequentialAugmentationContainer([
-        # TODO: add more aug types
-        ecvl.AugFlip(0.5)
+        ecvl.AugRotate([-5, 5]),
+        ecvl.AugAdditiveLaplaceNoise([0, 0.2 * 255]),
+        ecvl.AugCoarseDropout([0, 0.55], [0.02, 0.1], 0),
+        ecvl.AugAdditivePoissonNoise([0, 40]),
+        ecvl.AugResizeDim([30, 30]),
     ])
     test_augs = ecvl.SequentialAugmentationContainer([
-        # TODO: add more aug types
-        ecvl.AugFlip(0.5)
+        ecvl.AugResizeDim([30, 30]),
     ])
     ds_augs = [training_augs, None, test_augs]
 

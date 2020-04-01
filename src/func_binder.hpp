@@ -130,10 +130,55 @@ void bind_ecvl_functions(pybind11::module &m) {
   cl.def(pybind11::init<const std::vector<ecvl::Augmentation*>&>());
   cl.def("Add", (void (ecvl::SequentialAugmentationContainer::*)(ecvl::Augmentation*)) &ecvl::SequentialAugmentationContainer::Add, "ecvl::Add(ecvl::Augmentation*) --> void", pybind11::arg("aug"));
   }
+  // augmentations: AugRotate
+  {
+  pybind11::class_<ecvl::AugRotate, std::unique_ptr<ecvl::AugRotate, pybind11::nodelete>, ecvl::Augmentation> cl(m, "AugRotate", "Augmentation wrapper for ecvl::Rotate2D.");
+  cl.def(pybind11::init<const std::array<double, 2>&, const std::vector<double>&, const double&, const ecvl::InterpolationType&>(), pybind11::arg("angle"), pybind11::arg("center") = std::vector<double>(), pybind11::arg("scale") = 1., pybind11::arg("interp") = ecvl::InterpolationType::linear);
+  }
+  // augmentations: AugResizeDim
+  {
+  pybind11::class_<ecvl::AugResizeDim, std::unique_ptr<ecvl::AugResizeDim, pybind11::nodelete>, ecvl::Augmentation> cl(m, "AugResizeDim", "Augmentation wrapper for ecvl::ResizeDim.");
+  cl.def(pybind11::init<const std::vector<int>&, const ecvl::InterpolationType&>(), pybind11::arg("dims"), pybind11::arg("interp") = ecvl::InterpolationType::linear);
+  }
+  // augmentations: AugResizeScale
+  {
+  pybind11::class_<ecvl::AugResizeScale, std::unique_ptr<ecvl::AugResizeScale, pybind11::nodelete>, ecvl::Augmentation> cl(m, "AugResizeScale", "Augmentation wrapper for ecvl::ResizeScale.");
+  cl.def(pybind11::init<const std::vector<double>&, const ecvl::InterpolationType&>(), pybind11::arg("scale"), pybind11::arg("interp") = ecvl::InterpolationType::linear);
+  }
   // augmentations: AugFlip
   {
   pybind11::class_<ecvl::AugFlip, std::unique_ptr<ecvl::AugFlip, pybind11::nodelete>, ecvl::Augmentation> cl(m, "AugFlip", "Augmentation wrapper for ecvl::Flip2D.");
   cl.def(pybind11::init<const double &>(), pybind11::arg("p"));
+  }
+  // augmentations: AugMirror
+  {
+  pybind11::class_<ecvl::AugMirror, std::unique_ptr<ecvl::AugMirror, pybind11::nodelete>, ecvl::Augmentation> cl(m, "AugMirror", "Augmentation wrapper for ecvl::Mirror2D.");
+  cl.def(pybind11::init<const double &>(), pybind11::arg("p"));
+  }
+  // augmentations: AugGaussianBlur
+  {
+  pybind11::class_<ecvl::AugGaussianBlur, std::unique_ptr<ecvl::AugGaussianBlur, pybind11::nodelete>, ecvl::Augmentation> cl(m, "AugGaussianBlur", "Augmentation wrapper for ecvl::GaussianBlur.");
+  cl.def(pybind11::init<const std::array<double, 2>&>(), pybind11::arg("sigma"));
+  }
+  // augmentations: AugAdditiveLaplaceNoise
+  {
+  pybind11::class_<ecvl::AugAdditiveLaplaceNoise, std::unique_ptr<ecvl::AugAdditiveLaplaceNoise, pybind11::nodelete>, ecvl::Augmentation> cl(m, "AugAdditiveLaplaceNoise", "Augmentation wrapper for ecvl::AdditiveLaplaceNoise.");
+  cl.def(pybind11::init<const std::array<double, 2>&>(), pybind11::arg("std_dev"));
+  }
+  // augmentations: AugAdditivePoissonNoise
+  {
+  pybind11::class_<ecvl::AugAdditivePoissonNoise, std::unique_ptr<ecvl::AugAdditivePoissonNoise, pybind11::nodelete>, ecvl::Augmentation> cl(m, "AugAdditivePoissonNoise", "Augmentation wrapper for ecvl::AdditivePoissonNoise.");
+  cl.def(pybind11::init<const std::array<double, 2>&>(), pybind11::arg("lambda"));
+  }
+  // augmentations: AugGammaContrast
+  {
+  pybind11::class_<ecvl::AugGammaContrast, std::unique_ptr<ecvl::AugGammaContrast, pybind11::nodelete>, ecvl::Augmentation> cl(m, "AugGammaContrast", "Augmentation wrapper for ecvl::GammaContrast.");
+  cl.def(pybind11::init<const std::array<double, 2>&>(), pybind11::arg("gamma"));
+  }
+  // augmentations: AugCoarseDropout
+  {
+  pybind11::class_<ecvl::AugCoarseDropout, std::unique_ptr<ecvl::AugCoarseDropout, pybind11::nodelete>, ecvl::Augmentation> cl(m, "AugCoarseDropout", "Augmentation wrapper for ecvl::CoarseDropout.");
+  cl.def(pybind11::init<const std::array<double, 2>&, const std::array<double, 2>&, const double&>(), pybind11::arg("p"), pybind11::arg("drop_size"), pybind11::arg("per_channel"));
   }
 
   // support_eddl: DatasetAugmentations

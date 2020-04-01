@@ -31,3 +31,73 @@ def test_AugmentationParam():
     ecvl.AugmentationParam.SetSeed(12345)
     ap.GenerateValue()
     assert min_ <= ap.value_ <= max_
+
+
+def test_AugRotate():
+    img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    a = ecvl.AugRotate([30, 50])
+    a.Apply(img)
+    a = ecvl.AugRotate([30, 50], [2, 3])
+    a.Apply(img)
+    a = ecvl.AugRotate([30, 50], [2, 3], 1.1)
+    a.Apply(img)
+    a = ecvl.AugRotate([30, 50], [2, 3], 1.1, ecvl.InterpolationType.nearest)
+    a.Apply(img)
+
+
+def test_AugResizeDim():
+    img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    a = ecvl.AugResizeDim([4, 3])
+    a.Apply(img)
+    a = ecvl.AugResizeDim([4, 3], ecvl.InterpolationType.nearest)
+    a.Apply(img)
+
+
+def test_AugResizeScale():
+    img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    a = ecvl.AugResizeScale([0.5, 0.5])
+    a.Apply(img)
+    a = ecvl.AugResizeScale([0.5, 0.5], ecvl.InterpolationType.nearest)
+    a.Apply(img)
+
+
+def test_AugFlip():
+    img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    a = ecvl.AugFlip(0.5)
+    a.Apply(img)
+
+
+def test_AugMirror():
+    img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    a = ecvl.AugMirror(0.5)
+    a.Apply(img)
+
+
+def test_AugGaussianBlur():
+    img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    a = ecvl.AugGaussianBlur([0.2, 0.4])
+    a.Apply(img)
+
+
+def test_AugAdditiveLaplaceNoise():
+    img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    a = ecvl.AugAdditiveLaplaceNoise([255 * 0.05, 255 * 0.09])
+    a.Apply(img)
+
+
+def test_AugAdditivePoissonNoise():
+    img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    a = ecvl.AugAdditivePoissonNoise([2.0, 3.0])
+    a.Apply(img)
+
+
+def test_AugGammaContrast():
+    img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    a = ecvl.AugGammaContrast([3, 4])
+    a.Apply(img)
+
+
+def test_AugCoarseDropout():
+    img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    a = ecvl.AugCoarseDropout([0.5, 0.7], [0.1, 0.2], 0.4)
+    a.Apply(img)
