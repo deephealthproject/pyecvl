@@ -24,7 +24,8 @@
 #include <ecvl/core/imgcodecs.h>
 #include <ecvl/core/imgproc.h>
 #ifdef ECVL_EDDL
-#include <ecvl/eddl.h>
+#include <ecvl/augmentations.h>
+#include <ecvl/support_eddl.h>
 #endif
 #ifdef ECVL_WITH_OPENSLIDE
 #include <ecvl/core/support_openslide.h>
@@ -33,6 +34,26 @@
 #ifdef ECVL_WITH_DICOM
 #include <ecvl/core/support_dcmtk.h>
 #endif
+
+
+class PyAugmentation : public ecvl::Augmentation {
+public:
+    using ecvl::Augmentation::Augmentation;
+
+    void RealApply(ecvl::Image& img, const ecvl::Image& gt = ecvl::Image()) override {
+	PYBIND11_OVERLOAD_PURE(void, ecvl::Augmentation, RealApply, img, gt);
+    }
+};
+
+
+std::vector<ecvl::Augmentation*> getAugs(ecvl::SequentialAugmentationContainer &c) {
+    std::vector<ecvl::Augmentation*> rval;
+    for (const auto &aug: c.augs_) {
+	rval.push_back(aug.get());
+    }
+    return rval;
+}
+
 
 void bind_ecvl_functions(pybind11::module &m) {
   m.def("RearrangeChannels", [](const ecvl::Image& src, ecvl::Image& dst, const std::string& channels) {
@@ -80,97 +101,171 @@ void bind_ecvl_functions(pybind11::module &m) {
 	  ecvl::FindContours(src, contours);
 	  return contours;
       }, "Find contours in a binary image");
+  // imgproc: Stack
+  m.def("Stack", (void (*)(const std::vector<ecvl::Image>&, class ecvl::Image &)) &ecvl::Stack, "Stack a sequence of Images along a new depth dimension (images dimensions must match)", pybind11::arg("src"), pybind11::arg("dst"));
+  // imgproc: HConcat
+  m.def("HConcat", (void (*)(const std::vector<ecvl::Image>&, class ecvl::Image &)) &ecvl::HConcat, "Horizontal concatenation of images (with the same number of rows)", pybind11::arg("src"), pybind11::arg("dst"));
+  // imgproc: VConcat
+  m.def("VConcat", (void (*)(const std::vector<ecvl::Image>&, class ecvl::Image &)) &ecvl::VConcat, "Vertical concatenation of images (with the same number of columns)", pybind11::arg("src"), pybind11::arg("dst"));
+  // imgproc: Morphology
+  m.def("Morphology", (void (*)(const ecvl::Image&, ecvl::Image&, ecvl::MorphTypes, ecvl::Image&, ecvl::Point2i, int, int, const int&)) &ecvl::Morphology, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("op"), pybind11::arg("kernel"), pybind11::arg("anchor") = std::array<int, 2>({-1, -1}), pybind11::arg("iterations") = 1, pybind11::arg("borderType") = 1, pybind11::arg("borderValue") = 0);
+  // imgproc: Inpaint
+  m.def("Inpaint", (void (*)(const ecvl::Image&, ecvl::Image&, const ecvl::Image&, double, ecvl::InpaintTypes)) &ecvl::Inpaint, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("inpaintMask"), pybind11::arg("inpaintRadius"), pybind11::arg("flag") = ecvl::InpaintTypes::INPAINT_TELEA);
+  // imgproc: MeanStdDev
+  m.def("MeanStdDev", [](const ecvl::Image& src) -> pybind11::tuple {
+    std::vector<double> mean;
+    std::vector<double> stddev;
+    ecvl::MeanStdDev(src, mean, stddev);
+    return pybind11::make_tuple(mean, stddev);
+  });
 #ifdef ECVL_EDDL
-  // eddl: ImageToTensor
-  m.def("ImageToTensor", [](const ecvl::Image& img) {
-    Tensor* t;
-    ecvl::ImageToTensor(img, t);
-    return t;
-  });
-  m.def("ImageToTensor", [](ecvl::Image& img, int offset) {
-    Tensor* t;
-    ecvl::ImageToTensor(img, t, offset);
-    return t;
-  });
-  // eddl: TensorToImage
-  m.def("TensorToImage", [](Tensor* t) {
-    ecvl::Image img;
-    ecvl::TensorToImage(t, img);
-    return img;
-  });
-  m.def("TensorToImage", [](Tensor* t, ecvl::ColorType c_type) {
-    ecvl::Image img;
-    ecvl::TensorToImage(t, img, c_type);
-    return img;
-  });
-  // eddl: TensorToView
-  m.def("TensorToView", [](Tensor* t) {
-    ecvl::View<ecvl::DataType::float32> view;
-    ecvl::TensorToView(t, view);
-    return view;
-  });
-  m.def("TensorToView", [](Tensor* t, ecvl::ColorType c_type) {
-    ecvl::View<ecvl::DataType::float32> view;
-    ecvl::TensorToView(t, view, c_type);
-    return view;
-  });
-  // eddl: DLDataset
-  pybind11::class_<ecvl::DLDataset, std::shared_ptr<ecvl::DLDataset>, ecvl::Dataset> cl(m, "DLDataset", "");
-  cl.def(pybind11::init([](const std::string& filename, const int batch_size, const std::vector<int>& resize_dims) { return new ecvl::DLDataset(filename, batch_size, resize_dims); }));
-  cl.def(pybind11::init([](const std::string& filename, const int batch_size, const std::vector<int>& resize_dims, ecvl::ColorType ctype) { return new ecvl::DLDataset(filename, batch_size, resize_dims, ctype); }));
-  cl.def(pybind11::init([](const std::string& filename, const int batch_size, const std::vector<int>& resize_dims, ecvl::ColorType ctype, ecvl::ColorType ctype_gt) { return new ecvl::DLDataset(filename, batch_size, resize_dims, ctype, ctype_gt); }));
+  // augmentations: AugmentationParam
+  {
+  pybind11::class_<ecvl::AugmentationParam, std::shared_ptr<ecvl::AugmentationParam>> cl(m, "AugmentationParam", "Augmentations parameters. This class represent the augmentations parameters which must be randomly generated in a specific range.");
+  cl.def(pybind11::init([](){ return new ecvl::AugmentationParam(); }));
+  cl.def( pybind11::init<const double, const double>(), pybind11::arg("min"), pybind11::arg("max"));
+  cl.def_readwrite("min_", &ecvl::AugmentationParam::min_);
+  cl.def_readwrite("max_", &ecvl::AugmentationParam::max_);
+  cl.def_readwrite("value_", &ecvl::AugmentationParam::value_);
+  cl.def("GenerateValue", (void (ecvl::AugmentationParam::*)()) &ecvl::AugmentationParam::GenerateValue, "Generate the random value between min_ and max_.");
+  cl.def_static("SetSeed", (void (*)(unsigned int)) &ecvl::AugmentationParam::SetSeed, "Set a fixed seed for the random generated values. Useful to reproduce experiments with same augmentations.", pybind11::arg("seed"));
+  }
+  // augmentations: Augmentation
+  {
+  pybind11::class_<ecvl::Augmentation, std::unique_ptr<ecvl::Augmentation, pybind11::nodelete>, PyAugmentation> cl(m, "Augmentation", "Abstract class which represent a generic Augmentation function.");
+  cl.def(pybind11::init<>());
+  cl.def_readwrite("params_", &ecvl::Augmentation::params_);
+  cl.def("Apply", [](ecvl::Augmentation &o, class ecvl::Image & a0) -> void { return o.Apply(a0); }, "", pybind11::arg("img"));
+  cl.def("Apply", (void (ecvl::Augmentation::*)(class ecvl::Image &, const class ecvl::Image &)) &ecvl::Augmentation::Apply, "Generate the random value for each parameter and call the specialized augmentation functions.", pybind11::arg("img"), pybind11::arg("gt"));
+  }
+  // augmentations::SequentialAugmentationContainer
+  {
+  pybind11::class_<ecvl::SequentialAugmentationContainer, std::unique_ptr<ecvl::SequentialAugmentationContainer, pybind11::nodelete>, ecvl::Augmentation> cl(m, "SequentialAugmentationContainer", "Represents a container for multiple augmentations which will be sequentially applied to the Dataset images.");
+  cl.def_property_readonly("augs_", getAugs, pybind11::return_value_policy::reference);
+  cl.def(pybind11::init<>());
+  cl.def(pybind11::init<const std::vector<ecvl::Augmentation*>&>());
+  cl.def("Add", (void (ecvl::SequentialAugmentationContainer::*)(ecvl::Augmentation*)) &ecvl::SequentialAugmentationContainer::Add, "ecvl::Add(ecvl::Augmentation*) --> void", pybind11::arg("aug"));
+  }
+  // augmentations: AugRotate
+  {
+  pybind11::class_<ecvl::AugRotate, std::unique_ptr<ecvl::AugRotate, pybind11::nodelete>, ecvl::Augmentation> cl(m, "AugRotate", "Augmentation wrapper for ecvl::Rotate2D.");
+  cl.def(pybind11::init<const std::array<double, 2>&, const std::vector<double>&, const double&, const ecvl::InterpolationType&>(), pybind11::arg("angle"), pybind11::arg("center") = std::vector<double>(), pybind11::arg("scale") = 1., pybind11::arg("interp") = ecvl::InterpolationType::linear);
+  }
+  // augmentations: AugResizeDim
+  {
+  pybind11::class_<ecvl::AugResizeDim, std::unique_ptr<ecvl::AugResizeDim, pybind11::nodelete>, ecvl::Augmentation> cl(m, "AugResizeDim", "Augmentation wrapper for ecvl::ResizeDim.");
+  cl.def(pybind11::init<const std::vector<int>&, const ecvl::InterpolationType&>(), pybind11::arg("dims"), pybind11::arg("interp") = ecvl::InterpolationType::linear);
+  }
+  // augmentations: AugResizeScale
+  {
+  pybind11::class_<ecvl::AugResizeScale, std::unique_ptr<ecvl::AugResizeScale, pybind11::nodelete>, ecvl::Augmentation> cl(m, "AugResizeScale", "Augmentation wrapper for ecvl::ResizeScale.");
+  cl.def(pybind11::init<const std::vector<double>&, const ecvl::InterpolationType&>(), pybind11::arg("scale"), pybind11::arg("interp") = ecvl::InterpolationType::linear);
+  }
+  // augmentations: AugFlip
+  {
+  pybind11::class_<ecvl::AugFlip, std::unique_ptr<ecvl::AugFlip, pybind11::nodelete>, ecvl::Augmentation> cl(m, "AugFlip", "Augmentation wrapper for ecvl::Flip2D.");
+  cl.def(pybind11::init<const double &>(), pybind11::arg("p"));
+  }
+  // augmentations: AugMirror
+  {
+  pybind11::class_<ecvl::AugMirror, std::unique_ptr<ecvl::AugMirror, pybind11::nodelete>, ecvl::Augmentation> cl(m, "AugMirror", "Augmentation wrapper for ecvl::Mirror2D.");
+  cl.def(pybind11::init<const double &>(), pybind11::arg("p"));
+  }
+  // augmentations: AugGaussianBlur
+  {
+  pybind11::class_<ecvl::AugGaussianBlur, std::unique_ptr<ecvl::AugGaussianBlur, pybind11::nodelete>, ecvl::Augmentation> cl(m, "AugGaussianBlur", "Augmentation wrapper for ecvl::GaussianBlur.");
+  cl.def(pybind11::init<const std::array<double, 2>&>(), pybind11::arg("sigma"));
+  }
+  // augmentations: AugAdditiveLaplaceNoise
+  {
+  pybind11::class_<ecvl::AugAdditiveLaplaceNoise, std::unique_ptr<ecvl::AugAdditiveLaplaceNoise, pybind11::nodelete>, ecvl::Augmentation> cl(m, "AugAdditiveLaplaceNoise", "Augmentation wrapper for ecvl::AdditiveLaplaceNoise.");
+  cl.def(pybind11::init<const std::array<double, 2>&>(), pybind11::arg("std_dev"));
+  }
+  // augmentations: AugAdditivePoissonNoise
+  {
+  pybind11::class_<ecvl::AugAdditivePoissonNoise, std::unique_ptr<ecvl::AugAdditivePoissonNoise, pybind11::nodelete>, ecvl::Augmentation> cl(m, "AugAdditivePoissonNoise", "Augmentation wrapper for ecvl::AdditivePoissonNoise.");
+  cl.def(pybind11::init<const std::array<double, 2>&>(), pybind11::arg("lambda"));
+  }
+  // augmentations: AugGammaContrast
+  {
+  pybind11::class_<ecvl::AugGammaContrast, std::unique_ptr<ecvl::AugGammaContrast, pybind11::nodelete>, ecvl::Augmentation> cl(m, "AugGammaContrast", "Augmentation wrapper for ecvl::GammaContrast.");
+  cl.def(pybind11::init<const std::array<double, 2>&>(), pybind11::arg("gamma"));
+  }
+  // augmentations: AugCoarseDropout
+  {
+  pybind11::class_<ecvl::AugCoarseDropout, std::unique_ptr<ecvl::AugCoarseDropout, pybind11::nodelete>, ecvl::Augmentation> cl(m, "AugCoarseDropout", "Augmentation wrapper for ecvl::CoarseDropout.");
+  cl.def(pybind11::init<const std::array<double, 2>&, const std::array<double, 2>&, const double&>(), pybind11::arg("p"), pybind11::arg("drop_size"), pybind11::arg("per_channel"));
+  }
+  // support_eddl: DatasetAugmentations
+  {
+  pybind11::class_<ecvl::DatasetAugmentations, std::shared_ptr<ecvl::DatasetAugmentations>> cl(m, "DatasetAugmentations", "Dataset Augmentations. Represents the augmentations which will be applied to each split.");
+  cl.def(pybind11::init<std::array<ecvl::Augmentation*, 3>>());
+  cl.def("Apply", [](ecvl::DatasetAugmentations &o, enum ecvl::SplitType const & a0, class ecvl::Image & a1) -> void { return o.Apply(a0, a1); }, "", pybind11::arg("st"), pybind11::arg("img"));
+  cl.def("Apply", (void (ecvl::DatasetAugmentations::*)(enum ecvl::SplitType, class ecvl::Image &, const class ecvl::Image &)) &ecvl::DatasetAugmentations::Apply, "C++: ecvl::DatasetAugmentations::Apply(enum ecvl::SplitType, class ecvl::Image &, const class ecvl::Image &) --> void", pybind11::arg("st"), pybind11::arg("img"), pybind11::arg("gt"));
+  }
+  // support_eddl: DLDataset
+  {
+  pybind11::class_<ecvl::DLDataset, std::shared_ptr<ecvl::DLDataset>, ecvl::Dataset> cl(m, "DLDataset", "Extends the DeepHealth Dataset with deep learning specific members");
+  cl.def(pybind11::init([](const std::string& filename, const int batch_size) { return new ecvl::DLDataset(filename, batch_size); }));
+  cl.def(pybind11::init([](const std::string& filename, const int batch_size, std::array<ecvl::Augmentation*, 3> augs) {
+    ecvl::DatasetAugmentations da(augs);
+    return new ecvl::DLDataset(filename, batch_size, std::move(da));
+  }));
+  cl.def(pybind11::init([](const std::string& filename, const int batch_size, std::array<ecvl::Augmentation*, 3> augs, ecvl::ColorType ctype) {
+    ecvl::DatasetAugmentations da(augs);
+    return new ecvl::DLDataset(filename, batch_size, std::move(da), ctype);
+  }));
+  cl.def(pybind11::init([](const std::string& filename, const int batch_size, std::array<ecvl::Augmentation*, 3> augs, ecvl::ColorType ctype, ecvl::ColorType ctype_gt) {
+    ecvl::DatasetAugmentations da(augs);
+    return new ecvl::DLDataset(filename, batch_size, std::move(da), ctype, ctype_gt);
+  }));
+  cl.def(pybind11::init([](const std::string& filename, const int batch_size, std::array<ecvl::Augmentation*, 3> augs, ecvl::ColorType ctype, ecvl::ColorType ctype_gt, bool verify) {
+    ecvl::DatasetAugmentations da(augs);
+    return new ecvl::DLDataset(filename, batch_size, std::move(da), ctype, ctype_gt, verify);
+  }));
   cl.def_readwrite("batch_size_", &ecvl::DLDataset::batch_size_);
   cl.def_readwrite("n_channels_", &ecvl::DLDataset::n_channels_);
+  cl.def_readwrite("n_channels_gt_", &ecvl::DLDataset::n_channels_gt_);
   cl.def_readwrite("current_split_", &ecvl::DLDataset::current_split_);
   cl.def_readwrite("resize_dims_", &ecvl::DLDataset::resize_dims_);
   cl.def_readwrite("current_batch_", &ecvl::DLDataset::current_batch_);
   cl.def_readwrite("ctype_", &ecvl::DLDataset::ctype_);
   cl.def_readwrite("ctype_gt_", &ecvl::DLDataset::ctype_gt_);
-  cl.def("GetSplit", &ecvl::DLDataset::GetSplit);
+  // cl.def_readwrite("augs_", &ecvl::DLDataset::augs_);
+  cl.def("GetSplit", (std::vector<int>& (ecvl::DLDataset::*)()) &ecvl::DLDataset::GetSplit, "C++: ecvl::DLDataset::GetSplit() --> std::vector<int>&");
+  cl.def("GetSplit", (std::vector<int>& (ecvl::DLDataset::*)(const ecvl::SplitType&)) &ecvl::DLDataset::GetSplit, "C++: ecvl::DLDataset::GetSplit(const ecvl::SplitType&) --> std::vector<int>&");
   cl.def("ResetCurrentBatch", &ecvl::DLDataset::ResetCurrentBatch);
   cl.def("ResetAllBatches", &ecvl::DLDataset::ResetAllBatches);
   cl.def("SetSplit", &ecvl::DLDataset::SetSplit);
   cl.def("LoadBatch", [](ecvl::DLDataset& d, Tensor* images, Tensor* labels) {
     d.LoadBatch(images, labels);
   });
-  // eddl: TrainingToTensor
-  m.def("TrainingToTensor", [](const ecvl::Dataset& dataset, const std::vector<int>& size) -> pybind11::tuple {
-    Tensor* images;
-    Tensor* labels;
-    ecvl::TrainingToTensor(dataset, size, images, labels);
-    return pybind11::make_tuple(images, labels);
+  cl.def("LoadBatch", [](ecvl::DLDataset& d, Tensor* images) {
+    d.LoadBatch(images);
   });
-  m.def("TrainingToTensor", [](const ecvl::Dataset& dataset, const std::vector<int>& size, ecvl::ColorType ctype) -> pybind11::tuple {
-    Tensor* images;
-    Tensor* labels;
-    ecvl::TrainingToTensor(dataset, size, images, labels, ctype);
-    return pybind11::make_tuple(images, labels);
+  }
+  // support_eddl: ImageToTensor
+  m.def("ImageToTensor", [](const ecvl::Image& img) {
+    Tensor* t;
+    ecvl::ImageToTensor(img, t);
+    return t;
   });
-  // eddl: ValidationToTensor
-  m.def("ValidationToTensor", [](const ecvl::Dataset& dataset, const std::vector<int>& size) -> pybind11::tuple {
-    Tensor* images;
-    Tensor* labels;
-    ecvl::ValidationToTensor(dataset, size, images, labels);
-    return pybind11::make_tuple(images, labels);
+  m.def("ImageToTensor", [](const ecvl::Image& img, int offset) {
+    Tensor* t;
+    ecvl::ImageToTensor(img, t, offset);
+    return t;
   });
-  m.def("ValidationToTensor", [](const ecvl::Dataset& dataset, const std::vector<int>& size, ecvl::ColorType ctype) -> pybind11::tuple {
-    Tensor* images;
-    Tensor* labels;
-    ecvl::ValidationToTensor(dataset, size, images, labels, ctype);
-    return pybind11::make_tuple(images, labels);
+  // support_eddl: TensorToImage
+  m.def("TensorToImage", [](Tensor* t) {
+    ecvl::Image img;
+    ecvl::TensorToImage(t, img);
+    return img;
   });
-  // eddl: TestToTensor
-  m.def("TestToTensor", [](const ecvl::Dataset& dataset, const std::vector<int>& size) -> pybind11::tuple {
-    Tensor* images;
-    Tensor* labels;
-    ecvl::TestToTensor(dataset, size, images, labels);
-    return pybind11::make_tuple(images, labels);
-  });
-  m.def("TestToTensor", [](const ecvl::Dataset& dataset, const std::vector<int>& size, ecvl::ColorType ctype) -> pybind11::tuple {
-    Tensor* images;
-    Tensor* labels;
-    ecvl::TestToTensor(dataset, size, images, labels, ctype);
-    return pybind11::make_tuple(images, labels);
+  // support_eddl: TensorToView
+  m.def("TensorToView", [](Tensor* t) {
+    ecvl::View<ecvl::DataType::float32> view;
+    ecvl::TensorToView(t, view);
+    return view;
   });
 #endif
 #ifdef ECVL_WITH_OPENSLIDE

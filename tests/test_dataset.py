@@ -19,6 +19,7 @@
 # SOFTWARE.
 
 import io
+import os
 import pytest
 import pyecvl._core.ecvl as ecvl
 
@@ -55,6 +56,8 @@ def test_load(tmp_path):
     assert len(d.samples_) == 3
     with pytest.raises(RuntimeError):
         d.samples_[0].LoadImage()
+    locations = [os.path.basename(_.location_[0]) for _ in d.samples_]
+    assert locations == ["foo_0.png", "foo_1.png", "foo_2.png"]
 
 
 def test_load_nonexistent():

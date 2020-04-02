@@ -39,6 +39,7 @@ OPENCV_LIBS = [
     "opencv_core",
     "opencv_imgcodecs",
     "opencv_imgproc",
+    "opencv_photo",
 ]
 DICOM_LIBS = [
     "dcmdata",
@@ -52,7 +53,7 @@ DICOM_LIBS = [
     "oflog",
     "ofstd",
 ]
-ECVL_LIBS = ["dataset_parser", "ecvl_core"]
+ECVL_LIBS = ["dataset", "ecvl_core"]
 OTHER_LIBS = ["stdc++fs", "yaml-cpp"]
 ALL_LIBS = ECVL_LIBS + OPENCV_LIBS + OTHER_LIBS
 INCLUDE_DIRS = [

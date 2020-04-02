@@ -19,37 +19,27 @@
 # SOFTWARE.
 
 """\
-Reads a DeepHealth dataset.
+Reads an image, applies augmentations and writes results.
 """
 
 import argparse
+import os
 import sys
 
 import pyecvl._core.ecvl as ecvl
 
 
 def main(args):
-    print("reading", args.in_fn)
-    d = ecvl.Dataset(args.in_fn)
-    print("name:", d.name_)
-    print("description:", d.description_)
-    print("classes:", d.classes_)
-    print("features:", d.features_)
-    print("n. samples:", len(d.samples_))
-    print("  training:", len(d.split_.training_))
-    print("  validation:", len(d.split_.validation_))
-    print("  test:", len(d.split_.test_))
-    print("loading first sample image")
-    print("  location:", d.samples_[0].location_)
-    img = d.samples_[0].LoadImage()
-    out_path = "img0.png"
-    print("saving first sample image as", out_path)
-    ecvl.ImWrite(out_path, img)
-
-    # check setter for completeness, but why would anyone want to do this?
-    loc = ["/foo/bar"]
-    d.samples_[0].location_ = loc
-    assert d.samples_[0].location_ == loc
+    head, ext = os.path.splitext(os.path.basename(args.in_fn))
+    img = ecvl.ImRead(args.in_fn)
+    c = ecvl.SequentialAugmentationContainer([ecvl.AugFlip(0.5)])
+    da = ecvl.DatasetAugmentations([c, None, None])
+    # some output images should be flipped
+    for i in range(10):
+        da.Apply(ecvl.SplitType.training, img)
+        out_fn = "%s_flip_%d%s" % (head, i, ext)
+        print("writing", out_fn)
+        ecvl.ImWrite(out_fn, img)
 
 
 if __name__ == "__main__":

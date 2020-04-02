@@ -23,7 +23,7 @@ COPY third_party/ecvl /ecvl
 WORKDIR /ecvl
 RUN mkdir build && \
     cd build && \
-    cmake -DECVL_BUILD_GUI=OFF -DECVL_DATASET_PARSER=ON .. && \
+    cmake -DECVL_BUILD_GUI=OFF -DECVL_DATASET=ON .. && \
     make
 
 RUN cd build && make install

@@ -31,35 +31,63 @@ import pyeddl._core.eddlT as eddlT
 
 def main(args):
     img = ecvl.ImRead(args.in_img)
+    augs = ecvl.SequentialAugmentationContainer([
+        ecvl.AugRotate([-5, 5]),
+        ecvl.AugMirror(.5),
+        ecvl.AugFlip(.5),
+        ecvl.AugGammaContrast([3, 5]),
+        ecvl.AugAdditiveLaplaceNoise([0, 0.2 * 255]),
+        ecvl.AugCoarseDropout([0, 0.55], [0.02, 0.1], 0.5),
+        ecvl.AugAdditivePoissonNoise([0, 40]),
+        ecvl.AugResizeDim([500, 500]),
+    ])
+    ecvl.AugmentationParam.SetSeed(0)
+    augs.Apply(img)
     print("Executing ImageToTensor")
     t = ecvl.ImageToTensor(img)
     eddlT.div_(t, 128)
+    eddlT.mult_(t, 128)
     print("Executing TensorToImage")
     img = ecvl.TensorToImage(t)
     print("Executing TensorToView")
     ecvl.TensorToView(t)
 
+    training_augs = ecvl.SequentialAugmentationContainer([
+        ecvl.AugRotate([-5, 5]),
+        ecvl.AugAdditiveLaplaceNoise([0, 0.2 * 255]),
+        ecvl.AugCoarseDropout([0, 0.55], [0.02, 0.1], 0),
+        ecvl.AugAdditivePoissonNoise([0, 40]),
+        ecvl.AugResizeDim([30, 30]),
+    ])
+    test_augs = ecvl.SequentialAugmentationContainer([
+        ecvl.AugResizeDim([30, 30]),
+    ])
+    ds_augs = [training_augs, None, test_augs]
+
     batch_size = 64
     print("Creating a DLDataset")
-    d = ecvl.DLDataset(args.in_ds, batch_size, [28, 56], ecvl.ColorType.GRAY)
-    print("Create x_train and y_train")
-    x_train = eddlT.create(
+    d = ecvl.DLDataset(args.in_ds, batch_size, ds_augs, ecvl.ColorType.GRAY)
+    print("Create x and y")
+    x = eddlT.create(
         [batch_size, d.n_channels_, d.resize_dims_[0], d.resize_dims_[1]]
     )
-    y_train = eddlT.create([batch_size, len(d.classes_)])
+    y = eddlT.create([batch_size, len(d.classes_)])
 
-    # Load a batch of d.batch_size_ images into x_train and corresponding
-    # labels in y_train. Images are resized to the dimensions specified in size
-    print("Executing LoadBatch")
-    d.LoadBatch(x_train, y_train)
+    # Load a batch of d.batch_size_ images into x and corresponding labels
+    # into y. Images are resized to the dimensions specified in the
+    # augmentations chain
+    print("Executing LoadBatch on training set")
+    d.LoadBatch(x, y)
 
-    # Load test images in x_test and corresponding labels in y_test
-    print("Executing TestToTensor")
-    x_test, y_test = ecvl.TestToTensor(d, d.resize_dims_, ecvl.ColorType.GRAY)
-    print("x_test info:")
-    eddlT.info(x_test)
-    print("y_test info:")
-    eddlT.info(y_test)
+    # Change colortype and channels
+    img = ecvl.TensorToImage(x)
+    img.colortype_ = ecvl.ColorType.GRAY
+    img.channels_ = "xyc"
+
+    # Switch to Test split and load a batch of images
+    print("Executing LoadBatch on test set")
+    d.SetSplit(ecvl.SplitType.test)
+    d.LoadBatch(x, y)
 
 
 if __name__ == "__main__":
