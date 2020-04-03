@@ -33,7 +33,6 @@ import pyecvl._core.ecvl as ecvl
 import pyeddl._core.eddl as eddl
 import pyeddl._core.eddlT as eddlT
 
-import utils
 from models import VGG16
 
 
@@ -51,35 +50,37 @@ def main(args):
     net = eddl.Model([in_], [out])
     eddl.build(
         net,
-        eddl.sgd(0.0001, 0.9),
+        eddl.sgd(0.001, 0.9),
         ["soft_cross_entropy"],
         ["categorical_accuracy"],
+        eddl.CS_GPU([1]) if args.gpu else eddl.CS_CPU()
     )
-
-    if args.gpu:
-        eddl.toGPU(net, [1])
+    eddl.summary(net)
+    eddl.setlogfile(net, "skin_lesion_classification_inference")
 
     if not os.path.exists(args.ckpts):
-        print('Checkpoint "{}" must exist.'.format(args.ckpts))
-        exit(1)
+        raise RuntimeError('Checkpoint "{}" not found'.format(args.ckpts))
     eddl.load(net, args.ckpts, "bin")
 
-    eddl.summary(net)
+    training_augs = ecvl.SequentialAugmentationContainer([
+        ecvl.AugResizeDim(size),
+    ])
+    test_augs = ecvl.SequentialAugmentationContainer([
+        ecvl.AugResizeDim(size),
+    ])
+    dataset_augs = ecvl.DatasetAugmentations([training_augs, None, test_augs])
 
     print("Reading dataset")
-    d = ecvl.DLDataset(args.in_ds, args.batch_size, size)
+    d = ecvl.DLDataset(args.in_ds, args.batch_size, dataset_augs)
     x_train = eddlT.create([args.batch_size, d.n_channels_, size[0], size[1]])
     y_train = eddlT.create([args.batch_size, len(d.classes_)])
 
     print("Testing")
-    d.SetSplit("test")
+    d.SetSplit(ecvl.SplitType.test)
     num_samples = len(d.GetSplit())
     num_batches = num_samples // args.batch_size
-    d.ResetCurrentBatch()
     for b in range(num_batches):
-        print("Batch {:d}/{:d} - ".format(b + 1, num_batches), end="",
-              flush=True)
-
+        print("Batch {:d}/{:d}".format(b + 1, num_batches))
         d.LoadBatch(x_train, y_train)
         x_train.div_(255.0)
         eddl.forward(net, [x_train])
@@ -88,15 +89,14 @@ def main(args):
             for j in range(args.batch_size):
                 pred = eddlT.select(eddl.getTensor(out), j)
                 gt = eddlT.select(y_train, j)
-                image = eddlT.select(x_train, j)
                 pred = np.array(pred, copy=False)
                 gt = np.array(gt, copy=False)
-
-                image.mult_(255.)
                 gt = np.argmax(gt).item()
                 pred = np.argmax(pred).item()
+                image = eddlT.select(x_train, j)
+                image.mult_(255.)
                 image_Im = ecvl.TensorToImage(image)
-                utils.ImageSqueeze(image_Im)
+                image_Im.colortype_ = ecvl.ColorType.BGR
                 ecvl.ImWrite('{}/{}/img_{}_gt_class_{}.png'.format(
                     args.out_dir, pred, j + b * args.batch_size, gt),
                              image_Im)

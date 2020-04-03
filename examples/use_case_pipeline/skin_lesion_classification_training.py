@@ -44,40 +44,56 @@ def main(args):
     net = eddl.Model([in_], [out])
     eddl.build(
         net,
-        eddl.sgd(0.0001, 0.9),
+        eddl.sgd(0.001, 0.9),
         ["soft_cross_entropy"],
         ["categorical_accuracy"],
+        eddl.CS_GPU([1]) if args.gpu else eddl.CS_CPU()
+    )
+    eddl.summary(net)
+    eddl.setlogfile(net, "skin_lesion_classification")
+
+    training_augs = ecvl.SequentialAugmentationContainer([
+        ecvl.AugResizeDim(size),
+        ecvl.AugMirror(.5),
+        ecvl.AugFlip(.5),
+        ecvl.AugRotate([-180, 180]),
+        ecvl.AugAdditivePoissonNoise([0, 10]),
+        ecvl.AugGammaContrast([0.5, 1.5]),
+        ecvl.AugGaussianBlur([0, 0.8]),
+        ecvl.AugCoarseDropout([0, 0.3], [0.02, 0.05], 0.5)
+    ])
+    validation_augs = ecvl.SequentialAugmentationContainer([
+        ecvl.AugResizeDim(size),
+    ])
+    dataset_augs = ecvl.DatasetAugmentations(
+        [training_augs, validation_augs, None]
     )
 
-    if args.gpu:
-        eddl.toGPU(net, [1])
-
-    eddl.summary(net)
-
     print("Reading dataset")
-    d = ecvl.DLDataset(args.in_ds, args.batch_size, size)
+    d = ecvl.DLDataset(args.in_ds, args.batch_size, dataset_augs)
     x_train = eddlT.create([args.batch_size, d.n_channels_, size[0], size[1]])
     y_train = eddlT.create([args.batch_size, len(d.classes_)])
     num_samples_train = len(d.GetSplit())
     num_batches_train = num_samples_train // args.batch_size
-    d.SetSplit("validation")
+    d.SetSplit(ecvl.SplitType.validation)
     num_samples_val = len(d.GetSplit())
     num_batches_val = num_samples_val // args.batch_size
     indices = list(range(args.batch_size))
 
+    print("Starting training")
     for e in range(args.epochs):
         print("Epoch {:d}/{:d} - Training".format(e + 1, args.epochs),
               flush=True)
-        d.SetSplit("training")
+        d.SetSplit(ecvl.SplitType.training)
         eddl.reset_loss(net)
         s = d.GetSplit()
         random.shuffle(s)
         d.split_.training_ = s
-        d.ResetCurrentBatch()
+        d.ResetAllBatches()
         for b in range(num_batches_train):
             print("Epoch {:d}/{:d} (batch {:d}/{:d}) - ".format(
-                e + 1, args.epochs, b + 1, num_batches_train), end="",
-                  flush=True)
+                e + 1, args.epochs, b + 1, num_batches_train
+            ), end="", flush=True)
             d.LoadBatch(x_train, y_train)
             x_train.div_(255.0)
             tx, ty = [x_train], [y_train]
@@ -85,18 +101,20 @@ def main(args):
             eddl.print_loss(net, b)
             print()
 
+        print("Saving weights")
+        eddl.save(
+            net, "isic_classification_checkpoint_epoch_%s.bin" % e, "bin"
+        )
+
         print("Epoch %d/%d - Evaluation" % (e + 1, args.epochs), flush=True)
-        d.SetSplit("validation")
-        d.ResetCurrentBatch()
+        d.SetSplit(ecvl.SplitType.validation)
         for b in range(num_batches_val):
             print("Epoch {:d}/{:d} (batch {:d}/{:d}) - ".format(
-                e + 1, args.epochs, b + 1, num_batches_val), end="",
-                  flush=True)
+                e + 1, args.epochs, b + 1, num_batches_val
+            ), end="", flush=True)
             d.LoadBatch(x_train, y_train)
             x_train.div_(255.0)
             eddl.evaluate(net, [x_train], [y_train])
-
-    eddl.save(net, "isic_class_checkpoint.bin", "bin")
 
 
 if __name__ == "__main__":
