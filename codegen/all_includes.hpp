@@ -9,4 +9,5 @@
 #include <ecvl/core/imgcodecs.h>
 #include <ecvl/core/arithmetic.h>
 #include <ecvl/dataset_parser.h>
+#include <ecvl/dataset_generator.h>
 #include <image_ext.hpp>

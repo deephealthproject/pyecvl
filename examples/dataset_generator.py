@@ -19,44 +19,42 @@
 # SOFTWARE.
 
 """\
-Reads a DeepHealth dataset.
+DeepHealth dataset generation.
 """
 
 import argparse
+import os
 import sys
 
 import pyecvl._core.ecvl as ecvl
 
 
 def main(args):
-    print("reading", args.in_fn)
-    d = ecvl.Dataset(args.in_fn)
-    print("name:", d.name_)
-    print("description:", d.description_)
-    print("classes:", d.classes_)
-    print("features:", d.features_)
-    print("n. samples:", len(d.samples_))
-    print("  training:", len(d.split_.training_))
-    print("  validation:", len(d.split_.validation_))
-    print("  test:", len(d.split_.test_))
-    print("loading first sample image")
-    print("  location:", d.samples_[0].location_)
-    print("  label_path:", d.samples_[0].label_path_)
-    img = d.samples_[0].LoadImage()
-    out_path = "img0.png"
-    print("saving first sample image as", out_path)
-    ecvl.ImWrite(out_path, img)
 
-    # check setter for completeness, but why would anyone want to do this?
-    loc = ["/foo/bar"]
-    d.samples_[0].location_ = loc
-    assert d.samples_[0].location_ == loc
-    lp = "/foo/tar"
-    d.samples_[0].label_path_ = lp
-    assert d.samples_[0].label_path_ == lp
+    # Classification dataset
+    gcd = ecvl.GenerateClassificationDataset(args.cls_dir)
+    cls_d = gcd.GetDataset()
+    print("dumping classification dataset")
+    cls_d.Dump("classification_dataset.yml")
+
+    # Segmentation dataset
+    # Possible ground truth suffix or extension if different from images
+    suffix = "_segmentation.png"
+    # Possible ground truth name for images that have the same ground truth
+    gt_name = "black.png"
+    gsd = ecvl.GenerateSegmentationDataset(args.seg_dir, suffix, gt_name)
+    seg_d = gsd.GetDataset()
+    # remove from training set all the images with a "black" ground truth
+    seg_d.split_.training_ = [
+        i for i in seg_d.split_.training_
+        if os.path.basename(seg_d.samples_[i].label_path_) != "black.png"
+    ]
+    print("dumping segmentation dataset")
+    seg_d.Dump("segmentation_dataset.yml")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("in_fn", metavar="INPUT_PATH")
+    parser.add_argument("cls_dir", metavar="CLASSIFICATION_INPUT_DIR")
+    parser.add_argument("seg_dir", metavar="SEGMENTATION_INPUT_DIR")
     main(parser.parse_args(sys.argv[1:]))

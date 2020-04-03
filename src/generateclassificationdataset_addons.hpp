@@ -21,42 +21,11 @@
 #pragma once
 
 #include <pybind11/pybind11.h>
-#include <ecvl/dataset_parser.h>
-
-
-std::vector<std::string> getSampleLocation(ecvl::Sample &s) {
-    std::vector<std::string> loc;
-    for (const auto &path: s.location_) {
-	loc.push_back(std::string(path));
-    }
-    return loc;
-}
-
-void setSampleLocation(ecvl::Sample &s, std::vector<std::string> loc) {
-    std::vector<std::filesystem::path> location_;
-    for (const auto &str: loc) {
-	location_.push_back(std::filesystem::path(str));
-    }
-    s.location_ = location_;
-}
-
-
-std::optional<std::string> getSampleLabelPath(ecvl::Sample &s) {
-    if (s.label_path_) {
-	std::string rval = *(s.label_path_);
-	return rval;
-    }
-    return std::nullopt;
-}
-
-
-void setSampleLabelPath(ecvl::Sample &s, std::string lp) {
-    s.label_path_ = std::filesystem::path(lp);
-}
-
+#include <ecvl/dataset_generator.h>
 
 template <typename type_, typename... options>
-void sample_addons(pybind11::class_<type_, options...> &cl) {
-    cl.def_property("location_", getSampleLocation, setSampleLocation);
-    cl.def_property("label_path_", getSampleLabelPath, setSampleLabelPath);
+void generateclassificationdataset_addons(pybind11::class_<type_, options...> &cl) {
+    cl.def(pybind11::init([](const std::string& dataset_root_directory) {
+      return new ecvl::GenerateClassificationDataset(dataset_root_directory);
+    }));
 }

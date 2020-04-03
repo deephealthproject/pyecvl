@@ -404,8 +404,8 @@ void bind_unknown_unknown(std::function< pybind11::module &(std::string const &n
 
 	{ // ecvl::Sample file:ecvl/dataset_parser.h line:44
 		pybind11::class_<ecvl::Sample, std::shared_ptr<ecvl::Sample>> cl(M("ecvl"), "Sample", "Sample image in a dataset.\n\nThis class provides the information to describe a dataset sample.\n`label_` and `label_path_` are mutually exclusive.\n Sample");
-		cl.def( pybind11::init( [](){ return new ecvl::Sample(); } ) );
 		cl.def( pybind11::init( [](ecvl::Sample const &o){ return new ecvl::Sample(o); } ) );
+		cl.def( pybind11::init( [](){ return new ecvl::Sample(); } ) );
 		cl.def_readwrite("location_", &ecvl::Sample::location_);
 		cl.def_readwrite("label_", &ecvl::Sample::label_);
 		cl.def_readwrite("label_path_", &ecvl::Sample::label_path_);
@@ -413,6 +413,7 @@ void bind_unknown_unknown(std::function< pybind11::module &(std::string const &n
 		cl.def("LoadImage", [](ecvl::Sample const &o) -> ecvl::Image { return o.LoadImage(); }, "");
 		cl.def("LoadImage", [](ecvl::Sample const &o, enum ecvl::ColorType const & a0) -> ecvl::Image { return o.LoadImage(a0); }, "", pybind11::arg("ctype"));
 		cl.def("LoadImage", (class ecvl::Image (ecvl::Sample::*)(enum ecvl::ColorType, const bool &) const) &ecvl::Sample::LoadImage, "Return an Image of the dataset.\n\n    The LoadImage() function opens the sample image, from `location_` or `label_path_` depending on `is_gt` parameter.\n\n    \n ecvl::ColorType of the returned Image.\n    \n\n Whether to load the sample image or its ground truth.\n\n    \n Image containing the loaded sample.\n\nC++: ecvl::Sample::LoadImage(enum ecvl::ColorType, const bool &) const --> class ecvl::Image", pybind11::arg("ctype"), pybind11::arg("is_gt"));
+		cl.def("assign", (class ecvl::Sample & (ecvl::Sample::*)(const class ecvl::Sample &)) &ecvl::Sample::operator=, "C++: ecvl::Sample::operator=(const class ecvl::Sample &) --> class ecvl::Sample &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 
 		sample_addons(cl);
 	}
@@ -441,15 +442,21 @@ void bind_unknown_unknown(std::function< pybind11::module &(std::string const &n
 }
 
 
-// File: ecvl/core/image_1.cpp
+// File: ecvl/dataset_generator.cpp
+#include <bits/fs_path.h>
 #include <ecvl/core/datatype.h>
 #include <ecvl/core/image.h>
 #include <ecvl/core/iterators.h>
+#include <ecvl/dataset_generator.h>
+#include <ecvl/dataset_parser.h>
 #include <func_binder.hpp>
+#include <generateclassificationdataset_addons.hpp>
+#include <generatesegmentationdataset_addons.hpp>
 #include <iterator>
 #include <memory>
 #include <sstream> // __str__
 #include <string>
+#include <string_view>
 #include <vector>
 
 #include <pybind11/pybind11.h>
@@ -465,8 +472,45 @@ void bind_unknown_unknown(std::function< pybind11::module &(std::string const &n
 	PYBIND11_MAKE_OPAQUE(std::shared_ptr<void>);
 #endif
 
-void bind_ecvl_core_image_1(std::function< pybind11::module &(std::string const &namespace_) > &M)
+// ecvl::GenerateSegmentationDataset file:ecvl/dataset_generator.h line:88
+struct PyCallBack_ecvl_GenerateSegmentationDataset : public ecvl::GenerateSegmentationDataset {
+	using ecvl::GenerateSegmentationDataset::GenerateSegmentationDataset;
+
+};
+
+// ecvl::GenerateClassificationDataset file:ecvl/dataset_generator.h line:121
+struct PyCallBack_ecvl_GenerateClassificationDataset : public ecvl::GenerateClassificationDataset {
+	using ecvl::GenerateClassificationDataset::GenerateClassificationDataset;
+
+};
+
+void bind_ecvl_dataset_generator(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
+	{ // ecvl::GenerateDataset file:ecvl/dataset_generator.h line:26
+		pybind11::class_<ecvl::GenerateDataset, std::shared_ptr<ecvl::GenerateDataset>> cl(M("ecvl"), "GenerateDataset", "Abstract class which fill the dataset object with name and description, features common to all types of datasets.\n\n GenerateDataset");
+		cl.def_readonly("dataset_root_directory_", &ecvl::GenerateDataset::dataset_root_directory_);
+		cl.def_readwrite("splits_", &ecvl::GenerateDataset::splits_);
+		cl.def_readwrite("num_samples_", &ecvl::GenerateDataset::num_samples_);
+		cl.def_readwrite("d_", &ecvl::GenerateDataset::d_);
+		cl.def("LoadImagesAndSplits", (void (ecvl::GenerateDataset::*)()) &ecvl::GenerateDataset::LoadImagesAndSplits, "Call LoadSplitImages and load the splits with indexes of corresponding images.\n\n    If there aren't splits folders, only the list of images and corresponding labels will be loaded.\n\nC++: ecvl::GenerateDataset::LoadImagesAndSplits() --> void");
+		cl.def("GetDataset", (class ecvl::Dataset (ecvl::GenerateDataset::*)()) &ecvl::GenerateDataset::GetDataset, "Return the Dataset object obtained from the directory structure.\n\n    \n Dataset obtained from the directory structure.\n\nC++: ecvl::GenerateDataset::GetDataset() --> class ecvl::Dataset");
+	}
+	{ // ecvl::GenerateSegmentationDataset file:ecvl/dataset_generator.h line:88
+		pybind11::class_<ecvl::GenerateSegmentationDataset, std::shared_ptr<ecvl::GenerateSegmentationDataset>, PyCallBack_ecvl_GenerateSegmentationDataset, ecvl::GenerateDataset> cl(M("ecvl"), "GenerateSegmentationDataset", "Generate an ecvl::Dataset from a directory tree for a segmentation task.\n\nAssumes a directory structure where a top-level directory can have subdirectories\nnamed \"training\", \"validation\" and \"test\" (possibly not all present), each of\nwhich can have images and ground truth in different subdirectories (named \"images\" and \"ground_truth\")\nor in the same directory. If the ground truth images have a particular suffix or a different extension\n(necessary if they are in the same directory as the images) it's necessary to specify it in the constructor.\nFor more detailed information about the supported directory structure check https://github.com/deephealthproject/ecvl/wiki/ECVL-Dataset-Generator.\n\n GenerateSegmentationDataset");
+		cl.def( pybind11::init( [](PyCallBack_ecvl_GenerateSegmentationDataset const &o){ return new PyCallBack_ecvl_GenerateSegmentationDataset(o); } ) );
+		cl.def( pybind11::init( [](ecvl::GenerateSegmentationDataset const &o){ return new ecvl::GenerateSegmentationDataset(o); } ) );
+		cl.def_readwrite("suffix_", &ecvl::GenerateSegmentationDataset::suffix_);
+		cl.def_readwrite("gt_name_", &ecvl::GenerateSegmentationDataset::gt_name_);
+
+		generatesegmentationdataset_addons(cl);
+	}
+	{ // ecvl::GenerateClassificationDataset file:ecvl/dataset_generator.h line:121
+		pybind11::class_<ecvl::GenerateClassificationDataset, std::shared_ptr<ecvl::GenerateClassificationDataset>, PyCallBack_ecvl_GenerateClassificationDataset, ecvl::GenerateDataset> cl(M("ecvl"), "GenerateClassificationDataset", "Generate an ecvl::Dataset from a directory tree for a classification task.\n\nAssumes a directory structure where a top-level directory can have subdirectories\nnamed \"training\", \"validation\" and \"test\" (possibly not all present), each of\nwhich has in turn one subdirectory for each class, containing the images for that class.\nFor more detailed information about the supported directory structure check https://github.com/deephealthproject/ecvl/wiki/ECVL-Dataset-Generator.\n\n GenerateClassificationDataset");
+		cl.def( pybind11::init( [](PyCallBack_ecvl_GenerateClassificationDataset const &o){ return new PyCallBack_ecvl_GenerateClassificationDataset(o); } ) );
+		cl.def( pybind11::init( [](ecvl::GenerateClassificationDataset const &o){ return new ecvl::GenerateClassificationDataset(o); } ) );
+
+		generateclassificationdataset_addons(cl);
+	}
 	{ // ecvl::View file:ecvl/core/image.h line:494
 		pybind11::class_<ecvl::View<ecvl::DataType::int8>, std::shared_ptr<ecvl::View<ecvl::DataType::int8>>, ecvl::Image> cl(M("ecvl"), "View_ecvl_DataType_int8_t", "");
 		cl.def( pybind11::init( [](){ return new ecvl::View<ecvl::DataType::int8>(); } ) );
@@ -575,6 +619,40 @@ void bind_ecvl_core_image_1(std::function< pybind11::module &(std::string const 
 		cl.def("__imul__", (class ecvl::Image & (ecvl::Image::*)(const class ecvl::Image &)) &ecvl::Image::operator*=, "C++: ecvl::Image::operator*=(const class ecvl::Image &) --> class ecvl::Image &", pybind11::return_value_policy::automatic, pybind11::arg("rhs"));
 		cl.def("__idiv__", (class ecvl::Image & (ecvl::Image::*)(const class ecvl::Image &)) &ecvl::Image::operator/=, "C++: ecvl::Image::operator/=(const class ecvl::Image &) --> class ecvl::Image &", pybind11::return_value_policy::automatic, pybind11::arg("rhs"));
 	}
+}
+
+
+// File: ecvl/core/image_1.cpp
+#include <ecvl/core/datatype.h>
+#include <ecvl/core/image.h>
+#include <ecvl/core/iterators.h>
+#include <func_binder.hpp>
+#include <image_ext.hpp>
+#include <iterator>
+#include <memory>
+#include <sstream> // __str__
+#include <string>
+#include <vector>
+#include <view_float32_addons.hpp>
+#include <view_int16_addons.hpp>
+#include <view_int8_addons.hpp>
+#include <view_uint8_addons.hpp>
+
+#include <pybind11/pybind11.h>
+#include <functional>
+#include <string>
+#include <pybind11/stl.h>
+
+
+#ifndef BINDER_PYBIND11_TYPE_CASTER
+	#define BINDER_PYBIND11_TYPE_CASTER
+	PYBIND11_DECLARE_HOLDER_TYPE(T, std::shared_ptr<T>);
+	PYBIND11_DECLARE_HOLDER_TYPE(T, T*);
+	PYBIND11_MAKE_OPAQUE(std::shared_ptr<void>);
+#endif
+
+void bind_ecvl_core_image_1(std::function< pybind11::module &(std::string const &namespace_) > &M)
+{
 	{ // ecvl::View file:ecvl/core/image.h line:494
 		pybind11::class_<ecvl::View<ecvl::DataType::uint8>, std::shared_ptr<ecvl::View<ecvl::DataType::uint8>>, ecvl::Image> cl(M("ecvl"), "View_ecvl_DataType_uint8_t", "");
 		cl.def( pybind11::init( [](){ return new ecvl::View<ecvl::DataType::uint8>(); } ) );
@@ -611,39 +689,6 @@ void bind_ecvl_core_image_1(std::function< pybind11::module &(std::string const 
 		cl.def("__imul__", (class ecvl::Image & (ecvl::Image::*)(const class ecvl::Image &)) &ecvl::Image::operator*=, "C++: ecvl::Image::operator*=(const class ecvl::Image &) --> class ecvl::Image &", pybind11::return_value_policy::automatic, pybind11::arg("rhs"));
 		cl.def("__idiv__", (class ecvl::Image & (ecvl::Image::*)(const class ecvl::Image &)) &ecvl::Image::operator/=, "C++: ecvl::Image::operator/=(const class ecvl::Image &) --> class ecvl::Image &", pybind11::return_value_policy::automatic, pybind11::arg("rhs"));
 	}
-}
-
-
-// File: image_ext.cpp
-#include <ecvl/core/datatype.h>
-#include <ecvl/core/image.h>
-#include <ecvl/core/iterators.h>
-#include <func_binder.hpp>
-#include <image_ext.hpp>
-#include <memory>
-#include <sstream> // __str__
-#include <string>
-#include <vector>
-#include <view_float32_addons.hpp>
-#include <view_int16_addons.hpp>
-#include <view_int8_addons.hpp>
-#include <view_uint8_addons.hpp>
-
-#include <pybind11/pybind11.h>
-#include <functional>
-#include <string>
-#include <pybind11/stl.h>
-
-
-#ifndef BINDER_PYBIND11_TYPE_CASTER
-	#define BINDER_PYBIND11_TYPE_CASTER
-	PYBIND11_DECLARE_HOLDER_TYPE(T, std::shared_ptr<T>);
-	PYBIND11_DECLARE_HOLDER_TYPE(T, T*);
-	PYBIND11_MAKE_OPAQUE(std::shared_ptr<void>);
-#endif
-
-void bind_image_ext(std::function< pybind11::module &(std::string const &namespace_) > &M)
-{
 	{ // ecvl::View_int8 file:image_ext.hpp line:24
 		pybind11::class_<ecvl::View_int8, std::shared_ptr<ecvl::View_int8>, ecvl::View<ecvl::DataType::int8>> cl(M("ecvl"), "View_int8", "");
 		cl.def( pybind11::init<class ecvl::Image &>(), pybind11::arg("img") );
@@ -691,8 +736,8 @@ void bind_ecvl_core_image(std::function< pybind11::module &(std::string const &n
 void bind_ecvl_core_imgproc(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_ecvl_core_imgcodecs(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_unknown_unknown(std::function< pybind11::module &(std::string const &namespace_) > &M);
+void bind_ecvl_dataset_generator(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_ecvl_core_image_1(std::function< pybind11::module &(std::string const &namespace_) > &M);
-void bind_image_ext(std::function< pybind11::module &(std::string const &namespace_) > &M);
 
 
 PYBIND11_MODULE(_core, root_module) {
@@ -719,8 +764,8 @@ PYBIND11_MODULE(_core, root_module) {
 	bind_ecvl_core_imgproc(M);
 	bind_ecvl_core_imgcodecs(M);
 	bind_unknown_unknown(M);
+	bind_ecvl_dataset_generator(M);
 	bind_ecvl_core_image_1(M);
-	bind_image_ext(M);
 
 }
 
@@ -731,8 +776,8 @@ PYBIND11_MODULE(_core, root_module) {
 // ecvl/core/imgproc.cpp
 // ecvl/core/imgcodecs.cpp
 // unknown/unknown.cpp
+// ecvl/dataset_generator.cpp
 // ecvl/core/image_1.cpp
-// image_ext.cpp
 
 // Modules list file: /pyecvl/codegen/bindings/_core.modules
 // ecvl 
