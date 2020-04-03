@@ -62,7 +62,7 @@ def main(args):
     test_augs = ecvl.SequentialAugmentationContainer([
         ecvl.AugResizeDim([30, 30]),
     ])
-    ds_augs = [training_augs, None, test_augs]
+    ds_augs = ecvl.DatasetAugmentations([training_augs, None, test_augs])
 
     batch_size = 64
     print("Creating a DLDataset")
