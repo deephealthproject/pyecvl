@@ -50,33 +50,39 @@ def main(args):
         eddl.adam(0.0001),
         ["cross_entropy"],
         ["mean_squared_error"],
+        eddl.CS_GPU([1]) if args.gpu else eddl.CS_CPU()
     )
-
-    if args.gpu:
-        eddl.toGPU(net, [1])
+    eddl.summary(net)
+    eddl.setlogfile(net, "skin_lesion_segmentation_inference")
 
     if not os.path.exists(args.ckpts):
-        print('Checkpoint "{}" must exist.'.format(args.ckpts))
-        exit(1)
+        raise RuntimeError('Checkpoint "{}" not found'.format(args.ckpts))
     eddl.load(net, args.ckpts, "bin")
 
-    eddl.summary(net)
+    training_augs = ecvl.SequentialAugmentationContainer([
+        ecvl.AugResizeDim(size),
+    ])
+    test_augs = ecvl.SequentialAugmentationContainer([
+        ecvl.AugResizeDim(size),
+    ])
+    dataset_augs = ecvl.DatasetAugmentations([training_augs, None, test_augs])
 
     print("Reading dataset")
-    d = ecvl.DLDataset(args.in_ds, args.batch_size, size)
+    d = ecvl.DLDataset(args.in_ds, args.batch_size, dataset_augs)
     x = eddlT.create([args.batch_size, d.n_channels_, size[0], size[1]])
-    y = eddlT.create([args.batch_size, 1, size[0], size[1]])
+    y = eddlT.create([args.batch_size, d.n_channels_gt_, size[0], size[1]])
     if args.out_dir:
         try:
             os.makedirs(args.out_dir)
         except FileExistsError:
             pass
     print("Testing")
-    d.SetSplit("test")
+    d.SetSplit(ecvl.SplitType.test)
     num_samples_test = len(d.GetSplit())
     num_batches_validation = num_samples_test // args.batch_size
 
     evaluator = utils.Evaluator()
+    evaluator.ResetEval()
     for b in range(num_batches_validation):
         print("Batch {:d}/{:d} ".format(
             b + 1, num_batches_validation), end="", flush=True)
@@ -95,13 +101,15 @@ def main(args):
                 img_np[img_np >= 0.5] = 1
                 img_np[img_np < 0.5] = 0
                 img_t = ecvl.TensorToView(img)
-                utils.ImageSqueeze(img_t)
+                img_t.colortype_ = ecvl.ColorType.GRAY
+                img_t.channels_ = "xyc"
                 img.mult_(255.)
                 output_fn = os.path.join(
                     args.out_dir, "batch_{:d}_{:d}_output.png".format(b, k))
                 ecvl.ImWrite(output_fn, img_t)
                 gt_t = ecvl.TensorToView(gt)
-                utils.ImageSqueeze(gt_t)
+                gt_t.colortype_ = ecvl.ColorType.GRAY
+                gt_t.channels_ = "xyc"
                 gt.mult_(255.)
                 gt_fn = os.path.join(
                     args.out_dir, "batch_{:d}_{:d}_gt.png".format(b, k))

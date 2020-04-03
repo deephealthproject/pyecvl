@@ -51,20 +51,35 @@ def main(args):
         eddl.adam(0.0001),
         ["cross_entropy"],
         ["mean_squared_error"],
+        eddl.CS_GPU([1]) if args.gpu else eddl.CS_CPU()
     )
-
-    if args.gpu:
-        eddl.toGPU(net, [1])
-
     eddl.summary(net)
+    eddl.setlogfile(net, "skin_lesion_segmentation")
+
+    training_augs = ecvl.SequentialAugmentationContainer([
+        ecvl.AugResizeDim(size),
+        ecvl.AugMirror(.5),
+        ecvl.AugFlip(.5),
+        ecvl.AugRotate([-180, 180]),
+        ecvl.AugAdditivePoissonNoise([0, 10]),
+        ecvl.AugGammaContrast([0.5, 1.5]),
+        ecvl.AugGaussianBlur([0, 0.8]),
+        ecvl.AugCoarseDropout([0, 0.3], [0.02, 0.05], 0.5)
+    ])
+    validation_augs = ecvl.SequentialAugmentationContainer([
+        ecvl.AugResizeDim(size)
+    ])
+    dataset_augs = ecvl.DatasetAugmentations([
+        training_augs, validation_augs, None
+    ])
 
     print("Reading dataset")
-    d = ecvl.DLDataset(args.in_ds, args.batch_size, size)
+    d = ecvl.DLDataset(args.in_ds, args.batch_size, dataset_augs)
     x = eddlT.create([args.batch_size, d.n_channels_, size[0], size[1]])
     y = eddlT.create([args.batch_size, 1, size[0], size[1]])
     num_samples_train = len(d.GetSplit())
     num_batches_train = num_samples_train // args.batch_size
-    d.SetSplit("validation")
+    d.SetSplit(ecvl.SplitType.validation)
     num_samples_validation = len(d.GetSplit())
     num_batches_validation = num_samples_validation // args.batch_size
     indices = list(range(args.batch_size))
@@ -80,7 +95,7 @@ def main(args):
     for e in range(args.epochs):
         print("Epoch {:d}/{:d} - Training".format(e + 1, args.epochs),
               flush=True)
-        d.SetSplit("training")
+        d.SetSplit(ecvl.SplitType.training)
         eddl.reset_loss(net)
         s = d.GetSplit()
         random.shuffle(s)
@@ -88,8 +103,8 @@ def main(args):
         d.ResetAllBatches()
         for b in range(num_batches_train):
             print("Epoch {:d}/{:d} (batch {:d}/{:d}) - ".format(
-                e + 1, args.epochs, b + 1, num_batches_train), end="",
-                  flush=True)
+                e + 1, args.epochs, b + 1, num_batches_train
+            ), end="", flush=True)
             d.LoadBatch(x, y)
             x.div_(255.0)
             y.div_(255.0)
@@ -97,13 +112,17 @@ def main(args):
             eddl.train_batch(net, tx, ty, indices)
             eddl.print_loss(net, b)
             print()
-        d.SetSplit("validation")
+
+        print("Saving weights")
+        eddl.save(net, "isic_segmentation_checkpoint_epoch_%s.bin" % e, "bin")
+
+        d.SetSplit(ecvl.SplitType.validation)
         evaluator.ResetEval()
         print("Epoch %d/%d - Evaluation" % (e + 1, args.epochs), flush=True)
         for b in range(num_batches_validation):
             print("Epoch {:d}/{:d} (batch {:d}/{:d}) ".format(
-                e + 1, args.epochs, b + 1, num_batches_validation),
-                  end="", flush=True)
+                e + 1, args.epochs, b + 1, num_batches_validation
+            ), end="", flush=True)
             d.LoadBatch(x, y)
             x.div_(255.0)
             y.div_(255.0)
@@ -120,7 +139,8 @@ def main(args):
                     img_np[img_np >= 0.5] = 1
                     img_np[img_np < 0.5] = 0
                     img_t = ecvl.TensorToView(img)
-                    utils.ImageSqueeze(img_t)
+                    img_t.colortype_ = ecvl.ColorType.GRAY
+                    img_t.channels_ = "xyc"
                     img.mult_(255.)
                     output_fn = os.path.join(
                         args.out_dir, "batch_%d_%d_output.png" % (b, k)
@@ -128,7 +148,8 @@ def main(args):
                     ecvl.ImWrite(output_fn, img_t)
                     if e == 0:
                         gt_t = ecvl.TensorToView(gt)
-                        utils.ImageSqueeze(gt_t)
+                        gt_t.colortype_ = ecvl.ColorType.GRAY
+                        gt_t.channels_ = "xyc"
                         gt.mult_(255.)
                         gt_fn = os.path.join(
                             args.out_dir, "batch_%d_%d_gt.png" % (b, k)
@@ -139,7 +160,6 @@ def main(args):
         print("MIoU: %.6g" % current_miou)
         if best_miou < current_miou:
             best_miou = current_miou
-            eddl.save(net, "isic_segm_checkpoint.bin", "bin")
 
 
 if __name__ == "__main__":
