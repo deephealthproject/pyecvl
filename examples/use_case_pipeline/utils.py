@@ -9,9 +9,9 @@ class Evaluator:
     def ResetEval(self):
         self.buf = []
 
-    def BinaryIoU(self, a, b):
-        intersection = np.logical_and(a >= 0.5, b >= 0.5).sum()
-        union = np.logical_or(a >= 0.5, b >= 0.5).sum()
+    def BinaryIoU(self, a, b, thresh=0.5):
+        intersection = np.logical_and(a >= thresh, b >= thresh).sum()
+        union = np.logical_or(a >= thresh, b >= thresh).sum()
         rval = (intersection + self.eps) / (union + self.eps)
         self.buf.append(rval)
         return rval
@@ -20,6 +20,8 @@ class Evaluator:
         if not self.buf:
             return 0
         return sum(self.buf) / len(self.buf)
+
+    MeanMetric = MIoU
 
 
 def ImageSqueeze(img):

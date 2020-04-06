@@ -128,7 +128,6 @@ def main(args):
             output = eddl.getTensor(out)
             sum_ = 0.0
             for k in range(args.batch_size):
-                n += 1
                 result = eddlT.select(output, k)
                 target = eddlT.select(y, k)
                 ca = metric.value(target, result)
@@ -150,6 +149,7 @@ def main(args):
                         current_path, d.classes_[classe], bname
                     )
                     ecvl.ImWrite(cur_path, img_t)
+                n += 1
             print("categorical_accuracy:", sum_ / args.batch_size)
         total_avg = sum(total_metric) / len(total_metric)
         print("Total categorical accuracy:", total_avg)
