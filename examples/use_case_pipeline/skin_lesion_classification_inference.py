@@ -40,11 +40,6 @@ def main(args):
     num_classes = 8
     size = [224, 224]  # size of images
 
-    if args.out_dir:
-        # Create output folders, one for each class
-        for x in range(num_classes):
-            os.makedirs('{}/{}'.format(args.out_dir, x), exist_ok=True)
-
     in_ = eddl.Input([3, size[0], size[1]])
     out = VGG16(in_, num_classes)
     net = eddl.Model([in_], [out])
@@ -58,10 +53,6 @@ def main(args):
     eddl.summary(net)
     eddl.setlogfile(net, "skin_lesion_classification_inference")
 
-    if not os.path.exists(args.ckpts):
-        raise RuntimeError('Checkpoint "{}" not found'.format(args.ckpts))
-    eddl.load(net, args.ckpts, "bin")
-
     training_augs = ecvl.SequentialAugmentationContainer([
         ecvl.AugResizeDim(size),
     ])
@@ -72,34 +63,59 @@ def main(args):
 
     print("Reading dataset")
     d = ecvl.DLDataset(args.in_ds, args.batch_size, dataset_augs)
-    x_train = eddlT.create([args.batch_size, d.n_channels_, size[0], size[1]])
-    y_train = eddlT.create([args.batch_size, len(d.classes_)])
 
-    print("Testing")
+    if args.out_dir:
+        for c in d.classes_:
+            os.makedirs(os.path.join(args.out_dir, c), exist_ok=True)
+
+    x = eddlT.create([args.batch_size, d.n_channels_, size[0], size[1]])
+    y = eddlT.create([args.batch_size, len(d.classes_)])
+
     d.SetSplit(ecvl.SplitType.test)
     num_samples = len(d.GetSplit())
     num_batches = num_samples // args.batch_size
+    metric = eddl.getMetric("categorical_accuracy")
+    total_metric = []
+
+    if not os.path.exists(args.ckpts):
+        raise RuntimeError('Checkpoint "{}" not found'.format(args.ckpts))
+    eddl.load(net, args.ckpts, "bin")
+
+    print("Testing")
     for b in range(num_batches):
+        n = 0
         print("Batch {:d}/{:d}".format(b + 1, num_batches))
-        d.LoadBatch(x_train, y_train)
-        x_train.div_(255.0)
-        eddl.forward(net, [x_train])
-        if args.out_dir:
-            # Save network predictions
-            for j in range(args.batch_size):
-                pred = eddlT.select(eddl.getTensor(out), j)
-                gt = eddlT.select(y_train, j)
-                pred = np.array(pred, copy=False)
-                gt = np.array(gt, copy=False)
-                gt = np.argmax(gt).item()
-                pred = np.argmax(pred).item()
-                image = eddlT.select(x_train, j)
-                image.mult_(255.)
-                image_Im = ecvl.TensorToImage(image)
-                image_Im.colortype_ = ecvl.ColorType.BGR
-                ecvl.ImWrite('{}/{}/img_{}_gt_class_{}.png'.format(
-                    args.out_dir, pred, j + b * args.batch_size, gt),
-                             image_Im)
+        d.LoadBatch(x, y)
+        x.div_(255.0)
+        eddl.forward(net, [x])
+        output = eddl.getTensor(out)
+        sum_ = 0.0
+        for j in range(args.batch_size):
+            n += 1
+            result = eddlT.select(output, j)
+            target = eddlT.select(y, j)
+            ca = metric.value(target, result)
+            total_metric.append(ca)
+            sum_ += ca
+            if args.out_dir:
+                result_a = np.array(result, copy=False)
+                target_a = np.array(target, copy=False)
+                classe = np.argmax(result_a).item()
+                gt_class = np.argmax(target_a).item()
+                single_image = eddlT.select(x, j)
+                img_t = ecvl.TensorToView(single_image)
+                img_t.colortype_ = ecvl.ColorType.BGR
+                single_image.mult_(255.)
+                filename = d.samples_[d.GetSplit()[n]].location_[0]
+                head, tail = os.path.splitext(os.path.basename(filename))
+                bname = "%s_gt_class_%s.png" % (head, gt_class)
+                cur_path = os.path.join(
+                    args.out_dir, d.classes_[classe], bname
+                )
+                ecvl.ImWrite(cur_path, img_t)
+        print("categorical_accuracy:", sum_ / args.batch_size)
+    total_avg = sum(total_metric) / len(total_metric)
+    print("Total categorical accuracy:", total_avg)
 
 
 if __name__ == "__main__":
@@ -110,5 +126,6 @@ if __name__ == "__main__":
                         '_0.9_loss_sce_size_224_epoch_48.bin')
     parser.add_argument("--batch-size", type=int, metavar="INT", default=12)
     parser.add_argument("--gpu", action="store_true")
-    parser.add_argument("--out-dir", metavar="DIR", help="save images here")
+    parser.add_argument("--out-dir", metavar="DIR",
+                        help="if set, save images in this directory")
     main(parser.parse_args())

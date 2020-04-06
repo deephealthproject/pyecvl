@@ -66,6 +66,7 @@ def main(args):
     num_batches = num_samples // args.batch_size
     indices = list(range(args.batch_size))
 
+    print("Training")
     for i in range(args.epochs):
         eddl.reset_loss(net)
         s = d.GetSplit()
@@ -89,7 +90,6 @@ def main(args):
     d.SetSplit(ecvl.SplitType.test)
     num_samples = len(d.GetSplit())
     num_batches = num_samples // args.batch_size
-    d.ResetCurrentBatch()
     for i in range(num_batches):
         print("batch %d / %d - " % (i, num_batches), end="", flush=True)
         d.LoadBatch(x_train, y_train)

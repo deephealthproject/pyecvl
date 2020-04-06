@@ -26,7 +26,9 @@ https://github.com/deephealthproject/use_case_pipeline
 """
 
 import argparse
+import os
 
+import numpy as np
 import pyecvl._core.ecvl as ecvl
 import pyeddl._core.eddl as eddl
 import pyeddl._core.eddlT as eddlT
@@ -71,21 +73,28 @@ def main(args):
 
     print("Reading dataset")
     d = ecvl.DLDataset(args.in_ds, args.batch_size, dataset_augs)
-    x_train = eddlT.create([args.batch_size, d.n_channels_, size[0], size[1]])
-    y_train = eddlT.create([args.batch_size, len(d.classes_)])
+    x = eddlT.create([args.batch_size, d.n_channels_, size[0], size[1]])
+    y = eddlT.create([args.batch_size, len(d.classes_)])
     num_samples_train = len(d.GetSplit())
     num_batches_train = num_samples_train // args.batch_size
     d.SetSplit(ecvl.SplitType.validation)
     num_samples_val = len(d.GetSplit())
     num_batches_val = num_samples_val // args.batch_size
     indices = list(range(args.batch_size))
+    metric = eddl.getMetric("categorical_accuracy")
 
     print("Starting training")
     for e in range(args.epochs):
         print("Epoch {:d}/{:d} - Training".format(e + 1, args.epochs),
               flush=True)
+        if args.out_dir:
+            current_path = os.path.join(args.out_dir, "Epoch_%d" % e)
+            for c in d.classes_:
+                c_dir = os.path.join(current_path, c)
+                os.makedirs(c_dir, exist_ok=True)
         d.SetSplit(ecvl.SplitType.training)
         eddl.reset_loss(net)
+        total_metric = []
         s = d.GetSplit()
         random.shuffle(s)
         d.split_.training_ = s
@@ -94,9 +103,9 @@ def main(args):
             print("Epoch {:d}/{:d} (batch {:d}/{:d}) - ".format(
                 e + 1, args.epochs, b + 1, num_batches_train
             ), end="", flush=True)
-            d.LoadBatch(x_train, y_train)
-            x_train.div_(255.0)
-            tx, ty = [x_train], [y_train]
+            d.LoadBatch(x, y)
+            x.div_(255.0)
+            tx, ty = [x], [y]
             eddl.train_batch(net, tx, ty, indices)
             eddl.print_loss(net, b)
             print()
@@ -109,12 +118,41 @@ def main(args):
         print("Epoch %d/%d - Evaluation" % (e + 1, args.epochs), flush=True)
         d.SetSplit(ecvl.SplitType.validation)
         for b in range(num_batches_val):
+            n = 0
             print("Epoch {:d}/{:d} (batch {:d}/{:d}) - ".format(
                 e + 1, args.epochs, b + 1, num_batches_val
             ), end="", flush=True)
-            d.LoadBatch(x_train, y_train)
-            x_train.div_(255.0)
-            eddl.evaluate(net, [x_train], [y_train])
+            d.LoadBatch(x, y)
+            x.div_(255.0)
+            eddl.forward(net, [x])
+            output = eddl.getTensor(out)
+            sum_ = 0.0
+            for k in range(args.batch_size):
+                n += 1
+                result = eddlT.select(output, k)
+                target = eddlT.select(y, k)
+                ca = metric.value(target, result)
+                total_metric.append(ca)
+                sum_ += ca
+                if args.out_dir:
+                    result_a = np.array(result, copy=False)
+                    target_a = np.array(target, copy=False)
+                    classe = np.argmax(result_a).item()
+                    gt_class = np.argmax(target_a).item()
+                    single_image = eddlT.select(x, k)
+                    img_t = ecvl.TensorToView(single_image)
+                    img_t.colortype_ = ecvl.ColorType.BGR
+                    single_image.mult_(255.)
+                    filename = d.samples_[d.GetSplit()[n]].location_[0]
+                    head, tail = os.path.splitext(os.path.basename(filename))
+                    bname = "%s_gt_class_%s.png" % (head, gt_class)
+                    cur_path = os.path.join(
+                        current_path, d.classes_[classe], bname
+                    )
+                    ecvl.ImWrite(cur_path, img_t)
+            print("categorical_accuracy:", sum_ / args.batch_size)
+        total_avg = sum(total_metric) / len(total_metric)
+        print("Total categorical accuracy:", total_avg)
 
 
 if __name__ == "__main__":
@@ -123,4 +161,6 @@ if __name__ == "__main__":
     parser.add_argument("--epochs", type=int, metavar="INT", default=50)
     parser.add_argument("--batch-size", type=int, metavar="INT", default=12)
     parser.add_argument("--gpu", action="store_true")
+    parser.add_argument("--out-dir", metavar="DIR",
+                        help="if set, save images in this directory")
     main(parser.parse_args())
