@@ -48,15 +48,25 @@ def main(args):
         eddl.CS_GPU([1]) if args.gpu else eddl.CS_CPU()
     )
     eddl.summary(net)
+    eddl.setlogfile(net, "mnist")
+
+    training_augs = ecvl.SequentialAugmentationContainer([
+        ecvl.AugRotate([-5, 5]),
+        ecvl.AugAdditivePoissonNoise([0, 10]),
+        ecvl.AugGaussianBlur([0, 0.8]),
+        ecvl.AugCoarseDropout([0, 0.3], [0.02, 0.05], 0),
+    ])
+    dataset_augs = ecvl.DatasetAugmentations([training_augs, None, None])
 
     print("Reading dataset")
-    d = ecvl.DLDataset(args.in_ds, args.batch_size, size, ctype)
+    d = ecvl.DLDataset(args.in_ds, args.batch_size, dataset_augs, ctype)
     x_train = eddlT.create([args.batch_size, d.n_channels_, size[0], size[1]])
     y_train = eddlT.create([args.batch_size, len(d.classes_)])
     num_samples = len(d.GetSplit())
     num_batches = num_samples // args.batch_size
     indices = list(range(args.batch_size))
 
+    print("Training")
     for i in range(args.epochs):
         eddl.reset_loss(net)
         s = d.GetSplit()
@@ -73,13 +83,13 @@ def main(args):
             eddl.print_loss(net, j)
             print()
 
+    print("Saving weights")
     eddl.save(net, "mnist_checkpoint.bin", "bin")
 
     print("Evaluation")
-    d.SetSplit("test")
+    d.SetSplit(ecvl.SplitType.test)
     num_samples = len(d.GetSplit())
     num_batches = num_samples // args.batch_size
-    d.ResetCurrentBatch()
     for i in range(num_batches):
         print("batch %d / %d - " % (i, num_batches), end="", flush=True)
         d.LoadBatch(x_train, y_train)
