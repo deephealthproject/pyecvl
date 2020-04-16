@@ -9,6 +9,9 @@ RUN \
         libopencv-dev \
         libopenslide-dev \
         wget \
+        zlib1g-dev \
+        libeigen3-dev \
+	ca-certificates \
  && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 70 \
    --slave /usr/bin/g++ g++ /usr/bin/g++-7 \
    --slave /usr/bin/x86_64-linux-gnu-gcc x86_64-linux-gnu-gcc /usr/bin/x86_64-linux-gnu-gcc-7 \
@@ -24,9 +27,17 @@ RUN \
 COPY third_party/pyeddl/third_party/eddl /eddl
 WORKDIR /eddl
 
+RUN wget -q https://github.com/protocolbuffers/protobuf/releases/download/v3.11.4/protobuf-all-3.11.4.tar.gz && \
+    tar xf protobuf-all-3.11.4.tar.gz && \
+    cd protobuf-3.11.4/ && \
+    ./configure && \
+    make -j$(nproc) && \
+    make install && \
+    ldconfig
+
 RUN mkdir build && \
     cd build && \
-    cmake -D BUILD_TESTS=ON -D EDDL_SHARED=ON .. && \
+    cmake -D BUILD_SHARED_LIB=ON -D BUILD_PROTOBUF=ON -D BUILD_TESTS=OFF .. && \
     make -j$(nproc) && \
     make install
 
@@ -44,3 +55,5 @@ RUN mkdir build && \
       -DECVL_BUILD_EDDL=ON .. && \
     make -j$(nproc) && \
     make install
+
+ENV CPATH="/usr/include/eigen3:${CPATH}"

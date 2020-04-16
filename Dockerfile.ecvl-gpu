@@ -10,6 +10,10 @@ RUN \
         libopencv-dev \
         libopenslide-dev \
         wget \
+        zlib1g-dev \
+        libprotobuf-dev \
+        protobuf-compiler \
+        protobuf-c-compiler \
  && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 70 \
    --slave /usr/bin/g++ g++ /usr/bin/g++-7 \
    --slave /usr/bin/x86_64-linux-gnu-gcc x86_64-linux-gnu-gcc /usr/bin/x86_64-linux-gnu-gcc-7 \
@@ -20,7 +24,6 @@ RUN \
    --slave /usr/bin/x86_64-linux-gnu-g++ x86_64-linux-gnu-g++ /usr/bin/x86_64-linux-gnu-g++-8 \
  && apt-get clean
 
-
 # Install CMake
 RUN wget https://cmake.org/files/v3.14/cmake-3.14.5-Linux-x86_64.tar.gz && \
     tar xf cmake-3.14.5-Linux-x86_64.tar.gz && \
@@ -28,6 +31,25 @@ RUN wget https://cmake.org/files/v3.14/cmake-3.14.5-Linux-x86_64.tar.gz && \
     cp -rf cmake-3.14.5-Linux-x86_64/share /usr/ && \
     rm -rf cmake-3.14.5-Linux-x86_64.tar.gz cmake-3.14.5-Linux-x86_64
 
+# Eigen version installed by APT is too old to work properly with CUDA
+# https://devtalk.nvidia.com/default/topic/1026622/nvcc-can-t-compile-code-that-uses-eigen/
+RUN wget -q https://gitlab.com/libeigen/eigen/-/archive/3.3.7/eigen-3.3.7.tar.gz && \
+    tar xf eigen-3.3.7.tar.gz && \
+    cd eigen-3.3.7 && \
+    mkdir build && \
+    cd build && \
+    cmake .. && \
+    make install
+
+ENV CPATH="/usr/local/include/eigen3:${CPATH}"
+
+RUN wget -q https://github.com/protocolbuffers/protobuf/releases/download/v3.11.4/protobuf-all-3.11.4.tar.gz && \
+    tar xf protobuf-all-3.11.4.tar.gz && \
+    cd protobuf-3.11.4/ && \
+    ./configure && \
+    make -j$(nproc) && \
+    make install && \
+    ldconfig
 
 # Install EDDL. Assumes recursive submodule update.
 COPY third_party/pyeddl/third_party/eddl /eddl
@@ -36,10 +58,9 @@ WORKDIR /eddl
 RUN mkdir build && \
     cd build && \
     ln -s /usr/lib/x86_64-linux-gnu/libcublas.so /usr/local/cuda/lib64/ && \
-    cmake -D BUILD_TARGET=GPU -D BUILD_TESTS=ON -D EDDL_SHARED=ON .. && \
+    cmake -D BUILD_TARGET=GPU -D BUILD_EXAMPLES=ON -D BUILD_SHARED_LIB=ON -D BUILD_PROTOBUF=ON -D BUILD_TESTS=OFF .. && \
     make -j$(nproc) && \
     make install
-
 
 # Install ECVL with EDDL support. Assumes recursive submodule update.
 COPY third_party/ecvl /ecvl
