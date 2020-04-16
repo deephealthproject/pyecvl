@@ -1,5 +1,6 @@
 ARG ecvl_rev
-FROM simleo/ecvl:${ecvl_rev}
+ARG pyeddl_rev
+FROM simleo/ecvl:${ecvl_rev}-${pyeddl_rev}
 
 RUN apt-get -y update && apt-get -y install --no-install-recommends \
       python3-dev \
