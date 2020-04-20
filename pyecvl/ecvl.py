@@ -84,3 +84,142 @@ def Neg(img):
 
 def Or(src1, src2, dst):
     return _ecvl.Or(src1, src2, dst)
+
+
+# == imgproc ==
+
+class ThresholdingType(_ecvl.ThresholdingType):
+    pass
+
+
+class InterpolationType(_ecvl.InterpolationType):
+    pass
+
+
+class MorphTypes(_ecvl.MorphTypes):
+    pass
+
+
+class InpaintTypes(_ecvl.InpaintTypes):
+    pass
+
+
+def ResizeDim(src, dst, newdims, interp=InterpolationType.linear):
+    return _ecvl.ResizeDim(src, dst, newdims, interp)
+
+
+def ResizeScale(src, dst, scales, interp=InterpolationType.linear):
+    return _ecvl.ResizeScale(src, dst, scales, interp)
+
+
+def Flip2D(src, dst):
+    return _ecvl.Flip2D(src, dst)
+
+
+def Mirror2D(src, dst):
+    return _ecvl.Mirror2D(src, dst)
+
+
+def Rotate2D(src, dst, angle, center=None, scale=1.0,
+             interp=InterpolationType.linear):
+    if center is None:
+        center = []
+    return _ecvl.Rotate2D(src, dst, angle, center, scale, interp)
+
+
+def RotateFullImage2D(src, dst, angle, scale=1.0,
+                      interp=InterpolationType.linear):
+    return _ecvl.RotateFullImage2D(src, dst, angle, scale, interp)
+
+
+def ChangeColorSpace(src, dst, new_type):
+    return _ecvl.ChangeColorSpace(src, dst, new_type)
+
+
+def Threshold(src, dst, thresh, maxval, thresh_type=ThresholdingType.BINARY):
+    return _ecvl.Threshold(src, dst, thresh, maxval, thresh_type)
+
+
+def OtsuThreshold(src):
+    return _ecvl.OtsuThreshold(src)
+
+
+def Filter2D(src, dst, ker, type=DataType.none):
+    return _ecvl.Filter2D(src, dst, ker, type)
+
+
+def SeparableFilter2D(src, dst, kerX, kerY, type=DataType.none):
+    return _ecvl.SeparableFilter2D(src, dst, kerX, kerY, type)
+
+
+def GaussianBlur(src, dst, sizeX, sizeY, sigmaX, sigmaY=0):
+    return _ecvl.GaussianBlur(src, dst, sizeX, sizeY, sigmaX, sigmaY)
+
+
+def GaussianBlur2(src, dst, sigma):
+    return _ecvl.GaussianBlur(src, dst, sigma)
+
+
+def AdditiveLaplaceNoise(src, dst, std_dev):
+    return _ecvl.AdditiveLaplaceNoise(src, dst, std_dev)
+
+
+def AdditivePoissonNoise(src, dst, lambda_):
+    return _ecvl.AdditivePoissonNoise(src, dst, lambda_)
+
+
+def GammaContrast(src, dst, gamma):
+    return _ecvl.GammaContrast(src, dst, gamma)
+
+
+def CoarseDropout(src, dst, p, drop_size, per_channel):
+    return _ecvl.CoarseDropout(src, dst, p, drop_size, per_channel)
+
+
+def IntegralImage(src, dst, dst_type=DataType.float64):
+    return _ecvl.IntegralImage(src, dst, dst_type)
+
+
+def NonMaximaSuppression(src, dst):
+    return _ecvl.NonMaximaSuppression(src, dst)
+
+
+def GetMaxN(src, n):
+    return _ecvl.GetMaxN(src, n)
+
+
+def ConnectedComponentsLabeling(src, dst):
+    return _ecvl.ConnectedComponentsLabeling(src, dst)
+
+
+def FindContours(src):
+    return _ecvl.FindContours(src)
+
+
+def Stack(src, dst):
+    return _ecvl.Stack(src, dst)
+
+
+def HConcat(src, dst):
+    return _ecvl.HConcat(src, dst)
+
+
+def VConcat(src, dst):
+    return _ecvl.VConcat(src, dst)
+
+
+def Morphology(src, dst, op, kernel, anchor=None, iterations=1, borderType=1,
+               borderValue=0):
+    if anchor is None:
+        anchor = [-1, -1]
+    return _ecvl.Morphology(src, dst, op, kernel, anchor, iterations,
+                            borderType, borderValue)
+
+
+def Inpaint(src, dst, inpaintMask, inpaintRadius,
+            flag=InpaintTypes.INPAINT_TELEA):
+    return _ecvl.Inpaint(src, dst, inpaintMask, inpaintRadius, flag)
+
+
+def MeanStdDev(src):
+    return _ecvl.MeanStdDev(src)
