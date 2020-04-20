@@ -223,3 +223,99 @@ def Inpaint(src, dst, inpaintMask, inpaintRadius,
 
 def MeanStdDev(src):
     return _ecvl.MeanStdDev(src)
+
+
+# == dataset_parser ==
+
+class SplitType(_ecvl.SplitType):
+    pass
+
+
+class Sample(_ecvl.Sample):
+    pass
+
+
+class Split(_ecvl.Split):
+    pass
+
+
+class Dataset(_ecvl.Dataset):
+    pass
+
+
+# == augmentations ==
+
+class AugmentationParam(_ecvl.AugmentationParam):
+    pass
+
+
+class Augmentation(_ecvl.Augmentation):
+    pass
+
+
+class SequentialAugmentationContainer(_ecvl.SequentialAugmentationContainer):
+    pass
+
+
+class AugRotate(_ecvl.AugRotate):
+    pass
+
+
+class AugResizeDim(_ecvl.AugResizeDim):
+    pass
+
+
+class AugResizeScale(_ecvl.AugResizeScale):
+    pass
+
+
+class AugFlip(_ecvl.AugFlip):
+    pass
+
+
+class AugMirror(_ecvl.AugMirror):
+    pass
+
+
+class AugGaussianBlur(_ecvl.AugGaussianBlur):
+    pass
+
+
+class AugAdditiveLaplaceNoise(_ecvl.AugAdditiveLaplaceNoise):
+    pass
+
+
+class AugAdditivePoissonNoise(_ecvl.AugAdditivePoissonNoise):
+    pass
+
+
+class AugGammaContrast(_ecvl.AugGammaContrast):
+    pass
+
+
+class AugCoarseDropout(_ecvl.AugCoarseDropout):
+    pass
+
+
+# == support_eddl ==
+
+class DatasetAugmentations(_ecvl.DatasetAugmentations):
+    pass
+
+
+class DLDataset(_ecvl.DLDataset):
+    pass
+
+
+def ImageToTensor(img, offset=None):
+    if offset is None:
+        return _ecvl.ImageToTensor(img)
+    return _ecvl.ImageToTensor(img, offset)
+
+
+def TensorToImage(t):
+    return _ecvl.TensorToImage(t)
+
+
+def TensorToView(t):
+    return _ecvl.TensorToView(t)
