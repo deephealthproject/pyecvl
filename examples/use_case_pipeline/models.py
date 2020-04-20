@@ -18,7 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import pyeddl._core.eddl as eddl
+import pyeddl.eddl as eddl
 
 
 def LeNet(in_layer, num_classes):

@@ -25,8 +25,8 @@ ECVL-EDDL interaction.
 import argparse
 import sys
 
-import pyecvl._core.ecvl as ecvl
-import pyeddl._core.eddlT as eddlT
+import pyecvl.ecvl as ecvl
+import pyeddl.eddlT as eddlT
 
 
 def main(args):

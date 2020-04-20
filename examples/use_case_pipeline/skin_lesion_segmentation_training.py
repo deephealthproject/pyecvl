@@ -29,9 +29,9 @@ import argparse
 
 import numpy as np
 import os
-import pyecvl._core.ecvl as ecvl
-import pyeddl._core.eddl as eddl
-import pyeddl._core.eddlT as eddlT
+import pyecvl.ecvl as ecvl
+import pyeddl.eddl as eddl
+import pyeddl.eddlT as eddlT
 import random
 
 import utils

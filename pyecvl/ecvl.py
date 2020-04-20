@@ -297,6 +297,20 @@ class AugCoarseDropout(_ecvl.AugCoarseDropout):
     pass
 
 
+# == support_imgcodecs ==
+
+class ImReadMode(_ecvl.ImReadMode):
+    pass
+
+
+def ImRead(filename, flags=ImReadMode.COLOR):
+    return _ecvl.ImRead(filename, flags)
+
+
+def ImWrite(filename, src):
+    return _ecvl.ImWrite(filename, src)
+
+
 # == support_eddl ==
 
 class DatasetAugmentations(_ecvl.DatasetAugmentations):
@@ -319,3 +333,42 @@ def TensorToImage(t):
 
 def TensorToView(t):
     return _ecvl.TensorToView(t)
+
+
+# == support_openslide ==
+
+def OpenSlideGetLevels(filename):
+    return _ecvl.OpenSlideGetLevels(filename)
+
+
+def OpenSlideRead(filename, level, dims):
+    return _ecvl.OpenSlideRead(filename, level, dims)
+
+
+# == support_nifti ==
+
+def NiftiRead(filename):
+    return _ecvl.NiftiRead(filename)
+
+
+def NiftiWrite(filename, src):
+    return _ecvl.NiftiWrite(filename, src)
+
+
+# == support_dcmtk ==
+
+def DicomRead(filename):
+    return _ecvl.DicomRead(filename)
+
+
+def DicomWrite(filename, src):
+    return _ecvl.DicomWrite(filename, src)
+
+
+# == dataset_generator ==
+
+# FIXME: these cannot be extended. Probably a missing trampoline class.
+
+GenerateSegmentationDataset = _ecvl.GenerateSegmentationDataset
+
+GenerateClassificationDataset = _ecvl.GenerateClassificationDataset
