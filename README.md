@@ -36,7 +36,7 @@ See [full installation instructions below](#installation).
 
 ```python
 import numpy as np
-import pyecvl._core.ecvl as ecvl
+import pyecvl.ecvl as ecvl
 
 def inc_brightness(img, rate):
     a = np.array(img, copy=False)

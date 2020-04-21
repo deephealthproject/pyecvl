@@ -19,11 +19,15 @@
 # SOFTWARE.
 
 import pytest
-import pyecvl._core.ecvl as ecvl
+
+
+import pyecvl._core.ecvl as ecvl_core
+import pyecvl.ecvl as ecvl_py
 eddlT = pytest.importorskip("pyeddl._core.eddlT")
 
 
-def test_ImageToTensor():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_ImageToTensor(ecvl):
     dims = [20, 30, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     t = ecvl.ImageToTensor(img)
@@ -31,7 +35,8 @@ def test_ImageToTensor():
     assert t.shape == [dims[2], dims[1], dims[0]]
 
 
-def test_TensorToImage():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_TensorToImage(ecvl):
     # 3D
     shape = [3, 30, 20]
     t = eddlT.create(shape)
@@ -44,7 +49,8 @@ def test_TensorToImage():
     assert img.dims_ == [shape[3], shape[2], shape[0] * shape[1]]
 
 
-def test_TensorToView():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_TensorToView(ecvl):
     # 3D
     shape = [3, 30, 20]
     t = eddlT.create(shape)

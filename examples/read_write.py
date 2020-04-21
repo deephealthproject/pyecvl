@@ -26,7 +26,7 @@ import argparse
 import sys
 
 import numpy as np
-import pyecvl._core.ecvl as ecvl
+import pyecvl.ecvl as ecvl
 
 
 def inc_brightness(img, rate):

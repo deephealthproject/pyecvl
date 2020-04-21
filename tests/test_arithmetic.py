@@ -19,10 +19,14 @@
 # SOFTWARE.
 
 import numpy as np
-import pyecvl._core.ecvl as ecvl
+import pytest
+
+import pyecvl._core.ecvl as ecvl_core
+import pyecvl.ecvl as ecvl_py
 
 
-def test_Neg():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_Neg(ecvl):
     dims = [2, 3, 1]
     z = ecvl.Image(dims, ecvl.DataType.int8, "xyc", ecvl.ColorType.GRAY)
     d = np.array(z, copy=False)
@@ -31,7 +35,8 @@ def test_Neg():
     assert (d == -10).all()
 
 
-def test_And():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_And(ecvl):
     dims = [2, 3, 1]
     x = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.GRAY)
     y = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.GRAY)
@@ -45,7 +50,8 @@ def test_And():
     assert (c == (5 & 14)).all()
 
 
-def test_Or():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_Or(ecvl):
     dims = [2, 3, 1]
     x = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.GRAY)
     y = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.GRAY)

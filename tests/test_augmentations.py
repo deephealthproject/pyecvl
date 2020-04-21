@@ -19,10 +19,13 @@
 # SOFTWARE.
 
 import pytest
-import pyecvl._core.ecvl as ecvl
+
+import pyecvl._core.ecvl as ecvl_core
+import pyecvl.ecvl as ecvl_py
 
 
-def test_AugmentationParam():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_AugmentationParam(ecvl):
     ap = ecvl.AugmentationParam()
     min_, max_ = 0.1, 1.2
     ap = ecvl.AugmentationParam(min_, max_)
@@ -33,7 +36,8 @@ def test_AugmentationParam():
     assert min_ <= ap.value_ <= max_
 
 
-def test_AugRotate():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_AugRotate(ecvl):
     img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     a = ecvl.AugRotate([30, 50])
     a.Apply(img)
@@ -45,7 +49,8 @@ def test_AugRotate():
     a.Apply(img)
 
 
-def test_AugResizeDim():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_AugResizeDim(ecvl):
     img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     a = ecvl.AugResizeDim([4, 3])
     a.Apply(img)
@@ -53,7 +58,8 @@ def test_AugResizeDim():
     a.Apply(img)
 
 
-def test_AugResizeScale():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_AugResizeScale(ecvl):
     img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     a = ecvl.AugResizeScale([0.5, 0.5])
     a.Apply(img)
@@ -61,43 +67,50 @@ def test_AugResizeScale():
     a.Apply(img)
 
 
-def test_AugFlip():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_AugFlip(ecvl):
     img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     a = ecvl.AugFlip(0.5)
     a.Apply(img)
 
 
-def test_AugMirror():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_AugMirror(ecvl):
     img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     a = ecvl.AugMirror(0.5)
     a.Apply(img)
 
 
-def test_AugGaussianBlur():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_AugGaussianBlur(ecvl):
     img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     a = ecvl.AugGaussianBlur([0.2, 0.4])
     a.Apply(img)
 
 
-def test_AugAdditiveLaplaceNoise():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_AugAdditiveLaplaceNoise(ecvl):
     img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     a = ecvl.AugAdditiveLaplaceNoise([255 * 0.05, 255 * 0.09])
     a.Apply(img)
 
 
-def test_AugAdditivePoissonNoise():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_AugAdditivePoissonNoise(ecvl):
     img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     a = ecvl.AugAdditivePoissonNoise([2.0, 3.0])
     a.Apply(img)
 
 
-def test_AugGammaContrast():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_AugGammaContrast(ecvl):
     img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     a = ecvl.AugGammaContrast([3, 4])
     a.Apply(img)
 
 
-def test_AugCoarseDropout():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_AugCoarseDropout(ecvl):
     img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     a = ecvl.AugCoarseDropout([0.5, 0.7], [0.1, 0.2], 0.4)
     a.Apply(img)

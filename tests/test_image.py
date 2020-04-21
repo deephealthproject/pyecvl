@@ -19,66 +19,70 @@
 # SOFTWARE.
 
 import numpy as np
+import pytest
 
-from pyecvl._core.ecvl import (
-    Image, DataType, ColorType, View_int8, View_int16, Neg, RearrangeChannels,
-    CopyImage
-)
+import pyecvl._core.ecvl as ecvl_core
+import pyecvl.ecvl as ecvl_py
 
 
-def test_empty():
-    img = Image()
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_empty(ecvl):
+    img = ecvl.Image()
     assert len(img.dims_) == 0
     assert img.IsEmpty()
 
 
-def test_five_dims():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_five_dims(ecvl):
     dims = [1, 2, 3, 4, 5]
-    img = Image(dims, DataType.uint8, "xyzoo", ColorType.none)
+    img = ecvl.Image(dims, ecvl.DataType.uint8, "xyzoo", ecvl.ColorType.none)
     assert img.dims_ == dims
     assert len(img.strides_) == len(dims)
 
 
-def test_view():
-    x = Image([5, 4, 3], DataType.int8, "xyc", ColorType.RGB)
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_view(ecvl):
+    x = ecvl.Image([5, 4, 3], ecvl.DataType.int8, "xyc", ecvl.ColorType.RGB)
     assert x.Channels() == 3
     assert x.IsOwner()
-    y = View_int8(x)
+    y = ecvl.View_int8(x)
     assert not y.IsOwner()
     y[1, 2, 0] = 36
     y[3, 3, 2] = 48
     y[4, 2, 1] = -127
     y[3, 2, 0] = -128
-    Neg(x)
+    ecvl.Neg(x)
     assert y[1, 2, 0] == -36
     assert y[3, 3, 2] == -48
     assert y[4, 2, 1] == 127
     assert y[3, 2, 0] == -128
 
 
-def test_rearrange_channels():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_rearrange_channels(ecvl):
     S = [3, 4, 3, 2]
-    img = Image(S, DataType.int16, "cxyz", ColorType.RGB)
-    view = View_int16(img)
+    img = ecvl.Image(S, ecvl.DataType.int16, "cxyz", ecvl.ColorType.RGB)
+    view = ecvl.View_int16(img)
     for i in range(S[0]):
         for j in range(S[1]):
             for k in range(S[2]):
                 for l in range(S[3]):
                     view[i, j, k, l] = (l + k * S[3] + j * S[2] * S[3] +
                                         i * S[1] * S[2] * S[3])
-    img2 = Image()
-    RearrangeChannels(img, img2, "xyzc")
-    view2 = View_int16(img2)
+    img2 = ecvl.Image()
+    ecvl.RearrangeChannels(img, img2, "xyzc")
+    view2 = ecvl.View_int16(img2)
     assert view2[2, 0, 1, 0] == view[0, 2, 0, 1]
     assert view2[3, 1, 1, 2] == view[2, 3, 1, 1]
     assert view2[0, 2, 0, 1] == view[1, 0, 2, 0]
     assert view2[1, 2, 0, 1] == view[1, 1, 2, 0]
 
 
-def test_numpy():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_numpy(ecvl):
     shape = [2, 3, 4]
-    img = Image(shape, DataType.int16, "xy", ColorType.none)
-    view = View_int16(img)
+    img = ecvl.Image(shape, ecvl.DataType.int16, "xy", ecvl.ColorType.none)
+    view = ecvl.View_int16(img)
     a = np.array(img, copy=False)
     assert list(a.shape) == shape
     assert list(a.strides) == img.strides_
@@ -92,52 +96,55 @@ def test_numpy():
     assert np.array_equal(a + img, a + b)
 
 
-def test_numpy_types():
-    shape, channels, color_type = [2, 3], "xy", ColorType.none
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_numpy_types(ecvl):
+    shape, channels, color_type = [2, 3], "xy", ecvl.ColorType.none
     for dt_name in ("int8", "int16", "int32", "int64",
                     "float32", "float64", "uint8", "uint16"):
         np_dt = getattr(np, dt_name)
-        dt = getattr(DataType, dt_name)
-        img = Image(shape, dt, channels, color_type)
+        dt = getattr(ecvl.DataType, dt_name)
+        img = ecvl.Image(shape, dt, channels, color_type)
         a = np.array(img, copy=False)
         assert a.dtype == np_dt
 
 
-def test_image_from_array():
-    channels, color_type = "xy", ColorType.none
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_image_from_array(ecvl):
+    channels, color_type = "xy", ecvl.ColorType.none
     for dt_name in ("int8", "int16", "int32", "int64",
                     "float32", "float64", "uint8", "uint16"):
         np_dt = getattr(np, dt_name)
-        dt = getattr(DataType, dt_name)
+        dt = getattr(ecvl.DataType, dt_name)
         a = np.arange(12).reshape(3, 4).astype(np_dt)
         b = np.asfortranarray(a)
-        img = Image(b, channels, color_type)
+        img = ecvl.Image(b, channels, color_type)
         assert img.elemtype_ == dt
         assert img.dims_ == list(b.shape)
         assert img.strides_ == list(b.strides)
         # check construction from c-style array
-        img = Image(a, channels, color_type)
+        img = ecvl.Image(a, channels, color_type)
         assert img.elemtype_ == dt
         assert img.dims_ == list(a.shape)
         assert img.strides_ == list(b.strides)
     a = np.arange(12).reshape(3, 4).astype(np.int16)
     b = np.asfortranarray(a)
-    img = Image(b, channels, color_type)
-    view = View_int16(img)
+    img = ecvl.Image(b, channels, color_type)
+    view = ecvl.View_int16(img)
     for i in range(3):
         for j in range(4):
             assert view[i, j] == b[i, j]
     # check construction from c-style array
-    img = Image(a, channels, color_type)
-    view = View_int16(img)
+    img = ecvl.Image(a, channels, color_type)
+    view = ecvl.View_int16(img)
     for i in range(3):
         for j in range(4):
             assert view[i, j] == a[i, j]
 
 
-def test_add():
-    x = Image([2, 4, 3], DataType.int8, "xyc", ColorType.RGB)
-    y = Image([2, 4, 3], DataType.int8, "xyc", ColorType.RGB)
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_add(ecvl):
+    x = ecvl.Image([2, 4, 3], ecvl.DataType.int8, "xyc", ecvl.ColorType.RGB)
+    y = ecvl.Image([2, 4, 3], ecvl.DataType.int8, "xyc", ecvl.ColorType.RGB)
     a = np.array(x, copy=False)
     b = np.array(y, copy=False)
     a.fill(10)
@@ -156,9 +163,10 @@ def test_add():
     assert (a == -128).all()
 
 
-def test_sub():
-    x = Image([2, 4, 3], DataType.int8, "xyc", ColorType.RGB)
-    y = Image([2, 4, 3], DataType.int8, "xyc", ColorType.RGB)
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_sub(ecvl):
+    x = ecvl.Image([2, 4, 3], ecvl.DataType.int8, "xyc", ecvl.ColorType.RGB)
+    y = ecvl.Image([2, 4, 3], ecvl.DataType.int8, "xyc", ecvl.ColorType.RGB)
     a = np.array(x, copy=False)
     b = np.array(y, copy=False)
     a.fill(-10)
@@ -177,9 +185,10 @@ def test_sub():
     assert (a == 127).all()
 
 
-def test_mul():
-    x = Image([2, 4, 3], DataType.int8, "xyc", ColorType.RGB)
-    y = Image([2, 4, 3], DataType.int8, "xyc", ColorType.RGB)
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_mul(ecvl):
+    x = ecvl.Image([2, 4, 3], ecvl.DataType.int8, "xyc", ecvl.ColorType.RGB)
+    y = ecvl.Image([2, 4, 3], ecvl.DataType.int8, "xyc", ecvl.ColorType.RGB)
     a = np.array(x, copy=False)
     b = np.array(y, copy=False)
     a.fill(16)
@@ -198,9 +207,10 @@ def test_mul():
     assert (a == -128).all()
 
 
-def test_div():
-    x = Image([2, 4, 3], DataType.int8, "xyc", ColorType.RGB)
-    y = Image([2, 4, 3], DataType.int8, "xyc", ColorType.RGB)
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_div(ecvl):
+    x = ecvl.Image([2, 4, 3], ecvl.DataType.int8, "xyc", ecvl.ColorType.RGB)
+    y = ecvl.Image([2, 4, 3], ecvl.DataType.int8, "xyc", ecvl.ColorType.RGB)
     a = np.array(x, copy=False)
     b = np.array(y, copy=False)
     a.fill(11)
@@ -209,14 +219,16 @@ def test_div():
     assert (a == 5).all()
 
 
-def test_copy_image():
-    dims, dtype, ch, ctype = [2, 4, 3], DataType.int8, "xyc", ColorType.RGB
-    x = Image(dims, dtype, ch, ctype)
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_copy_image(ecvl):
+    dims, dtype = [2, 4, 3], ecvl.DataType.int8
+    ch, ctype = "xyc", ecvl.ColorType.RGB
+    x = ecvl.Image(dims, dtype, ch, ctype)
     a = np.array(x, copy=False)
     a.fill(3)
     # without dtype arg
-    y = Image()
-    CopyImage(x, y)
+    y = ecvl.Image()
+    ecvl.CopyImage(x, y)
     assert y.dims_ == dims
     assert y.elemtype_ == dtype
     assert y.channels_ == ch
@@ -224,9 +236,9 @@ def test_copy_image():
     b = np.array(y, copy=False)
     assert (b == 3).all()
     # with dtype arg
-    new_dtype = DataType.float32
-    y = Image()
-    CopyImage(x, y, new_dtype)
+    new_dtype = ecvl.DataType.float32
+    y = ecvl.Image()
+    ecvl.CopyImage(x, y, new_dtype)
     assert y.dims_ == dims
     assert y.elemtype_ == new_dtype
     assert y.channels_ == ch

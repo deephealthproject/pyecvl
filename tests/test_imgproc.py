@@ -19,10 +19,14 @@
 # SOFTWARE.
 
 import numpy as np
-import pyecvl._core.ecvl as ecvl
+import pytest
+
+import pyecvl._core.ecvl as ecvl_core
+import pyecvl.ecvl as ecvl_py
 
 
-def test_ResizeDim():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_ResizeDim(ecvl):
     dims = [20, 40, 3]
     newdims = [10, 20]  # no color channel
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
@@ -33,7 +37,8 @@ def test_ResizeDim():
     assert tmp.dims_[:2] == newdims
 
 
-def test_ResizeScale():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_ResizeScale(ecvl):
     dims = [20, 40, 3]
     scales = [0.5, 0.5]  # no color channel
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
@@ -44,7 +49,8 @@ def test_ResizeScale():
     assert tmp.dims_[:2] == [10, 20]
 
 
-def test_Flip2D():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_Flip2D(ecvl):
     dims = [20, 40, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     tmp = ecvl.Image()
@@ -52,7 +58,8 @@ def test_Flip2D():
     assert tmp.dims_ == img.dims_
 
 
-def test_Mirror2D():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_Mirror2D(ecvl):
     dims = [20, 40, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     tmp = ecvl.Image()
@@ -60,7 +67,8 @@ def test_Mirror2D():
     assert tmp.dims_ == img.dims_
 
 
-def test_Rotate2D():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_Rotate2D(ecvl):
     dims = [20, 40, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     tmp = ecvl.Image()
@@ -71,7 +79,8 @@ def test_Rotate2D():
     ecvl.Rotate2D(img, tmp, angle, center, scale, interp)
 
 
-def test_RotateFullImage2D():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_RotateFullImage2D(ecvl):
     dims = [20, 40, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     tmp = ecvl.Image()
@@ -81,7 +90,8 @@ def test_RotateFullImage2D():
     ecvl.RotateFullImage2D(img, tmp, angle, scale, interp)
 
 
-def test_ChangeColorSpace():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_ChangeColorSpace(ecvl):
     dims = [20, 40, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     tmp = ecvl.Image()
@@ -91,7 +101,8 @@ def test_ChangeColorSpace():
     assert tmp.dims_[-1] == 1
 
 
-def test_Threshold():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_Threshold(ecvl):
     dims = [20, 40, 1]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.GRAY)
     thr = ecvl.OtsuThreshold(img)
@@ -101,7 +112,8 @@ def test_Threshold():
     ecvl.Threshold(img, tmp, thr, 255, ttype)
 
 
-def test_Filter2D():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_Filter2D(ecvl):
     dims = [20, 40, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     tmp = ecvl.Image()
@@ -116,7 +128,8 @@ def test_Filter2D():
     ecvl.Filter2D(img, tmp, kernel, dtype)
 
 
-def test_SeparableFilter2D():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_SeparableFilter2D(ecvl):
     dims = [20, 40, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     tmp = ecvl.Image()
@@ -125,17 +138,21 @@ def test_SeparableFilter2D():
     ecvl.SeparableFilter2D(img, tmp, kerX, kerY, dtype)
 
 
-def test_GaussianBlur():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_GaussianBlur(ecvl):
     dims = [20, 40, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     tmp = ecvl.Image()
     sigmaY = 0.2
     ecvl.GaussianBlur(img, tmp, 5, 5, 0.1)
     ecvl.GaussianBlur(img, tmp, 5, 5, 0.1, sigmaY)
-    ecvl.GaussianBlur(img, tmp, 0.2)  # alt overload
+    # alt overload in the ext module, called "GaussianBlur2" in the wrapper
+    GaussianBlur2 = getattr(ecvl, "GaussianBlur2", ecvl.GaussianBlur)
+    GaussianBlur2(img, tmp, 0.2)
 
 
-def test_AdditiveLaplaceNoise():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_AdditiveLaplaceNoise(ecvl):
     dims = [20, 40, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     tmp = ecvl.Image()
@@ -143,7 +160,8 @@ def test_AdditiveLaplaceNoise():
     ecvl.AdditiveLaplaceNoise(img, tmp, stddev)
 
 
-def test_AdditivePoissonNoise():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_AdditivePoissonNoise(ecvl):
     dims = [20, 40, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     tmp = ecvl.Image()
@@ -151,7 +169,8 @@ def test_AdditivePoissonNoise():
     ecvl.AdditivePoissonNoise(img, tmp, lambda_)
 
 
-def test_GammaContrast():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_GammaContrast(ecvl):
     dims = [20, 40, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     tmp = ecvl.Image()
@@ -159,7 +178,8 @@ def test_GammaContrast():
     ecvl.GammaContrast(img, tmp, gamma)
 
 
-def test_CoarseDropout():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_CoarseDropout(ecvl):
     dims = [20, 40, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     tmp = ecvl.Image()
@@ -167,7 +187,8 @@ def test_CoarseDropout():
     ecvl.CoarseDropout(img, tmp, prob, drop_size, per_channel)
 
 
-def test_IntegralImage():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_IntegralImage(ecvl):
     dims = [20, 40, 1]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.GRAY)
     tmp = ecvl.Image()
@@ -176,14 +197,16 @@ def test_IntegralImage():
     ecvl.IntegralImage(img, tmp, dst_type)
 
 
-def test_NonMaximaSuppression():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_NonMaximaSuppression(ecvl):
     dims = [20, 40, 1]
     img = ecvl.Image(dims, ecvl.DataType.int32, "xyc", ecvl.ColorType.GRAY)
     tmp = ecvl.Image()
     ecvl.NonMaximaSuppression(img, tmp)
 
 
-def test_GetMaxN():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_GetMaxN(ecvl):
     a = np.asfortranarray(np.zeros(12, dtype=np.int32).reshape(3, 4, 1))
     a[0, 1] = 3
     a[1, 2] = 4
@@ -191,20 +214,23 @@ def test_GetMaxN():
     assert sorted(ecvl.GetMaxN(img, 2)) == [[0, 1], [1, 2]]
 
 
-def test_ConnectedComponentsLabeling():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_ConnectedComponentsLabeling(ecvl):
     dims = [20, 40, 1]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.GRAY)
     tmp = ecvl.Image()
     ecvl.ConnectedComponentsLabeling(img, tmp)
 
 
-def test_FindContours():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_FindContours(ecvl):
     dims = [20, 40, 1]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.GRAY)
     ecvl.FindContours(img)
 
 
-def test_HConcat():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_HConcat(ecvl):
     img1 = ecvl.Image(
         [20, 40, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR
     )
@@ -215,7 +241,8 @@ def test_HConcat():
     ecvl.HConcat([img1, img2], tmp)
 
 
-def test_VConcat():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_VConcat(ecvl):
     img1 = ecvl.Image(
         [20, 40, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR
     )
@@ -226,7 +253,8 @@ def test_VConcat():
     ecvl.VConcat([img1, img2], tmp)
 
 
-def test_Stack():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_Stack(ecvl):
     img1 = ecvl.Image(
         [20, 40, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR
     )
@@ -237,7 +265,8 @@ def test_Stack():
     ecvl.Stack([img1, img2], tmp)
 
 
-def test_Morphology():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_Morphology(ecvl):
     dims = [20, 40, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     kernel = ecvl.Image(
@@ -257,7 +286,8 @@ def test_Morphology():
     )
 
 
-def test_Inpaint():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_Inpaint(ecvl):
     dims = [20, 40, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     mask = ecvl.Image(
@@ -268,7 +298,8 @@ def test_Inpaint():
     ecvl.Inpaint(img, tmp, mask, 5.0, ecvl.InpaintTypes.INPAINT_NS)
 
 
-def test_MeanStdDev():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_MeanStdDev(ecvl):
     dims = [20, 40, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     mean, stddev = ecvl.MeanStdDev(img)

@@ -26,9 +26,9 @@ import argparse
 import random
 import sys
 
-import pyecvl._core.ecvl as ecvl
-import pyeddl._core.eddl as eddl
-import pyeddl._core.eddlT as eddlT
+import pyecvl.ecvl as ecvl
+import pyeddl.eddl as eddl
+import pyeddl.eddlT as eddlT
 from models import LeNet
 
 

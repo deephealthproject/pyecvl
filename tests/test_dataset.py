@@ -21,7 +21,9 @@
 import io
 import os
 import pytest
-import pyecvl._core.ecvl as ecvl
+
+import pyecvl._core.ecvl as ecvl_core
+import pyecvl.ecvl as ecvl_py
 
 
 DATASET = """\
@@ -46,7 +48,8 @@ split:
 """
 
 
-def test_load(tmp_path):
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_load(ecvl, tmp_path):
     fn = str(tmp_path / "foo.yml")
     with io.open(fn, "wt") as f:
         f.write(DATASET)
@@ -60,6 +63,7 @@ def test_load(tmp_path):
     assert locations == ["foo_0.png", "foo_1.png", "foo_2.png"]
 
 
-def test_load_nonexistent():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_load_nonexistent(ecvl):
     with pytest.raises(RuntimeError):
         ecvl.Dataset("/not/existing.yml")

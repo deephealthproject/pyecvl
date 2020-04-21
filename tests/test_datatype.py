@@ -18,10 +18,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import pyecvl._core.ecvl as ecvl
+import pytest
+import pyecvl._core.ecvl as ecvl_core
+import pyecvl.ecvl as ecvl_py
 
 
-def test_size():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_size(ecvl):
     assert ecvl.DataTypeSize(ecvl.DataType.int8) == 1
     assert ecvl.DataTypeSize(ecvl.DataType.int16) == 2
     assert ecvl.DataTypeSize(ecvl.DataType.int32) == 4
@@ -32,6 +35,7 @@ def test_size():
     assert ecvl.DataTypeSize(ecvl.DataType.uint16) == 2
 
 
-def test_size_no_args():
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_size_no_args(ecvl):
     assert ecvl.DataTypeSize() == 8
     assert ecvl.DataTypeSignedSize() == 6
