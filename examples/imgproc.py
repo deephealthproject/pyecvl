@@ -32,7 +32,7 @@ import pyecvl.ecvl as ecvl
 
 def main(args):
     head, ext = os.path.splitext(os.path.basename(args.in_fn))
-    tmp = ecvl.Image()
+    tmp = ecvl.Image.empty()
     img = ecvl.ImRead(args.in_fn)
 
     print("Resizing image by new width, height")
@@ -72,7 +72,7 @@ def main(args):
     ecvl.ImWrite("%s_threshold%s" % (head, ext), tmp)
 
     print("Labeling connected components")
-    labels = ecvl.Image()
+    labels = ecvl.Image.empty()
     ecvl.ConnectedComponentsLabeling(tmp, labels)
     ecvl.ImWrite("%s_labels%s" % (head, ext), labels)
 

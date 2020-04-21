@@ -66,11 +66,124 @@ def DataTypeSignedSize():
 # == image ==
 
 class ColorType(_ecvl.ColorType):
-    pass
+    """\
+    Enum class representing the supported color spaces.
+    """
+    none = _ecvl.ColorType.none
+    GRAY = _ecvl.ColorType.GRAY
+    RGB = _ecvl.ColorType.RGB
+    RGBA = _ecvl.ColorType.RGBA
+    BGR = _ecvl.ColorType.BGR
+    HSV = _ecvl.ColorType.HSV
+    YCbCr = _ecvl.ColorType.YCbCr
 
 
 class Image(_ecvl.Image):
-    pass
+    """\
+    Image class.
+    """
+
+    @staticmethod
+    def empty():
+        """\
+        Create an empty image.
+
+        :return: an empty image
+        """
+        return _ecvl.Image()
+
+    @staticmethod
+    def fromarray(array, channels, colortype, spacings=None):
+        """\
+        Create an image from a NumPy array.
+
+        :param array: a NumPy array
+        :param channels: channels string
+        :param colortype: a ColorType
+        :param spacings: spacings between pixels
+        :return: an image containing the same data as the input array
+        """
+        if spacings is None:
+            spacings = []
+        return _ecvl.Image(array, channels, colortype, spacings)
+
+    def __init__(self, dims, elemtype, channels, colortype, spacings=None):
+        """\
+        :param dims: image dimensions
+        :param elemtype: pixel type, a DataType
+        :param channels: channels string
+        :param colortype: a ColorType
+        :param spacings: spacings between pixels
+        """
+        if spacings is None:
+            spacings = []
+        _ecvl.Image.__init__(
+            self, dims, elemtype, channels, colortype, spacings
+        )
+
+    def IsEmpty(self):
+        """\
+        Whether the image contains data or not.
+
+        :return: True if the image contains data, False otherwise
+        """
+        return _ecvl.Image.IsEmpty(self)
+
+    def IsOwner(self):
+        """\
+        Whether the image owns the data or not.
+
+        :return: True if the image owns the data, False otherwise
+        """
+        return _ecvl.Image.IsOwner(self)
+
+    def Channels(self):
+        """\
+        Get the number of channels.
+
+        :return: number of channels
+        """
+        return _ecvl.Image.Channels(self)
+
+    def Add(self, other, saturate=True):
+        """\
+        Add data from another image to this image's data.
+
+        :param other: other image
+        :param saturate: in case of overflow, set values to limit for data type
+        :return: None
+        """
+        return _ecvl.Image.Add(self, other, saturate)
+
+    def Sub(self, other, saturate=True):
+        """\
+        Subtract data from another image from this image's data.
+
+        :param other: other image
+        :param saturate: in case of overflow, set values to limit for data type
+        :return: None
+        """
+        return _ecvl.Image.Sub(self, other, saturate)
+
+    def Mul(self, other, saturate=True):
+        """\
+        Multiply data from this image by another image's data.
+
+        :param other: other image
+        :param saturate: in case of overflow, set values to limit for data type
+        :return: None
+        """
+        return _ecvl.Image.Mul(self, other, saturate)
+
+    def Div(self, other, saturate=True):
+        """\
+        Divide data from this image by another image's data.
+
+        :param other: other image
+        :param saturate: in case of overflow, set values to limit for data type
+        :return: None
+        """
+        return _ecvl.Image.Div(self, other, saturate)
 
 
 class View_int8(_ecvl.View_int8):

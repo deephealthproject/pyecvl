@@ -25,6 +25,12 @@ import pyecvl._core.ecvl as ecvl_core
 import pyecvl.ecvl as ecvl_py
 
 
+def _empty_img(ecvl):
+    if ecvl is ecvl_core:
+        return ecvl.Image()
+    return ecvl.Image.empty()
+
+
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
 def test_Neg(ecvl):
     dims = [2, 3, 1]
@@ -42,7 +48,7 @@ def test_And(ecvl):
     y = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.GRAY)
     a = np.array(x, copy=False)
     b = np.array(y, copy=False)
-    tmp = ecvl.Image()
+    tmp = _empty_img(ecvl)
     a.fill(5)
     b.fill(14)
     ecvl.And(x, y, tmp)
@@ -57,7 +63,7 @@ def test_Or(ecvl):
     y = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.GRAY)
     a = np.array(x, copy=False)
     b = np.array(y, copy=False)
-    tmp = ecvl.Image()
+    tmp = _empty_img(ecvl)
     a.fill(5)
     b.fill(14)
     ecvl.Or(x, y, tmp)
