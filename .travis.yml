@@ -13,6 +13,7 @@ script:
   - docker build -t ecvl -f Dockerfile.ecvl .
   - docker build -t pyecvl .
   - docker run --rm pyecvl bash -c "pytest tests"
+  - docker run --rm pyecvl bash -c "bash examples/run_all.sh /ecvl/examples/data"
 
 deploy:
   provider: pypi
