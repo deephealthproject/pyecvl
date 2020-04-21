@@ -25,16 +25,41 @@ _ecvl = _core.ecvl
 # == datatype ==
 
 class DataType(_ecvl.DataType):
-    pass
+    """\
+    Enum class which defines data types allowed for images.
+    """
+    int8 = _ecvl.DataType.int8
+    int16 = _ecvl.DataType.int16
+    int32 = _ecvl.DataType.int32
+    int64 = _ecvl.DataType.int64
+    float32 = _ecvl.DataType.float32
+    float64 = _ecvl.DataType.float64
+    uint8 = _ecvl.DataType.uint8
+    uint16 = _ecvl.DataType.uint16
+    none = _ecvl.DataType.none
 
 
 def DataTypeSize(dt=None):
+    """\
+    Get the size in bytes of a given DataType.
+
+    With no arguments, get the number of existing DataType members.
+
+    :param dt: a DataType.
+    :return: the DataType size in bytes, or the number of existing DataType
+      members if called with no arguments
+    """
     if dt is None:
         return _ecvl.DataTypeSize()
     return _ecvl.DataTypeSize(dt)
 
 
 def DataTypeSignedSize():
+    """\
+    Get the number of existing signed DataType members.
+
+    :return: the number of existing signed DataType members
+    """
     return _ecvl.DataTypeSignedSize()
 
 
