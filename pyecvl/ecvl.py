@@ -253,7 +253,7 @@ def RearrangeChannels(src, dst, channels, new_type=None):
     :param channels: new order for the image channels, as a string
     :param new_type: new DaatType for the destination image. If None, the
       destination image will preserve its type if it is not empty, otherwise
-      it will have the same type as the source Image
+      it will have the same type as the source image
     """
     if new_type is None:
         return _ecvl.RearrangeChannels(src, dst, channels)
@@ -308,39 +308,122 @@ def Or(src1, src2, dst):
 # == imgproc ==
 
 class ThresholdingType(_ecvl.ThresholdingType):
-    pass
+    """\
+    Enum class representing the possible thresholding types.
+    """
+    BINARY = _ecvl.ThresholdingType.BINARY
+    BINARY_INV = _ecvl.ThresholdingType.BINARY_INV
 
 
 class InterpolationType(_ecvl.InterpolationType):
-    pass
+    """\
+    Enum class representing the possible interpolation types.
+    """
+    nearest = _ecvl.InterpolationType.nearest
+    linear = _ecvl.InterpolationType.linear
+    area = _ecvl.InterpolationType.area
+    cubic = _ecvl.InterpolationType.cubic
+    lanczos4 = _ecvl.InterpolationType.lanczos4
 
 
 class MorphTypes(_ecvl.MorphTypes):
-    pass
+    """\
+    Enum class representing the possible morph types.
+    """
+    MORPH_ERODE = _ecvl.MorphTypes.MORPH_ERODE
+    MORPH_DILATE = _ecvl.MorphTypes.MORPH_DILATE
+    MORPH_OPEN = _ecvl.MorphTypes.MORPH_OPEN
+    MORPH_CLOSE = _ecvl.MorphTypes.MORPH_CLOSE
+    MORPH_GRADIENT = _ecvl.MorphTypes.MORPH_GRADIENT
+    MORPH_TOPHAT = _ecvl.MorphTypes.MORPH_TOPHAT
+    MORPH_BLACKHAT = _ecvl.MorphTypes.MORPH_BLACKHAT
+    MORPH_HITMISS = _ecvl.MorphTypes.MORPH_HITMISS
 
 
 class InpaintTypes(_ecvl.InpaintTypes):
-    pass
+    """\
+    Enum class representing the possible inpaint types.
+    """
+    INPAINT_NS = _ecvl.InpaintTypes.INPAINT_NS
+    INPAINT_TELEA = _ecvl.InpaintTypes.INPAINT_TELEA
 
 
 def ResizeDim(src, dst, newdims, interp=InterpolationType.linear):
+    """\
+    Resize an image to the specified dimensions.
+
+    Resizes ``src`` and outputs the result in ``dst``.
+
+    :param src: source image
+    :param dst: destination image
+    :param newdims: list of integers specifying the new size of each
+      dimension. The lenght of the list must match the ``src`` image
+      dimensions, excluding the color channel
+    :param interp: InterpolationType to be used
+    :return: None
+    """
     return _ecvl.ResizeDim(src, dst, newdims, interp)
 
 
 def ResizeScale(src, dst, scales, interp=InterpolationType.linear):
+    """\
+    Resize an image by scaling the dimensions by a given scale factor.
+
+    Resizes ``src`` and outputs the result in ``dst``.
+
+    :param src: source image
+    :param dst: destination image
+    :param scales: list of floats that specifies the scale to apply to each
+      dimension. The length of the list must match the ``src`` image
+      dimensions, excluding the color channel
+    :param interp: InterpolationType to be used
+    :return: None
+    """
     return _ecvl.ResizeScale(src, dst, scales, interp)
 
 
 def Flip2D(src, dst):
+    """\
+    Flip an image vertically.
+
+    :param src: source image
+    :param dst: destination image
+    :return: None
+    """
     return _ecvl.Flip2D(src, dst)
 
 
 def Mirror2D(src, dst):
+    """\
+    Flip an image horizontally.
+
+    :param src: source image
+    :param dst: destination image
+    :return: None
+    """
     return _ecvl.Mirror2D(src, dst)
 
 
 def Rotate2D(src, dst, angle, center=None, scale=1.0,
              interp=InterpolationType.linear):
+    """\
+    Rotate an image without changing its dimensions.
+
+    Rotates an image clockwise by a given angle (in degrees), with respect to
+    a given center. The values of unknown pixels in the output image are set
+    to 0. The output image is guaranteed to have the same dimensions as the
+    input one. An optional scale parameter can be provided: this won't change
+    the output image size, but the image will be scaled during rotation.
+
+    :param src: source image
+    :param dst: destination image
+    :param angle: the rotation angle in degrees
+    :param center: a list of floats representing the coordinates of the
+      rotation center. If None, the center of the image is used
+    :param scale: scaling factor
+    :param interp: InterpolationType to be used
+    :return: None
+    """
     if center is None:
         center = []
     return _ecvl.Rotate2D(src, dst, angle, center, scale, interp)
@@ -348,30 +431,115 @@ def Rotate2D(src, dst, angle, center=None, scale=1.0,
 
 def RotateFullImage2D(src, dst, angle, scale=1.0,
                       interp=InterpolationType.linear):
+    """\
+    Rotate an image resizing the output to fit all the pixels.
+
+    Rotates an image clockwise by a given angle (in degrees). The values of
+    unknown pixels in the output image are set to 0. The output Image is
+    guaranteed to contain all the pixels of the rotated image. Thus, its
+    dimensions can be different from those of the input one. An optional scale
+    parameter can be provided: if set, the image will also be scaled.
+
+    :param src: source image
+    :param dst: destination image
+    :param angle: the rotation angle in degrees
+    :param scale: scaling factor
+    :param interp: InterpolationType to be used
+    :return: None
+    """
     return _ecvl.RotateFullImage2D(src, dst, angle, scale, interp)
 
 
 def ChangeColorSpace(src, dst, new_type):
+    """\
+    Copy the ``src`` image into the ``dst`` image changing the color space.
+
+    Source and destination can be the same image.
+
+    :param src: source image
+    :param dst: destination image
+    :param new_type: a ColorType specifying the new color space
+    :return: None
+    """
     return _ecvl.ChangeColorSpace(src, dst, new_type)
 
 
 def Threshold(src, dst, thresh, maxval, thresh_type=ThresholdingType.BINARY):
+    """\
+    Apply a fixed threshold to an image.
+
+    This function can be used to get a binary image out of a grayscale
+    (ColorType.GRAY) image or to remove noise, filtering out pixels with too
+    small or too large values. Pixels up to the ``thresh`` value will be set
+    to 0, others will be set to ``maxval`` if ``thresh_type`` is
+    ThresholdingType.BINARY. The opposite will happen if ``thresh_type`` is
+    set to ThresholdingType.BINARY_INV.
+
+    :param src: source image
+    :param dst: destination image
+    :param thresh: threshold value
+    :param maxval: maximum values in the thresholded image
+    :param thresh_type: ThresholdingType to be applied
+    :return: None
+    """
     return _ecvl.Threshold(src, dst, thresh, maxval, thresh_type)
 
 
 def OtsuThreshold(src):
+    """\
+    Calculate the Otsu thresholding value.
+
+    The image must be ColorType.GRAY.
+
+    :param src: source image
+    :return: Otsu threshold value
+    """
     return _ecvl.OtsuThreshold(src)
 
 
 def Filter2D(src, dst, ker, type=DataType.none):
+    """\
+    Convolve an image with a kernel.
+
+    :param src: source image
+    :param dst: destination image
+    :param ker: convolution kernel
+    :param type: destination DataType. If set to DataType.none, the DataType
+      of ``src`` is used
+    :return: None
+    """
     return _ecvl.Filter2D(src, dst, ker, type)
 
 
 def SeparableFilter2D(src, dst, kerX, kerY, type=DataType.none):
+    """\
+    Convolve an image with a couple of 1-dimensional kernels.
+
+    :param src: source image
+    :param dst: destination image
+    :param kerX: convolution kernel for the X axis.
+    :param kerY: convolution kernel for the Y axis.
+    :param type: destination DataType. If set to DataType.none, the DataType
+      of ``src`` is used
+    :return: None
+    """
     return _ecvl.SeparableFilter2D(src, dst, kerX, kerY, type)
 
 
 def GaussianBlur(src, dst, sizeX, sizeY, sigmaX, sigmaY=0):
+    """\
+    Blurs an image using a Gaussian kernel.
+
+    :param src: source image
+    :param dst: destination image
+    :param sizeX: horizontal size of the kernel. Must be positive and odd
+    :param sizeY: vertical size of the kernel. Must be positive and odd
+    :param sigmaX: Gaussian kernel standard deviation in the X direction.
+    :param sigmaY: Gaussian kernel standard deviation in the Y direction. If
+      zero, sigmaX is used. If both are zero, they are calculated from sizeX
+      and sizeY.
+    :return: None
+    """
     return _ecvl.GaussianBlur(src, dst, sizeX, sizeY, sigmaX, sigmaY)
 
 
@@ -380,50 +548,158 @@ def GaussianBlur2(src, dst, sigma):
 
 
 def AdditiveLaplaceNoise(src, dst, std_dev):
+    """\
+    Adds Laplace distributed noise to an image.
+
+    :param src: source image
+    :param dst: destination image
+    :param std_dev: standard deviation of the noise-generating distribution.
+      Suggested values are around 255 * 0.05 for uint8 images
+    :return: None
+    """
     return _ecvl.AdditiveLaplaceNoise(src, dst, std_dev)
 
 
 def AdditivePoissonNoise(src, dst, lambda_):
+    r"""\
+    Adds Poisson distributed noise to an image.
+
+    :param src: source image
+    :param dst: destination image
+    :param lambda\_: lambda parameter of the Poisson distribution
+    :return: None
+    """
     return _ecvl.AdditivePoissonNoise(src, dst, lambda_)
 
 
 def GammaContrast(src, dst, gamma):
+    """\
+    Adjust contrast by scaling each pixel value X to 255 * ((X/255) ** gamma).
+
+    :param src: source image
+    :param dst: destination image
+    :param gamma: exponent for the contrast adjustment
+    :return: None
+    """
     return _ecvl.GammaContrast(src, dst, gamma)
 
 
 def CoarseDropout(src, dst, p, drop_size, per_channel):
+    """\
+    Set rectangular areas within an image to zero.
+
+    :param src: source image
+    :param dst: destination image
+    :param p: probability of any rectangle being set to zero
+    :param drop_size: size of rectangles in percentage of the input image
+    :param per_channel: whether to use the same value for all channels
+    :return: None
+    """
     return _ecvl.CoarseDropout(src, dst, p, drop_size, per_channel)
 
 
 def IntegralImage(src, dst, dst_type=DataType.float64):
+    """\
+    Calculate the integral image of the source image.
+
+    The ``src`` image must be ColorType.GRAY, "xyc" and DataType.uint8.
+
+    :param src: source image
+    :param dst: destination image
+    :param dst_type: DataType of the destination image
+    :return: None
+    """
     return _ecvl.IntegralImage(src, dst, dst_type)
 
 
 def NonMaximaSuppression(src, dst):
+    """\
+    Calculate the non-maxima suppression of the source image.
+
+    The ``src`` image must be ColorType.GRAY, "xyc" and DataType.int32.
+
+    :param src: source image
+    :param dst: destination image
+    :return: None
+    """
     return _ecvl.NonMaximaSuppression(src, dst)
 
 
 def GetMaxN(src, n):
+    """\
+    Get the indices of the ``n`` maximum values of an image.
+
+    The ``src`` image must be ColorType.GRAY, "xyc" and DataType.int32.
+
+    :param src: source image
+    :param n: how many values to return
+    :return: list of pairs corresponding to the coordinates of the max values
+    """
     return _ecvl.GetMaxN(src, n)
 
 
 def ConnectedComponentsLabeling(src, dst):
+    """\
+    Label connected components in the input image.
+
+    The ``src`` image must be "xyc", only one color channel and DataType.uint8.
+
+    :param src: source image
+    :param dst: destination image
+    :return: None
+    """
     return _ecvl.ConnectedComponentsLabeling(src, dst)
 
 
 def FindContours(src):
+    """\
+    Find contours in the input image.
+
+    The ``src`` image must be "xyc", only one color channel and DataType.uint8.
+
+    :param src: source image
+    :param dst: destination image
+    :return: None
+    """
     return _ecvl.FindContours(src)
 
 
 def Stack(src, dst):
+    """\
+    Stack a sequence of images along a new depth dimension.
+
+    Images must be "xyc" and their dimensions must match.
+
+    :param src: list of source images
+    :param dst: destination image
+    :return: None
+    """
     return _ecvl.Stack(src, dst)
 
 
 def HConcat(src, dst):
+    """\
+    Concatenate images horizontally.
+
+    Images must be "xyc" and have the same number of rows.
+
+    :param src: list of source images
+    :param dst: destination image
+    :return: None
+    """
     return _ecvl.HConcat(src, dst)
 
 
 def VConcat(src, dst):
+    """\
+    Concatenate images vertically.
+
+    Images must be "xyc" and have the same number of columns.
+
+    :param src: list of source images
+    :param dst: destination image
+    :return: None
+    """
     return _ecvl.VConcat(src, dst)
 
 
