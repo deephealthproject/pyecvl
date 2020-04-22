@@ -199,12 +199,62 @@ class View_float32(_ecvl.View_float32):
 
 
 def CopyImage(src, dst, new_type=None):
+    """\
+    Copy data from the source image ``src`` to the destination image ``dst``.
+
+    ``src`` and ``dst`` cannot be the same image. ``src`` cannot be an image
+    with DataType.none. The optional ``new_type`` parameter can be used to
+    change the DataType of the ``dst`` image.
+
+    When the DataType is not specified:
+
+    * if ``dst`` is empty, ``src`` will be directly copied into ``dst``
+
+    * if ``src`` and ``dst`` have different size in memory or different
+      channels and ``dst`` is the data owner, the procedure will overwrite
+      ``dst`` creating a new image (channels and dimensions will be the same
+      as ``src``, DataType will be the same as ``dst`` if they are not none or
+      the same as ``src`` otherwise)
+
+    * if ``src`` and ``dst`` have different size in memory or different
+      channels and ``dst`` is not the data owner, the procedure will throw an
+      exception
+
+    * if ``src`` and ``dst`` have different color types and ``dst`` is the
+      data owner, the procedure produces a ``dst`` image with the same color
+      type as ``src``
+
+    * if ``src`` and ``dst`` have different color types and ``dst`` is not the
+      data owner, the procedure will throw an exception
+
+    When the DataType is specified the function has the same behavior, but
+    ``dst`` will have the specified DataType.
+
+    :param src: source image
+    :param dst: destination image
+    :param new_type: new DataType for the destination image
+    :return: None
+    """
     if new_type is None:
         return _ecvl.CopyImage(src, dst)
     return _ecvl.CopyImage(src, dst, new_type)
 
 
 def RearrangeChannels(src, dst, channels, new_type=None):
+    """\
+    Change image dimensions order.
+
+    Changes the order of the ``src`` image dimensions, saving the result into
+    the ``dst`` image. The new order can be specified as a string through the
+    ``channels`` parameter. ``src`` and ``dst`` can be the same image.
+
+    :param src: source image
+    :param dst: destination image
+    :param channels: new order for the image channels, as a string
+    :param new_type: new DaatType for the destination image. If None, the
+      destination image will preserve its type if it is not empty, otherwise
+      it will have the same type as the source Image
+    """
     if new_type is None:
         return _ecvl.RearrangeChannels(src, dst, channels)
     return _ecvl.RearrangeChannels(src, dst, channels, new_type)
@@ -213,14 +263,45 @@ def RearrangeChannels(src, dst, channels, new_type=None):
 # == arithmetic ==
 
 def And(src1, src2, dst):
+    """\
+    Boolean ``and`` between two images.
+
+    Performs boolean ``and`` between two images with DataType.uint8 and
+    ColorType.GRAY. The result is stored into ``dst``.
+
+    :param src1: first image operand
+    :param src2: second image operand
+    :param dst: destination image
+    :return: None
+    """
     return _ecvl.And(src1, src2, dst)
 
 
 def Neg(img):
+    """\
+    In-place negation of an image.
+
+    Negates every value of ``img``, and stores the the result in the same
+    image. The type of the image is not changed.
+
+    :param img: image to be negated
+    :return: negated image
+    """
     return _ecvl.Neg(img)
 
 
 def Or(src1, src2, dst):
+    """\
+    Boolean ``or`` between two images.
+
+    Performs boolean ``or`` between two images with DataType.uint8 and
+    ColorType.GRAY. The result is stored into ``dst``.
+
+    :param src1: first image operand
+    :param src2: second image operand
+    :param dst: destination image
+    :return: None
+    """
     return _ecvl.Or(src1, src2, dst)
 
 
