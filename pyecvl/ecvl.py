@@ -79,8 +79,40 @@ class ColorType(_ecvl.ColorType):
 
 
 class Image(_ecvl.Image):
-    """\
+    r"""\
     Image class.
+
+    :var elemtype\_: image pixel type, a DataType
+
+    :var elemsize\_: image pixel size in bytes
+
+    :dims\_: image dimensions in pixels/voxels (list of integers)
+
+    :strides\_: the number of bytes the internal data pointer has to skip to
+      get to the next pixel/voxel in the corresponding dimension
+
+    :var channels\_: a string describing the image planes layout. Each
+      character provides information on the corresponding channel. The
+      possible values are: 'x': horizontal spatial dimension; 'y': vertical
+      spatial dimension; 'z': depth spatial dimension; 'c': color dimension;
+      't': temporal dimension; 'o': any other dimension. For example, "xyc"
+      describes a 2-dimensional image structured in color planes. This could
+      be for example a ColorType.GRAY Image with dims\_[2] = 1 or a
+      ColorType.RGB Image with dims_[2] = 3. The ColorType constrains the
+      value of the dimension corresponding to the color channel. Another
+      example is "cxy" with dims\_[0] = 3 and ColorType.BGR. In this case the
+      color dimension is the one which changes faster, as it happens in
+      libraries such as OpenCV.
+
+    :var colortype\_: image ColorType. If different from ColorType.none, the
+      channels\_ string must contain a 'c' and the corresponding dimension must
+      have the appropriate value.
+
+    :var spacings\_: space in mm between consecutive pixels/voxels on each
+      axis (list of floats).
+
+    :var datasize\_: size of image data in bytes.
+    :var contiguous\_: whether the image is stored contiguously in memory
     """
 
     @staticmethod
