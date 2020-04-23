@@ -251,7 +251,7 @@ def RearrangeChannels(src, dst, channels, new_type=None):
     :param src: source image
     :param dst: destination image
     :param channels: new order for the image channels, as a string
-    :param new_type: new DaatType for the destination image. If None, the
+    :param new_type: new DataType for the destination image. If None, the
       destination image will preserve its type if it is not empty, otherwise
       it will have the same type as the source image
     """
@@ -802,55 +802,173 @@ class Dataset(_ecvl.Dataset):
 # == augmentations ==
 
 class AugmentationParam(_ecvl.AugmentationParam):
-    pass
+    r"""\
+    Augmentation parameters which must be randomly generated within a range.
 
+    :var min\_: minimum value for the random range
+    :var max\_: maximum value for the random range
+    :var value\_: generated parameter value
+    """
+    def GenerateValue(self):
+        r"""\
+        Generate the random value between min\_ and max\_.
+        """
+        return _ecvl.AugmentationParam.GenerateValue(self)
 
-class Augmentation(_ecvl.Augmentation):
-    pass
+    @staticmethod
+    def SetSeed(seed):
+        """\
+        Set a fixed seed for the random generated values.
+
+        Useful to reproduce experiments with same augmentations.
+
+        :param seed: seed value
+        :return: None
+        """
+        return _ecvl.AugmentationParam.SetSeed(seed)
 
 
 class SequentialAugmentationContainer(_ecvl.SequentialAugmentationContainer):
-    pass
+    """\
+    A container for multiple augmentations to be applied in sequence.
+    """
+    def __init__(self, augs):
+        """\
+        :param augs: list of augmentations to be applied
+        """
+        _ecvl.SequentialAugmentationContainer.__init__(self, augs)
 
 
 class AugRotate(_ecvl.AugRotate):
-    pass
+    """\
+    Augmentation wrapper for Rotate2D.
+    """
+    def __init__(self, angle, center=None, scale=1.0,
+                 interp=InterpolationType.linear):
+        """\
+        :param angle: range of degrees ``[min, max]`` to randomly select from
+        :param center: a list of floats representing the coordinates of the
+          rotation center. If None, the center of the image is used
+        :param scale: scaling factor
+        :param interp: InterpolationType to be used
+        """
+        if center is None:
+            center = []
+        _ecvl.AugRotate.__init__(self, angle, center, scale, interp)
 
 
 class AugResizeDim(_ecvl.AugResizeDim):
-    pass
+    """\
+    Augmentation wrapper for ResizeDim.
+    """
+    def __init__(self, dims, interp=InterpolationType.linear):
+        """\
+        :param dims: list of integers that specifies the new size of each
+          dimension
+        :param interp: InterpolationType to be used
+        """
+        _ecvl.AugResizeDim.__init__(self, dims, interp)
 
 
 class AugResizeScale(_ecvl.AugResizeScale):
-    pass
+    """\
+    Augmentation wrapper for ResizeScale.
+    """
+    def __init__(self, scale, interp=InterpolationType.linear):
+        """\
+        :param scale: list of floats that specifies the scale to apply to
+          each dimension
+        :param interp: InterpolationType to be used
+        """
+        _ecvl.AugResizeScale.__init__(self, scale, interp)
 
 
 class AugFlip(_ecvl.AugFlip):
-    pass
+    """\
+    Augmentation wrapper for Flip2D.
+    """
+    def __init__(self, p=0.5):
+        """\
+        :param p: probability of each image to get flipped
+        """
+        _ecvl.AugFlip.__init__(self, p)
 
 
 class AugMirror(_ecvl.AugMirror):
-    pass
+    """\
+    Augmentation wrapper for Mirror2D.
+    """
+    def __init__(self, p=0.5):
+        """\
+        :param p: probability of each image to get mirrored
+        """
+        _ecvl.AugMirror.__init__(self, p)
 
 
 class AugGaussianBlur(_ecvl.AugGaussianBlur):
-    pass
+    """\
+    Augmentation wrapper for GaussianBlur.
+    """
+    def __init__(self, sigma):
+        """\
+        :param sigma: sigma range ``[min, max]`` to randomly select from.
+        """
+        _ecvl.AugGaussianBlur.__init__(self, sigma)
 
 
 class AugAdditiveLaplaceNoise(_ecvl.AugAdditiveLaplaceNoise):
-    pass
+    """\
+    Augmentation wrapper for AdditiveLaplaceNoise.
+    """
+    def __init__(self, std_dev):
+        """\
+        :param std_dev: range of values ``[min, max]`` to randomly select the \
+          standard deviation of the noise generating distribution. Suggested \
+          values are around 255 * 0.05 for uint8 images
+        """
+        _ecvl.AugAdditiveLaplaceNoise.__init__(self, std_dev)
 
 
 class AugAdditivePoissonNoise(_ecvl.AugAdditivePoissonNoise):
-    pass
+    """\
+    Augmentation wrapper for AdditivePoissonNoise.
+    """
+    def __init__(self, lambda_):
+        """\
+        :param lambda\_: range of values ``[min, max]`` to randomly select \
+          the lambda of the noise generating distribution. Suggested values \
+          are around 0.0 to 10.0.
+        """  # noqa
+        _ecvl.AugAdditivePoissonNoise.__init__(self, lambda_)
 
 
 class AugGammaContrast(_ecvl.AugGammaContrast):
-    pass
+    """\
+    Augmentation wrapper for GammaContrast.
+    """
+    def __init__(self, gamma):
+        """\
+        :param gamma: range of values ``[min, max]`` to randomly select the \
+          exponent for the contrast adjustment. Suggested values are around \
+          0.5 to 2.0.
+        """
+        _ecvl.AugGammaContrast.__init__(self, gamma)
 
 
 class AugCoarseDropout(_ecvl.AugCoarseDropout):
-    pass
+    """\
+    Augmentation wrapper for CoarseDropout.
+    """
+    def __init__(self, p, drop_size, per_channel):
+        """\
+        :param p: range of values ``[min, max]`` to randomly select the
+          probability of any rectangle being set to zero
+        :param drop_size: range of values ``[min, max]`` to randomly select
+          the size of rectangles in percentage of the input image
+        :param per_channel: probability of each image to use the same value
+          for all channels of a pixel
+        """
+        _ecvl.AugCoarseDropout.__init__(self, p, drop_size, per_channel)
 
 
 # == support_imgcodecs ==
