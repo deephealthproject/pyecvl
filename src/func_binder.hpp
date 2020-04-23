@@ -189,6 +189,7 @@ void bind_ecvl_functions(pybind11::module &m) {
   // support_eddl: DatasetAugmentations
   {
   pybind11::class_<ecvl::DatasetAugmentations, std::shared_ptr<ecvl::DatasetAugmentations>> cl(m, "DatasetAugmentations", "Dataset Augmentations. Represents the augmentations which will be applied to each split.");
+  cl.def(pybind11::init<>());
   cl.def(pybind11::init<std::array<std::shared_ptr<ecvl::Augmentation>, 3>>());
   cl.def("Apply", [](ecvl::DatasetAugmentations &o, enum ecvl::SplitType const & a0, class ecvl::Image & a1) -> void { return o.Apply(a0, a1); }, "", pybind11::arg("st"), pybind11::arg("img"));
   cl.def("Apply", (void (ecvl::DatasetAugmentations::*)(enum ecvl::SplitType, class ecvl::Image &, const class ecvl::Image &)) &ecvl::DatasetAugmentations::Apply, "C++: ecvl::DatasetAugmentations::Apply(enum ecvl::SplitType, class ecvl::Image &, const class ecvl::Image &) --> void", pybind11::arg("st"), pybind11::arg("img"), pybind11::arg("gt"));

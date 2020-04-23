@@ -25,9 +25,23 @@ import pyecvl._core.ecvl as ecvl_core
 import pyecvl.ecvl as ecvl_py
 
 
+def _empty_img(ecvl):
+    if ecvl is ecvl_core:
+        return ecvl.Image()
+    return ecvl.Image.empty()
+
+
+def _img_fromarray(ecvl, array, channels, colortype, spacings=None):
+    if spacings is None:
+        spacings = []
+    if ecvl is ecvl_core:
+        return ecvl.Image(array, channels, colortype, spacings)
+    return ecvl.Image.fromarray(array, channels, colortype, spacings)
+
+
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
 def test_empty(ecvl):
-    img = ecvl.Image()
+    img = _empty_img(ecvl)
     assert len(img.dims_) == 0
     assert img.IsEmpty()
 
@@ -69,7 +83,7 @@ def test_rearrange_channels(ecvl):
                 for l in range(S[3]):
                     view[i, j, k, l] = (l + k * S[3] + j * S[2] * S[3] +
                                         i * S[1] * S[2] * S[3])
-    img2 = ecvl.Image()
+    img2 = _empty_img(ecvl)
     ecvl.RearrangeChannels(img, img2, "xyzc")
     view2 = ecvl.View_int16(img2)
     assert view2[2, 0, 1, 0] == view[0, 2, 0, 1]
@@ -117,24 +131,24 @@ def test_image_from_array(ecvl):
         dt = getattr(ecvl.DataType, dt_name)
         a = np.arange(12).reshape(3, 4).astype(np_dt)
         b = np.asfortranarray(a)
-        img = ecvl.Image(b, channels, color_type)
+        img = _img_fromarray(ecvl, b, channels, color_type)
         assert img.elemtype_ == dt
         assert img.dims_ == list(b.shape)
         assert img.strides_ == list(b.strides)
         # check construction from c-style array
-        img = ecvl.Image(a, channels, color_type)
+        img = _img_fromarray(ecvl, a, channels, color_type)
         assert img.elemtype_ == dt
         assert img.dims_ == list(a.shape)
         assert img.strides_ == list(b.strides)
     a = np.arange(12).reshape(3, 4).astype(np.int16)
     b = np.asfortranarray(a)
-    img = ecvl.Image(b, channels, color_type)
+    img = _img_fromarray(ecvl, b, channels, color_type)
     view = ecvl.View_int16(img)
     for i in range(3):
         for j in range(4):
             assert view[i, j] == b[i, j]
     # check construction from c-style array
-    img = ecvl.Image(a, channels, color_type)
+    img = _img_fromarray(ecvl, a, channels, color_type)
     view = ecvl.View_int16(img)
     for i in range(3):
         for j in range(4):
@@ -227,7 +241,7 @@ def test_copy_image(ecvl):
     a = np.array(x, copy=False)
     a.fill(3)
     # without dtype arg
-    y = ecvl.Image()
+    y = _empty_img(ecvl)
     ecvl.CopyImage(x, y)
     assert y.dims_ == dims
     assert y.elemtype_ == dtype
@@ -237,7 +251,7 @@ def test_copy_image(ecvl):
     assert (b == 3).all()
     # with dtype arg
     new_dtype = ecvl.DataType.float32
-    y = ecvl.Image()
+    y = _empty_img(ecvl)
     ecvl.CopyImage(x, y, new_dtype)
     assert y.dims_ == dims
     assert y.elemtype_ == new_dtype

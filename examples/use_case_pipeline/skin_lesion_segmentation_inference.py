@@ -112,7 +112,7 @@ def main(args):
                 orig_img_t.colortype_ = ecvl.ColorType.BGR
                 orig_img_t.channels_ = "xyc"
 
-                tmp, labels = ecvl.Image(), ecvl.Image()
+                tmp, labels = ecvl.Image.empty(), ecvl.Image.empty()
                 ecvl.CopyImage(img_t, tmp, ecvl.DataType.uint8)
                 ecvl.ConnectedComponentsLabeling(tmp, labels)
                 ecvl.CopyImage(labels, tmp, ecvl.DataType.uint8)

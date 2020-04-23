@@ -25,12 +25,18 @@ import pyecvl._core.ecvl as ecvl_core
 import pyecvl.ecvl as ecvl_py
 
 
+def _empty_img(ecvl):
+    if ecvl is ecvl_core:
+        return ecvl.Image()
+    return ecvl.Image.empty()
+
+
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
 def test_ResizeDim(ecvl):
     dims = [20, 40, 3]
     newdims = [10, 20]  # no color channel
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
-    tmp = ecvl.Image()
+    tmp = _empty_img(ecvl)
     ecvl.ResizeDim(img, tmp, newdims)
     assert tmp.dims_[:2] == newdims
     ecvl.ResizeDim(img, tmp, newdims, ecvl.InterpolationType.nearest)
@@ -42,7 +48,7 @@ def test_ResizeScale(ecvl):
     dims = [20, 40, 3]
     scales = [0.5, 0.5]  # no color channel
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
-    tmp = ecvl.Image()
+    tmp = _empty_img(ecvl)
     ecvl.ResizeScale(img, tmp, scales)
     assert tmp.dims_[:2] == [10, 20]
     ecvl.ResizeScale(img, tmp, scales, ecvl.InterpolationType.cubic)
@@ -53,7 +59,7 @@ def test_ResizeScale(ecvl):
 def test_Flip2D(ecvl):
     dims = [20, 40, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
-    tmp = ecvl.Image()
+    tmp = _empty_img(ecvl)
     ecvl.Flip2D(img, tmp)
     assert tmp.dims_ == img.dims_
 
@@ -62,7 +68,7 @@ def test_Flip2D(ecvl):
 def test_Mirror2D(ecvl):
     dims = [20, 40, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
-    tmp = ecvl.Image()
+    tmp = _empty_img(ecvl)
     ecvl.Mirror2D(img, tmp)
     assert tmp.dims_ == img.dims_
 
@@ -71,7 +77,7 @@ def test_Mirror2D(ecvl):
 def test_Rotate2D(ecvl):
     dims = [20, 40, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
-    tmp = ecvl.Image()
+    tmp = _empty_img(ecvl)
     angle, center, scale, interp = 9, [5, 5], 1.5, ecvl.InterpolationType.area
     ecvl.Rotate2D(img, tmp, angle)
     ecvl.Rotate2D(img, tmp, angle, center)
@@ -83,7 +89,7 @@ def test_Rotate2D(ecvl):
 def test_RotateFullImage2D(ecvl):
     dims = [20, 40, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
-    tmp = ecvl.Image()
+    tmp = _empty_img(ecvl)
     angle, scale, interp = 9, 1.5, ecvl.InterpolationType.lanczos4
     ecvl.RotateFullImage2D(img, tmp, angle)
     ecvl.RotateFullImage2D(img, tmp, angle, scale)
@@ -94,7 +100,7 @@ def test_RotateFullImage2D(ecvl):
 def test_ChangeColorSpace(ecvl):
     dims = [20, 40, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
-    tmp = ecvl.Image()
+    tmp = _empty_img(ecvl)
     new_color = ecvl.ColorType.GRAY
     ecvl.ChangeColorSpace(img, tmp, new_color)
     assert tmp.colortype_ == new_color
@@ -106,7 +112,7 @@ def test_Threshold(ecvl):
     dims = [20, 40, 1]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.GRAY)
     thr = ecvl.OtsuThreshold(img)
-    tmp = ecvl.Image()
+    tmp = _empty_img(ecvl)
     ttype = ecvl.ThresholdingType.BINARY_INV
     ecvl.Threshold(img, tmp, thr, 255)
     ecvl.Threshold(img, tmp, thr, 255, ttype)
@@ -116,7 +122,7 @@ def test_Threshold(ecvl):
 def test_Filter2D(ecvl):
     dims = [20, 40, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
-    tmp = ecvl.Image()
+    tmp = _empty_img(ecvl)
     # kernel must be float64, "xyc" and with one color channel
     kernel = ecvl.Image(
         [3, 3, 1], ecvl.DataType.float64, "xyc", ecvl.ColorType.GRAY
@@ -132,7 +138,7 @@ def test_Filter2D(ecvl):
 def test_SeparableFilter2D(ecvl):
     dims = [20, 40, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
-    tmp = ecvl.Image()
+    tmp = _empty_img(ecvl)
     kerX, kerY, dtype = [1, 2, 1], [1, 0, -1], ecvl.DataType.uint16
     ecvl.SeparableFilter2D(img, tmp, kerX, kerY)
     ecvl.SeparableFilter2D(img, tmp, kerX, kerY, dtype)
@@ -142,7 +148,7 @@ def test_SeparableFilter2D(ecvl):
 def test_GaussianBlur(ecvl):
     dims = [20, 40, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
-    tmp = ecvl.Image()
+    tmp = _empty_img(ecvl)
     sigmaY = 0.2
     ecvl.GaussianBlur(img, tmp, 5, 5, 0.1)
     ecvl.GaussianBlur(img, tmp, 5, 5, 0.1, sigmaY)
@@ -155,7 +161,7 @@ def test_GaussianBlur(ecvl):
 def test_AdditiveLaplaceNoise(ecvl):
     dims = [20, 40, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
-    tmp = ecvl.Image()
+    tmp = _empty_img(ecvl)
     stddev = 255 * 0.05
     ecvl.AdditiveLaplaceNoise(img, tmp, stddev)
 
@@ -164,7 +170,7 @@ def test_AdditiveLaplaceNoise(ecvl):
 def test_AdditivePoissonNoise(ecvl):
     dims = [20, 40, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
-    tmp = ecvl.Image()
+    tmp = _empty_img(ecvl)
     lambda_ = 2.0
     ecvl.AdditivePoissonNoise(img, tmp, lambda_)
 
@@ -173,7 +179,7 @@ def test_AdditivePoissonNoise(ecvl):
 def test_GammaContrast(ecvl):
     dims = [20, 40, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
-    tmp = ecvl.Image()
+    tmp = _empty_img(ecvl)
     gamma = 3
     ecvl.GammaContrast(img, tmp, gamma)
 
@@ -182,7 +188,7 @@ def test_GammaContrast(ecvl):
 def test_CoarseDropout(ecvl):
     dims = [20, 40, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
-    tmp = ecvl.Image()
+    tmp = _empty_img(ecvl)
     prob, drop_size, per_channel = 0.5, 0.1, True
     ecvl.CoarseDropout(img, tmp, prob, drop_size, per_channel)
 
@@ -191,7 +197,7 @@ def test_CoarseDropout(ecvl):
 def test_IntegralImage(ecvl):
     dims = [20, 40, 1]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.GRAY)
-    tmp = ecvl.Image()
+    tmp = _empty_img(ecvl)
     dst_type = ecvl.DataType.float64
     ecvl.IntegralImage(img, tmp)
     ecvl.IntegralImage(img, tmp, dst_type)
@@ -201,7 +207,7 @@ def test_IntegralImage(ecvl):
 def test_NonMaximaSuppression(ecvl):
     dims = [20, 40, 1]
     img = ecvl.Image(dims, ecvl.DataType.int32, "xyc", ecvl.ColorType.GRAY)
-    tmp = ecvl.Image()
+    tmp = _empty_img(ecvl)
     ecvl.NonMaximaSuppression(img, tmp)
 
 
@@ -210,7 +216,10 @@ def test_GetMaxN(ecvl):
     a = np.asfortranarray(np.zeros(12, dtype=np.int32).reshape(3, 4, 1))
     a[0, 1] = 3
     a[1, 2] = 4
-    img = ecvl.Image(a, "xyc", ecvl.ColorType.GRAY)
+    if ecvl is ecvl_core:
+        img = ecvl.Image(a, "xyc", ecvl.ColorType.GRAY)
+    else:
+        img = ecvl.Image.fromarray(a, "xyc", ecvl.ColorType.GRAY)
     assert sorted(ecvl.GetMaxN(img, 2)) == [[0, 1], [1, 2]]
 
 
@@ -218,7 +227,7 @@ def test_GetMaxN(ecvl):
 def test_ConnectedComponentsLabeling(ecvl):
     dims = [20, 40, 1]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.GRAY)
-    tmp = ecvl.Image()
+    tmp = _empty_img(ecvl)
     ecvl.ConnectedComponentsLabeling(img, tmp)
 
 
@@ -237,7 +246,7 @@ def test_HConcat(ecvl):
     img2 = ecvl.Image(
         [40, 40, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR
     )
-    tmp = ecvl.Image()
+    tmp = _empty_img(ecvl)
     ecvl.HConcat([img1, img2], tmp)
 
 
@@ -249,7 +258,7 @@ def test_VConcat(ecvl):
     img2 = ecvl.Image(
         [20, 20, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR
     )
-    tmp = ecvl.Image()
+    tmp = _empty_img(ecvl)
     ecvl.VConcat([img1, img2], tmp)
 
 
@@ -261,7 +270,7 @@ def test_Stack(ecvl):
     img2 = ecvl.Image(
         [20, 40, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR
     )
-    tmp = ecvl.Image()
+    tmp = _empty_img(ecvl)
     ecvl.Stack([img1, img2], tmp)
 
 
@@ -272,7 +281,7 @@ def test_Morphology(ecvl):
     kernel = ecvl.Image(
         [5, 5, 1], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR
     )
-    tmp = ecvl.Image()
+    tmp = _empty_img(ecvl)
     ecvl.Morphology(img, tmp, ecvl.MorphTypes.MORPH_BLACKHAT, kernel)
     ecvl.Morphology(img, tmp, ecvl.MorphTypes.MORPH_BLACKHAT, kernel, [3, 3])
     ecvl.Morphology(
@@ -293,7 +302,7 @@ def test_Inpaint(ecvl):
     mask = ecvl.Image(
         [20, 40, 1], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR
     )
-    tmp = ecvl.Image()
+    tmp = _empty_img(ecvl)
     ecvl.Inpaint(img, tmp, mask, 5.0)
     ecvl.Inpaint(img, tmp, mask, 5.0, ecvl.InpaintTypes.INPAINT_NS)
 
