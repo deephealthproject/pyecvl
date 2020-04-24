@@ -65,11 +65,13 @@ def test_view(ecvl):
     y[3, 3, 2] = 48
     y[4, 2, 1] = -127
     y[3, 2, 0] = -128
-    ecvl.Neg(x)
-    assert y[1, 2, 0] == -36
-    assert y[3, 3, 2] == -48
-    assert y[4, 2, 1] == 127
-    assert y[3, 2, 0] == -128
+    dst = _empty_img(ecvl)
+    ecvl.Neg(x, dst, ecvl.DataType.int8, False)
+    dst_view = ecvl.View_int8(dst)
+    assert dst_view[1, 2, 0] == -36
+    assert dst_view[3, 3, 2] == -48
+    assert dst_view[4, 2, 1] == 127
+    assert dst_view[3, 2, 0] == -128
 
 
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])

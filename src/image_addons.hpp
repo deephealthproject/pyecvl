@@ -39,10 +39,11 @@ ecvl::Image* bufToImg(const pybind11::buffer_info& b,
 template <typename type_, typename... options>
 void image_addons(pybind11::class_<type_, options...> &cl) {
     cl.def(pybind11::init<const std::vector<int>&, ecvl::DataType, std::string,
-           ecvl::ColorType, const std::vector<float>&>(),
+           ecvl::ColorType, const std::vector<float>&, ecvl::Device>(),
            pybind11::arg("dims"), pybind11::arg("elemtype"),
            pybind11::arg("channels"), pybind11::arg("colortype"),
            pybind11::arg("spacings") = std::vector<float>(),
+           pybind11::arg("dev") = ecvl::Device::CPU,
            pybind11::keep_alive<1, 2>(), pybind11::keep_alive<1, 6>());
     // def_buffer will be run by numpy, so exceptions will crash the program
     cl.def_buffer([](ecvl::Image &img) -> pybind11::buffer_info {
@@ -111,4 +112,8 @@ void image_addons(pybind11::class_<type_, options...> &cl) {
     cl.def(pybind11::init([](pybind11::array_t<double, pybind11::array::f_style> array, std::string channels, ecvl::ColorType colortype, const std::vector<float>& spacings) {
         return bufToImg(array.request(), ecvl::DataType::float64, channels, colortype, spacings);
     }), pybind11::arg("buf"), pybind11::arg("channels"), pybind11::arg("colortype"), pybind11::arg("spacings") = std::vector<float>());
+    cl.def("Add", &ecvl::Image::Add<ecvl::Image>, "In-place addition", pybind11::arg("rhs"), pybind11::arg("saturate") = true);
+    cl.def("Sub", &ecvl::Image::Sub<ecvl::Image>, "In-place subtraction", pybind11::arg("rhs"), pybind11::arg("saturate") = true);
+    cl.def("Mul", &ecvl::Image::Mul<ecvl::Image>, "In-place multiplication", pybind11::arg("rhs"), pybind11::arg("saturate") = true);
+    cl.def("Div", &ecvl::Image::Div<ecvl::Image>, "In-place division", pybind11::arg("rhs"), pybind11::arg("saturate") = true);
 }

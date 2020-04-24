@@ -294,47 +294,20 @@ def RearrangeChannels(src, dst, channels, new_type=None):
 
 # == arithmetic ==
 
-def And(src1, src2, dst):
-    """\
-    Boolean ``and`` between two images.
-
-    Performs boolean ``and`` between two images with DataType.uint8 and
-    ColorType.GRAY. The result is stored into ``dst``.
-
-    :param src1: first image operand
-    :param src2: second image operand
-    :param dst: destination image
-    :return: None
-    """
-    return _ecvl.And(src1, src2, dst)
-
-
-def Neg(img):
+def Neg(src, dst, dst_type=DataType.none, saturate=True):
     """\
     In-place negation of an image.
 
-    Negates every value of ``img``, and stores the the result in the same
-    image. The type of the image is not changed.
+    Negates every value of ``src``, and stores the the result in ``dst``
+    with the specified type.
 
-    :param img: image to be negated
-    :return: negated image
-    """
-    return _ecvl.Neg(img)
-
-
-def Or(src1, src2, dst):
-    """\
-    Boolean ``or`` between two images.
-
-    Performs boolean ``or`` between two images with DataType.uint8 and
-    ColorType.GRAY. The result is stored into ``dst``.
-
-    :param src1: first image operand
-    :param src2: second image operand
+    :param src: source image
     :param dst: destination image
+    :param dst_type: destination image DataType
+    :param saturate: whether to apply saturation
     :return: None
     """
-    return _ecvl.Or(src1, src2, dst)
+    return _ecvl.Neg(src, dst, dst_type, saturate)
 
 
 # == imgproc ==

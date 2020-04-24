@@ -37,35 +37,22 @@ def test_Neg(ecvl):
     z = ecvl.Image(dims, ecvl.DataType.int8, "xyc", ecvl.ColorType.GRAY)
     d = np.array(z, copy=False)
     d.fill(10)
-    ecvl.Neg(z)
-    assert (d == -10).all()
-
-
-@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
-def test_And(ecvl):
-    dims = [2, 3, 1]
-    x = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.GRAY)
-    y = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.GRAY)
-    a = np.array(x, copy=False)
-    b = np.array(y, copy=False)
     tmp = _empty_img(ecvl)
-    a.fill(5)
-    b.fill(14)
-    ecvl.And(x, y, tmp)
-    c = np.array(tmp, copy=False)
-    assert (c == (5 & 14)).all()
-
-
-@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
-def test_Or(ecvl):
-    dims = [2, 3, 1]
-    x = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.GRAY)
-    y = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.GRAY)
-    a = np.array(x, copy=False)
-    b = np.array(y, copy=False)
-    tmp = _empty_img(ecvl)
-    a.fill(5)
-    b.fill(14)
-    ecvl.Or(x, y, tmp)
-    c = np.array(tmp, copy=False)
-    assert (c == (5 | 14)).all()
+    # basic call
+    ecvl.Neg(z, tmp)
+    tmp_arr = np.array(tmp, copy=False)
+    assert (tmp_arr == -10).all()
+    # data type
+    d.fill(20)
+    ecvl.Neg(z, tmp, ecvl.DataType.int16)
+    tmp_arr = np.array(tmp, copy=False)
+    assert (tmp_arr == -20).all()
+    assert (tmp_arr.dtype == np.int16)
+    # saturate
+    d.fill(-128)
+    ecvl.Neg(z, tmp, ecvl.DataType.int8, True)
+    tmp_arr = np.array(tmp, copy=False)
+    assert (tmp_arr == 127).all()
+    ecvl.Neg(z, tmp, ecvl.DataType.int8, False)
+    tmp_arr = np.array(tmp, copy=False)
+    assert (tmp_arr == -128).all()
