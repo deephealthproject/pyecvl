@@ -1653,6 +1653,21 @@ void bind_ecvl_core_imgcodecs(std::function< pybind11::module &(std::string cons
 
 ;
 
+	// ecvl::Add(const class ecvl::Image &, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool) file: line:69
+	M("ecvl").def("Add", [](const class ecvl::Image & a0, const class ecvl::Image & a1, class ecvl::Image & a2) -> void { return ecvl::Add(a0, a1, a2); }, "", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"));
+	M("ecvl").def("Add", [](const class ecvl::Image & a0, const class ecvl::Image & a1, class ecvl::Image & a2, enum ecvl::DataType const & a3) -> void { return ecvl::Add(a0, a1, a2, a3); }, "", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"));
+	M("ecvl").def("Add", (void (*)(const class ecvl::Image &, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::Add, "C++: ecvl::Add(const class ecvl::Image &, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
+
+	// ecvl::Sub(const class ecvl::Image &, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool) file: line:118
+	M("ecvl").def("Sub", [](const class ecvl::Image & a0, const class ecvl::Image & a1, class ecvl::Image & a2) -> void { return ecvl::Sub(a0, a1, a2); }, "", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"));
+	M("ecvl").def("Sub", [](const class ecvl::Image & a0, const class ecvl::Image & a1, class ecvl::Image & a2, enum ecvl::DataType const & a3) -> void { return ecvl::Sub(a0, a1, a2, a3); }, "", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"));
+	M("ecvl").def("Sub", (void (*)(const class ecvl::Image &, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::Sub, "C++: ecvl::Sub(const class ecvl::Image &, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
+
+	// ecvl::Mul(const class ecvl::Image &, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool) file: line:122
+	M("ecvl").def("Mul", [](const class ecvl::Image & a0, const class ecvl::Image & a1, class ecvl::Image & a2) -> void { return ecvl::Mul(a0, a1, a2); }, "", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"));
+	M("ecvl").def("Mul", [](const class ecvl::Image & a0, const class ecvl::Image & a1, class ecvl::Image & a2, enum ecvl::DataType const & a3) -> void { return ecvl::Mul(a0, a1, a2, a3); }, "", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"));
+	M("ecvl").def("Mul", (void (*)(const class ecvl::Image &, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::Mul, "C++: ecvl::Mul(const class ecvl::Image &, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
+
 	// ecvl::Div(const class ecvl::Image &, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool) file: line:126
 	M("ecvl").def("Div", [](const class ecvl::Image & a0, const class ecvl::Image & a1, class ecvl::Image & a2) -> void { return ecvl::Div(a0, a1, a2); }, "", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"));
 	M("ecvl").def("Div", [](const class ecvl::Image & a0, const class ecvl::Image & a1, class ecvl::Image & a2, enum ecvl::DataType const & a3) -> void { return ecvl::Div(a0, a1, a2, a3); }, "", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"));

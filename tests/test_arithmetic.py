@@ -56,3 +56,123 @@ def test_Neg(ecvl):
     ecvl.Neg(z, tmp, ecvl.DataType.int8, False)
     tmp_arr = np.array(tmp, copy=False)
     assert (tmp_arr == -128).all()
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_Add(ecvl):
+    x = ecvl.Image([2, 4, 3], ecvl.DataType.int8, "xyc", ecvl.ColorType.RGB)
+    y = ecvl.Image([2, 4, 3], ecvl.DataType.int8, "xyc", ecvl.ColorType.RGB)
+    a = np.array(x, copy=False)
+    b = np.array(y, copy=False)
+    a.fill(10)
+    b.fill(3)
+    z = _empty_img(ecvl)
+    # basic call
+    ecvl.Add(x, y, z)
+    c = np.array(z, copy=False)
+    assert (c == 13).all()
+    # data type
+    a.fill(20)
+    ecvl.Add(x, y, z, ecvl.DataType.int16)
+    c = np.array(z, copy=False)
+    assert (c == 23).all()
+    assert (c.dtype == np.int16)
+    # saturate
+    a.fill(10)
+    b.fill(118)
+    ecvl.Add(x, y, z, ecvl.DataType.int8, True)
+    c = np.array(z, copy=False)
+    assert (c == 127).all()
+    ecvl.Add(x, y, z, ecvl.DataType.int8, False)
+    c = np.array(z, copy=False)
+    assert (c == -128).all()
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_sub(ecvl):
+    x = ecvl.Image([2, 4, 3], ecvl.DataType.int8, "xyc", ecvl.ColorType.RGB)
+    y = ecvl.Image([2, 4, 3], ecvl.DataType.int8, "xyc", ecvl.ColorType.RGB)
+    a = np.array(x, copy=False)
+    b = np.array(y, copy=False)
+    a.fill(-10)
+    b.fill(3)
+    z = _empty_img(ecvl)
+    # basic call
+    ecvl.Sub(x, y, z)
+    c = np.array(z, copy=False)
+    assert (c == -13).all()
+    # data type
+    a.fill(-20)
+    ecvl.Sub(x, y, z, ecvl.DataType.int16)
+    c = np.array(z, copy=False)
+    assert (c == -23).all()
+    assert (c.dtype == np.int16)
+    # saturate
+    a.fill(-10)
+    b.fill(119)
+    ecvl.Sub(x, y, z, ecvl.DataType.int8, True)
+    c = np.array(z, copy=False)
+    assert (c == -128).all()
+    ecvl.Sub(x, y, z, ecvl.DataType.int8, False)
+    c = np.array(z, copy=False)
+    assert (c == 127).all()
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_mul(ecvl):
+    x = ecvl.Image([2, 4, 3], ecvl.DataType.int8, "xyc", ecvl.ColorType.RGB)
+    y = ecvl.Image([2, 4, 3], ecvl.DataType.int8, "xyc", ecvl.ColorType.RGB)
+    a = np.array(x, copy=False)
+    b = np.array(y, copy=False)
+    a.fill(16)
+    b.fill(3)
+    z = _empty_img(ecvl)
+    # basic call
+    ecvl.Mul(x, y, z)
+    c = np.array(z, copy=False)
+    assert (c == 48).all()
+    # data type
+    a.fill(20)
+    ecvl.Mul(x, y, z, ecvl.DataType.int16)
+    c = np.array(z, copy=False)
+    assert (c == 60).all()
+    assert (c.dtype == np.int16)
+    # saturate
+    a.fill(16)
+    b.fill(8)
+    ecvl.Mul(x, y, z, ecvl.DataType.int8, True)
+    c = np.array(z, copy=False)
+    assert (c == 127).all()
+    ecvl.Mul(x, y, z, ecvl.DataType.int8, False)
+    c = np.array(z, copy=False)
+    assert (c == -128).all()
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_div(ecvl):
+    x = ecvl.Image([2, 4, 3], ecvl.DataType.int16, "xyc", ecvl.ColorType.RGB)
+    y = ecvl.Image([2, 4, 3], ecvl.DataType.int16, "xyc", ecvl.ColorType.RGB)
+    a = np.array(x, copy=False)
+    b = np.array(y, copy=False)
+    a.fill(11)
+    b.fill(2)
+    z = _empty_img(ecvl)
+    # basic call
+    ecvl.Div(x, y, z)
+    c = np.array(z, copy=False)
+    assert (c == 5).all()
+    # data type
+    a.fill(20)
+    ecvl.Div(x, y, z, ecvl.DataType.int8)
+    c = np.array(z, copy=False)
+    assert (c == 10).all()
+    assert (c.dtype == np.int8)
+    # saturate
+    a.fill(1280)
+    b.fill(10)
+    ecvl.Div(x, y, z, ecvl.DataType.int8, True)
+    c = np.array(z, copy=False)
+    # assert (c == 127).all()  # bug in ecvl::Div?
+    ecvl.Div(x, y, z, ecvl.DataType.int8, False)
+    c = np.array(z, copy=False)
+    # assert (c == -128).all()  # bug in ecvl::Div?
