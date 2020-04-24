@@ -78,6 +78,16 @@ class ColorType(_ecvl.ColorType):
     YCbCr = _ecvl.ColorType.YCbCr
 
 
+class Device(_ecvl.Device):
+    """\
+    Enum class representing the supported devices.
+    """
+    NONE = _ecvl.Device.NONE
+    CPU = _ecvl.Device.CPU
+    GPU = _ecvl.Device.GPU
+    FPGA = _ecvl.Device.FPGA
+
+
 class Image(_ecvl.Image):
     r"""\
     Image class.
@@ -112,7 +122,10 @@ class Image(_ecvl.Image):
       axis (list of floats).
 
     :var datasize\_: size of image data in bytes.
+
     :var contiguous\_: whether the image is stored contiguously in memory
+
+    :var dev\_: image Device
     """
 
     @staticmethod
@@ -139,13 +152,15 @@ class Image(_ecvl.Image):
             spacings = []
         return _ecvl.Image(array, channels, colortype, spacings)
 
-    def __init__(self, dims, elemtype, channels, colortype, spacings=None):
+    def __init__(self, dims, elemtype, channels, colortype, spacings=None,
+                 dev=Device.CPU):
         """\
         :param dims: image dimensions
         :param elemtype: pixel type, a DataType
         :param channels: channels string
         :param colortype: a ColorType
         :param spacings: spacings between pixels
+        :param dev: image Device
         """
         if spacings is None:
             spacings = []
@@ -168,6 +183,22 @@ class Image(_ecvl.Image):
         :return: True if the image owns the data, False otherwise
         """
         return _ecvl.Image.IsOwner(self)
+
+    def Width(self):
+        """\
+        Get the image width.
+
+        :return: image width
+        """
+        return _ecvl.Image.Width(self)
+
+    def Height(self):
+        """\
+        Get the image height.
+
+        :return: image height
+        """
+        return _ecvl.Image.Height(self)
 
     def Channels(self):
         """\
@@ -216,6 +247,15 @@ class Image(_ecvl.Image):
         :return: None
         """
         return _ecvl.Image.Div(self, other, saturate)
+
+    def To(self, dev):
+        """\
+        Change the image device.
+
+        :param dev: new Device
+        :return: None
+        """
+        return _ecvl.Image.To(self, dev)
 
 
 class View_int8(_ecvl.View_int8):
