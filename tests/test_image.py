@@ -55,6 +55,29 @@ def test_five_dims(ecvl):
 
 
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_height_width_channels(ecvl):
+    img = ecvl.Image([3, 10, 8], ecvl.DataType.int8, "cxy", ecvl.ColorType.BGR)
+    assert img.Channels() == 3
+    assert img.Width() == 10
+    assert img.Height() == 8
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_extra_args(ecvl):
+    dims = [1, 2, 3, 4, 5]
+    spacings = [1.1, 1.1]
+    dev = ecvl.Device.CPU
+    img = ecvl.Image(dims, ecvl.DataType.uint8, "xyzoo", ecvl.ColorType.none,
+                     spacings, dev)
+    assert img.dims_ == dims
+    assert len(img.strides_) == len(dims)
+    assert img.spacings_ == pytest.approx(spacings)
+    assert img.dev_ == dev
+    img.To(ecvl.Device.CPU)
+    assert img.dev_ == dev
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
 def test_view(ecvl):
     x = ecvl.Image([5, 4, 3], ecvl.DataType.int8, "xyc", ecvl.ColorType.RGB)
     assert x.Channels() == 3
@@ -65,11 +88,13 @@ def test_view(ecvl):
     y[3, 3, 2] = 48
     y[4, 2, 1] = -127
     y[3, 2, 0] = -128
-    ecvl.Neg(x)
-    assert y[1, 2, 0] == -36
-    assert y[3, 3, 2] == -48
-    assert y[4, 2, 1] == 127
-    assert y[3, 2, 0] == -128
+    dst = _empty_img(ecvl)
+    ecvl.Neg(x, dst, ecvl.DataType.int8, False)
+    dst_view = ecvl.View_int8(dst)
+    assert dst_view[1, 2, 0] == -36
+    assert dst_view[3, 3, 2] == -48
+    assert dst_view[4, 2, 1] == 127
+    assert dst_view[3, 2, 0] == -128
 
 
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])

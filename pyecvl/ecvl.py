@@ -78,6 +78,16 @@ class ColorType(_ecvl.ColorType):
     YCbCr = _ecvl.ColorType.YCbCr
 
 
+class Device(_ecvl.Device):
+    """\
+    Enum class representing the supported devices.
+    """
+    NONE = _ecvl.Device.NONE
+    CPU = _ecvl.Device.CPU
+    GPU = _ecvl.Device.GPU
+    FPGA = _ecvl.Device.FPGA
+
+
 class Image(_ecvl.Image):
     r"""\
     Image class.
@@ -112,7 +122,10 @@ class Image(_ecvl.Image):
       axis (list of floats).
 
     :var datasize\_: size of image data in bytes.
+
     :var contiguous\_: whether the image is stored contiguously in memory
+
+    :var dev\_: image Device
     """
 
     @staticmethod
@@ -139,13 +152,15 @@ class Image(_ecvl.Image):
             spacings = []
         return _ecvl.Image(array, channels, colortype, spacings)
 
-    def __init__(self, dims, elemtype, channels, colortype, spacings=None):
+    def __init__(self, dims, elemtype, channels, colortype, spacings=None,
+                 dev=Device.CPU):
         """\
         :param dims: image dimensions
         :param elemtype: pixel type, a DataType
         :param channels: channels string
         :param colortype: a ColorType
         :param spacings: spacings between pixels
+        :param dev: image Device
         """
         if spacings is None:
             spacings = []
@@ -168,6 +183,22 @@ class Image(_ecvl.Image):
         :return: True if the image owns the data, False otherwise
         """
         return _ecvl.Image.IsOwner(self)
+
+    def Width(self):
+        """\
+        Get the image width.
+
+        :return: image width
+        """
+        return _ecvl.Image.Width(self)
+
+    def Height(self):
+        """\
+        Get the image height.
+
+        :return: image height
+        """
+        return _ecvl.Image.Height(self)
 
     def Channels(self):
         """\
@@ -216,6 +247,15 @@ class Image(_ecvl.Image):
         :return: None
         """
         return _ecvl.Image.Div(self, other, saturate)
+
+    def To(self, dev):
+        """\
+        Change the image device.
+
+        :param dev: new Device
+        :return: None
+        """
+        return _ecvl.Image.To(self, dev)
 
 
 class View_int8(_ecvl.View_int8):
@@ -294,47 +334,89 @@ def RearrangeChannels(src, dst, channels, new_type=None):
 
 # == arithmetic ==
 
-def And(src1, src2, dst):
-    """\
-    Boolean ``and`` between two images.
-
-    Performs boolean ``and`` between two images with DataType.uint8 and
-    ColorType.GRAY. The result is stored into ``dst``.
-
-    :param src1: first image operand
-    :param src2: second image operand
-    :param dst: destination image
-    :return: None
-    """
-    return _ecvl.And(src1, src2, dst)
-
-
-def Neg(img):
+def Neg(src, dst, dst_type=DataType.none, saturate=True):
     """\
     In-place negation of an image.
 
-    Negates every value of ``img``, and stores the the result in the same
-    image. The type of the image is not changed.
+    Negates every value of ``src``, and stores the the result in ``dst``
+    with the specified type.
 
-    :param img: image to be negated
-    :return: negated image
-    """
-    return _ecvl.Neg(img)
-
-
-def Or(src1, src2, dst):
-    """\
-    Boolean ``or`` between two images.
-
-    Performs boolean ``or`` between two images with DataType.uint8 and
-    ColorType.GRAY. The result is stored into ``dst``.
-
-    :param src1: first image operand
-    :param src2: second image operand
+    :param src: source image
     :param dst: destination image
+    :param dst_type: destination image DataType
+    :param saturate: whether to apply saturation
     :return: None
     """
-    return _ecvl.Or(src1, src2, dst)
+    return _ecvl.Neg(src, dst, dst_type, saturate)
+
+
+def Add(src1, src2, dst, dst_type=DataType.none, saturate=True):
+    """\
+    Add two images.
+
+    Adds ``src1`` to ``src2`` and stores the the result in ``dst`` with the
+    specified type.
+
+    :param src1: source image 1
+    :param src2: source image 2
+    :param dst: destination image
+    :param dst_type: destination image DataType
+    :param saturate: whether to apply saturation
+    :return: None
+
+    """
+    return _ecvl.Add(src1, src2, dst, dst_type, saturate)
+
+
+def Sub(src1, src2, dst, dst_type=DataType.none, saturate=True):
+    """\
+    Subtract an image from another.
+
+    Subtracts ``src2`` from ``src1`` and stores the the result in ``dst`` with
+    the specified type.
+
+    :param src1: source image 1
+    :param src2: source image 2
+    :param dst: destination image
+    :param dst_type: destination image DataType
+    :param saturate: whether to apply saturation
+    :return: None
+    """
+    return _ecvl.Sub(src1, src2, dst, dst_type, saturate)
+
+
+def Mul(src1, src2, dst, dst_type=DataType.none, saturate=True):
+    """\
+    Multiply two images.
+
+    Muliplies ``src1`` by ``src2`` and stores the the result in ``dst`` with
+    the specified type.
+
+    :param src1: source image 1
+    :param src2: source image 2
+    :param dst: destination image
+    :param dst_type: destination image DataType
+    :param saturate: whether to apply saturation
+    :return: None
+    """
+    return _ecvl.Mul(src1, src2, dst, dst_type, saturate)
+
+
+def Div(src1, src2, dst, dst_type=DataType.none, saturate=True):
+    """\
+    Divide an image by another.
+
+    Divides ``src1`` by ``src2`` and stores the the result in ``dst`` with
+    the specified type.
+
+    :param src1: source image 1
+    :param src2: source image 2
+    :param dst: destination image
+    :param dst_type: destination image DataType
+    :param saturate: whether to apply saturation
+    :return: None
+    """
+    return _ecvl.Div(src1, src2, dst, dst_type, saturate)
 
 
 # == imgproc ==
