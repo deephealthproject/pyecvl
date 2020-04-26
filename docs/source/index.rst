@@ -2,14 +2,19 @@ Welcome to PyECVL's documentation!
 ==================================
 
 PyECVL is a Python wrapper for `ECVL
-<https://deephealthproject.github.io/ecvl/index.html>`_, the European Computer
+<https://github.com/deephealthproject/ecvl>`_, the European Computer
 Vision Library.
+
+The source code for PyECVL is available on the `GitHub repo
+<https://github.com/deephealthproject/pyecvl>`_.
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+   installation
    api/index
+
 
 Indices and tables
 ==================
