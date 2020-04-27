@@ -13,6 +13,7 @@ The source code for PyECVL is available on the `GitHub repo
    :caption: Contents:
 
    installation
+   getting_started
    api/index
 
 
