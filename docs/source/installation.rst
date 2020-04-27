@@ -7,7 +7,7 @@ To install PyECVL, you need to install ECVL first. Installation instructions
 for ECVL are available in the `ECVL README
 <https://github.com/deephealthproject/ecvl/blob/master/README.md>`_.
 
-As explained in the above README, Some ECVL components are optional. By
+As shown in the above README, Some ECVL components are optional. By
 default, PyECVL assumes that ECVL has been installed with DICOM, OpenSlide and
 EDDL support.
 
@@ -20,9 +20,9 @@ PyECVL version depends on specific ECVL and PyEDDL versions. If you are
 installing from the GitHub repo, the correct versions of ECVL and PyEDDL are
 available from the submodules (``third_party`` dir).
 
-The following sections contain a complete walkthrough to install the current
-version of PyECVL from scratch, assuming installation of all EDDL and ECVL
-optional modules. We use Ubuntu Linux as an example platform.
+The following sections contain instructions to install PyECVL from scratch,
+assuming installation of all EDDL and ECVL optional modules. We use Ubuntu
+Linux as an example platform.
 
 
 Install ECVL and EDDL dependencies
@@ -89,7 +89,7 @@ The EDDL code includes Eigen headers like in this example: ``#include
 <Eigen/Dense>``, e.g., with ``Eigen`` as the root directory. However, Eigen
 installations usually have the header rooted at ``eigen3`` (for instance, the
 apt installation places them in ``/usr/include/eigen3``). To work around this
-you can either add a symlink or set `CPATH`, e.g.::
+you can either add a symlink or set ``CPATH``, e.g.::
 
     export CPATH="/usr/include/eigen3:${CPATH}"
 
@@ -99,3 +99,61 @@ Install pyeddl and pyecvl::
     python3 setup.py install
     popd
     python3 setup.py install
+
+Alternatively, in the case of tagged releases, you can also install PyEDDL and
+PyECVL with pip. The following table shows the required ECVL and PyEDDL
+versions for each PyECVL version:
+
++----------------+--------------+----------------+
+| PyECVL version | ECVL version | PyEDDL version |
++================+==============+================+
+| 0.1.0          | 0.1.0        | 0.1.0          |
++----------------+--------------+----------------+
+
+Thus, for instance, to install PyECVL 0.1.0::
+
+    python3 -m pip install pyeddl==0.1.0
+    python3 -m pip install pyecvl==0.1.0
+
+
+Disabling unwanted modules
+--------------------------
+
+By default, PyECVL assumes a complete ECVL installation, including optional
+modules (except for the GUI), and builds bindings for all of them. You can
+disable support for specific modules via environment variables. For instance,
+suppose you installed ECVL without OpenSlide support: by default, PyECVL will
+try to build the bindings for OpenSlide-specific ECVL tools and link the
+OpenSlide library, which might not even be present on your system. To avoid
+this, set the ``ECVL_WITH_OPENSLIDE`` environment variable to ``OFF`` (or
+``FALSE``) before building PyECVL. Similarly, you can turn off DICOM and EDDL
+support by setting ``ECVL_WITH_DICOM`` and ``ECVL_EDDL`` to ``OFF``.
+
+
+ECVL installed in an arbitrary directory
+----------------------------------------
+
+The above installation instructions assume installation in standard system
+paths (such as ``/usr/local/include``, ``/usr/local/lib``). However, ECVL can
+be installed in an arbitrary directory, for instance::
+
+    cd third_party/ecvl
+    mkdir build
+    cd build
+    cmake -DCMAKE_INSTALL_PREFIX=/home/myuser/ecvl -DECVL_WITH_DICOM=ON \
+      -DECVL_WITH_OPENSLIDE=ON -DECVL_DATASET=ON -DECVL_BUILD_EDDL=ON ..
+    make
+    make install
+
+You can tell the PyECVL setup script about this via the ``ECVL_DIR``
+environment variable::
+
+    export ECVL_DIR=/home/myuser/ecvl
+    python3 setup.py install
+
+In this way, ``setup.py`` will look for additional include files in
+``/home/myuser/ecvl/include`` and for additional libraries in
+``/home/myuser/ecvl/lib``.
+
+Similarly, if EDDL is installed in an arbitrary path, you can tell the setup
+script via the ``EDDL_DIR`` environment variable.
