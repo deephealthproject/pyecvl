@@ -81,7 +81,21 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyecvl.ecvl</span></code> — ecvl API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyecvl.ecvl</span></code> — ecvl API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#data-types">Data types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#color-types">Color types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#device-types">Device types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#image">Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#arithmetic-operations">Arithmetic operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#image-processing">Image processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#deephealth-dataset-parser">DeepHealth dataset parser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#augmentations">Augmentations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#image-i-o">Image I/O</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#eddl-support">EDDL support</a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -148,276 +162,91 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-pyecvl.ecvl">
-<span id="pyecvl-ecvl-ecvl-api"></span><span id="ecvl"></span><h1><a class="reference internal" href="#module-pyecvl.ecvl" title="pyecvl.ecvl"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyecvl.ecvl</span></code></a> — ecvl API<a class="headerlink" href="#module-pyecvl.ecvl" title="Permalink to this headline">¶</a></h1>
-<dl class="py function">
-<dt id="pyecvl.ecvl.AdditiveLaplaceNoise">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">AdditiveLaplaceNoise</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">std_dev</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AdditiveLaplaceNoise" title="Permalink to this definition">¶</a></dt>
-<dd><p>Adds Laplace distributed noise to an image.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>src</strong> – source image</p></li>
-<li><p><strong>dst</strong> – destination image</p></li>
-<li><p><strong>std_dev</strong> – standard deviation of the noise-generating distribution.
-Suggested values are around 255 * 0.05 for uint8 images</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.AdditivePoissonNoise">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">AdditivePoissonNoise</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">lambda_</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AdditivePoissonNoise" title="Permalink to this definition">¶</a></dt>
-<dd><p>Adds Poisson distributed noise to an image.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>src</strong> – source image</p></li>
-<li><p><strong>dst</strong> – destination image</p></li>
-<li><p><strong>lambda_</strong> – lambda parameter of the Poisson distribution</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.And">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">And</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src1</span></em>, <em class="sig-param"><span class="n">src2</span></em>, <em class="sig-param"><span class="n">dst</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.And" title="Permalink to this definition">¶</a></dt>
-<dd><p>Boolean <code class="docutils literal notranslate"><span class="pre">and</span></code> between two images.</p>
-<p>Performs boolean <code class="docutils literal notranslate"><span class="pre">and</span></code> between two images with DataType.uint8 and
-ColorType.GRAY. The result is stored into <code class="docutils literal notranslate"><span class="pre">dst</span></code>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>src1</strong> – first image operand</p></li>
-<li><p><strong>src2</strong> – second image operand</p></li>
-<li><p><strong>dst</strong> – destination image</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
+  <div class="section" id="pyecvl-ecvl-ecvl-api">
+<span id="ecvl"></span><h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyecvl.ecvl</span></code> — ecvl API<a class="headerlink" href="#pyecvl-ecvl-ecvl-api" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="data-types">
+<h2>Data types<a class="headerlink" href="#data-types" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt id="pyecvl.ecvl.AugAdditiveLaplaceNoise">
-<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">AugAdditiveLaplaceNoise</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">std_dev</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugAdditiveLaplaceNoise" title="Permalink to this definition">¶</a></dt>
-<dd><p>Augmentation wrapper for AdditiveLaplaceNoise.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>std_dev</strong> – range of values <code class="docutils literal notranslate"><span class="pre">[min,</span> <span class="pre">max]</span></code> to randomly select the           standard deviation of the noise generating distribution. Suggested           values are around 255 * 0.05 for uint8 images</p>
-</dd>
-</dl>
-</dd></dl>
+<dt id="pyecvl.ecvl.DataType">
+<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">DataType</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n">pyecvl._core.ecvl.DataType</span></em>, <em class="sig-param"><span class="n">arg0</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyecvl.ecvl.DataType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enum class which defines data types allowed for images.</p>
+<dl class="py attribute">
+<dt id="pyecvl.ecvl.DataType.float32">
+<code class="sig-name descname">float32</code><em class="property"> = DataType.float32</em><a class="headerlink" href="#pyecvl.ecvl.DataType.float32" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
-<dl class="py class">
-<dt id="pyecvl.ecvl.AugAdditivePoissonNoise">
-<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">AugAdditivePoissonNoise</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lambda_</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugAdditivePoissonNoise" title="Permalink to this definition">¶</a></dt>
-<dd><p>Augmentation wrapper for AdditivePoissonNoise.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>lambda_</strong> – range of values <code class="docutils literal notranslate"><span class="pre">[min,</span> <span class="pre">max]</span></code> to randomly select           the lambda of the noise generating distribution. Suggested values           are around 0.0 to 10.0.</p>
-</dd>
-</dl>
-</dd></dl>
+<dl class="py attribute">
+<dt id="pyecvl.ecvl.DataType.float64">
+<code class="sig-name descname">float64</code><em class="property"> = DataType.float64</em><a class="headerlink" href="#pyecvl.ecvl.DataType.float64" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
-<dl class="py class">
-<dt id="pyecvl.ecvl.AugCoarseDropout">
-<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">AugCoarseDropout</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p</span></em>, <em class="sig-param"><span class="n">drop_size</span></em>, <em class="sig-param"><span class="n">per_channel</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugCoarseDropout" title="Permalink to this definition">¶</a></dt>
-<dd><p>Augmentation wrapper for CoarseDropout.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>p</strong> – range of values <code class="docutils literal notranslate"><span class="pre">[min,</span> <span class="pre">max]</span></code> to randomly select the
-probability of any rectangle being set to zero</p></li>
-<li><p><strong>drop_size</strong> – range of values <code class="docutils literal notranslate"><span class="pre">[min,</span> <span class="pre">max]</span></code> to randomly select
-the size of rectangles in percentage of the input image</p></li>
-<li><p><strong>per_channel</strong> – probability of each image to use the same value
-for all channels of a pixel</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
+<dl class="py attribute">
+<dt id="pyecvl.ecvl.DataType.int16">
+<code class="sig-name descname">int16</code><em class="property"> = DataType.int16</em><a class="headerlink" href="#pyecvl.ecvl.DataType.int16" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
-<dl class="py class">
-<dt id="pyecvl.ecvl.AugFlip">
-<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">AugFlip</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p</span><span class="o">=</span><span class="default_value">0.5</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugFlip" title="Permalink to this definition">¶</a></dt>
-<dd><p>Augmentation wrapper for Flip2D.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>p</strong> – probability of each image to get flipped</p>
-</dd>
-</dl>
-</dd></dl>
+<dl class="py attribute">
+<dt id="pyecvl.ecvl.DataType.int32">
+<code class="sig-name descname">int32</code><em class="property"> = DataType.int32</em><a class="headerlink" href="#pyecvl.ecvl.DataType.int32" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
-<dl class="py class">
-<dt id="pyecvl.ecvl.AugGammaContrast">
-<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">AugGammaContrast</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">gamma</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugGammaContrast" title="Permalink to this definition">¶</a></dt>
-<dd><p>Augmentation wrapper for GammaContrast.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>gamma</strong> – range of values <code class="docutils literal notranslate"><span class="pre">[min,</span> <span class="pre">max]</span></code> to randomly select the           exponent for the contrast adjustment. Suggested values are around           0.5 to 2.0.</p>
-</dd>
-</dl>
-</dd></dl>
+<dl class="py attribute">
+<dt id="pyecvl.ecvl.DataType.int64">
+<code class="sig-name descname">int64</code><em class="property"> = DataType.int64</em><a class="headerlink" href="#pyecvl.ecvl.DataType.int64" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
-<dl class="py class">
-<dt id="pyecvl.ecvl.AugGaussianBlur">
-<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">AugGaussianBlur</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sigma</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugGaussianBlur" title="Permalink to this definition">¶</a></dt>
-<dd><p>Augmentation wrapper for GaussianBlur.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>sigma</strong> – sigma range <code class="docutils literal notranslate"><span class="pre">[min,</span> <span class="pre">max]</span></code> to randomly select from.</p>
-</dd>
-</dl>
-</dd></dl>
+<dl class="py attribute">
+<dt id="pyecvl.ecvl.DataType.int8">
+<code class="sig-name descname">int8</code><em class="property"> = DataType.int8</em><a class="headerlink" href="#pyecvl.ecvl.DataType.int8" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
-<dl class="py class">
-<dt id="pyecvl.ecvl.AugMirror">
-<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">AugMirror</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p</span><span class="o">=</span><span class="default_value">0.5</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugMirror" title="Permalink to this definition">¶</a></dt>
-<dd><p>Augmentation wrapper for Mirror2D.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>p</strong> – probability of each image to get mirrored</p>
-</dd>
-</dl>
-</dd></dl>
+<dl class="py attribute">
+<dt id="pyecvl.ecvl.DataType.none">
+<code class="sig-name descname">none</code><em class="property"> = DataType.none</em><a class="headerlink" href="#pyecvl.ecvl.DataType.none" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
-<dl class="py class">
-<dt id="pyecvl.ecvl.AugResizeDim">
-<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">AugResizeDim</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dims</span></em>, <em class="sig-param"><span class="n">interp</span><span class="o">=</span><span class="default_value">InterpolationType.linear</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugResizeDim" title="Permalink to this definition">¶</a></dt>
-<dd><p>Augmentation wrapper for ResizeDim.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dims</strong> – list of integers that specifies the new size of each
-dimension</p></li>
-<li><p><strong>interp</strong> – InterpolationType to be used</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
+<dl class="py attribute">
+<dt id="pyecvl.ecvl.DataType.uint16">
+<code class="sig-name descname">uint16</code><em class="property"> = DataType.uint16</em><a class="headerlink" href="#pyecvl.ecvl.DataType.uint16" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
-<dl class="py class">
-<dt id="pyecvl.ecvl.AugResizeScale">
-<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">AugResizeScale</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scale</span></em>, <em class="sig-param"><span class="n">interp</span><span class="o">=</span><span class="default_value">InterpolationType.linear</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugResizeScale" title="Permalink to this definition">¶</a></dt>
-<dd><p>Augmentation wrapper for ResizeScale.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>scale</strong> – list of floats that specifies the scale to apply to
-each dimension</p></li>
-<li><p><strong>interp</strong> – InterpolationType to be used</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py class">
-<dt id="pyecvl.ecvl.AugRotate">
-<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">AugRotate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">angle</span></em>, <em class="sig-param"><span class="n">center</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scale</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">interp</span><span class="o">=</span><span class="default_value">InterpolationType.linear</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugRotate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Augmentation wrapper for Rotate2D.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>angle</strong> – range of degrees <code class="docutils literal notranslate"><span class="pre">[min,</span> <span class="pre">max]</span></code> to randomly select from</p></li>
-<li><p><strong>center</strong> – a list of floats representing the coordinates of the
-rotation center. If None, the center of the image is used</p></li>
-<li><p><strong>scale</strong> – scaling factor</p></li>
-<li><p><strong>interp</strong> – InterpolationType to be used</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py class">
-<dt id="pyecvl.ecvl.AugmentationParam">
-<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">AugmentationParam</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugmentationParam" title="Permalink to this definition">¶</a></dt>
-<dd><p>Augmentation parameters which must be randomly generated within a range.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Variables</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>min_</strong> – minimum value for the random range</p></li>
-<li><p><strong>max_</strong> – maximum value for the random range</p></li>
-<li><p><strong>value_</strong> – generated parameter value</p></li>
-</ul>
-</dd>
-</dl>
-<p>Overloaded function.</p>
-<ol class="arabic simple">
-<li><p>__init__(self: pyecvl._core.ecvl.AugmentationParam) -&gt; None</p></li>
-<li><p>__init__(self: pyecvl._core.ecvl.AugmentationParam, min: float, max: float) -&gt; None</p></li>
-</ol>
-<dl class="py method">
-<dt id="pyecvl.ecvl.AugmentationParam.GenerateValue">
-<code class="sig-name descname">GenerateValue</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugmentationParam.GenerateValue" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate the random value between min_ and max_.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyecvl.ecvl.AugmentationParam.SetSeed">
-<em class="property">static </em><code class="sig-name descname">SetSeed</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">seed</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugmentationParam.SetSeed" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set a fixed seed for the random generated values.</p>
-<p>Useful to reproduce experiments with same augmentations.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>seed</strong> – seed value</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
+<dl class="py attribute">
+<dt id="pyecvl.ecvl.DataType.uint8">
+<code class="sig-name descname">uint8</code><em class="property"> = DataType.uint8</em><a class="headerlink" href="#pyecvl.ecvl.DataType.uint8" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
-<dt id="pyecvl.ecvl.ChangeColorSpace">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">ChangeColorSpace</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">new_type</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ChangeColorSpace" title="Permalink to this definition">¶</a></dt>
-<dd><p>Copy the <code class="docutils literal notranslate"><span class="pre">src</span></code> image into the <code class="docutils literal notranslate"><span class="pre">dst</span></code> image changing the color space.</p>
-<p>Source and destination can be the same image.</p>
+<dt id="pyecvl.ecvl.DataTypeSize">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">DataTypeSize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.DataTypeSize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the size in bytes of a given DataType.</p>
+<p>With no arguments, get the number of existing DataType members.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>src</strong> – source image</p></li>
-<li><p><strong>dst</strong> – destination image</p></li>
-<li><p><strong>new_type</strong> – a ColorType specifying the new color space</p></li>
-</ul>
+<dd class="field-odd"><p><strong>dt</strong> – a DataType.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
+<dd class="field-even"><p>the DataType size in bytes, or the number of existing DataType
+members if called with no arguments</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt id="pyecvl.ecvl.CoarseDropout">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">CoarseDropout</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">p</span></em>, <em class="sig-param"><span class="n">drop_size</span></em>, <em class="sig-param"><span class="n">per_channel</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.CoarseDropout" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set rectangular areas within an image to zero.</p>
+<dt id="pyecvl.ecvl.DataTypeSignedSize">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">DataTypeSignedSize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.DataTypeSignedSize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the number of existing signed DataType members.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>src</strong> – source image</p></li>
-<li><p><strong>dst</strong> – destination image</p></li>
-<li><p><strong>p</strong> – probability of any rectangle being set to zero</p></li>
-<li><p><strong>drop_size</strong> – size of rectangles in percentage of the input image</p></li>
-<li><p><strong>per_channel</strong> – whether to use the same value for all channels</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the number of existing signed DataType members</p>
 </dd>
 </dl>
 </dd></dl>
 
+</div>
+<div class="section" id="color-types">
+<h2>Color types<a class="headerlink" href="#color-types" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="pyecvl.ecvl.ColorType">
 <em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">ColorType</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n">pyecvl._core.ecvl.ColorType</span></em>, <em class="sig-param"><span class="n">arg0</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyecvl.ecvl.ColorType" title="Permalink to this definition">¶</a></dt>
@@ -459,22 +288,254 @@ rotation center. If None, the center of the image is used</p></li>
 
 </dd></dl>
 
-<dl class="py function">
-<dt id="pyecvl.ecvl.ConnectedComponentsLabeling">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">ConnectedComponentsLabeling</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ConnectedComponentsLabeling" title="Permalink to this definition">¶</a></dt>
-<dd><p>Label connected components in the input image.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">src</span></code> image must be “xyc”, only one color channel and DataType.uint8.</p>
+</div>
+<div class="section" id="device-types">
+<h2>Device types<a class="headerlink" href="#device-types" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyecvl.ecvl.Device">
+<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">Device</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n">pyecvl._core.ecvl.Device</span></em>, <em class="sig-param"><span class="n">arg0</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyecvl.ecvl.Device" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enum class representing the supported devices.</p>
+<dl class="py attribute">
+<dt id="pyecvl.ecvl.Device.CPU">
+<code class="sig-name descname">CPU</code><em class="property"> = Device.CPU</em><a class="headerlink" href="#pyecvl.ecvl.Device.CPU" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pyecvl.ecvl.Device.FPGA">
+<code class="sig-name descname">FPGA</code><em class="property"> = Device.FPGA</em><a class="headerlink" href="#pyecvl.ecvl.Device.FPGA" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pyecvl.ecvl.Device.GPU">
+<code class="sig-name descname">GPU</code><em class="property"> = Device.GPU</em><a class="headerlink" href="#pyecvl.ecvl.Device.GPU" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pyecvl.ecvl.Device.NONE">
+<code class="sig-name descname">NONE</code><em class="property"> = Device.NONE</em><a class="headerlink" href="#pyecvl.ecvl.Device.NONE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="image">
+<h2>Image<a class="headerlink" href="#image" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyecvl.ecvl.Image">
+<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">Image</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dims</span></em>, <em class="sig-param"><span class="n">elemtype</span></em>, <em class="sig-param"><span class="n">channels</span></em>, <em class="sig-param"><span class="n">colortype</span></em>, <em class="sig-param"><span class="n">spacings</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dev</span><span class="o">=</span><span class="default_value">Device.CPU</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Image class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>elemtype_</strong> – image pixel type, a DataType</p></li>
+<li><p><strong>elemsize_</strong> – image pixel size in bytes</p></li>
+<li><p><strong>channels_</strong> – a string describing the image planes layout. Each
+character provides information on the corresponding channel. The
+possible values are: ‘x’: horizontal spatial dimension; ‘y’: vertical
+spatial dimension; ‘z’: depth spatial dimension; ‘c’: color dimension;
+‘t’: temporal dimension; ‘o’: any other dimension. For example, “xyc”
+describes a 2-dimensional image structured in color planes. This could
+be for example a ColorType.GRAY Image with dims_[2] = 1 or a
+ColorType.RGB Image with dims_[2] = 3. The ColorType constrains the
+value of the dimension corresponding to the color channel. Another
+example is “cxy” with dims_[0] = 3 and ColorType.BGR. In this case the
+color dimension is the one which changes faster, as it happens in
+libraries such as OpenCV.</p></li>
+<li><p><strong>colortype_</strong> – image ColorType. If different from ColorType.none, the
+channels_ string must contain a ‘c’ and the corresponding dimension must
+have the appropriate value.</p></li>
+<li><p><strong>spacings_</strong> – space in mm between consecutive pixels/voxels on each
+axis (list of floats).</p></li>
+<li><p><strong>datasize_</strong> – size of image data in bytes.</p></li>
+<li><p><strong>contiguous_</strong> – whether the image is stored contiguously in memory</p></li>
+<li><p><strong>dev_</strong> – image Device</p></li>
+</ul>
+</dd>
+<dt class="field-even">Dims_</dt>
+<dd class="field-even"><p>image dimensions in pixels/voxels (list of integers)</p>
+</dd>
+<dt class="field-odd">Strides_</dt>
+<dd class="field-odd"><p>the number of bytes the internal data pointer has to skip to
+get to the next pixel/voxel in the corresponding dimension</p>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>dims</strong> – image dimensions</p></li>
+<li><p><strong>elemtype</strong> – pixel type, a DataType</p></li>
+<li><p><strong>channels</strong> – channels string</p></li>
+<li><p><strong>colortype</strong> – a ColorType</p></li>
+<li><p><strong>spacings</strong> – spacings between pixels</p></li>
+<li><p><strong>dev</strong> – image Device</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="pyecvl.ecvl.Image.Add">
+<code class="sig-name descname">Add</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em>, <em class="sig-param"><span class="n">saturate</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Image.Add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add data from another image to this image’s data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>src</strong> – source image</p></li>
-<li><p><strong>dst</strong> – destination image</p></li>
+<li><p><strong>other</strong> – other image</p></li>
+<li><p><strong>saturate</strong> – in case of overflow, set values to limit for data type</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>None</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyecvl.ecvl.Image.Channels">
+<code class="sig-name descname">Channels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Image.Channels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the number of channels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>number of channels</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyecvl.ecvl.Image.Div">
+<code class="sig-name descname">Div</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em>, <em class="sig-param"><span class="n">saturate</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Image.Div" title="Permalink to this definition">¶</a></dt>
+<dd><p>Divide data from this image by another image’s data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>other</strong> – other image</p></li>
+<li><p><strong>saturate</strong> – in case of overflow, set values to limit for data type</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyecvl.ecvl.Image.Height">
+<code class="sig-name descname">Height</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Image.Height" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the image height.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>image height</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyecvl.ecvl.Image.IsEmpty">
+<code class="sig-name descname">IsEmpty</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Image.IsEmpty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether the image contains data or not.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if the image contains data, False otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyecvl.ecvl.Image.IsOwner">
+<code class="sig-name descname">IsOwner</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Image.IsOwner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether the image owns the data or not.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if the image owns the data, False otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyecvl.ecvl.Image.Mul">
+<code class="sig-name descname">Mul</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em>, <em class="sig-param"><span class="n">saturate</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Image.Mul" title="Permalink to this definition">¶</a></dt>
+<dd><p>Multiply data from this image by another image’s data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>other</strong> – other image</p></li>
+<li><p><strong>saturate</strong> – in case of overflow, set values to limit for data type</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyecvl.ecvl.Image.Sub">
+<code class="sig-name descname">Sub</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em>, <em class="sig-param"><span class="n">saturate</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Image.Sub" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subtract data from another image from this image’s data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>other</strong> – other image</p></li>
+<li><p><strong>saturate</strong> – in case of overflow, set values to limit for data type</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyecvl.ecvl.Image.To">
+<code class="sig-name descname">To</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dev</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Image.To" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the image device.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dev</strong> – new Device</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyecvl.ecvl.Image.Width">
+<code class="sig-name descname">Width</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Image.Width" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the image width.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>image width</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyecvl.ecvl.Image.empty">
+<em class="property">static </em><code class="sig-name descname">empty</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Image.empty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an empty image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>an empty image</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyecvl.ecvl.Image.fromarray">
+<em class="property">static </em><code class="sig-name descname">fromarray</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">array</span></em>, <em class="sig-param"><span class="n">channels</span></em>, <em class="sig-param"><span class="n">colortype</span></em>, <em class="sig-param"><span class="n">spacings</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Image.fromarray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an image from a NumPy array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>array</strong> – a NumPy array</p></li>
+<li><p><strong>channels</strong> – channels string</p></li>
+<li><p><strong>colortype</strong> – a ColorType</p></li>
+<li><p><strong>spacings</strong> – spacings between pixels</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>an image containing the same data as the input array</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py function">
@@ -515,6 +576,1238 @@ data owner, the procedure will throw an exception</p></li>
 <dd class="field-even"><p>None</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.RearrangeChannels">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">RearrangeChannels</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">channels</span></em>, <em class="sig-param"><span class="n">new_type</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.RearrangeChannels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change image dimensions order.</p>
+<p>Changes the order of the <code class="docutils literal notranslate"><span class="pre">src</span></code> image dimensions, saving the result into
+the <code class="docutils literal notranslate"><span class="pre">dst</span></code> image. The new order can be specified as a string through the
+<code class="docutils literal notranslate"><span class="pre">channels</span></code> parameter. <code class="docutils literal notranslate"><span class="pre">src</span></code> and <code class="docutils literal notranslate"><span class="pre">dst</span></code> can be the same image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – source image</p></li>
+<li><p><strong>dst</strong> – destination image</p></li>
+<li><p><strong>channels</strong> – new order for the image channels, as a string</p></li>
+<li><p><strong>new_type</strong> – new DataType for the destination image. If None, the
+destination image will preserve its type if it is not empty, otherwise
+it will have the same type as the source image</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="arithmetic-operations">
+<h2>Arithmetic operations<a class="headerlink" href="#arithmetic-operations" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="pyecvl.ecvl.Neg">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">Neg</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">dst_type</span><span class="o">=</span><span class="default_value">DataType.none</span></em>, <em class="sig-param"><span class="n">saturate</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Neg" title="Permalink to this definition">¶</a></dt>
+<dd><p>In-place negation of an image.</p>
+<p>Negates every value of <code class="docutils literal notranslate"><span class="pre">src</span></code>, and stores the the result in <code class="docutils literal notranslate"><span class="pre">dst</span></code>
+with the specified type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – source image</p></li>
+<li><p><strong>dst</strong> – destination image</p></li>
+<li><p><strong>dst_type</strong> – destination image DataType</p></li>
+<li><p><strong>saturate</strong> – whether to apply saturation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.Add">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">Add</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src1</span></em>, <em class="sig-param"><span class="n">src2</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">dst_type</span><span class="o">=</span><span class="default_value">DataType.none</span></em>, <em class="sig-param"><span class="n">saturate</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add two images.</p>
+<p>Adds <code class="docutils literal notranslate"><span class="pre">src1</span></code> to <code class="docutils literal notranslate"><span class="pre">src2</span></code> and stores the the result in <code class="docutils literal notranslate"><span class="pre">dst</span></code> with the
+specified type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src1</strong> – source image 1</p></li>
+<li><p><strong>src2</strong> – source image 2</p></li>
+<li><p><strong>dst</strong> – destination image</p></li>
+<li><p><strong>dst_type</strong> – destination image DataType</p></li>
+<li><p><strong>saturate</strong> – whether to apply saturation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.Sub">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">Sub</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src1</span></em>, <em class="sig-param"><span class="n">src2</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">dst_type</span><span class="o">=</span><span class="default_value">DataType.none</span></em>, <em class="sig-param"><span class="n">saturate</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Sub" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subtract an image from another.</p>
+<p>Subtracts <code class="docutils literal notranslate"><span class="pre">src2</span></code> from <code class="docutils literal notranslate"><span class="pre">src1</span></code> and stores the the result in <code class="docutils literal notranslate"><span class="pre">dst</span></code> with
+the specified type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src1</strong> – source image 1</p></li>
+<li><p><strong>src2</strong> – source image 2</p></li>
+<li><p><strong>dst</strong> – destination image</p></li>
+<li><p><strong>dst_type</strong> – destination image DataType</p></li>
+<li><p><strong>saturate</strong> – whether to apply saturation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.Mul">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">Mul</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src1</span></em>, <em class="sig-param"><span class="n">src2</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">dst_type</span><span class="o">=</span><span class="default_value">DataType.none</span></em>, <em class="sig-param"><span class="n">saturate</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Mul" title="Permalink to this definition">¶</a></dt>
+<dd><p>Multiply two images.</p>
+<p>Muliplies <code class="docutils literal notranslate"><span class="pre">src1</span></code> by <code class="docutils literal notranslate"><span class="pre">src2</span></code> and stores the the result in <code class="docutils literal notranslate"><span class="pre">dst</span></code> with
+the specified type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src1</strong> – source image 1</p></li>
+<li><p><strong>src2</strong> – source image 2</p></li>
+<li><p><strong>dst</strong> – destination image</p></li>
+<li><p><strong>dst_type</strong> – destination image DataType</p></li>
+<li><p><strong>saturate</strong> – whether to apply saturation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.Div">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">Div</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src1</span></em>, <em class="sig-param"><span class="n">src2</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">dst_type</span><span class="o">=</span><span class="default_value">DataType.none</span></em>, <em class="sig-param"><span class="n">saturate</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Div" title="Permalink to this definition">¶</a></dt>
+<dd><p>Divide an image by another.</p>
+<p>Divides <code class="docutils literal notranslate"><span class="pre">src1</span></code> by <code class="docutils literal notranslate"><span class="pre">src2</span></code> and stores the the result in <code class="docutils literal notranslate"><span class="pre">dst</span></code> with
+the specified type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src1</strong> – source image 1</p></li>
+<li><p><strong>src2</strong> – source image 2</p></li>
+<li><p><strong>dst</strong> – destination image</p></li>
+<li><p><strong>dst_type</strong> – destination image DataType</p></li>
+<li><p><strong>saturate</strong> – whether to apply saturation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="image-processing">
+<h2>Image processing<a class="headerlink" href="#image-processing" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyecvl.ecvl.ThresholdingType">
+<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">ThresholdingType</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n">pyecvl._core.ecvl.ThresholdingType</span></em>, <em class="sig-param"><span class="n">arg0</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyecvl.ecvl.ThresholdingType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enum class representing the possible thresholding types.</p>
+<dl class="py attribute">
+<dt id="pyecvl.ecvl.ThresholdingType.BINARY">
+<code class="sig-name descname">BINARY</code><em class="property"> = ThresholdingType.BINARY</em><a class="headerlink" href="#pyecvl.ecvl.ThresholdingType.BINARY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pyecvl.ecvl.ThresholdingType.BINARY_INV">
+<code class="sig-name descname">BINARY_INV</code><em class="property"> = ThresholdingType.BINARY_INV</em><a class="headerlink" href="#pyecvl.ecvl.ThresholdingType.BINARY_INV" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pyecvl.ecvl.InterpolationType">
+<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">InterpolationType</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n">pyecvl._core.ecvl.InterpolationType</span></em>, <em class="sig-param"><span class="n">arg0</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyecvl.ecvl.InterpolationType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enum class representing the possible interpolation types.</p>
+<dl class="py attribute">
+<dt id="pyecvl.ecvl.InterpolationType.area">
+<code class="sig-name descname">area</code><em class="property"> = InterpolationType.area</em><a class="headerlink" href="#pyecvl.ecvl.InterpolationType.area" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pyecvl.ecvl.InterpolationType.cubic">
+<code class="sig-name descname">cubic</code><em class="property"> = InterpolationType.cubic</em><a class="headerlink" href="#pyecvl.ecvl.InterpolationType.cubic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pyecvl.ecvl.InterpolationType.lanczos4">
+<code class="sig-name descname">lanczos4</code><em class="property"> = InterpolationType.lanczos4</em><a class="headerlink" href="#pyecvl.ecvl.InterpolationType.lanczos4" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pyecvl.ecvl.InterpolationType.linear">
+<code class="sig-name descname">linear</code><em class="property"> = InterpolationType.linear</em><a class="headerlink" href="#pyecvl.ecvl.InterpolationType.linear" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pyecvl.ecvl.InterpolationType.nearest">
+<code class="sig-name descname">nearest</code><em class="property"> = InterpolationType.nearest</em><a class="headerlink" href="#pyecvl.ecvl.InterpolationType.nearest" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pyecvl.ecvl.MorphTypes">
+<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">MorphTypes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n">pyecvl._core.ecvl.MorphTypes</span></em>, <em class="sig-param"><span class="n">arg0</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyecvl.ecvl.MorphTypes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enum class representing the possible morph types.</p>
+<dl class="py attribute">
+<dt id="pyecvl.ecvl.MorphTypes.MORPH_BLACKHAT">
+<code class="sig-name descname">MORPH_BLACKHAT</code><em class="property"> = MorphTypes.MORPH_BLACKHAT</em><a class="headerlink" href="#pyecvl.ecvl.MorphTypes.MORPH_BLACKHAT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pyecvl.ecvl.MorphTypes.MORPH_CLOSE">
+<code class="sig-name descname">MORPH_CLOSE</code><em class="property"> = MorphTypes.MORPH_CLOSE</em><a class="headerlink" href="#pyecvl.ecvl.MorphTypes.MORPH_CLOSE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pyecvl.ecvl.MorphTypes.MORPH_DILATE">
+<code class="sig-name descname">MORPH_DILATE</code><em class="property"> = MorphTypes.MORPH_DILATE</em><a class="headerlink" href="#pyecvl.ecvl.MorphTypes.MORPH_DILATE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pyecvl.ecvl.MorphTypes.MORPH_ERODE">
+<code class="sig-name descname">MORPH_ERODE</code><em class="property"> = MorphTypes.MORPH_ERODE</em><a class="headerlink" href="#pyecvl.ecvl.MorphTypes.MORPH_ERODE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pyecvl.ecvl.MorphTypes.MORPH_GRADIENT">
+<code class="sig-name descname">MORPH_GRADIENT</code><em class="property"> = MorphTypes.MORPH_GRADIENT</em><a class="headerlink" href="#pyecvl.ecvl.MorphTypes.MORPH_GRADIENT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pyecvl.ecvl.MorphTypes.MORPH_HITMISS">
+<code class="sig-name descname">MORPH_HITMISS</code><em class="property"> = MorphTypes.MORPH_HITMISS</em><a class="headerlink" href="#pyecvl.ecvl.MorphTypes.MORPH_HITMISS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pyecvl.ecvl.MorphTypes.MORPH_OPEN">
+<code class="sig-name descname">MORPH_OPEN</code><em class="property"> = MorphTypes.MORPH_OPEN</em><a class="headerlink" href="#pyecvl.ecvl.MorphTypes.MORPH_OPEN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pyecvl.ecvl.MorphTypes.MORPH_TOPHAT">
+<code class="sig-name descname">MORPH_TOPHAT</code><em class="property"> = MorphTypes.MORPH_TOPHAT</em><a class="headerlink" href="#pyecvl.ecvl.MorphTypes.MORPH_TOPHAT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pyecvl.ecvl.InpaintTypes">
+<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">InpaintTypes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n">pyecvl._core.ecvl.InpaintTypes</span></em>, <em class="sig-param"><span class="n">arg0</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyecvl.ecvl.InpaintTypes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enum class representing the possible inpaint types.</p>
+<dl class="py attribute">
+<dt id="pyecvl.ecvl.InpaintTypes.INPAINT_NS">
+<code class="sig-name descname">INPAINT_NS</code><em class="property"> = InpaintTypes.INPAINT_NS</em><a class="headerlink" href="#pyecvl.ecvl.InpaintTypes.INPAINT_NS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pyecvl.ecvl.InpaintTypes.INPAINT_TELEA">
+<code class="sig-name descname">INPAINT_TELEA</code><em class="property"> = InpaintTypes.INPAINT_TELEA</em><a class="headerlink" href="#pyecvl.ecvl.InpaintTypes.INPAINT_TELEA" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.ResizeDim">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">ResizeDim</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">newdims</span></em>, <em class="sig-param"><span class="n">interp</span><span class="o">=</span><span class="default_value">InterpolationType.linear</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ResizeDim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resize an image to the specified dimensions.</p>
+<p>Resizes <code class="docutils literal notranslate"><span class="pre">src</span></code> and outputs the result in <code class="docutils literal notranslate"><span class="pre">dst</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – source image</p></li>
+<li><p><strong>dst</strong> – destination image</p></li>
+<li><p><strong>newdims</strong> – list of integers specifying the new size of each
+dimension. The lenght of the list must match the <code class="docutils literal notranslate"><span class="pre">src</span></code> image
+dimensions, excluding the color channel</p></li>
+<li><p><strong>interp</strong> – InterpolationType to be used</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.ResizeScale">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">ResizeScale</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">scales</span></em>, <em class="sig-param"><span class="n">interp</span><span class="o">=</span><span class="default_value">InterpolationType.linear</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ResizeScale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resize an image by scaling the dimensions by a given scale factor.</p>
+<p>Resizes <code class="docutils literal notranslate"><span class="pre">src</span></code> and outputs the result in <code class="docutils literal notranslate"><span class="pre">dst</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – source image</p></li>
+<li><p><strong>dst</strong> – destination image</p></li>
+<li><p><strong>scales</strong> – list of floats that specifies the scale to apply to each
+dimension. The length of the list must match the <code class="docutils literal notranslate"><span class="pre">src</span></code> image
+dimensions, excluding the color channel</p></li>
+<li><p><strong>interp</strong> – InterpolationType to be used</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.Flip2D">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">Flip2D</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Flip2D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flip an image vertically.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – source image</p></li>
+<li><p><strong>dst</strong> – destination image</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.Mirror2D">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">Mirror2D</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Mirror2D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flip an image horizontally.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – source image</p></li>
+<li><p><strong>dst</strong> – destination image</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.Rotate2D">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">Rotate2D</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">angle</span></em>, <em class="sig-param"><span class="n">center</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scale</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">interp</span><span class="o">=</span><span class="default_value">InterpolationType.linear</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Rotate2D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotate an image without changing its dimensions.</p>
+<p>Rotates an image clockwise by a given angle (in degrees), with respect to
+a given center. The values of unknown pixels in the output image are set
+to 0. The output image is guaranteed to have the same dimensions as the
+input one. An optional scale parameter can be provided: this won’t change
+the output image size, but the image will be scaled during rotation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – source image</p></li>
+<li><p><strong>dst</strong> – destination image</p></li>
+<li><p><strong>angle</strong> – the rotation angle in degrees</p></li>
+<li><p><strong>center</strong> – a list of floats representing the coordinates of the
+rotation center. If None, the center of the image is used</p></li>
+<li><p><strong>scale</strong> – scaling factor</p></li>
+<li><p><strong>interp</strong> – InterpolationType to be used</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.RotateFullImage2D">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">RotateFullImage2D</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">angle</span></em>, <em class="sig-param"><span class="n">scale</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">interp</span><span class="o">=</span><span class="default_value">InterpolationType.linear</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.RotateFullImage2D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotate an image resizing the output to fit all the pixels.</p>
+<p>Rotates an image clockwise by a given angle (in degrees). The values of
+unknown pixels in the output image are set to 0. The output Image is
+guaranteed to contain all the pixels of the rotated image. Thus, its
+dimensions can be different from those of the input one. An optional scale
+parameter can be provided: if set, the image will also be scaled.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – source image</p></li>
+<li><p><strong>dst</strong> – destination image</p></li>
+<li><p><strong>angle</strong> – the rotation angle in degrees</p></li>
+<li><p><strong>scale</strong> – scaling factor</p></li>
+<li><p><strong>interp</strong> – InterpolationType to be used</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.ChangeColorSpace">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">ChangeColorSpace</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">new_type</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ChangeColorSpace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy the <code class="docutils literal notranslate"><span class="pre">src</span></code> image into the <code class="docutils literal notranslate"><span class="pre">dst</span></code> image changing the color space.</p>
+<p>Source and destination can be the same image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – source image</p></li>
+<li><p><strong>dst</strong> – destination image</p></li>
+<li><p><strong>new_type</strong> – a ColorType specifying the new color space</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.Threshold">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">Threshold</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">thresh</span></em>, <em class="sig-param"><span class="n">maxval</span></em>, <em class="sig-param"><span class="n">thresh_type</span><span class="o">=</span><span class="default_value">ThresholdingType.BINARY</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Threshold" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply a fixed threshold to an image.</p>
+<p>This function can be used to get a binary image out of a grayscale
+(ColorType.GRAY) image or to remove noise, filtering out pixels with too
+small or too large values. Pixels up to the <code class="docutils literal notranslate"><span class="pre">thresh</span></code> value will be set
+to 0, others will be set to <code class="docutils literal notranslate"><span class="pre">maxval</span></code> if <code class="docutils literal notranslate"><span class="pre">thresh_type</span></code> is
+ThresholdingType.BINARY. The opposite will happen if <code class="docutils literal notranslate"><span class="pre">thresh_type</span></code> is
+set to ThresholdingType.BINARY_INV.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – source image</p></li>
+<li><p><strong>dst</strong> – destination image</p></li>
+<li><p><strong>thresh</strong> – threshold value</p></li>
+<li><p><strong>maxval</strong> – maximum values in the thresholded image</p></li>
+<li><p><strong>thresh_type</strong> – ThresholdingType to be applied</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.OtsuThreshold">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">OtsuThreshold</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.OtsuThreshold" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the Otsu thresholding value.</p>
+<p>The image must be ColorType.GRAY.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>src</strong> – source image</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Otsu threshold value</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.Filter2D">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">Filter2D</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">ker</span></em>, <em class="sig-param"><span class="n">type</span><span class="o">=</span><span class="default_value">DataType.none</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Filter2D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convolve an image with a kernel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – source image</p></li>
+<li><p><strong>dst</strong> – destination image</p></li>
+<li><p><strong>ker</strong> – convolution kernel</p></li>
+<li><p><strong>type</strong> – destination DataType. If set to DataType.none, the DataType
+of <code class="docutils literal notranslate"><span class="pre">src</span></code> is used</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.SeparableFilter2D">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">SeparableFilter2D</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">kerX</span></em>, <em class="sig-param"><span class="n">kerY</span></em>, <em class="sig-param"><span class="n">type</span><span class="o">=</span><span class="default_value">DataType.none</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.SeparableFilter2D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convolve an image with a couple of 1-dimensional kernels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – source image</p></li>
+<li><p><strong>dst</strong> – destination image</p></li>
+<li><p><strong>kerX</strong> – convolution kernel for the X axis.</p></li>
+<li><p><strong>kerY</strong> – convolution kernel for the Y axis.</p></li>
+<li><p><strong>type</strong> – destination DataType. If set to DataType.none, the DataType
+of <code class="docutils literal notranslate"><span class="pre">src</span></code> is used</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.GaussianBlur">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">GaussianBlur</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">sizeX</span></em>, <em class="sig-param"><span class="n">sizeY</span></em>, <em class="sig-param"><span class="n">sigmaX</span></em>, <em class="sig-param"><span class="n">sigmaY</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.GaussianBlur" title="Permalink to this definition">¶</a></dt>
+<dd><p>Blurs an image using a Gaussian kernel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – source image</p></li>
+<li><p><strong>dst</strong> – destination image</p></li>
+<li><p><strong>sizeX</strong> – horizontal size of the kernel. Must be positive and odd</p></li>
+<li><p><strong>sizeY</strong> – vertical size of the kernel. Must be positive and odd</p></li>
+<li><p><strong>sigmaX</strong> – Gaussian kernel standard deviation in the X direction.</p></li>
+<li><p><strong>sigmaY</strong> – Gaussian kernel standard deviation in the Y direction. If
+zero, sigmaX is used. If both are zero, they are calculated from sizeX
+and sizeY.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.GaussianBlur2">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">GaussianBlur2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">sigma</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.GaussianBlur2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.AdditiveLaplaceNoise">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">AdditiveLaplaceNoise</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">std_dev</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AdditiveLaplaceNoise" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds Laplace distributed noise to an image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – source image</p></li>
+<li><p><strong>dst</strong> – destination image</p></li>
+<li><p><strong>std_dev</strong> – standard deviation of the noise-generating distribution.
+Suggested values are around 255 * 0.05 for uint8 images</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.AdditivePoissonNoise">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">AdditivePoissonNoise</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">lambda_</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AdditivePoissonNoise" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds Poisson distributed noise to an image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – source image</p></li>
+<li><p><strong>dst</strong> – destination image</p></li>
+<li><p><strong>lambda_</strong> – lambda parameter of the Poisson distribution</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.GammaContrast">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">GammaContrast</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">gamma</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.GammaContrast" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adjust contrast by scaling each pixel value X to 255 * ((X/255) ** gamma).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – source image</p></li>
+<li><p><strong>dst</strong> – destination image</p></li>
+<li><p><strong>gamma</strong> – exponent for the contrast adjustment</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.CoarseDropout">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">CoarseDropout</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">p</span></em>, <em class="sig-param"><span class="n">drop_size</span></em>, <em class="sig-param"><span class="n">per_channel</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.CoarseDropout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set rectangular areas within an image to zero.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – source image</p></li>
+<li><p><strong>dst</strong> – destination image</p></li>
+<li><p><strong>p</strong> – probability of any rectangle being set to zero</p></li>
+<li><p><strong>drop_size</strong> – size of rectangles in percentage of the input image</p></li>
+<li><p><strong>per_channel</strong> – whether to use the same value for all channels</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.IntegralImage">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">IntegralImage</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">dst_type</span><span class="o">=</span><span class="default_value">DataType.float64</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.IntegralImage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the integral image of the source image.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">src</span></code> image must be ColorType.GRAY, “xyc” and DataType.uint8.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – source image</p></li>
+<li><p><strong>dst</strong> – destination image</p></li>
+<li><p><strong>dst_type</strong> – DataType of the destination image</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.NonMaximaSuppression">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">NonMaximaSuppression</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.NonMaximaSuppression" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the non-maxima suppression of the source image.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">src</span></code> image must be ColorType.GRAY, “xyc” and DataType.int32.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – source image</p></li>
+<li><p><strong>dst</strong> – destination image</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.GetMaxN">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">GetMaxN</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">n</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.GetMaxN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the indices of the <code class="docutils literal notranslate"><span class="pre">n</span></code> maximum values of an image.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">src</span></code> image must be ColorType.GRAY, “xyc” and DataType.int32.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – source image</p></li>
+<li><p><strong>n</strong> – how many values to return</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of pairs corresponding to the coordinates of the max values</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.ConnectedComponentsLabeling">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">ConnectedComponentsLabeling</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ConnectedComponentsLabeling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Label connected components in the input image.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">src</span></code> image must be “xyc”, only one color channel and DataType.uint8.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – source image</p></li>
+<li><p><strong>dst</strong> – destination image</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.FindContours">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">FindContours</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.FindContours" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find contours in the input image.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">src</span></code> image must be “xyc”, only one color channel and DataType.uint8.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – source image</p></li>
+<li><p><strong>dst</strong> – destination image</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.Stack">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">Stack</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Stack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stack a sequence of images along a new depth dimension.</p>
+<p>Images must be “xyc” and their dimensions must match.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – list of source images</p></li>
+<li><p><strong>dst</strong> – destination image</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.HConcat">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">HConcat</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.HConcat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Concatenate images horizontally.</p>
+<p>Images must be “xyc” and have the same number of rows.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – list of source images</p></li>
+<li><p><strong>dst</strong> – destination image</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.VConcat">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">VConcat</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.VConcat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Concatenate images vertically.</p>
+<p>Images must be “xyc” and have the same number of columns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – list of source images</p></li>
+<li><p><strong>dst</strong> – destination image</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.Morphology">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">Morphology</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">op</span></em>, <em class="sig-param"><span class="n">kernel</span></em>, <em class="sig-param"><span class="n">anchor</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">iterations</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">borderType</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">borderValue</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Morphology" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.Inpaint">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">Inpaint</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">inpaintMask</span></em>, <em class="sig-param"><span class="n">inpaintRadius</span></em>, <em class="sig-param"><span class="n">flag</span><span class="o">=</span><span class="default_value">InpaintTypes.INPAINT_TELEA</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Inpaint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.MeanStdDev">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">MeanStdDev</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.MeanStdDev" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="deephealth-dataset-parser">
+<h2>DeepHealth dataset parser<a class="headerlink" href="#deephealth-dataset-parser" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyecvl.ecvl.SplitType">
+<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">SplitType</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n">pyecvl._core.ecvl.SplitType</span></em>, <em class="sig-param"><span class="n">arg0</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyecvl.ecvl.SplitType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enum class representing the supported split types.</p>
+<dl class="py attribute">
+<dt id="pyecvl.ecvl.SplitType.test">
+<code class="sig-name descname">test</code><em class="property"> = SplitType.test</em><a class="headerlink" href="#pyecvl.ecvl.SplitType.test" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pyecvl.ecvl.SplitType.training">
+<code class="sig-name descname">training</code><em class="property"> = SplitType.training</em><a class="headerlink" href="#pyecvl.ecvl.SplitType.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pyecvl.ecvl.SplitType.validation">
+<code class="sig-name descname">validation</code><em class="property"> = SplitType.validation</em><a class="headerlink" href="#pyecvl.ecvl.SplitType.validation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pyecvl.ecvl.Sample">
+<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">Sample</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sample image in a dataset.</p>
+<p>Provides the information to describe a dataset sample.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>location_</strong> – absolute path(s) of the sample (list of strings)</p></li>
+<li><p><strong>label_path_</strong> – absolute path of the sample’s ground truth</p></li>
+<li><p><strong>label_</strong> – sample labels (list of integers)</p></li>
+<li><p><strong>values_</strong> – feature index-to-value mapping</p></li>
+</ul>
+</dd>
+</dl>
+<p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>__init__(self: pyecvl._core.ecvl.Sample, arg0: pyecvl._core.ecvl.Sample) -&gt; None</p></li>
+<li><p>__init__(self: pyecvl._core.ecvl.Sample) -&gt; None</p></li>
+</ol>
+<dl class="py method">
+<dt id="pyecvl.ecvl.Sample.LoadImage">
+<code class="sig-name descname">LoadImage</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ctype</span><span class="o">=</span><span class="default_value">ColorType.BGR</span></em>, <em class="sig-param"><span class="n">is_gt</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Sample.LoadImage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the dataset image for this sample.</p>
+<p>Opens the sample image from <code class="docutils literal notranslate"><span class="pre">location_</span></code> or <code class="docutils literal notranslate"><span class="pre">label_path_</span></code>, depending
+on the <code class="docutils literal notranslate"><span class="pre">is_gt</span></code> parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ctype</strong> – ColorType of the returned image</p></li>
+<li><p><strong>is_gt</strong> – whether to load the sample image or its ground truth</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>sample image</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pyecvl.ecvl.Split">
+<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">Split</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Split" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides the splits a dataset can have: training, validation, and test.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>training_</strong> – training samples indices (list of integers)</p></li>
+<li><p><strong>validation_</strong> – validation samples indices (list of integers)</p></li>
+<li><p><strong>test_</strong> – test samples indices (list of integers)</p></li>
+</ul>
+</dd>
+</dl>
+<p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>__init__(self: pyecvl._core.ecvl.Split, arg0: pyecvl._core.ecvl.Split) -&gt; None</p></li>
+<li><p>__init__(self: pyecvl._core.ecvl.Split) -&gt; None</p></li>
+</ol>
+</dd></dl>
+
+<dl class="py class">
+<dt id="pyecvl.ecvl.Dataset">
+<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">Dataset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>DeepHealth Dataset.</p>
+<p>Implements the <a class="reference external" href="https://github.com/deephealthproject/ecvl/wiki/DeepHealth-Toolkit-Dataset-Format">DeepHealth Dataset Format</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name_</strong> – dataset name</p></li>
+<li><p><strong>description_</strong> – dataset description</p></li>
+<li><p><strong>classes_</strong> – classes available in the dataset (list of strings)</p></li>
+<li><p><strong>features_</strong> – features available in the dataset (list of strings)</p></li>
+<li><p><strong>samples_</strong> – list of dataset samples</p></li>
+<li><p><strong>split_</strong> – dataset splits</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><p><strong>filename</strong> – path to the dataset file</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="pyecvl.ecvl.Dataset.Dump">
+<code class="sig-name descname">Dump</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Dataset.Dump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dump the dataset to YAML following the DeepHealth Dataset Format.</p>
+<p>The YAML file is saved into the dataset’s root directory. Sample paths
+are relative to the dataset’s root directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> – output file path</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="augmentations">
+<h2>Augmentations<a class="headerlink" href="#augmentations" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyecvl.ecvl.AugmentationParam">
+<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">AugmentationParam</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugmentationParam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Augmentation parameters which must be randomly generated within a range.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>min_</strong> – minimum value for the random range</p></li>
+<li><p><strong>max_</strong> – maximum value for the random range</p></li>
+<li><p><strong>value_</strong> – generated parameter value</p></li>
+</ul>
+</dd>
+</dl>
+<p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>__init__(self: pyecvl._core.ecvl.AugmentationParam) -&gt; None</p></li>
+<li><p>__init__(self: pyecvl._core.ecvl.AugmentationParam, min: float, max: float) -&gt; None</p></li>
+</ol>
+<dl class="py method">
+<dt id="pyecvl.ecvl.AugmentationParam.GenerateValue">
+<code class="sig-name descname">GenerateValue</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugmentationParam.GenerateValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate the random value between min_ and max_.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pyecvl.ecvl.AugmentationParam.SetSeed">
+<em class="property">static </em><code class="sig-name descname">SetSeed</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">seed</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugmentationParam.SetSeed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a fixed seed for the random generated values.</p>
+<p>Useful to reproduce experiments with same augmentations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>seed</strong> – seed value</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pyecvl.ecvl.SequentialAugmentationContainer">
+<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">SequentialAugmentationContainer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">augs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.SequentialAugmentationContainer" title="Permalink to this definition">¶</a></dt>
+<dd><p>A container for multiple augmentations to be applied in sequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>augs</strong> – list of augmentations to be applied</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="pyecvl.ecvl.AugRotate">
+<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">AugRotate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">angle</span></em>, <em class="sig-param"><span class="n">center</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scale</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">interp</span><span class="o">=</span><span class="default_value">InterpolationType.linear</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugRotate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Augmentation wrapper for Rotate2D.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>angle</strong> – range of degrees <code class="docutils literal notranslate"><span class="pre">[min,</span> <span class="pre">max]</span></code> to randomly select from</p></li>
+<li><p><strong>center</strong> – a list of floats representing the coordinates of the
+rotation center. If None, the center of the image is used</p></li>
+<li><p><strong>scale</strong> – scaling factor</p></li>
+<li><p><strong>interp</strong> – InterpolationType to be used</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="pyecvl.ecvl.AugResizeDim">
+<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">AugResizeDim</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dims</span></em>, <em class="sig-param"><span class="n">interp</span><span class="o">=</span><span class="default_value">InterpolationType.linear</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugResizeDim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Augmentation wrapper for ResizeDim.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dims</strong> – list of integers that specifies the new size of each
+dimension</p></li>
+<li><p><strong>interp</strong> – InterpolationType to be used</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="pyecvl.ecvl.AugResizeScale">
+<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">AugResizeScale</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scale</span></em>, <em class="sig-param"><span class="n">interp</span><span class="o">=</span><span class="default_value">InterpolationType.linear</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugResizeScale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Augmentation wrapper for ResizeScale.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>scale</strong> – list of floats that specifies the scale to apply to
+each dimension</p></li>
+<li><p><strong>interp</strong> – InterpolationType to be used</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="pyecvl.ecvl.AugFlip">
+<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">AugFlip</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p</span><span class="o">=</span><span class="default_value">0.5</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugFlip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Augmentation wrapper for Flip2D.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>p</strong> – probability of each image to get flipped</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="pyecvl.ecvl.AugMirror">
+<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">AugMirror</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p</span><span class="o">=</span><span class="default_value">0.5</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugMirror" title="Permalink to this definition">¶</a></dt>
+<dd><p>Augmentation wrapper for Mirror2D.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>p</strong> – probability of each image to get mirrored</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="pyecvl.ecvl.AugGaussianBlur">
+<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">AugGaussianBlur</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sigma</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugGaussianBlur" title="Permalink to this definition">¶</a></dt>
+<dd><p>Augmentation wrapper for GaussianBlur.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>sigma</strong> – sigma range <code class="docutils literal notranslate"><span class="pre">[min,</span> <span class="pre">max]</span></code> to randomly select from.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="pyecvl.ecvl.AugAdditiveLaplaceNoise">
+<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">AugAdditiveLaplaceNoise</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">std_dev</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugAdditiveLaplaceNoise" title="Permalink to this definition">¶</a></dt>
+<dd><p>Augmentation wrapper for AdditiveLaplaceNoise.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>std_dev</strong> – range of values <code class="docutils literal notranslate"><span class="pre">[min,</span> <span class="pre">max]</span></code> to randomly select the           standard deviation of the noise generating distribution. Suggested           values are around 255 * 0.05 for uint8 images</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="pyecvl.ecvl.AugAdditivePoissonNoise">
+<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">AugAdditivePoissonNoise</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lambda_</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugAdditivePoissonNoise" title="Permalink to this definition">¶</a></dt>
+<dd><p>Augmentation wrapper for AdditivePoissonNoise.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>lambda_</strong> – range of values <code class="docutils literal notranslate"><span class="pre">[min,</span> <span class="pre">max]</span></code> to randomly select           the lambda of the noise generating distribution. Suggested values           are around 0.0 to 10.0.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="pyecvl.ecvl.AugGammaContrast">
+<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">AugGammaContrast</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">gamma</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugGammaContrast" title="Permalink to this definition">¶</a></dt>
+<dd><p>Augmentation wrapper for GammaContrast.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>gamma</strong> – range of values <code class="docutils literal notranslate"><span class="pre">[min,</span> <span class="pre">max]</span></code> to randomly select the           exponent for the contrast adjustment. Suggested values are around           0.5 to 2.0.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="pyecvl.ecvl.AugCoarseDropout">
+<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">AugCoarseDropout</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p</span></em>, <em class="sig-param"><span class="n">drop_size</span></em>, <em class="sig-param"><span class="n">per_channel</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugCoarseDropout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Augmentation wrapper for CoarseDropout.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> – range of values <code class="docutils literal notranslate"><span class="pre">[min,</span> <span class="pre">max]</span></code> to randomly select the
+probability of any rectangle being set to zero</p></li>
+<li><p><strong>drop_size</strong> – range of values <code class="docutils literal notranslate"><span class="pre">[min,</span> <span class="pre">max]</span></code> to randomly select
+the size of rectangles in percentage of the input image</p></li>
+<li><p><strong>per_channel</strong> – probability of each image to use the same value
+for all channels of a pixel</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="image-i-o">
+<h2>Image I/O<a class="headerlink" href="#image-i-o" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyecvl.ecvl.ImReadMode">
+<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">ImReadMode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n">pyecvl._core.ecvl.ImReadMode</span></em>, <em class="sig-param"><span class="n">arg0</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyecvl.ecvl.ImReadMode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enum class representing the possible image read modes.</p>
+<dl class="py attribute">
+<dt id="pyecvl.ecvl.ImReadMode.COLOR">
+<code class="sig-name descname">COLOR</code><em class="property"> = ImReadMode.COLOR</em><a class="headerlink" href="#pyecvl.ecvl.ImReadMode.COLOR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="pyecvl.ecvl.ImReadMode.GRAYSCALE">
+<code class="sig-name descname">GRAYSCALE</code><em class="property"> = ImReadMode.GRAYSCALE</em><a class="headerlink" href="#pyecvl.ecvl.ImReadMode.GRAYSCALE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.ImRead">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">ImRead</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">flags</span><span class="o">=</span><span class="default_value">ImReadMode.COLOR</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ImRead" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load an image from a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> – name of the input file</p></li>
+<li><p><strong>flags</strong> – an ImReadMode indicating how to read the image</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>an Image object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.ImWrite">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">ImWrite</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">src</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ImWrite" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save an image to a file.</p>
+<p>The image format is chosen based on the filename extension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> – name of the output file</p></li>
+<li><p><strong>src</strong> – Image to be saved</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.OpenSlideGetLevels">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">OpenSlideGetLevels</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.OpenSlideGetLevels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the width and height for each level of a whole-slide image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> – image file name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a list of pairs representing the width and height of each level</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.OpenSlideRead">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">OpenSlideRead</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">level</span></em>, <em class="sig-param"><span class="n">dims</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.OpenSlideRead" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a region of a whole-slide image.</p>
+<p>Supported formats are those supported by the OpenSlide library.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> – image file name</p></li>
+<li><p><strong>level</strong> – image level to extract</p></li>
+<li><p><strong>dims</strong> – <code class="docutils literal notranslate"><span class="pre">[x,</span> <span class="pre">y,</span> <span class="pre">w,</span> <span class="pre">h]</span></code> list representing the region to extract.
+<code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> are the top-left x and y coordinates in the level 0
+reference frame. <code class="docutils literal notranslate"><span class="pre">w</span></code> and <code class="docutils literal notranslate"><span class="pre">h</span></code> are the width and height of the region</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>an Image object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.NiftiRead">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">NiftiRead</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.NiftiRead" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads a nifti image from a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> – image file name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>an Image object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.NiftiWrite">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">NiftiWrite</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">src</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.NiftiWrite" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save an image to a file in the NIfTI-1 format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> – image file name</p></li>
+<li><p><strong>src</strong> – image to be saved</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.DicomRead">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">DicomRead</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.DicomRead" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads a dicom image from a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> – image file name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>an Image object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.DicomWrite">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">DicomWrite</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">src</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.DicomWrite" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save an image to a file in the DICOM format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> – image file name</p></li>
+<li><p><strong>src</strong> – image to be saved</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="eddl-support">
+<h2>EDDL support<a class="headerlink" href="#eddl-support" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pyecvl.ecvl.DatasetAugmentations">
+<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">DatasetAugmentations</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">augs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.DatasetAugmentations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents the augmentations which will be applied to each split.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>augs</strong> – three-element list containing the augmentations to be           applied to the training, validation and test splits respectively.           If no augmentations need to be defined for a split, set the           corresponding list element to None.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="pyecvl.ecvl.DatasetAugmentations.Apply">
+<code class="sig-name descname">Apply</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">st</span></em>, <em class="sig-param"><span class="n">img</span></em>, <em class="sig-param"><span class="n">gt</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.DatasetAugmentations.Apply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply augmentations for the specified split to an image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>st</strong> – a SplitType specifying which set of augmentations
+should be applied</p></li>
+<li><p><strong>img</strong> – image to which augmentations should be applied</p></li>
+<li><p><strong>gt</strong> – ground truth image to which augmentations should be applied</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -608,551 +1901,6 @@ augmentation is required</p></li>
 
 </dd></dl>
 
-<dl class="py class">
-<dt id="pyecvl.ecvl.DataType">
-<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">DataType</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n">pyecvl._core.ecvl.DataType</span></em>, <em class="sig-param"><span class="n">arg0</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyecvl.ecvl.DataType" title="Permalink to this definition">¶</a></dt>
-<dd><p>Enum class which defines data types allowed for images.</p>
-<dl class="py attribute">
-<dt id="pyecvl.ecvl.DataType.float32">
-<code class="sig-name descname">float32</code><em class="property"> = DataType.float32</em><a class="headerlink" href="#pyecvl.ecvl.DataType.float32" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="pyecvl.ecvl.DataType.float64">
-<code class="sig-name descname">float64</code><em class="property"> = DataType.float64</em><a class="headerlink" href="#pyecvl.ecvl.DataType.float64" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="pyecvl.ecvl.DataType.int16">
-<code class="sig-name descname">int16</code><em class="property"> = DataType.int16</em><a class="headerlink" href="#pyecvl.ecvl.DataType.int16" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="pyecvl.ecvl.DataType.int32">
-<code class="sig-name descname">int32</code><em class="property"> = DataType.int32</em><a class="headerlink" href="#pyecvl.ecvl.DataType.int32" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="pyecvl.ecvl.DataType.int64">
-<code class="sig-name descname">int64</code><em class="property"> = DataType.int64</em><a class="headerlink" href="#pyecvl.ecvl.DataType.int64" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="pyecvl.ecvl.DataType.int8">
-<code class="sig-name descname">int8</code><em class="property"> = DataType.int8</em><a class="headerlink" href="#pyecvl.ecvl.DataType.int8" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="pyecvl.ecvl.DataType.none">
-<code class="sig-name descname">none</code><em class="property"> = DataType.none</em><a class="headerlink" href="#pyecvl.ecvl.DataType.none" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="pyecvl.ecvl.DataType.uint16">
-<code class="sig-name descname">uint16</code><em class="property"> = DataType.uint16</em><a class="headerlink" href="#pyecvl.ecvl.DataType.uint16" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="pyecvl.ecvl.DataType.uint8">
-<code class="sig-name descname">uint8</code><em class="property"> = DataType.uint8</em><a class="headerlink" href="#pyecvl.ecvl.DataType.uint8" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.DataTypeSignedSize">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">DataTypeSignedSize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.DataTypeSignedSize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the number of existing signed DataType members.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>the number of existing signed DataType members</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.DataTypeSize">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">DataTypeSize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dt</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.DataTypeSize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the size in bytes of a given DataType.</p>
-<p>With no arguments, get the number of existing DataType members.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>dt</strong> – a DataType.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>the DataType size in bytes, or the number of existing DataType
-members if called with no arguments</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py class">
-<dt id="pyecvl.ecvl.Dataset">
-<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">Dataset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Dataset" title="Permalink to this definition">¶</a></dt>
-<dd><p>DeepHealth Dataset.</p>
-<p>Implements the <a class="reference external" href="https://github.com/deephealthproject/ecvl/wiki/DeepHealth-Toolkit-Dataset-Format">DeepHealth Dataset Format</a>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Variables</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>name_</strong> – dataset name</p></li>
-<li><p><strong>description_</strong> – dataset description</p></li>
-<li><p><strong>classes_</strong> – classes available in the dataset (list of strings)</p></li>
-<li><p><strong>features_</strong> – features available in the dataset (list of strings)</p></li>
-<li><p><strong>samples_</strong> – list of dataset samples</p></li>
-<li><p><strong>split_</strong> – dataset splits</p></li>
-</ul>
-</dd>
-<dt class="field-even">Parameters</dt>
-<dd class="field-even"><p><strong>filename</strong> – path to the dataset file</p>
-</dd>
-</dl>
-<dl class="py method">
-<dt id="pyecvl.ecvl.Dataset.Dump">
-<code class="sig-name descname">Dump</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Dataset.Dump" title="Permalink to this definition">¶</a></dt>
-<dd><p>Dump the dataset to YAML following the DeepHealth Dataset Format.</p>
-<p>The YAML file is saved into the dataset’s root directory. Sample paths
-are relative to the dataset’s root directory.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>path</strong> – output file path</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="pyecvl.ecvl.DatasetAugmentations">
-<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">DatasetAugmentations</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">augs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.DatasetAugmentations" title="Permalink to this definition">¶</a></dt>
-<dd><p>Represents the augmentations which will be applied to each split.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>augs</strong> – three-element list containing the augmentations to be           applied to the training, validation and test splits respectively.           If no augmentations need to be defined for a split, set the           corresponding list element to None.</p>
-</dd>
-</dl>
-<dl class="py method">
-<dt id="pyecvl.ecvl.DatasetAugmentations.Apply">
-<code class="sig-name descname">Apply</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">st</span></em>, <em class="sig-param"><span class="n">img</span></em>, <em class="sig-param"><span class="n">gt</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.DatasetAugmentations.Apply" title="Permalink to this definition">¶</a></dt>
-<dd><p>Apply augmentations for the specified split to an image.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>st</strong> – a SplitType specifying which set of augmentations
-should be applied</p></li>
-<li><p><strong>img</strong> – image to which augmentations should be applied</p></li>
-<li><p><strong>gt</strong> – ground truth image to which augmentations should be applied</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.DicomRead">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">DicomRead</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.DicomRead" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads a dicom image from a file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>filename</strong> – image file name</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>an Image object</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.DicomWrite">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">DicomWrite</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">src</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.DicomWrite" title="Permalink to this definition">¶</a></dt>
-<dd><p>Save an image to a file in the DICOM format.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> – image file name</p></li>
-<li><p><strong>src</strong> – image to be saved</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.Filter2D">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">Filter2D</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">ker</span></em>, <em class="sig-param"><span class="n">type</span><span class="o">=</span><span class="default_value">DataType.none</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Filter2D" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convolve an image with a kernel.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>src</strong> – source image</p></li>
-<li><p><strong>dst</strong> – destination image</p></li>
-<li><p><strong>ker</strong> – convolution kernel</p></li>
-<li><p><strong>type</strong> – destination DataType. If set to DataType.none, the DataType
-of <code class="docutils literal notranslate"><span class="pre">src</span></code> is used</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.FindContours">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">FindContours</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.FindContours" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find contours in the input image.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">src</span></code> image must be “xyc”, only one color channel and DataType.uint8.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>src</strong> – source image</p></li>
-<li><p><strong>dst</strong> – destination image</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.Flip2D">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">Flip2D</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Flip2D" title="Permalink to this definition">¶</a></dt>
-<dd><p>Flip an image vertically.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>src</strong> – source image</p></li>
-<li><p><strong>dst</strong> – destination image</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.GammaContrast">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">GammaContrast</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">gamma</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.GammaContrast" title="Permalink to this definition">¶</a></dt>
-<dd><p>Adjust contrast by scaling each pixel value X to 255 * ((X/255) ** gamma).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>src</strong> – source image</p></li>
-<li><p><strong>dst</strong> – destination image</p></li>
-<li><p><strong>gamma</strong> – exponent for the contrast adjustment</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.GaussianBlur">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">GaussianBlur</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">sizeX</span></em>, <em class="sig-param"><span class="n">sizeY</span></em>, <em class="sig-param"><span class="n">sigmaX</span></em>, <em class="sig-param"><span class="n">sigmaY</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.GaussianBlur" title="Permalink to this definition">¶</a></dt>
-<dd><p>Blurs an image using a Gaussian kernel.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>src</strong> – source image</p></li>
-<li><p><strong>dst</strong> – destination image</p></li>
-<li><p><strong>sizeX</strong> – horizontal size of the kernel. Must be positive and odd</p></li>
-<li><p><strong>sizeY</strong> – vertical size of the kernel. Must be positive and odd</p></li>
-<li><p><strong>sigmaX</strong> – Gaussian kernel standard deviation in the X direction.</p></li>
-<li><p><strong>sigmaY</strong> – Gaussian kernel standard deviation in the Y direction. If
-zero, sigmaX is used. If both are zero, they are calculated from sizeX
-and sizeY.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.GaussianBlur2">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">GaussianBlur2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">sigma</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.GaussianBlur2" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.GetMaxN">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">GetMaxN</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">n</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.GetMaxN" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the indices of the <code class="docutils literal notranslate"><span class="pre">n</span></code> maximum values of an image.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">src</span></code> image must be ColorType.GRAY, “xyc” and DataType.int32.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>src</strong> – source image</p></li>
-<li><p><strong>n</strong> – how many values to return</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>list of pairs corresponding to the coordinates of the max values</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.HConcat">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">HConcat</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.HConcat" title="Permalink to this definition">¶</a></dt>
-<dd><p>Concatenate images horizontally.</p>
-<p>Images must be “xyc” and have the same number of rows.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>src</strong> – list of source images</p></li>
-<li><p><strong>dst</strong> – destination image</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.ImRead">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">ImRead</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">flags</span><span class="o">=</span><span class="default_value">ImReadMode.COLOR</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ImRead" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load an image from a file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> – name of the input file</p></li>
-<li><p><strong>flags</strong> – an ImReadMode indicating how to read the image</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>an Image object</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py class">
-<dt id="pyecvl.ecvl.ImReadMode">
-<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">ImReadMode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n">pyecvl._core.ecvl.ImReadMode</span></em>, <em class="sig-param"><span class="n">arg0</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyecvl.ecvl.ImReadMode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Enum class representing the possible image read modes.</p>
-<dl class="py attribute">
-<dt id="pyecvl.ecvl.ImReadMode.COLOR">
-<code class="sig-name descname">COLOR</code><em class="property"> = ImReadMode.COLOR</em><a class="headerlink" href="#pyecvl.ecvl.ImReadMode.COLOR" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="pyecvl.ecvl.ImReadMode.GRAYSCALE">
-<code class="sig-name descname">GRAYSCALE</code><em class="property"> = ImReadMode.GRAYSCALE</em><a class="headerlink" href="#pyecvl.ecvl.ImReadMode.GRAYSCALE" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.ImWrite">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">ImWrite</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">src</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ImWrite" title="Permalink to this definition">¶</a></dt>
-<dd><p>Save an image to a file.</p>
-<p>The image format is chosen based on the filename extension.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> – name of the output file</p></li>
-<li><p><strong>src</strong> – Image to be saved</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py class">
-<dt id="pyecvl.ecvl.Image">
-<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">Image</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dims</span></em>, <em class="sig-param"><span class="n">elemtype</span></em>, <em class="sig-param"><span class="n">channels</span></em>, <em class="sig-param"><span class="n">colortype</span></em>, <em class="sig-param"><span class="n">spacings</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Image" title="Permalink to this definition">¶</a></dt>
-<dd><p>Image class.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Variables</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>elemtype_</strong> – image pixel type, a DataType</p></li>
-<li><p><strong>elemsize_</strong> – image pixel size in bytes</p></li>
-<li><p><strong>channels_</strong> – a string describing the image planes layout. Each
-character provides information on the corresponding channel. The
-possible values are: ‘x’: horizontal spatial dimension; ‘y’: vertical
-spatial dimension; ‘z’: depth spatial dimension; ‘c’: color dimension;
-‘t’: temporal dimension; ‘o’: any other dimension. For example, “xyc”
-describes a 2-dimensional image structured in color planes. This could
-be for example a ColorType.GRAY Image with dims_[2] = 1 or a
-ColorType.RGB Image with dims_[2] = 3. The ColorType constrains the
-value of the dimension corresponding to the color channel. Another
-example is “cxy” with dims_[0] = 3 and ColorType.BGR. In this case the
-color dimension is the one which changes faster, as it happens in
-libraries such as OpenCV.</p></li>
-<li><p><strong>colortype_</strong> – image ColorType. If different from ColorType.none, the
-channels_ string must contain a ‘c’ and the corresponding dimension must
-have the appropriate value.</p></li>
-<li><p><strong>spacings_</strong> – space in mm between consecutive pixels/voxels on each
-axis (list of floats).</p></li>
-<li><p><strong>datasize_</strong> – size of image data in bytes.</p></li>
-<li><p><strong>contiguous_</strong> – whether the image is stored contiguously in memory</p></li>
-</ul>
-</dd>
-<dt class="field-even">Dims_</dt>
-<dd class="field-even"><p>image dimensions in pixels/voxels (list of integers)</p>
-</dd>
-<dt class="field-odd">Strides_</dt>
-<dd class="field-odd"><p>the number of bytes the internal data pointer has to skip to
-get to the next pixel/voxel in the corresponding dimension</p>
-</dd>
-<dt class="field-even">Parameters</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>dims</strong> – image dimensions</p></li>
-<li><p><strong>elemtype</strong> – pixel type, a DataType</p></li>
-<li><p><strong>channels</strong> – channels string</p></li>
-<li><p><strong>colortype</strong> – a ColorType</p></li>
-<li><p><strong>spacings</strong> – spacings between pixels</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt id="pyecvl.ecvl.Image.Add">
-<code class="sig-name descname">Add</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em>, <em class="sig-param"><span class="n">saturate</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Image.Add" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add data from another image to this image’s data.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>other</strong> – other image</p></li>
-<li><p><strong>saturate</strong> – in case of overflow, set values to limit for data type</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyecvl.ecvl.Image.Channels">
-<code class="sig-name descname">Channels</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Image.Channels" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the number of channels.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>number of channels</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyecvl.ecvl.Image.Div">
-<code class="sig-name descname">Div</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em>, <em class="sig-param"><span class="n">saturate</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Image.Div" title="Permalink to this definition">¶</a></dt>
-<dd><p>Divide data from this image by another image’s data.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>other</strong> – other image</p></li>
-<li><p><strong>saturate</strong> – in case of overflow, set values to limit for data type</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyecvl.ecvl.Image.IsEmpty">
-<code class="sig-name descname">IsEmpty</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Image.IsEmpty" title="Permalink to this definition">¶</a></dt>
-<dd><p>Whether the image contains data or not.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True if the image contains data, False otherwise</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyecvl.ecvl.Image.IsOwner">
-<code class="sig-name descname">IsOwner</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Image.IsOwner" title="Permalink to this definition">¶</a></dt>
-<dd><p>Whether the image owns the data or not.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>True if the image owns the data, False otherwise</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyecvl.ecvl.Image.Mul">
-<code class="sig-name descname">Mul</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em>, <em class="sig-param"><span class="n">saturate</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Image.Mul" title="Permalink to this definition">¶</a></dt>
-<dd><p>Multiply data from this image by another image’s data.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>other</strong> – other image</p></li>
-<li><p><strong>saturate</strong> – in case of overflow, set values to limit for data type</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyecvl.ecvl.Image.Sub">
-<code class="sig-name descname">Sub</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">other</span></em>, <em class="sig-param"><span class="n">saturate</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Image.Sub" title="Permalink to this definition">¶</a></dt>
-<dd><p>Subtract data from another image from this image’s data.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>other</strong> – other image</p></li>
-<li><p><strong>saturate</strong> – in case of overflow, set values to limit for data type</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyecvl.ecvl.Image.empty">
-<em class="property">static </em><code class="sig-name descname">empty</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Image.empty" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create an empty image.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>an empty image</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="pyecvl.ecvl.Image.fromarray">
-<em class="property">static </em><code class="sig-name descname">fromarray</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">array</span></em>, <em class="sig-param"><span class="n">channels</span></em>, <em class="sig-param"><span class="n">colortype</span></em>, <em class="sig-param"><span class="n">spacings</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Image.fromarray" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create an image from a NumPy array.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>array</strong> – a NumPy array</p></li>
-<li><p><strong>channels</strong> – channels string</p></li>
-<li><p><strong>colortype</strong> – a ColorType</p></li>
-<li><p><strong>spacings</strong> – spacings between pixels</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>an image containing the same data as the input array</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
 <dl class="py function">
 <dt id="pyecvl.ecvl.ImageToTensor">
 <code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">ImageToTensor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">img</span></em>, <em class="sig-param"><span class="n">offset</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ImageToTensor" title="Permalink to this definition">¶</a></dt>
@@ -1173,534 +1921,6 @@ tensor’s dimensions will be C x H x W, where:</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>output tensor</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.Inpaint">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">Inpaint</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">inpaintMask</span></em>, <em class="sig-param"><span class="n">inpaintRadius</span></em>, <em class="sig-param"><span class="n">flag</span><span class="o">=</span><span class="default_value">InpaintTypes.INPAINT_TELEA</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Inpaint" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py class">
-<dt id="pyecvl.ecvl.InpaintTypes">
-<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">InpaintTypes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n">pyecvl._core.ecvl.InpaintTypes</span></em>, <em class="sig-param"><span class="n">arg0</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyecvl.ecvl.InpaintTypes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Enum class representing the possible inpaint types.</p>
-<dl class="py attribute">
-<dt id="pyecvl.ecvl.InpaintTypes.INPAINT_NS">
-<code class="sig-name descname">INPAINT_NS</code><em class="property"> = InpaintTypes.INPAINT_NS</em><a class="headerlink" href="#pyecvl.ecvl.InpaintTypes.INPAINT_NS" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="pyecvl.ecvl.InpaintTypes.INPAINT_TELEA">
-<code class="sig-name descname">INPAINT_TELEA</code><em class="property"> = InpaintTypes.INPAINT_TELEA</em><a class="headerlink" href="#pyecvl.ecvl.InpaintTypes.INPAINT_TELEA" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.IntegralImage">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">IntegralImage</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">dst_type</span><span class="o">=</span><span class="default_value">DataType.float64</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.IntegralImage" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the integral image of the source image.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">src</span></code> image must be ColorType.GRAY, “xyc” and DataType.uint8.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>src</strong> – source image</p></li>
-<li><p><strong>dst</strong> – destination image</p></li>
-<li><p><strong>dst_type</strong> – DataType of the destination image</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py class">
-<dt id="pyecvl.ecvl.InterpolationType">
-<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">InterpolationType</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n">pyecvl._core.ecvl.InterpolationType</span></em>, <em class="sig-param"><span class="n">arg0</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyecvl.ecvl.InterpolationType" title="Permalink to this definition">¶</a></dt>
-<dd><p>Enum class representing the possible interpolation types.</p>
-<dl class="py attribute">
-<dt id="pyecvl.ecvl.InterpolationType.area">
-<code class="sig-name descname">area</code><em class="property"> = InterpolationType.area</em><a class="headerlink" href="#pyecvl.ecvl.InterpolationType.area" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="pyecvl.ecvl.InterpolationType.cubic">
-<code class="sig-name descname">cubic</code><em class="property"> = InterpolationType.cubic</em><a class="headerlink" href="#pyecvl.ecvl.InterpolationType.cubic" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="pyecvl.ecvl.InterpolationType.lanczos4">
-<code class="sig-name descname">lanczos4</code><em class="property"> = InterpolationType.lanczos4</em><a class="headerlink" href="#pyecvl.ecvl.InterpolationType.lanczos4" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="pyecvl.ecvl.InterpolationType.linear">
-<code class="sig-name descname">linear</code><em class="property"> = InterpolationType.linear</em><a class="headerlink" href="#pyecvl.ecvl.InterpolationType.linear" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="pyecvl.ecvl.InterpolationType.nearest">
-<code class="sig-name descname">nearest</code><em class="property"> = InterpolationType.nearest</em><a class="headerlink" href="#pyecvl.ecvl.InterpolationType.nearest" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.MeanStdDev">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">MeanStdDev</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.MeanStdDev" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.Mirror2D">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">Mirror2D</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Mirror2D" title="Permalink to this definition">¶</a></dt>
-<dd><p>Flip an image horizontally.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>src</strong> – source image</p></li>
-<li><p><strong>dst</strong> – destination image</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py class">
-<dt id="pyecvl.ecvl.MorphTypes">
-<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">MorphTypes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n">pyecvl._core.ecvl.MorphTypes</span></em>, <em class="sig-param"><span class="n">arg0</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyecvl.ecvl.MorphTypes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Enum class representing the possible morph types.</p>
-<dl class="py attribute">
-<dt id="pyecvl.ecvl.MorphTypes.MORPH_BLACKHAT">
-<code class="sig-name descname">MORPH_BLACKHAT</code><em class="property"> = MorphTypes.MORPH_BLACKHAT</em><a class="headerlink" href="#pyecvl.ecvl.MorphTypes.MORPH_BLACKHAT" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="pyecvl.ecvl.MorphTypes.MORPH_CLOSE">
-<code class="sig-name descname">MORPH_CLOSE</code><em class="property"> = MorphTypes.MORPH_CLOSE</em><a class="headerlink" href="#pyecvl.ecvl.MorphTypes.MORPH_CLOSE" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="pyecvl.ecvl.MorphTypes.MORPH_DILATE">
-<code class="sig-name descname">MORPH_DILATE</code><em class="property"> = MorphTypes.MORPH_DILATE</em><a class="headerlink" href="#pyecvl.ecvl.MorphTypes.MORPH_DILATE" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="pyecvl.ecvl.MorphTypes.MORPH_ERODE">
-<code class="sig-name descname">MORPH_ERODE</code><em class="property"> = MorphTypes.MORPH_ERODE</em><a class="headerlink" href="#pyecvl.ecvl.MorphTypes.MORPH_ERODE" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="pyecvl.ecvl.MorphTypes.MORPH_GRADIENT">
-<code class="sig-name descname">MORPH_GRADIENT</code><em class="property"> = MorphTypes.MORPH_GRADIENT</em><a class="headerlink" href="#pyecvl.ecvl.MorphTypes.MORPH_GRADIENT" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="pyecvl.ecvl.MorphTypes.MORPH_HITMISS">
-<code class="sig-name descname">MORPH_HITMISS</code><em class="property"> = MorphTypes.MORPH_HITMISS</em><a class="headerlink" href="#pyecvl.ecvl.MorphTypes.MORPH_HITMISS" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="pyecvl.ecvl.MorphTypes.MORPH_OPEN">
-<code class="sig-name descname">MORPH_OPEN</code><em class="property"> = MorphTypes.MORPH_OPEN</em><a class="headerlink" href="#pyecvl.ecvl.MorphTypes.MORPH_OPEN" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="pyecvl.ecvl.MorphTypes.MORPH_TOPHAT">
-<code class="sig-name descname">MORPH_TOPHAT</code><em class="property"> = MorphTypes.MORPH_TOPHAT</em><a class="headerlink" href="#pyecvl.ecvl.MorphTypes.MORPH_TOPHAT" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.Morphology">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">Morphology</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">op</span></em>, <em class="sig-param"><span class="n">kernel</span></em>, <em class="sig-param"><span class="n">anchor</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">iterations</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">borderType</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">borderValue</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Morphology" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.Neg">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">Neg</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">img</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Neg" title="Permalink to this definition">¶</a></dt>
-<dd><p>In-place negation of an image.</p>
-<p>Negates every value of <code class="docutils literal notranslate"><span class="pre">img</span></code>, and stores the the result in the same
-image. The type of the image is not changed.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>img</strong> – image to be negated</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>negated image</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.NiftiRead">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">NiftiRead</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.NiftiRead" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads a nifti image from a file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>filename</strong> – image file name</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>an Image object</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.NiftiWrite">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">NiftiWrite</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">src</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.NiftiWrite" title="Permalink to this definition">¶</a></dt>
-<dd><p>Save an image to a file in the NIfTI-1 format.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> – image file name</p></li>
-<li><p><strong>src</strong> – image to be saved</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.NonMaximaSuppression">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">NonMaximaSuppression</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.NonMaximaSuppression" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the non-maxima suppression of the source image.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">src</span></code> image must be ColorType.GRAY, “xyc” and DataType.int32.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>src</strong> – source image</p></li>
-<li><p><strong>dst</strong> – destination image</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.OpenSlideGetLevels">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">OpenSlideGetLevels</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.OpenSlideGetLevels" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the width and height for each level of a whole-slide image.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>filename</strong> – image file name</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>a list of pairs representing the width and height of each level</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.OpenSlideRead">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">OpenSlideRead</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">level</span></em>, <em class="sig-param"><span class="n">dims</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.OpenSlideRead" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load a region of a whole-slide image.</p>
-<p>Supported formats are those supported by the OpenSlide library.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> – image file name</p></li>
-<li><p><strong>level</strong> – image level to extract</p></li>
-<li><p><strong>dims</strong> – <code class="docutils literal notranslate"><span class="pre">[x,</span> <span class="pre">y,</span> <span class="pre">w,</span> <span class="pre">h]</span></code> list representing the region to extract.
-<code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> are the top-left x and y coordinates in the level 0
-reference frame. <code class="docutils literal notranslate"><span class="pre">w</span></code> and <code class="docutils literal notranslate"><span class="pre">h</span></code> are the width and height of the region</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>an Image object</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.Or">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">Or</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src1</span></em>, <em class="sig-param"><span class="n">src2</span></em>, <em class="sig-param"><span class="n">dst</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Or" title="Permalink to this definition">¶</a></dt>
-<dd><p>Boolean <code class="docutils literal notranslate"><span class="pre">or</span></code> between two images.</p>
-<p>Performs boolean <code class="docutils literal notranslate"><span class="pre">or</span></code> between two images with DataType.uint8 and
-ColorType.GRAY. The result is stored into <code class="docutils literal notranslate"><span class="pre">dst</span></code>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>src1</strong> – first image operand</p></li>
-<li><p><strong>src2</strong> – second image operand</p></li>
-<li><p><strong>dst</strong> – destination image</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.OtsuThreshold">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">OtsuThreshold</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.OtsuThreshold" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the Otsu thresholding value.</p>
-<p>The image must be ColorType.GRAY.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>src</strong> – source image</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Otsu threshold value</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.RearrangeChannels">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">RearrangeChannels</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">channels</span></em>, <em class="sig-param"><span class="n">new_type</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.RearrangeChannels" title="Permalink to this definition">¶</a></dt>
-<dd><p>Change image dimensions order.</p>
-<p>Changes the order of the <code class="docutils literal notranslate"><span class="pre">src</span></code> image dimensions, saving the result into
-the <code class="docutils literal notranslate"><span class="pre">dst</span></code> image. The new order can be specified as a string through the
-<code class="docutils literal notranslate"><span class="pre">channels</span></code> parameter. <code class="docutils literal notranslate"><span class="pre">src</span></code> and <code class="docutils literal notranslate"><span class="pre">dst</span></code> can be the same image.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>src</strong> – source image</p></li>
-<li><p><strong>dst</strong> – destination image</p></li>
-<li><p><strong>channels</strong> – new order for the image channels, as a string</p></li>
-<li><p><strong>new_type</strong> – new DataType for the destination image. If None, the
-destination image will preserve its type if it is not empty, otherwise
-it will have the same type as the source image</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.ResizeDim">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">ResizeDim</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">newdims</span></em>, <em class="sig-param"><span class="n">interp</span><span class="o">=</span><span class="default_value">InterpolationType.linear</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ResizeDim" title="Permalink to this definition">¶</a></dt>
-<dd><p>Resize an image to the specified dimensions.</p>
-<p>Resizes <code class="docutils literal notranslate"><span class="pre">src</span></code> and outputs the result in <code class="docutils literal notranslate"><span class="pre">dst</span></code>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>src</strong> – source image</p></li>
-<li><p><strong>dst</strong> – destination image</p></li>
-<li><p><strong>newdims</strong> – list of integers specifying the new size of each
-dimension. The lenght of the list must match the <code class="docutils literal notranslate"><span class="pre">src</span></code> image
-dimensions, excluding the color channel</p></li>
-<li><p><strong>interp</strong> – InterpolationType to be used</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.ResizeScale">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">ResizeScale</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">scales</span></em>, <em class="sig-param"><span class="n">interp</span><span class="o">=</span><span class="default_value">InterpolationType.linear</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ResizeScale" title="Permalink to this definition">¶</a></dt>
-<dd><p>Resize an image by scaling the dimensions by a given scale factor.</p>
-<p>Resizes <code class="docutils literal notranslate"><span class="pre">src</span></code> and outputs the result in <code class="docutils literal notranslate"><span class="pre">dst</span></code>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>src</strong> – source image</p></li>
-<li><p><strong>dst</strong> – destination image</p></li>
-<li><p><strong>scales</strong> – list of floats that specifies the scale to apply to each
-dimension. The length of the list must match the <code class="docutils literal notranslate"><span class="pre">src</span></code> image
-dimensions, excluding the color channel</p></li>
-<li><p><strong>interp</strong> – InterpolationType to be used</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.Rotate2D">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">Rotate2D</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">angle</span></em>, <em class="sig-param"><span class="n">center</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scale</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">interp</span><span class="o">=</span><span class="default_value">InterpolationType.linear</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Rotate2D" title="Permalink to this definition">¶</a></dt>
-<dd><p>Rotate an image without changing its dimensions.</p>
-<p>Rotates an image clockwise by a given angle (in degrees), with respect to
-a given center. The values of unknown pixels in the output image are set
-to 0. The output image is guaranteed to have the same dimensions as the
-input one. An optional scale parameter can be provided: this won’t change
-the output image size, but the image will be scaled during rotation.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>src</strong> – source image</p></li>
-<li><p><strong>dst</strong> – destination image</p></li>
-<li><p><strong>angle</strong> – the rotation angle in degrees</p></li>
-<li><p><strong>center</strong> – a list of floats representing the coordinates of the
-rotation center. If None, the center of the image is used</p></li>
-<li><p><strong>scale</strong> – scaling factor</p></li>
-<li><p><strong>interp</strong> – InterpolationType to be used</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.RotateFullImage2D">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">RotateFullImage2D</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">angle</span></em>, <em class="sig-param"><span class="n">scale</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">interp</span><span class="o">=</span><span class="default_value">InterpolationType.linear</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.RotateFullImage2D" title="Permalink to this definition">¶</a></dt>
-<dd><p>Rotate an image resizing the output to fit all the pixels.</p>
-<p>Rotates an image clockwise by a given angle (in degrees). The values of
-unknown pixels in the output image are set to 0. The output Image is
-guaranteed to contain all the pixels of the rotated image. Thus, its
-dimensions can be different from those of the input one. An optional scale
-parameter can be provided: if set, the image will also be scaled.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>src</strong> – source image</p></li>
-<li><p><strong>dst</strong> – destination image</p></li>
-<li><p><strong>angle</strong> – the rotation angle in degrees</p></li>
-<li><p><strong>scale</strong> – scaling factor</p></li>
-<li><p><strong>interp</strong> – InterpolationType to be used</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py class">
-<dt id="pyecvl.ecvl.Sample">
-<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">Sample</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Sample" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sample image in a dataset.</p>
-<p>Provides the information to describe a dataset sample.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Variables</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>location_</strong> – absolute path(s) of the sample (list of strings)</p></li>
-<li><p><strong>label_path_</strong> – absolute path of the sample’s ground truth</p></li>
-<li><p><strong>label_</strong> – sample labels (list of integers)</p></li>
-<li><p><strong>values_</strong> – feature index-to-value mapping</p></li>
-</ul>
-</dd>
-</dl>
-<p>Overloaded function.</p>
-<ol class="arabic simple">
-<li><p>__init__(self: pyecvl._core.ecvl.Sample, arg0: pyecvl._core.ecvl.Sample) -&gt; None</p></li>
-<li><p>__init__(self: pyecvl._core.ecvl.Sample) -&gt; None</p></li>
-</ol>
-<dl class="py method">
-<dt id="pyecvl.ecvl.Sample.LoadImage">
-<code class="sig-name descname">LoadImage</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ctype</span><span class="o">=</span><span class="default_value">ColorType.BGR</span></em>, <em class="sig-param"><span class="n">is_gt</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Sample.LoadImage" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the dataset image for this sample.</p>
-<p>Opens the sample image from <code class="docutils literal notranslate"><span class="pre">location_</span></code> or <code class="docutils literal notranslate"><span class="pre">label_path_</span></code>, depending
-on the <code class="docutils literal notranslate"><span class="pre">is_gt</span></code> parameter.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>ctype</strong> – ColorType of the returned image</p></li>
-<li><p><strong>is_gt</strong> – whether to load the sample image or its ground truth</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>sample image</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.SeparableFilter2D">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">SeparableFilter2D</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">kerX</span></em>, <em class="sig-param"><span class="n">kerY</span></em>, <em class="sig-param"><span class="n">type</span><span class="o">=</span><span class="default_value">DataType.none</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.SeparableFilter2D" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convolve an image with a couple of 1-dimensional kernels.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>src</strong> – source image</p></li>
-<li><p><strong>dst</strong> – destination image</p></li>
-<li><p><strong>kerX</strong> – convolution kernel for the X axis.</p></li>
-<li><p><strong>kerY</strong> – convolution kernel for the Y axis.</p></li>
-<li><p><strong>type</strong> – destination DataType. If set to DataType.none, the DataType
-of <code class="docutils literal notranslate"><span class="pre">src</span></code> is used</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py class">
-<dt id="pyecvl.ecvl.SequentialAugmentationContainer">
-<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">SequentialAugmentationContainer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">augs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.SequentialAugmentationContainer" title="Permalink to this definition">¶</a></dt>
-<dd><p>A container for multiple augmentations to be applied in sequence.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>augs</strong> – list of augmentations to be applied</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py class">
-<dt id="pyecvl.ecvl.Split">
-<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">Split</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Split" title="Permalink to this definition">¶</a></dt>
-<dd><p>Provides the splits a dataset can have: training, validation, and test.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Variables</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>training_</strong> – training samples indices (list of integers)</p></li>
-<li><p><strong>validation_</strong> – validation samples indices (list of integers)</p></li>
-<li><p><strong>test_</strong> – test samples indices (list of integers)</p></li>
-</ul>
-</dd>
-</dl>
-<p>Overloaded function.</p>
-<ol class="arabic simple">
-<li><p>__init__(self: pyecvl._core.ecvl.Split, arg0: pyecvl._core.ecvl.Split) -&gt; None</p></li>
-<li><p>__init__(self: pyecvl._core.ecvl.Split) -&gt; None</p></li>
-</ol>
-</dd></dl>
-
-<dl class="py class">
-<dt id="pyecvl.ecvl.SplitType">
-<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">SplitType</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n">pyecvl._core.ecvl.SplitType</span></em>, <em class="sig-param"><span class="n">arg0</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyecvl.ecvl.SplitType" title="Permalink to this definition">¶</a></dt>
-<dd><p>Enum class representing the supported split types.</p>
-<dl class="py attribute">
-<dt id="pyecvl.ecvl.SplitType.test">
-<code class="sig-name descname">test</code><em class="property"> = SplitType.test</em><a class="headerlink" href="#pyecvl.ecvl.SplitType.test" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="pyecvl.ecvl.SplitType.training">
-<code class="sig-name descname">training</code><em class="property"> = SplitType.training</em><a class="headerlink" href="#pyecvl.ecvl.SplitType.training" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="pyecvl.ecvl.SplitType.validation">
-<code class="sig-name descname">validation</code><em class="property"> = SplitType.validation</em><a class="headerlink" href="#pyecvl.ecvl.SplitType.validation" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.Stack">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">Stack</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Stack" title="Permalink to this definition">¶</a></dt>
-<dd><p>Stack a sequence of images along a new depth dimension.</p>
-<p>Images must be “xyc” and their dimensions must match.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>src</strong> – list of source images</p></li>
-<li><p><strong>dst</strong> – destination image</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1727,86 +1947,7 @@ of <code class="docutils literal notranslate"><span class="pre">src</span></code
 </dl>
 </dd></dl>
 
-<dl class="py function">
-<dt id="pyecvl.ecvl.TensorToView">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">TensorToView</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">t</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.TensorToView" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.Threshold">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">Threshold</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">thresh</span></em>, <em class="sig-param"><span class="n">maxval</span></em>, <em class="sig-param"><span class="n">thresh_type</span><span class="o">=</span><span class="default_value">ThresholdingType.BINARY</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Threshold" title="Permalink to this definition">¶</a></dt>
-<dd><p>Apply a fixed threshold to an image.</p>
-<p>This function can be used to get a binary image out of a grayscale
-(ColorType.GRAY) image or to remove noise, filtering out pixels with too
-small or too large values. Pixels up to the <code class="docutils literal notranslate"><span class="pre">thresh</span></code> value will be set
-to 0, others will be set to <code class="docutils literal notranslate"><span class="pre">maxval</span></code> if <code class="docutils literal notranslate"><span class="pre">thresh_type</span></code> is
-ThresholdingType.BINARY. The opposite will happen if <code class="docutils literal notranslate"><span class="pre">thresh_type</span></code> is
-set to ThresholdingType.BINARY_INV.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>src</strong> – source image</p></li>
-<li><p><strong>dst</strong> – destination image</p></li>
-<li><p><strong>thresh</strong> – threshold value</p></li>
-<li><p><strong>maxval</strong> – maximum values in the thresholded image</p></li>
-<li><p><strong>thresh_type</strong> – ThresholdingType to be applied</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py class">
-<dt id="pyecvl.ecvl.ThresholdingType">
-<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">ThresholdingType</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n">pyecvl._core.ecvl.ThresholdingType</span></em>, <em class="sig-param"><span class="n">arg0</span><span class="p">:</span> <span class="n">int</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyecvl.ecvl.ThresholdingType" title="Permalink to this definition">¶</a></dt>
-<dd><p>Enum class representing the possible thresholding types.</p>
-<dl class="py attribute">
-<dt id="pyecvl.ecvl.ThresholdingType.BINARY">
-<code class="sig-name descname">BINARY</code><em class="property"> = ThresholdingType.BINARY</em><a class="headerlink" href="#pyecvl.ecvl.ThresholdingType.BINARY" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt id="pyecvl.ecvl.ThresholdingType.BINARY_INV">
-<code class="sig-name descname">BINARY_INV</code><em class="property"> = ThresholdingType.BINARY_INV</em><a class="headerlink" href="#pyecvl.ecvl.ThresholdingType.BINARY_INV" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt id="pyecvl.ecvl.VConcat">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">VConcat</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.VConcat" title="Permalink to this definition">¶</a></dt>
-<dd><p>Concatenate images vertically.</p>
-<p>Images must be “xyc” and have the same number of columns.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>src</strong> – list of source images</p></li>
-<li><p><strong>dst</strong> – destination image</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py class">
-<dt id="pyecvl.ecvl.View_float32">
-<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">View_float32</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n">pyecvl._core.ecvl.View_float32</span></em>, <em class="sig-param"><span class="n">img</span><span class="p">:</span> <span class="n">pyecvl._core.ecvl.Image</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyecvl.ecvl.View_float32" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py class">
-<dt id="pyecvl.ecvl.View_int16">
-<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">View_int16</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n">pyecvl._core.ecvl.View_int16</span></em>, <em class="sig-param"><span class="n">img</span><span class="p">:</span> <span class="n">pyecvl._core.ecvl.Image</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyecvl.ecvl.View_int16" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py class">
-<dt id="pyecvl.ecvl.View_int8">
-<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">View_int8</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n">pyecvl._core.ecvl.View_int8</span></em>, <em class="sig-param"><span class="n">img</span><span class="p">:</span> <span class="n">pyecvl._core.ecvl.Image</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#pyecvl.ecvl.View_int8" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+</div>
 </div>
 
 
