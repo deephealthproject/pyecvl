@@ -30,14 +30,10 @@ if __name__ == "__main__":
     main()
 ```
 
-Each PyECVL version requires a specific ECVL version. If you are installing
-PyECVL with EDDL support (on by default), you also need to install
-[PyEDDL](https://github.com/deephealthproject/pyeddl). The following table
-shows the required ECVL and PyEDDL versions for each PyECVL version:
-
-PyECVL version | ECVL version | PyEDDL version |
--------------- | ------------ | -------------- |
-0.1.0          | 0.1.0        | 0.1.0          |
-
 The PyECVL documentation is available at
 https://deephealthproject.github.io/pyecvl.
+
+Quick links:
+
+* [Installation](https://deephealthproject.github.io/pyecvl/installation.html)
+* [Getting Started](https://deephealthproject.github.io/pyecvl/getting_started.html)
