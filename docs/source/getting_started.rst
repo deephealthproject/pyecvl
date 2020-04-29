@@ -52,6 +52,7 @@ Convert an image to a NumPy array:
 .. code-block:: python
 
     import pyecvl.ecvl as ecvl
+    import numpy as np
     img = ecvl.ImRead(img_path)
     a = np.array(img)
 
