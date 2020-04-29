@@ -3,6 +3,13 @@
 Installation
 ============
 
+.. note::
+
+    We recommend using the `DeepHealth Docker images
+    <https://github.com/deephealthproject/docker-libs>`_, which provide
+    ready-to-use containers for the DeepHealth components, including
+    PyECVL. If you want to install PyECVL manually instead, read on.
+
 To install PyECVL, you need to install ECVL first. Installation instructions
 for ECVL are available in the `ECVL README
 <https://github.com/deephealthproject/ecvl/blob/master/README.md>`_.
