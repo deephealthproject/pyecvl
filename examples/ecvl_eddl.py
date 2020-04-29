@@ -29,6 +29,17 @@ import pyecvl.ecvl as ecvl
 import pyeddl.eddlT as eddlT
 
 
+AUG_TXT = '''\
+SequentialAugmentationContainer
+    AugRotate angle=[-5,5] center=(0,0) scale=0.5 interp="linear"
+    AugAdditiveLaplaceNoise std_dev=[0,0.51]
+    AugCoarseDropout p=[0,0.55] drop_size=[0.02,0.1] per_channel=0
+    AugAdditivePoissonNoise lambda=[0,40]
+    AugResizeDim dims=(30,30) interp="linear"
+end
+'''
+
+
 def main(args):
     img = ecvl.ImRead(args.in_img)
     augs = ecvl.SequentialAugmentationContainer([
@@ -51,6 +62,8 @@ def main(args):
     img = ecvl.TensorToImage(t)
     print("Executing TensorToView")
     ecvl.TensorToView(t)
+
+    _ = ecvl.AugmentationFactory.create(AUG_TXT)
 
     training_augs = ecvl.SequentialAugmentationContainer([
         ecvl.AugRotate([-5, 5]),

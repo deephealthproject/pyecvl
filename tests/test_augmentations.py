@@ -47,6 +47,10 @@ def test_AugRotate(ecvl):
     a.Apply(img)
     a = ecvl.AugRotate([30, 50], [2, 3], 1.1, ecvl.InterpolationType.nearest)
     a.Apply(img)
+    # fromtext
+    f = ecvl.AugRotate if ecvl is ecvl_core else ecvl.AugRotate.fromtext
+    a = f('angle=[30,50] center=(2,3) scale=1.1 interp="nearest"\n')
+    a.Apply(img)
 
 
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
