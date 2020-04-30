@@ -161,6 +161,10 @@ Augmentations
    :members:
    :undoc-members:
 
+.. autoclass:: pyecvl.ecvl.AugmentationFactory
+   :members:
+   :undoc-members:
+
 .. autoclass:: pyecvl.ecvl.SequentialAugmentationContainer
    :members:
    :undoc-members:

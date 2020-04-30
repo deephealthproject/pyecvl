@@ -160,3 +160,43 @@ def test_AugCoarseDropout(ecvl):
         ecvl.AugCoarseDropout.fromtext
     a = f('p=[0.5, 0.7] drop_size=[0.1, 0.2] per_channel=0.4\n')
     a.Apply(img)
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_AugmentationFactory(ecvl):
+    img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    # one arg
+    a = ecvl.AugmentationFactory.create('AugFlip p=0.5\n')
+    a.Apply(img)
+    # two args
+    a = ecvl.AugmentationFactory.create('AugFlip', 'p=0.5\n')
+    a.Apply(img)
+    # container
+    txt = ('SequentialAugmentationContainer\n'
+           'AugRotate angle=[-5,5] center=(0,0) scale=0.5 interp="linear"\n'
+           'AugAdditiveLaplaceNoise std_dev=[0,0.51]\n'
+           'AugCoarseDropout p=[0,0.55] drop_size=[0.02,0.1] per_channel=0\n'
+           'AugAdditivePoissonNoise lambda=[0,40]\n'
+           'AugResizeDim dims=(30,30) interp="linear"\n'
+           'end\n')
+    c = ecvl.AugmentationFactory.create(txt)
+    c.Apply(img)
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_SequentialAugmentationContainer(ecvl):
+    img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    # from list
+    c = ecvl.SequentialAugmentationContainer([
+        ecvl.AugRotate([-5, 5]),
+        ecvl.AugMirror(.5),
+    ])
+    c.Apply(img)
+    # fromtext
+    txt = ('AugFlip p=0.2\n'
+           'AugMirror p=0.2\n'
+           'end\n')
+    f = ecvl.SequentialAugmentationContainer if ecvl is ecvl_core else \
+        ecvl.SequentialAugmentationContainer.fromtext
+    c = f(txt)
+    c.Apply(img)

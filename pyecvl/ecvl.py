@@ -943,7 +943,7 @@ class AugmentationParam(_ecvl.AugmentationParam):
 
 
 class AugmentationFactory(_ecvl.AugmentationFactory):
-    """\
+    r"""\
     Creates augmentations from text strings.
 
     If only one argument is supplied, it needs to include the augmentation's
