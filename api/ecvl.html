@@ -1485,6 +1485,33 @@ are relative to the dataset’s root directory.</p>
 </dd></dl>
 
 <dl class="py class">
+<dt id="pyecvl.ecvl.AugmentationFactory">
+<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">AugmentationFactory</code><a class="headerlink" href="#pyecvl.ecvl.AugmentationFactory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates augmentations from text strings.</p>
+<p>If only one argument is supplied, it needs to include the augmentation’s
+name, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">AugmentationFactory</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;AugFlip p=0.5</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If only two arguments are supplied, the first is the augmentation’s
+name, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">AugmentationFactory</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">&#39;AugFlip&#39;</span><span class="p">,</span> <span class="s1">&#39;p=0.5</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that the text must end with a newline character.</p>
+<dl class="py method">
+<dt id="pyecvl.ecvl.AugmentationFactory.create">
+<em class="property">static </em><code class="sig-name descname">create</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugmentationFactory.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>create(is: str) -&gt; pyecvl._core.ecvl.Augmentation</p></li>
+<li><p>create(name: str, is: str) -&gt; pyecvl._core.ecvl.Augmentation</p></li>
+</ol>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt id="pyecvl.ecvl.SequentialAugmentationContainer">
 <em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">SequentialAugmentationContainer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">augs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.SequentialAugmentationContainer" title="Permalink to this definition">¶</a></dt>
 <dd><p>A container for multiple augmentations to be applied in sequence.</p>
@@ -1493,6 +1520,22 @@ are relative to the dataset’s root directory.</p>
 <dd class="field-odd"><p><strong>augs</strong> – list of augmentations to be applied</p>
 </dd>
 </dl>
+<dl class="py method">
+<dt id="pyecvl.ecvl.SequentialAugmentationContainer.fromtext">
+<em class="property">static </em><code class="sig-name descname">fromtext</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">txt</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.SequentialAugmentationContainer.fromtext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a SequentialAugmentationContainer from a text description,
+e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">txt</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span><span class="se">\</span>
+<span class="s1">AugFlip p=0.2</span>
+<span class="s1">AugMirror p=0.4</span>
+<span class="s1">end</span>
+<span class="s1">&#39;&#39;&#39;</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">SequentialAugmentationContainer</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that the text must end with a newline character.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -1510,6 +1553,17 @@ rotation center. If None, the center of the image is used</p></li>
 </ul>
 </dd>
 </dl>
+<dl class="py method">
+<dt id="pyecvl.ecvl.AugRotate.fromtext">
+<em class="property">static </em><code class="sig-name descname">fromtext</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">txt</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugRotate.fromtext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an AugRotate from a text description, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">AugRotate</span><span class="p">(</span><span class="s1">&#39;angle=[30, 50] center=(2, 3) &#39;</span>
+              <span class="s1">&#39;scale=1.1 interp=&quot;nearest&quot;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that the text must end with a newline character.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -1525,6 +1579,16 @@ dimension</p></li>
 </ul>
 </dd>
 </dl>
+<dl class="py method">
+<dt id="pyecvl.ecvl.AugResizeDim.fromtext">
+<em class="property">static </em><code class="sig-name descname">fromtext</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">txt</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugResizeDim.fromtext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an AugResizeDim from a text description, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">AugResizeDim</span><span class="p">(</span><span class="s1">&#39;dims=(4, 3) interp=&quot;linear&quot;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that the text must end with a newline character.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -1540,6 +1604,16 @@ each dimension</p></li>
 </ul>
 </dd>
 </dl>
+<dl class="py method">
+<dt id="pyecvl.ecvl.AugResizeScale.fromtext">
+<em class="property">static </em><code class="sig-name descname">fromtext</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">txt</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugResizeScale.fromtext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an AugResizeScale from a text description, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">AugResizeScale</span><span class="p">(</span><span class="s1">&#39;scale=(0.5, 0.5) interp=&quot;linear&quot;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that the text must end with a newline character.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -1551,6 +1625,16 @@ each dimension</p></li>
 <dd class="field-odd"><p><strong>p</strong> – probability of each image to get flipped</p>
 </dd>
 </dl>
+<dl class="py method">
+<dt id="pyecvl.ecvl.AugFlip.fromtext">
+<em class="property">static </em><code class="sig-name descname">fromtext</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">txt</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugFlip.fromtext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an AugFlip from a text description, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">AugFlip</span><span class="p">(</span><span class="s1">&#39;p=0.5</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that the text must end with a newline character.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -1562,6 +1646,16 @@ each dimension</p></li>
 <dd class="field-odd"><p><strong>p</strong> – probability of each image to get mirrored</p>
 </dd>
 </dl>
+<dl class="py method">
+<dt id="pyecvl.ecvl.AugMirror.fromtext">
+<em class="property">static </em><code class="sig-name descname">fromtext</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">txt</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugMirror.fromtext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an AugMirror from a text description, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">AugMirror</span><span class="p">(</span><span class="s1">&#39;p=0.5</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that the text must end with a newline character.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -1573,6 +1667,16 @@ each dimension</p></li>
 <dd class="field-odd"><p><strong>sigma</strong> – sigma range <code class="docutils literal notranslate"><span class="pre">[min,</span> <span class="pre">max]</span></code> to randomly select from.</p>
 </dd>
 </dl>
+<dl class="py method">
+<dt id="pyecvl.ecvl.AugGaussianBlur.fromtext">
+<em class="property">static </em><code class="sig-name descname">fromtext</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">txt</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugGaussianBlur.fromtext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an AugGaussianBlur from a text description, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">AugGaussianBlur</span><span class="p">(</span><span class="s1">&#39;sigma=[0.2, 0.4]</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that the text must end with a newline character.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -1584,6 +1688,16 @@ each dimension</p></li>
 <dd class="field-odd"><p><strong>std_dev</strong> – range of values <code class="docutils literal notranslate"><span class="pre">[min,</span> <span class="pre">max]</span></code> to randomly select the           standard deviation of the noise generating distribution. Suggested           values are around 255 * 0.05 for uint8 images</p>
 </dd>
 </dl>
+<dl class="py method">
+<dt id="pyecvl.ecvl.AugAdditiveLaplaceNoise.fromtext">
+<em class="property">static </em><code class="sig-name descname">fromtext</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">txt</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugAdditiveLaplaceNoise.fromtext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an AugAdditiveLaplaceNoise from a text description, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">AugAdditiveLaplaceNoise</span><span class="p">(</span><span class="s1">&#39;std_dev=[12.5, 23.1]</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that the text must end with a newline character.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -1595,6 +1709,16 @@ each dimension</p></li>
 <dd class="field-odd"><p><strong>lambda_</strong> – range of values <code class="docutils literal notranslate"><span class="pre">[min,</span> <span class="pre">max]</span></code> to randomly select           the lambda of the noise generating distribution. Suggested values           are around 0.0 to 10.0.</p>
 </dd>
 </dl>
+<dl class="py method">
+<dt id="pyecvl.ecvl.AugAdditivePoissonNoise.fromtext">
+<em class="property">static </em><code class="sig-name descname">fromtext</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">txt</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugAdditivePoissonNoise.fromtext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an AugAdditivePoissonNoise from a text description, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">AugAdditivePoissonNoise</span><span class="p">(</span><span class="s1">&#39;lambda=[2.0, 3.0]</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that the text must end with a newline character.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -1606,6 +1730,16 @@ each dimension</p></li>
 <dd class="field-odd"><p><strong>gamma</strong> – range of values <code class="docutils literal notranslate"><span class="pre">[min,</span> <span class="pre">max]</span></code> to randomly select the           exponent for the contrast adjustment. Suggested values are around           0.5 to 2.0.</p>
 </dd>
 </dl>
+<dl class="py method">
+<dt id="pyecvl.ecvl.AugGammaContrast.fromtext">
+<em class="property">static </em><code class="sig-name descname">fromtext</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">txt</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugGammaContrast.fromtext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an AugGammaContrast from a text description, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">AugGammaContrast</span><span class="p">(</span><span class="s1">&#39;gamma=[3, 4]</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that the text must end with a newline character.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -1624,6 +1758,17 @@ for all channels of a pixel</p></li>
 </ul>
 </dd>
 </dl>
+<dl class="py method">
+<dt id="pyecvl.ecvl.AugCoarseDropout.fromtext">
+<em class="property">static </em><code class="sig-name descname">fromtext</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">txt</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugCoarseDropout.fromtext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an AugCoarseDropout from a text description, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">AugCoarseDropout</span><span class="p">(</span><span class="s1">&#39;p=[0.5, 0.7] drop_size=[0.1, 0.2] &#39;</span>
+                     <span class="s1">&#39;per_channel=0.4</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that the text must end with a newline character.</p>
+</dd></dl>
+
 </dd></dl>
 
 </div>
