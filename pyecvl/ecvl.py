@@ -956,8 +956,7 @@ class AugmentationFactory(_ecvl.AugmentationFactory):
 
         AugmentationFactory.create('AugFlip', 'p=0.5\n')
 
-    Note that the text must end with a newline character. Also, there must be
-    no space between elements in sequence parameters.
+    Note that the text must end with a newline character.
     """
 
     @staticmethod
@@ -974,7 +973,7 @@ class SequentialAugmentationContainer(_ecvl.SequentialAugmentationContainer):
 
     @staticmethod
     def fromtext(txt):
-        """\
+        r"""\
         Create a SequentialAugmentationContainer from a text description,
         e.g.::
 
@@ -985,8 +984,7 @@ class SequentialAugmentationContainer(_ecvl.SequentialAugmentationContainer):
             '''
             c = SequentialAugmentationContainer(txt)
 
-        Note that the text must end with a newline character. Also, there must
-        be no space between elements in sequence parameters.
+        Note that the text must end with a newline character.
         """
         return _ecvl.SequentialAugmentationContainer(txt)
 
@@ -1004,13 +1002,13 @@ class AugRotate(_ecvl.AugRotate):
 
     @staticmethod
     def fromtext(txt):
-        """\
+        r"""\
         Create an AugRotate from a text description, e.g.::
 
-            a = AugRotate('angle=[30,50] center=(2,3)\n')
+            a = AugRotate('angle=[30, 50] center=(2, 3) '
+                          'scale=1.1 interp="nearest"\n')
 
-        Note that the text must end with a newline character. Also, there must
-        be no space between elements in sequence parameters.
+        Note that the text must end with a newline character.
         """
         return _ecvl.AugRotate(txt)
 
@@ -1035,13 +1033,12 @@ class AugResizeDim(_ecvl.AugResizeDim):
 
     @staticmethod
     def fromtext(txt):
-        """\
+        r"""\
         Create an AugResizeDim from a text description, e.g.::
 
-            a = AugResizeDim('dims=(4,3) interp="linear"\n')
+            a = AugResizeDim('dims=(4, 3) interp="linear"\n')
 
-        Note that the text must end with a newline character. Also, there must
-        be no space between elements in sequence parameters.
+        Note that the text must end with a newline character.
         """
         return _ecvl.AugResizeDim(txt)
 
@@ -1061,13 +1058,12 @@ class AugResizeScale(_ecvl.AugResizeScale):
 
     @staticmethod
     def fromtext(txt):
-        """\
+        r"""\
         Create an AugResizeScale from a text description, e.g.::
 
-            a = AugResizeScale('scale=(4,3) interp="linear"\n')
+            a = AugResizeScale('scale=(0.5, 0.5) interp="linear"\n')
 
-        Note that the text must end with a newline character. Also, there must
-        be no space between elements in sequence parameters.
+        Note that the text must end with a newline character.
         """
         return _ecvl.AugResizeScale(txt)
 
@@ -1087,13 +1083,12 @@ class AugFlip(_ecvl.AugFlip):
 
     @staticmethod
     def fromtext(txt):
-        """\
+        r"""\
         Create an AugFlip from a text description, e.g.::
 
             a = AugFlip('p=0.5\n')
 
-        Note that the text must end with a newline character. Also, there must
-        be no space between elements in sequence parameters.
+        Note that the text must end with a newline character.
         """
         return _ecvl.AugFlip(txt)
 
@@ -1111,13 +1106,12 @@ class AugMirror(_ecvl.AugMirror):
 
     @staticmethod
     def fromtext(txt):
-        """\
+        r"""\
         Create an AugMirror from a text description, e.g.::
 
             a = AugMirror('p=0.5\n')
 
-        Note that the text must end with a newline character. Also, there must
-        be no space between elements in sequence parameters.
+        Note that the text must end with a newline character.
         """
         return _ecvl.AugMirror(txt)
 
@@ -1135,13 +1129,12 @@ class AugGaussianBlur(_ecvl.AugGaussianBlur):
 
     @staticmethod
     def fromtext(txt):
-        """\
+        r"""\
         Create an AugGaussianBlur from a text description, e.g.::
 
-            a = AugGaussianBlur("sigma=[0.2,0.4]\n")
+            a = AugGaussianBlur('sigma=[0.2, 0.4]\n')
 
-        Note that the text must end with a newline character. Also, there must
-        be no space between elements in sequence parameters.
+        Note that the text must end with a newline character.
         """
         return _ecvl.AugGaussianBlur(txt)
 
@@ -1159,13 +1152,12 @@ class AugAdditiveLaplaceNoise(_ecvl.AugAdditiveLaplaceNoise):
 
     @staticmethod
     def fromtext(txt):
-        """\
+        r"""\
         Create an AugAdditiveLaplaceNoise from a text description, e.g.::
 
-            a = AugAdditiveLaplaceNoise("std_dev=[12.5,23.1]\n")
+            a = AugAdditiveLaplaceNoise('std_dev=[12.5, 23.1]\n')
 
-        Note that the text must end with a newline character. Also, there must
-        be no space between elements in sequence parameters.
+        Note that the text must end with a newline character.
         """
         return _ecvl.AugAdditiveLaplaceNoise(txt)
 
@@ -1185,13 +1177,12 @@ class AugAdditivePoissonNoise(_ecvl.AugAdditivePoissonNoise):
 
     @staticmethod
     def fromtext(txt):
-        """\
+        r"""\
         Create an AugAdditivePoissonNoise from a text description, e.g.::
 
-            a = AugAdditivePoissonNoise("lambda=[2.0,3.0]\n")
+            a = AugAdditivePoissonNoise('lambda=[2.0, 3.0]\n')
 
-        Note that the text must end with a newline character. Also, there must
-        be no space between elements in sequence parameters.
+        Note that the text must end with a newline character.
         """
         return _ecvl.AugAdditivePoissonNoise(txt)
 
@@ -1211,13 +1202,12 @@ class AugGammaContrast(_ecvl.AugGammaContrast):
 
     @staticmethod
     def fromtext(txt):
-        """\
+        r"""\
         Create an AugGammaContrast from a text description, e.g.::
 
-            a = AugGammaContrast("gamma=[3,4]\n")
+            a = AugGammaContrast('gamma=[3, 4]\n')
 
-        Note that the text must end with a newline character. Also, there must
-        be no space between elements in sequence parameters.
+        Note that the text must end with a newline character.
         """
         return _ecvl.AugGammaContrast(txt)
 
@@ -1237,13 +1227,13 @@ class AugCoarseDropout(_ecvl.AugCoarseDropout):
 
     @staticmethod
     def fromtext(txt):
-        """\
+        r"""\
         Create an AugCoarseDropout from a text description, e.g.::
 
-            a = AugCoarseDropout("p=[0.5,0.7] drop_size=[0.1,0.2]\n")
+            a = AugCoarseDropout('p=[0.5, 0.7] drop_size=[0.1, 0.2] '
+                                 'per_channel=0.4\n')
 
-        Note that the text must end with a newline character. Also, there must
-        be no space between elements in sequence parameters.
+        Note that the text must end with a newline character.
         """
         return _ecvl.AugCoarseDropout(txt)
 
