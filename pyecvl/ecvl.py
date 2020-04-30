@@ -942,10 +942,52 @@ class AugmentationParam(_ecvl.AugmentationParam):
         return _ecvl.AugmentationParam.SetSeed(seed)
 
 
+class AugmentationFactory(_ecvl.AugmentationFactory):
+    r"""\
+    Creates augmentations from text strings.
+
+    If only one argument is supplied, it needs to include the augmentation's
+    name, e.g.::
+
+        AugmentationFactory.create('AugFlip p=0.5\n')
+
+    If only two arguments are supplied, the first is the augmentation's
+    name, e.g.::
+
+        AugmentationFactory.create('AugFlip', 'p=0.5\n')
+
+    Note that the text must end with a newline character.
+    """
+
+    @staticmethod
+    def create(s1, s2=None):
+        if s2 is None:
+            return _ecvl.AugmentationFactory.create(s1)
+        return _ecvl.AugmentationFactory.create(s1, s2)
+
+
 class SequentialAugmentationContainer(_ecvl.SequentialAugmentationContainer):
     """\
     A container for multiple augmentations to be applied in sequence.
     """
+
+    @staticmethod
+    def fromtext(txt):
+        r"""\
+        Create a SequentialAugmentationContainer from a text description,
+        e.g.::
+
+            txt = '''\
+            AugFlip p=0.2
+            AugMirror p=0.4
+            end
+            '''
+            c = SequentialAugmentationContainer(txt)
+
+        Note that the text must end with a newline character.
+        """
+        return _ecvl.SequentialAugmentationContainer(txt)
+
     def __init__(self, augs):
         """\
         :param augs: list of augmentations to be applied
@@ -957,6 +999,19 @@ class AugRotate(_ecvl.AugRotate):
     """\
     Augmentation wrapper for Rotate2D.
     """
+
+    @staticmethod
+    def fromtext(txt):
+        r"""\
+        Create an AugRotate from a text description, e.g.::
+
+            a = AugRotate('angle=[30, 50] center=(2, 3) '
+                          'scale=1.1 interp="nearest"\n')
+
+        Note that the text must end with a newline character.
+        """
+        return _ecvl.AugRotate(txt)
+
     def __init__(self, angle, center=None, scale=1.0,
                  interp=InterpolationType.linear):
         """\
@@ -975,6 +1030,18 @@ class AugResizeDim(_ecvl.AugResizeDim):
     """\
     Augmentation wrapper for ResizeDim.
     """
+
+    @staticmethod
+    def fromtext(txt):
+        r"""\
+        Create an AugResizeDim from a text description, e.g.::
+
+            a = AugResizeDim('dims=(4, 3) interp="linear"\n')
+
+        Note that the text must end with a newline character.
+        """
+        return _ecvl.AugResizeDim(txt)
+
     def __init__(self, dims, interp=InterpolationType.linear):
         """\
         :param dims: list of integers that specifies the new size of each
@@ -988,6 +1055,18 @@ class AugResizeScale(_ecvl.AugResizeScale):
     """\
     Augmentation wrapper for ResizeScale.
     """
+
+    @staticmethod
+    def fromtext(txt):
+        r"""\
+        Create an AugResizeScale from a text description, e.g.::
+
+            a = AugResizeScale('scale=(0.5, 0.5) interp="linear"\n')
+
+        Note that the text must end with a newline character.
+        """
+        return _ecvl.AugResizeScale(txt)
+
     def __init__(self, scale, interp=InterpolationType.linear):
         """\
         :param scale: list of floats that specifies the scale to apply to
@@ -1001,6 +1080,18 @@ class AugFlip(_ecvl.AugFlip):
     """\
     Augmentation wrapper for Flip2D.
     """
+
+    @staticmethod
+    def fromtext(txt):
+        r"""\
+        Create an AugFlip from a text description, e.g.::
+
+            a = AugFlip('p=0.5\n')
+
+        Note that the text must end with a newline character.
+        """
+        return _ecvl.AugFlip(txt)
+
     def __init__(self, p=0.5):
         """\
         :param p: probability of each image to get flipped
@@ -1012,6 +1103,18 @@ class AugMirror(_ecvl.AugMirror):
     """\
     Augmentation wrapper for Mirror2D.
     """
+
+    @staticmethod
+    def fromtext(txt):
+        r"""\
+        Create an AugMirror from a text description, e.g.::
+
+            a = AugMirror('p=0.5\n')
+
+        Note that the text must end with a newline character.
+        """
+        return _ecvl.AugMirror(txt)
+
     def __init__(self, p=0.5):
         """\
         :param p: probability of each image to get mirrored
@@ -1023,6 +1126,18 @@ class AugGaussianBlur(_ecvl.AugGaussianBlur):
     """\
     Augmentation wrapper for GaussianBlur.
     """
+
+    @staticmethod
+    def fromtext(txt):
+        r"""\
+        Create an AugGaussianBlur from a text description, e.g.::
+
+            a = AugGaussianBlur('sigma=[0.2, 0.4]\n')
+
+        Note that the text must end with a newline character.
+        """
+        return _ecvl.AugGaussianBlur(txt)
+
     def __init__(self, sigma):
         """\
         :param sigma: sigma range ``[min, max]`` to randomly select from.
@@ -1034,6 +1149,18 @@ class AugAdditiveLaplaceNoise(_ecvl.AugAdditiveLaplaceNoise):
     """\
     Augmentation wrapper for AdditiveLaplaceNoise.
     """
+
+    @staticmethod
+    def fromtext(txt):
+        r"""\
+        Create an AugAdditiveLaplaceNoise from a text description, e.g.::
+
+            a = AugAdditiveLaplaceNoise('std_dev=[12.5, 23.1]\n')
+
+        Note that the text must end with a newline character.
+        """
+        return _ecvl.AugAdditiveLaplaceNoise(txt)
+
     def __init__(self, std_dev):
         """\
         :param std_dev: range of values ``[min, max]`` to randomly select the \
@@ -1047,6 +1174,18 @@ class AugAdditivePoissonNoise(_ecvl.AugAdditivePoissonNoise):
     """\
     Augmentation wrapper for AdditivePoissonNoise.
     """
+
+    @staticmethod
+    def fromtext(txt):
+        r"""\
+        Create an AugAdditivePoissonNoise from a text description, e.g.::
+
+            a = AugAdditivePoissonNoise('lambda=[2.0, 3.0]\n')
+
+        Note that the text must end with a newline character.
+        """
+        return _ecvl.AugAdditivePoissonNoise(txt)
+
     def __init__(self, lambda_):
         """\
         :param lambda\_: range of values ``[min, max]`` to randomly select \
@@ -1060,6 +1199,18 @@ class AugGammaContrast(_ecvl.AugGammaContrast):
     """\
     Augmentation wrapper for GammaContrast.
     """
+
+    @staticmethod
+    def fromtext(txt):
+        r"""\
+        Create an AugGammaContrast from a text description, e.g.::
+
+            a = AugGammaContrast('gamma=[3, 4]\n')
+
+        Note that the text must end with a newline character.
+        """
+        return _ecvl.AugGammaContrast(txt)
+
     def __init__(self, gamma):
         """\
         :param gamma: range of values ``[min, max]`` to randomly select the \
@@ -1073,6 +1224,19 @@ class AugCoarseDropout(_ecvl.AugCoarseDropout):
     """\
     Augmentation wrapper for CoarseDropout.
     """
+
+    @staticmethod
+    def fromtext(txt):
+        r"""\
+        Create an AugCoarseDropout from a text description, e.g.::
+
+            a = AugCoarseDropout('p=[0.5, 0.7] drop_size=[0.1, 0.2] '
+                                 'per_channel=0.4\n')
+
+        Note that the text must end with a newline character.
+        """
+        return _ecvl.AugCoarseDropout(txt)
+
     def __init__(self, p, drop_size, per_channel):
         """\
         :param p: range of values ``[min, max]`` to randomly select the
