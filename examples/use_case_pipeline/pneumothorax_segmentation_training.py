@@ -205,8 +205,8 @@ def main(args):
             eddl.print_loss(net, b)
             print()
         print("Saving weights")
-        eddl.save(net, f"pneumothorax_segnetBN_adam_lr_0.0001_loss_ce_size_512"
-                       f"_{e + 1}.bin", "bin")
+        eddl.save(net, "pneumothorax_segnetBN_adam_lr_0.0001_loss_ce_size_512"
+                       "_{}.bin".format(e + 1), "bin")
 
         d.SetSplit(ecvl.SplitType.validation)
         evaluator.ResetEval()
@@ -233,7 +233,7 @@ def main(args):
                 img_np = np.array(img, copy=False)
                 gt_np = np.array(gt, copy=False)
                 dice = evaluator.DiceCoefficient(img_np, gt_np, thresh=thresh)
-                print(f"- Dice: {dice:.6f} ", end="", flush=True)
+                print("- Dice: {:.6f} ".format(dice), end="", flush=True)
                 if args.out_dir:
                     # C++ BinaryIoU modifies image as a side effect
 
@@ -252,9 +252,9 @@ def main(args):
                     filename = names[n]
                     filename_gt = names[n + 1]
                     n += 2
-                    filepath = os.path.join(args.out_dir,
-                                            filename.split('/')[-1].replace(
-                                                '.dcm', '.png'))
+                    head, tail = os.path.splitext(os.path.basename(filename))
+                    bname = "{}.png".format(head)
+                    filepath = os.path.join(args.out_dir, bname)
                     ecvl.ImWrite(filepath, img_I)
 
                     if filename_gt != 'black.png':
