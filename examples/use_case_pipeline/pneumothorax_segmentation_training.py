@@ -74,7 +74,8 @@ def PneumothoraxLoadBatch(d, mask_indices, black_indices, m_i, b_i):
         else:
             index = black_indices[b_i]
             b_i += 1
-        # insert the original name of images and ground truth in case you want to save predictions during validation
+        # insert the original name of images and ground truth in case
+        # you want to save predictions during validation
         elem = d.samples_[index]
         names.append(elem.location_[0])
         names.append(elem.label_path_)
@@ -85,7 +86,8 @@ def PneumothoraxLoadBatch(d, mask_indices, black_indices, m_i, b_i):
         # Read the ground truth
         gt = elem.LoadImage(d.ctype_gt_, True)
 
-        # Apply chain of augmentations to sample image and corresponding ground truth
+        # Apply chain of augmentations to sample image
+        # and corresponding ground truth
         d.augs_.Apply(d.current_split_, img, gt)
 
         # Copy image into tensor (images)
@@ -114,6 +116,7 @@ def main(args):
     num_classes = 1
     size = [512, 512]  # size of images
     thresh = 0.5
+    best_dice = -1
 
     if args.out_dir:
         os.makedirs(args.out_dir, exist_ok=True)
@@ -204,9 +207,6 @@ def main(args):
             eddl.train_batch(net, [x], [y], indices)
             eddl.print_loss(net, b)
             print()
-        print("Saving weights")
-        eddl.save(net, "pneumothorax_segnetBN_adam_lr_0.0001_loss_ce_size_512"
-                       "_{}.bin".format(e + 1), "bin")
 
         d.SetSplit(ecvl.SplitType.validation)
         evaluator.ResetEval()
@@ -258,12 +258,19 @@ def main(args):
                     ecvl.ImWrite(filepath, img_I)
 
                     if filename_gt != 'black.png':
-                        filepath = os.path.join(args.out_dir,
-                                                filename_gt.split('/')[-1])
+                        bname = os.path.basename(filename_gt)
+                        filepath = os.path.join(args.out_dir, bname)
                         ecvl.ImWrite(filepath, gt_I)
 
             print()
-        print("Mean Dice Coefficient:: {.6g}".format(evaluator.MeanMetric()))
+
+        mean_dice = evaluator.MeanMetric()
+        if mean_dice > best_dice:
+            print("Saving weights")
+            eddl.save(net, "pneumothorax_segnetBN_adam_lr_0.0001_"
+                           "loss_ce_size_512_{}.bin".format(e + 1), "bin")
+            best_dice = mean_dice
+        print("Mean Dice Coefficient:: {.6g}".format(mean_dice))
 
 
 if __name__ == "__main__":
