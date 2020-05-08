@@ -274,7 +274,7 @@ void bind_ecvl_functions(pybind11::module &m) {
   cl.def_readwrite("current_batch_", &ecvl::DLDataset::current_batch_);
   cl.def_readwrite("ctype_", &ecvl::DLDataset::ctype_);
   cl.def_readwrite("ctype_gt_", &ecvl::DLDataset::ctype_gt_);
-  // cl.def_readwrite("augs_", &ecvl::DLDataset::augs_);
+  cl.def_readwrite("augs_", &ecvl::DLDataset::augs_);
   cl.def("GetSplit", (std::vector<int>& (ecvl::DLDataset::*)()) &ecvl::DLDataset::GetSplit, "C++: ecvl::DLDataset::GetSplit() --> std::vector<int>&");
   cl.def("GetSplit", (std::vector<int>& (ecvl::DLDataset::*)(const ecvl::SplitType&)) &ecvl::DLDataset::GetSplit, "C++: ecvl::DLDataset::GetSplit(const ecvl::SplitType&) --> std::vector<int>&");
   cl.def("ResetCurrentBatch", &ecvl::DLDataset::ResetCurrentBatch);
