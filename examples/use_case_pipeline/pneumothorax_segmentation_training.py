@@ -39,34 +39,37 @@ import utils
 from models import SegNetBN
 
 
-def PneumothoraxLoadBatch(d, mask_indices, black_indices, m_i, b_i):
+def PneumothoraxLoadBatch(d, black_indices, m_i, b_i):
+    mask_indices = d.GetSplit()
+    len_mask_indices = len(mask_indices)
     bs = d.batch_size_
     names = []
     images = []
     labels = []
 
     if d.current_split_ == ecvl.SplitType.training:
-        current_batch = d.current_batch_[0]
+        index = 0
     elif d.current_split_ == ecvl.SplitType.validation:
-        current_batch = d.current_batch_[1]
+        index = 1
     else:
-        current_batch = d.current_batch_[2]
+        index = 2
 
-    start = current_batch * bs
-    current_batch += 1
+    start = d.current_batch_[index] * bs
+    d.current_batch_ = [elem + 1 if i == index else elem for i, elem in
+                        enumerate(d.current_batch_)]
 
     expr = True
     for i in range(start, start + bs):
         if d.current_split_ == ecvl.SplitType.training:
             # in training, check if you can take
             # other black ground truth images..
-            if len(mask_indices) * 1.25 - i > len(mask_indices) * 1.25 - m_i:
-                expr = random.random() >= 0.2 and m_i < len(mask_indices)
+            if len_mask_indices * 1.25 - i > len_mask_indices - m_i:
+                expr = random.random() >= 0.2 and m_i < len_mask_indices
             # ..otherwise, you have to take a ground truth with mask
         else:
             # in validation, first take all the samples with the ground
             # truth with mask and then all those with the black ground truth.
-            expr = m_i < len(mask_indices)
+            expr = m_i < len_mask_indices
 
         if expr:
             index = mask_indices[m_i]
@@ -96,7 +99,7 @@ def PneumothoraxLoadBatch(d, mask_indices, black_indices, m_i, b_i):
         # Copy label into tensor (labels)
         labels.append(ecvl.ImageToTensor(gt))
 
-    return images, labels, names, m_i, b_i
+    return d, images, labels, names, m_i, b_i
 
 
 def fill_tensors(images, labels, x, y):
@@ -133,7 +136,7 @@ def main(args):
         eddl.CS_GPU([1], mem='low_mem') if args.gpu else eddl.CS_CPU()
     )
     eddl.summary(net)
-    eddl.setlogfile(net, "pneumothorax_segmentation")
+    eddl.setlogfile(net, "pneumothorax_segmentation_training")
 
     training_augs = ecvl.SequentialAugmentationContainer([
         ecvl.AugResizeDim(size, ecvl.InterpolationType.nearest),
@@ -199,8 +202,8 @@ def main(args):
             print("Epoch {:d}/{:d} (batch {:d}/{:d}) - ".format(
                 e + 1, args.epochs, b + 1, num_batches_train
             ), end="", flush=True)
-            images, labels, _, m_i, b_i = PneumothoraxLoadBatch(
-                d, d.GetSplit(), black_training, m_i, b_i)
+            d, images, labels, _, m_i, b_i = PneumothoraxLoadBatch(
+                d, black_training, m_i, b_i)
             x, y = fill_tensors(images, labels, x, y)
             x.div_(255.0)
             y.div_(255.0)
@@ -218,8 +221,8 @@ def main(args):
             print("Epoch {:d}/{:d} (batch {:d}/{:d}) ".format(
                 e + 1, args.epochs, b + 1, num_batches_validation
             ), end="", flush=True)
-            images, labels, names, m_i, b_i = PneumothoraxLoadBatch(
-                d, d.GetSplit(), black_validation, m_i, b_i)
+            d, images, labels, names, m_i, b_i = PneumothoraxLoadBatch(
+                d, black_validation, m_i, b_i)
             x, y = fill_tensors(images, labels, x, y)
             x.div_(255.0)
             y.div_(255.0)
@@ -234,6 +237,7 @@ def main(args):
                 gt_np = np.array(gt, copy=False)
                 dice = evaluator.DiceCoefficient(img_np, gt_np, thresh=thresh)
                 print("- Dice: {:.6f} ".format(dice), end="", flush=True)
+
                 if args.out_dir:
                     # C++ BinaryIoU modifies image as a side effect
 
@@ -261,7 +265,6 @@ def main(args):
                         bname = os.path.basename(filename_gt)
                         filepath = os.path.join(args.out_dir, bname)
                         ecvl.ImWrite(filepath, gt_I)
-
             print()
 
         mean_dice = evaluator.MeanMetric()
@@ -270,7 +273,7 @@ def main(args):
             eddl.save(net, "pneumothorax_segnetBN_adam_lr_0.0001_"
                            "loss_ce_size_512_{}.bin".format(e + 1), "bin")
             best_dice = mean_dice
-        print("Mean Dice Coefficient:: {.6g}".format(mean_dice))
+        print("Mean Dice Coefficient: {:.6g}".format(mean_dice))
 
 
 if __name__ == "__main__":
