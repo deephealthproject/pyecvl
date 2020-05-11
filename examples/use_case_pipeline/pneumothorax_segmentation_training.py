@@ -138,6 +138,10 @@ def main(args):
     eddl.summary(net)
     eddl.setlogfile(net, "pneumothorax_segmentation_training")
 
+    if args.ckpts and os.path.exists(args.ckpts):
+        print("Loading checkpoints '{}'".format(args.ckpts))
+        eddl.load(net, args.ckpts, 'bin')
+
     training_augs = ecvl.SequentialAugmentationContainer([
         ecvl.AugResizeDim(size, ecvl.InterpolationType.nearest),
         ecvl.AugMirror(0.5),
@@ -198,18 +202,19 @@ def main(args):
         # Indices to track mask and black vector in PneumothoraxLoadBatch
         m_i = 0
         b_i = 0
-        for b in range(num_batches_train):
-            print("Epoch {:d}/{:d} (batch {:d}/{:d}) - ".format(
-                e + 1, args.epochs, b + 1, num_batches_train
-            ), end="", flush=True)
+        for i, b in enumerate(range(num_batches_train)):
             d, images, labels, _, m_i, b_i = PneumothoraxLoadBatch(
                 d, black_training, m_i, b_i)
             x, y = fill_tensors(images, labels, x, y)
             x.div_(255.0)
             y.div_(255.0)
             eddl.train_batch(net, [x], [y], indices)
-            eddl.print_loss(net, b)
-            print()
+            if i % args.log_interval == 0:
+                print("Epoch {:d}/{:d} (batch {:d}/{:d}) - ".format(
+                    e + 1, args.epochs, b + 1, num_batches_train
+                ), end="", flush=True)
+                eddl.print_loss(net, b)
+                print()
 
         d.SetSplit(ecvl.SplitType.validation)
         evaluator.ResetEval()
@@ -281,7 +286,9 @@ if __name__ == "__main__":
     parser.add_argument("in_ds", metavar="INPUT_DATASET")
     parser.add_argument("--epochs", type=int, metavar="INT", default=20)
     parser.add_argument("--batch-size", type=int, metavar="INT", default=2)
+    parser.add_argument("--log-interval", type=int, metavar="INT", default=100)
     parser.add_argument("--gpu", action="store_true")
     parser.add_argument("--out-dir", metavar="DIR",
                         help="if set, save images in this directory")
+    parser.add_argument("--ckpts", type=str)
     main(parser.parse_args())
