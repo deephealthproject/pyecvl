@@ -69,11 +69,15 @@ Image processing
    :members:
    :undoc-members:
 
-.. autoclass:: pyecvl.ecvl.MorphTypes
+.. autoclass:: pyecvl.ecvl.MorphType
    :members:
    :undoc-members:
 
-.. autoclass:: pyecvl.ecvl.InpaintTypes
+.. autoclass:: pyecvl.ecvl.InpaintType
+   :members:
+   :undoc-members:
+
+.. autoclass:: pyecvl.ecvl.BorderType
    :members:
    :undoc-members:
 

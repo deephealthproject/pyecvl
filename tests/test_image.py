@@ -120,7 +120,7 @@ def test_rearrange_channels(ecvl):
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
 def test_numpy(ecvl):
     shape = [2, 3, 4]
-    img = ecvl.Image(shape, ecvl.DataType.int16, "xy", ecvl.ColorType.none)
+    img = ecvl.Image(shape, ecvl.DataType.int16, "xyc", ecvl.ColorType.none)
     view = ecvl.View_int16(img)
     a = np.array(img, copy=False)
     assert list(a.shape) == shape

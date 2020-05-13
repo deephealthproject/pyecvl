@@ -25,11 +25,11 @@ RUN \
  && apt-get clean
 
 # Install CMake
-RUN wget https://cmake.org/files/v3.14/cmake-3.14.5-Linux-x86_64.tar.gz && \
-    tar xf cmake-3.14.5-Linux-x86_64.tar.gz && \
-    cp -rf cmake-3.14.5-Linux-x86_64/bin /usr/ && \
-    cp -rf cmake-3.14.5-Linux-x86_64/share /usr/ && \
-    rm -rf cmake-3.14.5-Linux-x86_64.tar.gz cmake-3.14.5-Linux-x86_64
+RUN wget -q https://cmake.org/files/v3.17/cmake-3.17.2-Linux-x86_64.tar.gz && \
+    tar xf cmake-3.17.2-Linux-x86_64.tar.gz && \
+    cp -rf cmake-3.17.2-Linux-x86_64/bin /usr/ && \
+    cp -rf cmake-3.17.2-Linux-x86_64/share /usr/ && \
+    rm -rf cmake-3.17.2-Linux-x86_64.tar.gz cmake-3.17.2-Linux-x86_64
 
 # Eigen version installed by APT is too old to work properly with CUDA
 # https://devtalk.nvidia.com/default/topic/1026622/nvcc-can-t-compile-code-that-uses-eigen/
@@ -39,7 +39,8 @@ RUN wget -q https://gitlab.com/libeigen/eigen/-/archive/3.3.7/eigen-3.3.7.tar.gz
     mkdir build && \
     cd build && \
     cmake .. && \
-    make install
+    make install && \
+    rm -rf eigen-3.3.7.tar.gz eigen-3.3.7
 
 ENV CPATH="/usr/local/include/eigen3:${CPATH}"
 
@@ -49,7 +50,8 @@ RUN wget -q https://github.com/protocolbuffers/protobuf/releases/download/v3.11.
     ./configure && \
     make -j$(nproc) && \
     make install && \
-    ldconfig
+    ldconfig && \
+    rm -rf protobuf-all-3.11.4.tar.gz protobuf-3.11.4
 
 # Install EDDL. Assumes recursive submodule update.
 COPY third_party/pyeddl/third_party/eddl /eddl
@@ -72,6 +74,7 @@ RUN mkdir build && \
       -DECVL_WITH_DICOM=ON \
       -DECVL_WITH_OPENSLIDE=ON \
       -DECVL_DATASET=ON \
+      -DECVL_GPU=ON \
       -DECVL_BUILD_EDDL=ON .. && \
     make -j$(nproc) && \
     make install

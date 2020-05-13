@@ -440,26 +440,38 @@ class InterpolationType(_ecvl.InterpolationType):
     lanczos4 = _ecvl.InterpolationType.lanczos4
 
 
-class MorphTypes(_ecvl.MorphTypes):
+class MorphType(_ecvl.MorphType):
     """\
     Enum class representing the possible morph types.
     """
-    MORPH_ERODE = _ecvl.MorphTypes.MORPH_ERODE
-    MORPH_DILATE = _ecvl.MorphTypes.MORPH_DILATE
-    MORPH_OPEN = _ecvl.MorphTypes.MORPH_OPEN
-    MORPH_CLOSE = _ecvl.MorphTypes.MORPH_CLOSE
-    MORPH_GRADIENT = _ecvl.MorphTypes.MORPH_GRADIENT
-    MORPH_TOPHAT = _ecvl.MorphTypes.MORPH_TOPHAT
-    MORPH_BLACKHAT = _ecvl.MorphTypes.MORPH_BLACKHAT
-    MORPH_HITMISS = _ecvl.MorphTypes.MORPH_HITMISS
+    MORPH_ERODE = _ecvl.MorphType.MORPH_ERODE
+    MORPH_DILATE = _ecvl.MorphType.MORPH_DILATE
+    MORPH_OPEN = _ecvl.MorphType.MORPH_OPEN
+    MORPH_CLOSE = _ecvl.MorphType.MORPH_CLOSE
+    MORPH_GRADIENT = _ecvl.MorphType.MORPH_GRADIENT
+    MORPH_TOPHAT = _ecvl.MorphType.MORPH_TOPHAT
+    MORPH_BLACKHAT = _ecvl.MorphType.MORPH_BLACKHAT
+    MORPH_HITMISS = _ecvl.MorphType.MORPH_HITMISS
 
 
-class InpaintTypes(_ecvl.InpaintTypes):
+class InpaintType(_ecvl.InpaintType):
     """\
     Enum class representing the possible inpaint types.
     """
-    INPAINT_NS = _ecvl.InpaintTypes.INPAINT_NS
-    INPAINT_TELEA = _ecvl.InpaintTypes.INPAINT_TELEA
+    INPAINT_NS = _ecvl.InpaintType.INPAINT_NS
+    INPAINT_TELEA = _ecvl.InpaintType.INPAINT_TELEA
+
+
+class BorderType(_ecvl.BorderType):
+    """\
+    Enum class representing the possible border types.
+    """
+    BORDER_CONSTANT = _ecvl.BorderType.BORDER_CONSTANT
+    BORDER_REPLICATE = _ecvl.BorderType.BORDER_REPLICATE
+    BORDER_REFLECT = _ecvl.BorderType.BORDER_REFLECT
+    BORDER_WRAP = _ecvl.BorderType.BORDER_WRAP
+    BORDER_REFLECT_101 = _ecvl.BorderType.BORDER_REFLECT_101
+    BORDER_TRANSPARENT = _ecvl.BorderType.BORDER_TRANSPARENT
 
 
 def ResizeDim(src, dst, newdims, interp=InterpolationType.linear):
@@ -772,8 +784,7 @@ def FindContours(src):
     The ``src`` image must be "xyc", only one color channel and DataType.uint8.
 
     :param src: source image
-    :param dst: destination image
-    :return: None
+    :return: image contours
     """
     return _ecvl.FindContours(src)
 
@@ -817,20 +828,53 @@ def VConcat(src, dst):
     return _ecvl.VConcat(src, dst)
 
 
-def Morphology(src, dst, op, kernel, anchor=None, iterations=1, borderType=1,
-               borderValue=0):
+def Morphology(src, dst, op, kernel, anchor=None, iterations=1,
+               border_type=BorderType.BORDER_CONSTANT, border_value=0):
+    """\
+    Perform morphological transformations based on erosion and dilation.
+
+    :param src: input image
+    :param dst: output image
+    :param op: a MorphType
+    :param kernel: structuring element
+    :param anchor: anchor position within the kernel. A negative value means
+      that the anchor is at the center of the kernel
+    :param iterations: number of times erosion and dilation are applied
+    :param borderType: pixel extrapolation method, see BorderType.
+      BorderType.BORDER_WRAP is not supported
+    :param borderValue: border value in case of a constant border
+    :return: None
+    """
     if anchor is None:
         anchor = [-1, -1]
     return _ecvl.Morphology(src, dst, op, kernel, anchor, iterations,
-                            borderType, borderValue)
+                            border_type, border_value)
 
 
 def Inpaint(src, dst, inpaintMask, inpaintRadius,
-            flag=InpaintTypes.INPAINT_TELEA):
+            flag=InpaintType.INPAINT_TELEA):
+    """\
+    Restore a region in an image using the region's neighborhood.
+
+    :param src: input image
+    :param dst: output image
+    :param inpaintMask: an Image with 1 channel and DataType.uint8. Non-zero
+      pixels indicate the area that needs to be inpainted.
+    :param inpaintRadius: radius of a circular neighborhood of each point
+      inpainted that is considered by the algorithm.
+    :param flag: inpainting method (an InpaintType)
+    :return: None
+    """
     return _ecvl.Inpaint(src, dst, inpaintMask, inpaintRadius, flag)
 
 
 def MeanStdDev(src):
+    """\
+    Calculate the mean and the standard deviation of an image.
+
+    :param src: input image
+    :return: a (mean, stddev) tuple
+    """
     return _ecvl.MeanStdDev(src)
 
 

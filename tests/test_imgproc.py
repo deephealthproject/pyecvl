@@ -282,16 +282,18 @@ def test_Morphology(ecvl):
         [5, 5, 1], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR
     )
     tmp = _empty_img(ecvl)
-    ecvl.Morphology(img, tmp, ecvl.MorphTypes.MORPH_BLACKHAT, kernel)
-    ecvl.Morphology(img, tmp, ecvl.MorphTypes.MORPH_BLACKHAT, kernel, [3, 3])
+    ecvl.Morphology(img, tmp, ecvl.MorphType.MORPH_BLACKHAT, kernel)
+    ecvl.Morphology(img, tmp, ecvl.MorphType.MORPH_BLACKHAT, kernel, [3, 3])
     ecvl.Morphology(
-        img, tmp, ecvl.MorphTypes.MORPH_BLACKHAT, kernel, [3, 3], 2
+        img, tmp, ecvl.MorphType.MORPH_BLACKHAT, kernel, [3, 3], 2
     )
     ecvl.Morphology(
-        img, tmp, ecvl.MorphTypes.MORPH_BLACKHAT, kernel, [3, 3], 2, 2
+        img, tmp, ecvl.MorphType.MORPH_BLACKHAT, kernel, [3, 3], 2,
+        ecvl.BorderType.BORDER_REFLECT
     )
     ecvl.Morphology(
-        img, tmp, ecvl.MorphTypes.MORPH_BLACKHAT, kernel, [3, 3], 2, 2, 1
+        img, tmp, ecvl.MorphType.MORPH_BLACKHAT, kernel, [3, 3], 2,
+        ecvl.BorderType.BORDER_REFLECT, 1
     )
 
 
@@ -304,7 +306,7 @@ def test_Inpaint(ecvl):
     )
     tmp = _empty_img(ecvl)
     ecvl.Inpaint(img, tmp, mask, 5.0)
-    ecvl.Inpaint(img, tmp, mask, 5.0, ecvl.InpaintTypes.INPAINT_NS)
+    ecvl.Inpaint(img, tmp, mask, 5.0, ecvl.InpaintType.INPAINT_NS)
 
 
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
