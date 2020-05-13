@@ -137,6 +137,12 @@ Image processing
 
 .. autofunction:: pyecvl.ecvl.MeanStdDev
 
+.. autofunction:: pyecvl.ecvl.Transpose
+
+.. autofunction:: pyecvl.ecvl.GridDistortion
+
+.. autofunction:: pyecvl.ecvl.ElasticTransform
+
 
 DeepHealth dataset parser
 -------------------------
