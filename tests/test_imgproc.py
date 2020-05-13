@@ -314,3 +314,52 @@ def test_MeanStdDev(ecvl):
     dims = [20, 40, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     mean, stddev = ecvl.MeanStdDev(img)
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_Transpose(ecvl):
+    img = ecvl.Image(
+        [20, 40, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR
+    )
+    tmp = _empty_img(ecvl)
+    ecvl.Transpose(img, tmp)
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_GridDistortion(ecvl):
+    dims = [20, 40, 3]
+    img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    tmp = _empty_img(ecvl)
+    ecvl.GridDistortion(img, tmp)
+    ecvl.GridDistortion(img, tmp, 6)
+    ecvl.GridDistortion(img, tmp, 6, [-0.5, 0.5])
+    ecvl.GridDistortion(
+        img, tmp, 6, [-0.5, 0.5], ecvl.InterpolationType.nearest
+    )
+    ecvl.GridDistortion(
+        img, tmp, 6, [-0.5, 0.5], ecvl.InterpolationType.nearest,
+        ecvl.BorderType.BORDER_CONSTANT
+    )
+    ecvl.GridDistortion(
+        img, tmp, 6, [-0.5, 0.5], ecvl.InterpolationType.nearest,
+        ecvl.BorderType.BORDER_CONSTANT, 1
+    )
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_ElasticTransform(ecvl):
+    dims = [20, 40, 3]
+    img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    tmp = _empty_img(ecvl)
+    ecvl.ElasticTransform(img, tmp)
+    ecvl.ElasticTransform(img, tmp, 35)
+    ecvl.ElasticTransform(img, tmp, 35, 5)
+    ecvl.ElasticTransform(img, tmp, 35, 5, ecvl.InterpolationType.nearest)
+    ecvl.ElasticTransform(
+        img, tmp, 35, 5, ecvl.InterpolationType.nearest,
+        ecvl.BorderType.BORDER_CONSTANT
+    )
+    ecvl.ElasticTransform(
+        img, tmp, 35, 5, ecvl.InterpolationType.nearest,
+        ecvl.BorderType.BORDER_CONSTANT, 1
+    )

@@ -878,6 +878,61 @@ def MeanStdDev(src):
     return _ecvl.MeanStdDev(src)
 
 
+def Transpose(src, dst):
+    """\
+    Swap rows and columns of an image.
+
+    :param src: input image
+    :param dst: output image
+    :return: None
+    """
+    return _ecvl.Transpose(src, dst)
+
+
+def GridDistortion(src, dst, num_steps=5, distort_limit=None,
+                   interp=InterpolationType.linear,
+                   border_type=BorderType.BORDER_REFLECT_101, border_value=0):
+    """\
+    Divide the image into a cell grid and randomly stretch or reduce each cell.
+
+    :param src: input image
+    :param dst: output image
+    :param num_steps: grid cell count on each side
+    :param distort_limit: distortion steps range
+    :param interp: InterpolationType to be used
+    :param border_type: pixel extrapolation method, see BorderType
+    :param border_value: padding value if border_type is
+      BorderType.BORDER_CONSTANT
+    :return: None
+    """
+    if distort_limit is None:
+        distort_limit = [-0.3, 0.3]
+    return _ecvl.GridDistortion(src, dst, num_steps, distort_limit,
+                                interp, border_type, border_value)
+
+
+def ElasticTransform(src, dst, alpha=34, sigma=4,
+                     interp=InterpolationType.linear,
+                     border_type=BorderType.BORDER_REFLECT_101,
+                     border_value=0):
+    """\
+    Elastic deformation of input image.
+
+    :param src: input image
+    :param dst: output image
+    :param alpha: scaling factor that controls the intensity of the deformation
+    :param sigma: Gaussian kernel standard deviation
+    :param interp: InterpolationType to be used. If ``src`` is DataType.int8
+      or DataType.int32, InterpolationType.nearest is used
+    :param border_type: pixel extrapolation method, see BorderType
+    :param border_value: padding value if border_type is
+      BorderType.BORDER_CONSTANT
+    :return: None
+    """
+    return _ecvl.ElasticTransform(src, dst, alpha, sigma, interp, border_type,
+                                  border_value)
+
+
 # == dataset_parser ==
 
 class SplitType(_ecvl.SplitType):
