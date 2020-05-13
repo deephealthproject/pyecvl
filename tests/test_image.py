@@ -105,7 +105,7 @@ def test_rearrange_channels(ecvl):
     for i in range(S[0]):
         for j in range(S[1]):
             for k in range(S[2]):
-                for l in range(S[3]):
+                for l in range(S[3]):  # noqa
                     view[i, j, k, l] = (l + k * S[3] + j * S[2] * S[3] +
                                         i * S[1] * S[2] * S[3])
     img2 = _empty_img(ecvl)
