@@ -1,25 +1,15 @@
-# Copyright (c) 2020 CRS4
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+# PyECVL - Python wrapper for European Computer Vision Library
+# Copyright (c) 2020, Università degli Studi di Modena e Reggio Emilia (UNIMORE), AImageLab
+# Authors:
+#    Michele Cancilla (michele.cancilla@unimore.it)
+#    Laura Canalini (laura.canalini@unimore.it)
+#    Costantino Grana (costantino.grana@unimore.it)
+#    Federico Bolelli (federico.bolelli@unimore.it)
+#    Stefano Allegretti (stefano.allegretti@unimore.it)
+# All rights reserved.
 
 """\
-Skin lesion segmentation training example.
+Pneumothorax segmentation training example.
 
 More information and checkpoints available at
 https://github.com/deephealthproject/use_case_pipeline
