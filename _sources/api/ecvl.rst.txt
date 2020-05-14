@@ -69,11 +69,15 @@ Image processing
    :members:
    :undoc-members:
 
-.. autoclass:: pyecvl.ecvl.MorphTypes
+.. autoclass:: pyecvl.ecvl.MorphType
    :members:
    :undoc-members:
 
-.. autoclass:: pyecvl.ecvl.InpaintTypes
+.. autoclass:: pyecvl.ecvl.InpaintType
+   :members:
+   :undoc-members:
+
+.. autoclass:: pyecvl.ecvl.BorderType
    :members:
    :undoc-members:
 
@@ -132,6 +136,12 @@ Image processing
 .. autofunction:: pyecvl.ecvl.Inpaint
 
 .. autofunction:: pyecvl.ecvl.MeanStdDev
+
+.. autofunction:: pyecvl.ecvl.Transpose
+
+.. autofunction:: pyecvl.ecvl.GridDistortion
+
+.. autofunction:: pyecvl.ecvl.ElasticTransform
 
 
 DeepHealth dataset parser
@@ -206,6 +216,22 @@ Augmentations
    :undoc-members:
 
 .. autoclass:: pyecvl.ecvl.AugCoarseDropout
+   :members:
+   :undoc-members:
+
+.. autoclass:: pyecvl.ecvl.AugTranspose
+   :members:
+   :undoc-members:
+
+.. autoclass:: pyecvl.ecvl.AugBrightness
+   :members:
+   :undoc-members:
+
+.. autoclass:: pyecvl.ecvl.AugGridDistortion
+   :members:
+   :undoc-members:
+
+.. autoclass:: pyecvl.ecvl.AugElasticTransform
    :members:
    :undoc-members:
 
