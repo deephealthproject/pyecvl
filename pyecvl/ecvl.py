@@ -165,7 +165,7 @@ class Image(_ecvl.Image):
         if spacings is None:
             spacings = []
         _ecvl.Image.__init__(
-            self, dims, elemtype, channels, colortype, spacings
+            self, dims, elemtype, channels, colortype, spacings, dev
         )
 
     def IsEmpty(self):
