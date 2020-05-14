@@ -120,11 +120,13 @@ versions for each PyECVL version:
 +----------------+--------------+----------------+
 | 0.2.1          | 0.2.0        | 0.6.0          |
 +----------------+--------------+----------------+
+| 0.3.0          | 0.2.1        | 0.6.0          |
++----------------+--------------+----------------+
 
-Thus, for instance, to install PyECVL 0.2.1::
+Thus, for instance, to install PyECVL 0.3.0::
 
     python3 -m pip install pyeddl==0.6.0
-    python3 -m pip install pyecvl==0.2.1
+    python3 -m pip install pyecvl==0.3.0
 
 
 Disabling unwanted modules

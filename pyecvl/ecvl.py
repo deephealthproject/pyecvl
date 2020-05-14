@@ -165,7 +165,7 @@ class Image(_ecvl.Image):
         if spacings is None:
             spacings = []
         _ecvl.Image.__init__(
-            self, dims, elemtype, channels, colortype, spacings
+            self, dims, elemtype, channels, colortype, spacings, dev
         )
 
     def IsEmpty(self):
@@ -440,26 +440,38 @@ class InterpolationType(_ecvl.InterpolationType):
     lanczos4 = _ecvl.InterpolationType.lanczos4
 
 
-class MorphTypes(_ecvl.MorphTypes):
+class MorphType(_ecvl.MorphType):
     """\
     Enum class representing the possible morph types.
     """
-    MORPH_ERODE = _ecvl.MorphTypes.MORPH_ERODE
-    MORPH_DILATE = _ecvl.MorphTypes.MORPH_DILATE
-    MORPH_OPEN = _ecvl.MorphTypes.MORPH_OPEN
-    MORPH_CLOSE = _ecvl.MorphTypes.MORPH_CLOSE
-    MORPH_GRADIENT = _ecvl.MorphTypes.MORPH_GRADIENT
-    MORPH_TOPHAT = _ecvl.MorphTypes.MORPH_TOPHAT
-    MORPH_BLACKHAT = _ecvl.MorphTypes.MORPH_BLACKHAT
-    MORPH_HITMISS = _ecvl.MorphTypes.MORPH_HITMISS
+    MORPH_ERODE = _ecvl.MorphType.MORPH_ERODE
+    MORPH_DILATE = _ecvl.MorphType.MORPH_DILATE
+    MORPH_OPEN = _ecvl.MorphType.MORPH_OPEN
+    MORPH_CLOSE = _ecvl.MorphType.MORPH_CLOSE
+    MORPH_GRADIENT = _ecvl.MorphType.MORPH_GRADIENT
+    MORPH_TOPHAT = _ecvl.MorphType.MORPH_TOPHAT
+    MORPH_BLACKHAT = _ecvl.MorphType.MORPH_BLACKHAT
+    MORPH_HITMISS = _ecvl.MorphType.MORPH_HITMISS
 
 
-class InpaintTypes(_ecvl.InpaintTypes):
+class InpaintType(_ecvl.InpaintType):
     """\
     Enum class representing the possible inpaint types.
     """
-    INPAINT_NS = _ecvl.InpaintTypes.INPAINT_NS
-    INPAINT_TELEA = _ecvl.InpaintTypes.INPAINT_TELEA
+    INPAINT_NS = _ecvl.InpaintType.INPAINT_NS
+    INPAINT_TELEA = _ecvl.InpaintType.INPAINT_TELEA
+
+
+class BorderType(_ecvl.BorderType):
+    """\
+    Enum class representing the possible border types.
+    """
+    BORDER_CONSTANT = _ecvl.BorderType.BORDER_CONSTANT
+    BORDER_REPLICATE = _ecvl.BorderType.BORDER_REPLICATE
+    BORDER_REFLECT = _ecvl.BorderType.BORDER_REFLECT
+    BORDER_WRAP = _ecvl.BorderType.BORDER_WRAP
+    BORDER_REFLECT_101 = _ecvl.BorderType.BORDER_REFLECT_101
+    BORDER_TRANSPARENT = _ecvl.BorderType.BORDER_TRANSPARENT
 
 
 def ResizeDim(src, dst, newdims, interp=InterpolationType.linear):
@@ -772,8 +784,7 @@ def FindContours(src):
     The ``src`` image must be "xyc", only one color channel and DataType.uint8.
 
     :param src: source image
-    :param dst: destination image
-    :return: None
+    :return: image contours
     """
     return _ecvl.FindContours(src)
 
@@ -817,21 +828,109 @@ def VConcat(src, dst):
     return _ecvl.VConcat(src, dst)
 
 
-def Morphology(src, dst, op, kernel, anchor=None, iterations=1, borderType=1,
-               borderValue=0):
+def Morphology(src, dst, op, kernel, anchor=None, iterations=1,
+               border_type=BorderType.BORDER_CONSTANT, border_value=0):
+    """\
+    Perform morphological transformations based on erosion and dilation.
+
+    :param src: input image
+    :param dst: output image
+    :param op: a MorphType
+    :param kernel: structuring element
+    :param anchor: anchor position within the kernel. A negative value means
+      that the anchor is at the center of the kernel
+    :param iterations: number of times erosion and dilation are applied
+    :param borderType: pixel extrapolation method, see BorderType.
+      BorderType.BORDER_WRAP is not supported
+    :param borderValue: border value in case of a constant border
+    :return: None
+    """
     if anchor is None:
         anchor = [-1, -1]
     return _ecvl.Morphology(src, dst, op, kernel, anchor, iterations,
-                            borderType, borderValue)
+                            border_type, border_value)
 
 
 def Inpaint(src, dst, inpaintMask, inpaintRadius,
-            flag=InpaintTypes.INPAINT_TELEA):
+            flag=InpaintType.INPAINT_TELEA):
+    """\
+    Restore a region in an image using the region's neighborhood.
+
+    :param src: input image
+    :param dst: output image
+    :param inpaintMask: an Image with 1 channel and DataType.uint8. Non-zero
+      pixels indicate the area that needs to be inpainted.
+    :param inpaintRadius: radius of a circular neighborhood of each point
+      inpainted that is considered by the algorithm.
+    :param flag: inpainting method (an InpaintType)
+    :return: None
+    """
     return _ecvl.Inpaint(src, dst, inpaintMask, inpaintRadius, flag)
 
 
 def MeanStdDev(src):
+    """\
+    Calculate the mean and the standard deviation of an image.
+
+    :param src: input image
+    :return: a (mean, stddev) tuple
+    """
     return _ecvl.MeanStdDev(src)
+
+
+def Transpose(src, dst):
+    """\
+    Swap rows and columns of an image.
+
+    :param src: input image
+    :param dst: output image
+    :return: None
+    """
+    return _ecvl.Transpose(src, dst)
+
+
+def GridDistortion(src, dst, num_steps=5, distort_limit=None,
+                   interp=InterpolationType.linear,
+                   border_type=BorderType.BORDER_REFLECT_101, border_value=0):
+    """\
+    Divide the image into a cell grid and randomly stretch or reduce each cell.
+
+    :param src: input image
+    :param dst: output image
+    :param num_steps: grid cell count on each side
+    :param distort_limit: distortion steps range
+    :param interp: InterpolationType to be used
+    :param border_type: pixel extrapolation method, see BorderType
+    :param border_value: padding value if border_type is
+      BorderType.BORDER_CONSTANT
+    :return: None
+    """
+    if distort_limit is None:
+        distort_limit = [-0.3, 0.3]
+    return _ecvl.GridDistortion(src, dst, num_steps, distort_limit,
+                                interp, border_type, border_value)
+
+
+def ElasticTransform(src, dst, alpha=34, sigma=4,
+                     interp=InterpolationType.linear,
+                     border_type=BorderType.BORDER_REFLECT_101,
+                     border_value=0):
+    """\
+    Elastic deformation of input image.
+
+    :param src: input image
+    :param dst: output image
+    :param alpha: scaling factor that controls the intensity of the deformation
+    :param sigma: Gaussian kernel standard deviation
+    :param interp: InterpolationType to be used. If ``src`` is DataType.int8
+      or DataType.int32, InterpolationType.nearest is used
+    :param border_type: pixel extrapolation method, see BorderType
+    :param border_value: padding value if border_type is
+      BorderType.BORDER_CONSTANT
+    :return: None
+    """
+    return _ecvl.ElasticTransform(src, dst, alpha, sigma, interp, border_type,
+                                  border_value)
 
 
 # == dataset_parser ==
@@ -855,6 +954,7 @@ class Sample(_ecvl.Sample):
     :var label_path\_: absolute path of the sample's ground truth
     :var label\_: sample labels (list of integers)
     :var values\_: feature index-to-value mapping
+    :var size\_: original x and y dimensions of the sample
     """
     def LoadImage(self, ctype=ColorType.BGR, is_gt=False):
         """\
@@ -949,14 +1049,12 @@ class AugmentationFactory(_ecvl.AugmentationFactory):
     If only one argument is supplied, it needs to include the augmentation's
     name, e.g.::
 
-        AugmentationFactory.create('AugFlip p=0.5\n')
+        AugmentationFactory.create('AugFlip p=0.5')
 
     If only two arguments are supplied, the first is the augmentation's
     name, e.g.::
 
-        AugmentationFactory.create('AugFlip', 'p=0.5\n')
-
-    Note that the text must end with a newline character.
+        AugmentationFactory.create('AugFlip', 'p=0.5')
     """
 
     @staticmethod
@@ -983,8 +1081,6 @@ class SequentialAugmentationContainer(_ecvl.SequentialAugmentationContainer):
             end
             '''
             c = SequentialAugmentationContainer(txt)
-
-        Note that the text must end with a newline character.
         """
         return _ecvl.SequentialAugmentationContainer(txt)
 
@@ -1006,9 +1102,7 @@ class AugRotate(_ecvl.AugRotate):
         Create an AugRotate from a text description, e.g.::
 
             a = AugRotate('angle=[30, 50] center=(2, 3) '
-                          'scale=1.1 interp="nearest"\n')
-
-        Note that the text must end with a newline character.
+                          'scale=1.1 interp="nearest"')
         """
         return _ecvl.AugRotate(txt)
 
@@ -1036,9 +1130,7 @@ class AugResizeDim(_ecvl.AugResizeDim):
         r"""\
         Create an AugResizeDim from a text description, e.g.::
 
-            a = AugResizeDim('dims=(4, 3) interp="linear"\n')
-
-        Note that the text must end with a newline character.
+            a = AugResizeDim('dims=(4, 3) interp="linear"')
         """
         return _ecvl.AugResizeDim(txt)
 
@@ -1061,9 +1153,7 @@ class AugResizeScale(_ecvl.AugResizeScale):
         r"""\
         Create an AugResizeScale from a text description, e.g.::
 
-            a = AugResizeScale('scale=(0.5, 0.5) interp="linear"\n')
-
-        Note that the text must end with a newline character.
+            a = AugResizeScale('scale=(0.5, 0.5) interp="linear"')
         """
         return _ecvl.AugResizeScale(txt)
 
@@ -1086,9 +1176,7 @@ class AugFlip(_ecvl.AugFlip):
         r"""\
         Create an AugFlip from a text description, e.g.::
 
-            a = AugFlip('p=0.5\n')
-
-        Note that the text must end with a newline character.
+            a = AugFlip('p=0.5')
         """
         return _ecvl.AugFlip(txt)
 
@@ -1109,9 +1197,7 @@ class AugMirror(_ecvl.AugMirror):
         r"""\
         Create an AugMirror from a text description, e.g.::
 
-            a = AugMirror('p=0.5\n')
-
-        Note that the text must end with a newline character.
+            a = AugMirror('p=0.5')
         """
         return _ecvl.AugMirror(txt)
 
@@ -1132,9 +1218,7 @@ class AugGaussianBlur(_ecvl.AugGaussianBlur):
         r"""\
         Create an AugGaussianBlur from a text description, e.g.::
 
-            a = AugGaussianBlur('sigma=[0.2, 0.4]\n')
-
-        Note that the text must end with a newline character.
+            a = AugGaussianBlur('sigma=[0.2, 0.4]')
         """
         return _ecvl.AugGaussianBlur(txt)
 
@@ -1155,9 +1239,7 @@ class AugAdditiveLaplaceNoise(_ecvl.AugAdditiveLaplaceNoise):
         r"""\
         Create an AugAdditiveLaplaceNoise from a text description, e.g.::
 
-            a = AugAdditiveLaplaceNoise('std_dev=[12.5, 23.1]\n')
-
-        Note that the text must end with a newline character.
+            a = AugAdditiveLaplaceNoise('std_dev=[12.5, 23.1]')
         """
         return _ecvl.AugAdditiveLaplaceNoise(txt)
 
@@ -1180,9 +1262,7 @@ class AugAdditivePoissonNoise(_ecvl.AugAdditivePoissonNoise):
         r"""\
         Create an AugAdditivePoissonNoise from a text description, e.g.::
 
-            a = AugAdditivePoissonNoise('lambda=[2.0, 3.0]\n')
-
-        Note that the text must end with a newline character.
+            a = AugAdditivePoissonNoise('lambda=[2.0, 3.0]')
         """
         return _ecvl.AugAdditivePoissonNoise(txt)
 
@@ -1205,9 +1285,7 @@ class AugGammaContrast(_ecvl.AugGammaContrast):
         r"""\
         Create an AugGammaContrast from a text description, e.g.::
 
-            a = AugGammaContrast('gamma=[3, 4]\n')
-
-        Note that the text must end with a newline character.
+            a = AugGammaContrast('gamma=[3, 4]')
         """
         return _ecvl.AugGammaContrast(txt)
 
@@ -1231,9 +1309,7 @@ class AugCoarseDropout(_ecvl.AugCoarseDropout):
         Create an AugCoarseDropout from a text description, e.g.::
 
             a = AugCoarseDropout('p=[0.5, 0.7] drop_size=[0.1, 0.2] '
-                                 'per_channel=0.4\n')
-
-        Note that the text must end with a newline character.
+                                 'per_channel=0.4')
         """
         return _ecvl.AugCoarseDropout(txt)
 
@@ -1247,6 +1323,116 @@ class AugCoarseDropout(_ecvl.AugCoarseDropout):
           for all channels of a pixel
         """
         _ecvl.AugCoarseDropout.__init__(self, p, drop_size, per_channel)
+
+
+class AugTranspose(_ecvl.AugTranspose):
+    """\
+    Augmentation wrapper for Transpose.
+    """
+
+    @staticmethod
+    def fromtext(txt):
+        r"""\
+        Create an AugTranspose from a text description, e.g.::
+
+            a = AugTranspose('p=0.5')
+        """
+        return _ecvl.AugTranspose(txt)
+
+    def __init__(self, p=0.5):
+        """\
+        :param p: probability of each image to get transposed.
+        """
+        _ecvl.AugTranspose.__init__(self, p)
+
+
+class AugBrightness(_ecvl.AugBrightness):
+    """\
+    Augmentation wrapper for brightness adjustment.
+    """
+
+    @staticmethod
+    def fromtext(txt):
+        r"""\
+        Create an AugBrightness from a text description, e.g.::
+
+            a = AugBrightness('beta=[30, 60]')
+        """
+        return _ecvl.AugBrightness(txt)
+
+    def __init__(self, beta):
+        """\
+        :param beta: range of values ``[min, max]`` to randomly select from \
+          for the brightness adjustment. Suggested values are around 0 to 100.
+        """
+        _ecvl.AugBrightness.__init__(self, beta)
+
+
+class AugGridDistortion(_ecvl.AugGridDistortion):
+    """\
+    Augmentation wrapper for GridDistortion.
+    """
+
+    @staticmethod
+    def fromtext(txt):
+        r"""\
+        Create an AugGridDistortion from a text description, e.g.::
+
+            a = AugGridDistortion('num_steps=[5,10] distort_limit=[-0.2,0.2] '
+                                  'interp=\"linear\" '
+                                  'border_type=\"reflect_101\" '
+                                  'border_value=0')
+        """
+        return _ecvl.AugGridDistortion(txt)
+
+    def __init__(self, num_steps, distort_limit,
+                 interp=InterpolationType.linear,
+                 border_type=BorderType.BORDER_REFLECT_101, border_value=0):
+        """\
+        :param num_steps: range of values ``[min, max]`` to randomly select
+          the number of grid cells on each side
+        :param distort_limit: range of values ``[min, max]`` to randomly select
+          the distortion steps
+        :param interp: InterpolationType to be used
+        :param border_type: pixel extrapolation method, see BorderType
+        :param border_value: padding value if border_type is
+          BorderType.BORDER_CONSTANT
+        """
+        _ecvl.AugGridDistortion.__init__(self, num_steps, distort_limit,
+                                         interp, border_type, border_value)
+
+
+class AugElasticTransform(_ecvl.AugElasticTransform):
+    """\
+    Augmentation wrapper for ElasticTransform.
+    """
+
+    @staticmethod
+    def fromtext(txt):
+        r"""\
+        Create an AugElasticTransform from a text description, e.g.::
+
+            a = AugElasticTransform('alpha=[34,60] sigma=[4,6] '
+                                    'interp=\"linear\" '
+                                    'border_type=\"reflect_101\" '
+                                    'border_value=0')
+        """
+        return _ecvl.AugElasticTransform(txt)
+
+    def __init__(self, alpha, sigma, interp=InterpolationType.linear,
+                 border_type=BorderType.BORDER_REFLECT_101, border_value=0):
+        """\
+        :param alpha: range of values ``[min, max]`` to randomly select the
+          scaling factor that controls the intensity of the deformation
+        :param sigma: range of values ``[min, max]`` to randomly select the
+          gaussian kernel standard deviation
+        :param interp: InterpolationType to be used
+        :param border_type: pixel extrapolation method, see BorderType
+        :param border_value: padding value if border_type is
+          BorderType.BORDER_CONSTANT
+        """
+        _ecvl.AugElasticTransform.__init__(self, alpha, sigma, interp,
+                                           border_type, border_value)
 
 
 # == support_imgcodecs ==

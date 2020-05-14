@@ -105,7 +105,7 @@ def test_rearrange_channels(ecvl):
     for i in range(S[0]):
         for j in range(S[1]):
             for k in range(S[2]):
-                for l in range(S[3]):
+                for l in range(S[3]):  # noqa
                     view[i, j, k, l] = (l + k * S[3] + j * S[2] * S[3] +
                                         i * S[1] * S[2] * S[3])
     img2 = _empty_img(ecvl)
@@ -120,7 +120,7 @@ def test_rearrange_channels(ecvl):
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
 def test_numpy(ecvl):
     shape = [2, 3, 4]
-    img = ecvl.Image(shape, ecvl.DataType.int16, "xy", ecvl.ColorType.none)
+    img = ecvl.Image(shape, ecvl.DataType.int16, "xyc", ecvl.ColorType.none)
     view = ecvl.View_int16(img)
     a = np.array(img, copy=False)
     assert list(a.shape) == shape

@@ -99,9 +99,9 @@ void bind_ecvl_functions(pybind11::module &m) {
   // imgproc: VConcat
   m.def("VConcat", (void (*)(const std::vector<ecvl::Image>&, class ecvl::Image &)) &ecvl::VConcat, "Vertical concatenation of images (with the same number of columns)", pybind11::arg("src"), pybind11::arg("dst"));
   // imgproc: Morphology
-  m.def("Morphology", (void (*)(const ecvl::Image&, ecvl::Image&, ecvl::MorphTypes, ecvl::Image&, ecvl::Point2i, int, int, const int&)) &ecvl::Morphology, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("op"), pybind11::arg("kernel"), pybind11::arg("anchor") = std::array<int, 2>({-1, -1}), pybind11::arg("iterations") = 1, pybind11::arg("borderType") = 1, pybind11::arg("borderValue") = 0);
+  m.def("Morphology", (void (*)(const ecvl::Image&, ecvl::Image&, ecvl::MorphType, ecvl::Image&, ecvl::Point2i, int, ecvl::BorderType, const int&)) &ecvl::Morphology, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("op"), pybind11::arg("kernel"), pybind11::arg("anchor") = std::array<int, 2>({-1, -1}), pybind11::arg("iterations") = 1, pybind11::arg("border_type") = ecvl::BorderType::BORDER_CONSTANT, pybind11::arg("border_value") = 0);
   // imgproc: Inpaint
-  m.def("Inpaint", (void (*)(const ecvl::Image&, ecvl::Image&, const ecvl::Image&, double, ecvl::InpaintTypes)) &ecvl::Inpaint, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("inpaintMask"), pybind11::arg("inpaintRadius"), pybind11::arg("flag") = ecvl::InpaintTypes::INPAINT_TELEA);
+  m.def("Inpaint", (void (*)(const ecvl::Image&, ecvl::Image&, const ecvl::Image&, double, ecvl::InpaintType)) &ecvl::Inpaint, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("inpaintMask"), pybind11::arg("inpaintRadius"), pybind11::arg("flag") = ecvl::InpaintType::INPAINT_TELEA);
   // imgproc: MeanStdDev
   m.def("MeanStdDev", [](const ecvl::Image& src) -> pybind11::tuple {
     std::vector<double> mean;
@@ -109,6 +109,8 @@ void bind_ecvl_functions(pybind11::module &m) {
     ecvl::MeanStdDev(src, mean, stddev);
     return pybind11::make_tuple(mean, stddev);
   });
+  // imgproc: GridDistortion
+  m.def("GridDistortion", (void (*)(const ecvl::Image&, ecvl::Image&, int, const std::array<float, 2>&, ecvl::InterpolationType, ecvl::BorderType, const int&)) &ecvl::GridDistortion, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("num_steps") = 5, pybind11::arg("distort_limit") = std::array<float, 2>({-0.3f, 0.3f}), pybind11::arg("interp") = ecvl::InterpolationType::linear, pybind11::arg("border_type") = ecvl::BorderType::BORDER_REFLECT_101, pybind11::arg("border_value") = 0);
 #ifdef ECVL_EDDL
   // augmentations: AugmentationParam
   {
@@ -241,14 +243,50 @@ void bind_ecvl_functions(pybind11::module &m) {
     return new ecvl::AugCoarseDropout(ss);
   }));
   }
+  // augmentations: AugTranspose
+  {
+  pybind11::class_<ecvl::AugTranspose, std::shared_ptr<ecvl::AugTranspose>, ecvl::Augmentation> cl(m, "AugTranspose", "Augmentation wrapper for ecvl::Transpose.");
+  cl.def(pybind11::init<double>(), pybind11::arg("p"));
+  cl.def(pybind11::init([](const std::string& s) {
+    std::stringstream ss(s);
+    return new ecvl::AugTranspose(ss);
+  }));
+  }
+  // augmentations: AugBrightness
+  {
+  pybind11::class_<ecvl::AugBrightness, std::shared_ptr<ecvl::AugBrightness>, ecvl::Augmentation> cl(m, "AugBrightness", "Augmentation wrapper brightness adjustment.");
+  cl.def(pybind11::init<const std::array<double, 2>&>(), pybind11::arg("beta"));
+  cl.def(pybind11::init([](const std::string& s) {
+    std::stringstream ss(s);
+    return new ecvl::AugBrightness(ss);
+  }));
+  }
+  // augmentations: AugGridDistortion
+  {
+  pybind11::class_<ecvl::AugGridDistortion, std::shared_ptr<ecvl::AugGridDistortion>, ecvl::Augmentation> cl(m, "AugGridDistortion", "Augmentation wrapper for ecvl::GridDistortion.");
+  cl.def(pybind11::init<const std::array<int, 2>&, const std::array<float, 2>&, const ecvl::InterpolationType&, const ecvl::BorderType&, const int&>(), pybind11::arg("num_steps"), pybind11::arg("distort_limit"), pybind11::arg("interp") = ecvl::InterpolationType::linear, pybind11::arg("border_type") = ecvl::BorderType::BORDER_REFLECT_101, pybind11::arg("border_value") = 0);
+  cl.def(pybind11::init([](const std::string& s) {
+    std::stringstream ss(s);
+    return new ecvl::AugGridDistortion(ss);
+  }));
+  }
+  // augmentations: AugElasticTransform
+  {
+  pybind11::class_<ecvl::AugElasticTransform, std::shared_ptr<ecvl::AugElasticTransform>, ecvl::Augmentation> cl(m, "AugElasticTransform", "Augmentation wrapper for ecvl::ElasticTransform.");
+  cl.def(pybind11::init<const std::array<double, 2>&, const std::array<double, 2>&, const ecvl::InterpolationType&, const ecvl::BorderType&, const int&>(), pybind11::arg("alpha"), pybind11::arg("sigma"), pybind11::arg("interp") = ecvl::InterpolationType::linear, pybind11::arg("border_type") = ecvl::BorderType::BORDER_REFLECT_101, pybind11::arg("border_value") = 0);
+  cl.def(pybind11::init([](const std::string& s) {
+    std::stringstream ss(s);
+    return new ecvl::AugElasticTransform(ss);
+  }));
+  }
 
   // support_eddl: DatasetAugmentations
   {
   pybind11::class_<ecvl::DatasetAugmentations, std::shared_ptr<ecvl::DatasetAugmentations>> cl(m, "DatasetAugmentations", "Dataset Augmentations. Represents the augmentations which will be applied to each split.");
   cl.def(pybind11::init<>());
   cl.def(pybind11::init<std::array<std::shared_ptr<ecvl::Augmentation>, 3>>());
-  cl.def("Apply", [](ecvl::DatasetAugmentations &o, enum ecvl::SplitType const & a0, class ecvl::Image & a1) -> void { return o.Apply(a0, a1); }, "", pybind11::arg("st"), pybind11::arg("img"));
-  cl.def("Apply", (void (ecvl::DatasetAugmentations::*)(enum ecvl::SplitType, class ecvl::Image &, const class ecvl::Image &)) &ecvl::DatasetAugmentations::Apply, "C++: ecvl::DatasetAugmentations::Apply(enum ecvl::SplitType, class ecvl::Image &, const class ecvl::Image &) --> void", pybind11::arg("st"), pybind11::arg("img"), pybind11::arg("gt"));
+  cl.def("Apply", [](ecvl::DatasetAugmentations &o, enum ecvl::SplitType const & a0, class ecvl::Image & a1) -> bool { return o.Apply(a0, a1); }, "", pybind11::arg("st"), pybind11::arg("img"));
+  cl.def("Apply", (bool (ecvl::DatasetAugmentations::*)(enum ecvl::SplitType, class ecvl::Image &, const class ecvl::Image &)) &ecvl::DatasetAugmentations::Apply, "C++: ecvl::DatasetAugmentations::Apply(enum ecvl::SplitType, class ecvl::Image &, const class ecvl::Image &) --> bool", pybind11::arg("st"), pybind11::arg("img"), pybind11::arg("gt"));
   }
   // support_eddl: DLDataset
   {
