@@ -219,6 +219,22 @@ Augmentations
    :members:
    :undoc-members:
 
+.. autoclass:: pyecvl.ecvl.AugTranspose
+   :members:
+   :undoc-members:
+
+.. autoclass:: pyecvl.ecvl.AugBrightness
+   :members:
+   :undoc-members:
+
+.. autoclass:: pyecvl.ecvl.AugGridDistortion
+   :members:
+   :undoc-members:
+
+.. autoclass:: pyecvl.ecvl.AugElasticTransform
+   :members:
+   :undoc-members:
+
 
 Image I/O
 ---------

@@ -163,6 +163,83 @@ def test_AugCoarseDropout(ecvl):
 
 
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_AugTranspose(ecvl):
+    img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    a = ecvl.AugTranspose(0.5)
+    a.Apply(img)
+    # fromtext
+    f = ecvl.AugTranspose if ecvl is ecvl_core else ecvl.AugTranspose.fromtext
+    a = f('p=0.5\n')
+    a.Apply(img)
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_AugBrightness(ecvl):
+    img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    a = ecvl.AugBrightness([30, 60])
+    a.Apply(img)
+    # fromtext
+    f = ecvl.AugBrightness if ecvl is ecvl_core else \
+        ecvl.AugBrightness.fromtext
+    a = f('beta=[30, 60]\n')
+    a.Apply(img)
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_AugGridDistortion(ecvl):
+    img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    a = ecvl.AugGridDistortion([5, 10], [-0.2, 0.2])
+    a.Apply(img)
+    a = ecvl.AugGridDistortion(
+        [5, 10], [-0.2, 0.2], ecvl.InterpolationType.nearest
+    )
+    a.Apply(img)
+    a = ecvl.AugGridDistortion(
+        [5, 10], [-0.2, 0.2], ecvl.InterpolationType.nearest,
+        ecvl.BorderType.BORDER_REFLECT_101
+    )
+    a.Apply(img)
+    a = ecvl.AugGridDistortion(
+        [5, 10], [-0.2, 0.2], ecvl.InterpolationType.nearest,
+        ecvl.BorderType.BORDER_REFLECT_101, 0
+    )
+    a.Apply(img)
+    # fromtext
+    f = ecvl.AugGridDistortion if ecvl is ecvl_core else \
+        ecvl.AugGridDistortion.fromtext
+    a = f('num_steps=[5,10] distort_limit=[-0.2,0.2] interp=\"linear\" '
+          'border_type=\"reflect_101\" border_value=0\n')
+    a.Apply(img)
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_AugElasticTransform(ecvl):
+    img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    a = ecvl.AugElasticTransform([34, 60], [4, 6])
+    a.Apply(img)
+    a = ecvl.AugElasticTransform(
+        [34, 60], [4, 6], ecvl.InterpolationType.nearest
+    )
+    a.Apply(img)
+    a = ecvl.AugElasticTransform(
+        [34, 60], [4, 6], ecvl.InterpolationType.nearest,
+        ecvl.BorderType.BORDER_REFLECT_101
+    )
+    a.Apply(img)
+    a = ecvl.AugElasticTransform(
+        [34, 60], [4, 6], ecvl.InterpolationType.nearest,
+        ecvl.BorderType.BORDER_REFLECT_101, 0
+    )
+    a.Apply(img)
+    # fromtext
+    f = ecvl.AugElasticTransform if ecvl is ecvl_core else \
+        ecvl.AugElasticTransform.fromtext
+    a = f('alpha=[34,60] sigma=[4,6] interp=\"linear\" '
+          'border_type=\"reflect_101\" border_value=0\n')
+    a.Apply(img)
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
 def test_AugmentationFactory(ecvl):
     img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     # one arg

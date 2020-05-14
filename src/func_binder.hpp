@@ -243,6 +243,42 @@ void bind_ecvl_functions(pybind11::module &m) {
     return new ecvl::AugCoarseDropout(ss);
   }));
   }
+  // augmentations: AugTranspose
+  {
+  pybind11::class_<ecvl::AugTranspose, std::shared_ptr<ecvl::AugTranspose>, ecvl::Augmentation> cl(m, "AugTranspose", "Augmentation wrapper for ecvl::Transpose.");
+  cl.def(pybind11::init<double>(), pybind11::arg("p"));
+  cl.def(pybind11::init([](const std::string& s) {
+    std::stringstream ss(s);
+    return new ecvl::AugTranspose(ss);
+  }));
+  }
+  // augmentations: AugBrightness
+  {
+  pybind11::class_<ecvl::AugBrightness, std::shared_ptr<ecvl::AugBrightness>, ecvl::Augmentation> cl(m, "AugBrightness", "Augmentation wrapper brightness adjustment.");
+  cl.def(pybind11::init<const std::array<double, 2>&>(), pybind11::arg("beta"));
+  cl.def(pybind11::init([](const std::string& s) {
+    std::stringstream ss(s);
+    return new ecvl::AugBrightness(ss);
+  }));
+  }
+  // augmentations: AugGridDistortion
+  {
+  pybind11::class_<ecvl::AugGridDistortion, std::shared_ptr<ecvl::AugGridDistortion>, ecvl::Augmentation> cl(m, "AugGridDistortion", "Augmentation wrapper for ecvl::GridDistortion.");
+  cl.def(pybind11::init<const std::array<int, 2>&, const std::array<float, 2>&, const ecvl::InterpolationType&, const ecvl::BorderType&, const int&>(), pybind11::arg("num_steps"), pybind11::arg("distort_limit"), pybind11::arg("interp") = ecvl::InterpolationType::linear, pybind11::arg("border_type") = ecvl::BorderType::BORDER_REFLECT_101, pybind11::arg("border_value") = 0);
+  cl.def(pybind11::init([](const std::string& s) {
+    std::stringstream ss(s);
+    return new ecvl::AugGridDistortion(ss);
+  }));
+  }
+  // augmentations: AugElasticTransform
+  {
+  pybind11::class_<ecvl::AugElasticTransform, std::shared_ptr<ecvl::AugElasticTransform>, ecvl::Augmentation> cl(m, "AugElasticTransform", "Augmentation wrapper for ecvl::ElasticTransform.");
+  cl.def(pybind11::init<const std::array<double, 2>&, const std::array<double, 2>&, const ecvl::InterpolationType&, const ecvl::BorderType&, const int&>(), pybind11::arg("alpha"), pybind11::arg("sigma"), pybind11::arg("interp") = ecvl::InterpolationType::linear, pybind11::arg("border_type") = ecvl::BorderType::BORDER_REFLECT_101, pybind11::arg("border_value") = 0);
+  cl.def(pybind11::init([](const std::string& s) {
+    std::stringstream ss(s);
+    return new ecvl::AugElasticTransform(ss);
+  }));
+  }
 
   // support_eddl: DatasetAugmentations
   {

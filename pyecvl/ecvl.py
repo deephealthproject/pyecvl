@@ -954,6 +954,7 @@ class Sample(_ecvl.Sample):
     :var label_path\_: absolute path of the sample's ground truth
     :var label\_: sample labels (list of integers)
     :var values\_: feature index-to-value mapping
+    :var size\_: original x and y dimensions of the sample
     """
     def LoadImage(self, ctype=ColorType.BGR, is_gt=False):
         """\
@@ -1346,6 +1347,124 @@ class AugCoarseDropout(_ecvl.AugCoarseDropout):
           for all channels of a pixel
         """
         _ecvl.AugCoarseDropout.__init__(self, p, drop_size, per_channel)
+
+
+class AugTranspose(_ecvl.AugTranspose):
+    """\
+    Augmentation wrapper for Transpose.
+    """
+
+    @staticmethod
+    def fromtext(txt):
+        r"""\
+        Create an AugTranspose from a text description, e.g.::
+
+            a = AugTranspose('p=0.5\n')
+
+        Note that the text must end with a newline character.
+        """
+        return _ecvl.AugTranspose(txt)
+
+    def __init__(self, p=0.5):
+        """\
+        :param p: probability of each image to get transposed.
+        """
+        _ecvl.AugTranspose.__init__(self, p)
+
+
+class AugBrightness(_ecvl.AugBrightness):
+    """\
+    Augmentation wrapper for brightness adjustment.
+    """
+
+    @staticmethod
+    def fromtext(txt):
+        r"""\
+        Create an AugBrightness from a text description, e.g.::
+
+            a = AugBrightness('beta=[30, 60]\n')
+
+        Note that the text must end with a newline character.
+        """
+        return _ecvl.AugBrightness(txt)
+
+    def __init__(self, beta):
+        """\
+        :param beta: range of values ``[min, max]`` to randomly select from \
+          for the brightness adjustment. Suggested values are around 0 to 100.
+        """
+        _ecvl.AugBrightness.__init__(self, beta)
+
+
+class AugGridDistortion(_ecvl.AugGridDistortion):
+    """\
+    Augmentation wrapper for GridDistortion.
+    """
+
+    @staticmethod
+    def fromtext(txt):
+        r"""\
+        Create an AugGridDistortion from a text description, e.g.::
+
+            a = AugGridDistortion('num_steps=[5,10] distort_limit=[-0.2,0.2] '
+                                  'interp=\"linear\" '
+                                  'border_type=\"reflect_101\" '
+                                  'border_value=0\n')
+
+        Note that the text must end with a newline character.
+        """
+        return _ecvl.AugGridDistortion(txt)
+
+    def __init__(self, num_steps, distort_limit,
+                 interp=InterpolationType.linear,
+                 border_type=BorderType.BORDER_REFLECT_101, border_value=0):
+        """\
+        :param num_steps: range of values ``[min, max]`` to randomly select
+          the number of grid cells on each side
+        :param distort_limit: range of values ``[min, max]`` to randomly select
+          the distortion steps
+        :param interp: InterpolationType to be used
+        :param border_type: pixel extrapolation method, see BorderType
+        :param border_value: padding value if border_type is
+          BorderType.BORDER_CONSTANT
+        """
+        _ecvl.AugGridDistortion.__init__(self, num_steps, distort_limit,
+                                         interp, border_type, border_value)
+
+
+class AugElasticTransform(_ecvl.AugElasticTransform):
+    """\
+    Augmentation wrapper for ElasticTransform.
+    """
+
+    @staticmethod
+    def fromtext(txt):
+        r"""\
+        Create an AugElasticTransform from a text description, e.g.::
+
+            a = AugElasticTransform('alpha=[34,60] sigma=[4,6] '
+                                    'interp=\"linear\" '
+                                    'border_type=\"reflect_101\" '
+                                    'border_value=0\n')
+
+        Note that the text must end with a newline character.
+        """
+        return _ecvl.AugElasticTransform(txt)
+
+    def __init__(self, alpha, sigma, interp=InterpolationType.linear,
+                 border_type=BorderType.BORDER_REFLECT_101, border_value=0):
+        """\
+        :param alpha: range of values ``[min, max]`` to randomly select the
+          scaling factor that controls the intensity of the deformation
+        :param sigma: range of values ``[min, max]`` to randomly select the
+          gaussian kernel standard deviation
+        :param interp: InterpolationType to be used
+        :param border_type: pixel extrapolation method, see BorderType
+        :param border_value: padding value if border_type is
+          BorderType.BORDER_CONSTANT
+        """
+        _ecvl.AugElasticTransform.__init__(self, alpha, sigma, interp,
+                                           border_type, border_value)
 
 
 # == support_imgcodecs ==
