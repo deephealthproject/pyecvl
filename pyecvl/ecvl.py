@@ -1049,14 +1049,12 @@ class AugmentationFactory(_ecvl.AugmentationFactory):
     If only one argument is supplied, it needs to include the augmentation's
     name, e.g.::
 
-        AugmentationFactory.create('AugFlip p=0.5\n')
+        AugmentationFactory.create('AugFlip p=0.5')
 
     If only two arguments are supplied, the first is the augmentation's
     name, e.g.::
 
-        AugmentationFactory.create('AugFlip', 'p=0.5\n')
-
-    Note that the text must end with a newline character.
+        AugmentationFactory.create('AugFlip', 'p=0.5')
     """
 
     @staticmethod
@@ -1083,8 +1081,6 @@ class SequentialAugmentationContainer(_ecvl.SequentialAugmentationContainer):
             end
             '''
             c = SequentialAugmentationContainer(txt)
-
-        Note that the text must end with a newline character.
         """
         return _ecvl.SequentialAugmentationContainer(txt)
 
@@ -1106,9 +1102,7 @@ class AugRotate(_ecvl.AugRotate):
         Create an AugRotate from a text description, e.g.::
 
             a = AugRotate('angle=[30, 50] center=(2, 3) '
-                          'scale=1.1 interp="nearest"\n')
-
-        Note that the text must end with a newline character.
+                          'scale=1.1 interp="nearest"')
         """
         return _ecvl.AugRotate(txt)
 
@@ -1136,9 +1130,7 @@ class AugResizeDim(_ecvl.AugResizeDim):
         r"""\
         Create an AugResizeDim from a text description, e.g.::
 
-            a = AugResizeDim('dims=(4, 3) interp="linear"\n')
-
-        Note that the text must end with a newline character.
+            a = AugResizeDim('dims=(4, 3) interp="linear"')
         """
         return _ecvl.AugResizeDim(txt)
 
@@ -1161,9 +1153,7 @@ class AugResizeScale(_ecvl.AugResizeScale):
         r"""\
         Create an AugResizeScale from a text description, e.g.::
 
-            a = AugResizeScale('scale=(0.5, 0.5) interp="linear"\n')
-
-        Note that the text must end with a newline character.
+            a = AugResizeScale('scale=(0.5, 0.5) interp="linear"')
         """
         return _ecvl.AugResizeScale(txt)
 
@@ -1186,9 +1176,7 @@ class AugFlip(_ecvl.AugFlip):
         r"""\
         Create an AugFlip from a text description, e.g.::
 
-            a = AugFlip('p=0.5\n')
-
-        Note that the text must end with a newline character.
+            a = AugFlip('p=0.5')
         """
         return _ecvl.AugFlip(txt)
 
@@ -1209,9 +1197,7 @@ class AugMirror(_ecvl.AugMirror):
         r"""\
         Create an AugMirror from a text description, e.g.::
 
-            a = AugMirror('p=0.5\n')
-
-        Note that the text must end with a newline character.
+            a = AugMirror('p=0.5')
         """
         return _ecvl.AugMirror(txt)
 
@@ -1232,9 +1218,7 @@ class AugGaussianBlur(_ecvl.AugGaussianBlur):
         r"""\
         Create an AugGaussianBlur from a text description, e.g.::
 
-            a = AugGaussianBlur('sigma=[0.2, 0.4]\n')
-
-        Note that the text must end with a newline character.
+            a = AugGaussianBlur('sigma=[0.2, 0.4]')
         """
         return _ecvl.AugGaussianBlur(txt)
 
@@ -1255,9 +1239,7 @@ class AugAdditiveLaplaceNoise(_ecvl.AugAdditiveLaplaceNoise):
         r"""\
         Create an AugAdditiveLaplaceNoise from a text description, e.g.::
 
-            a = AugAdditiveLaplaceNoise('std_dev=[12.5, 23.1]\n')
-
-        Note that the text must end with a newline character.
+            a = AugAdditiveLaplaceNoise('std_dev=[12.5, 23.1]')
         """
         return _ecvl.AugAdditiveLaplaceNoise(txt)
 
@@ -1280,9 +1262,7 @@ class AugAdditivePoissonNoise(_ecvl.AugAdditivePoissonNoise):
         r"""\
         Create an AugAdditivePoissonNoise from a text description, e.g.::
 
-            a = AugAdditivePoissonNoise('lambda=[2.0, 3.0]\n')
-
-        Note that the text must end with a newline character.
+            a = AugAdditivePoissonNoise('lambda=[2.0, 3.0]')
         """
         return _ecvl.AugAdditivePoissonNoise(txt)
 
@@ -1305,9 +1285,7 @@ class AugGammaContrast(_ecvl.AugGammaContrast):
         r"""\
         Create an AugGammaContrast from a text description, e.g.::
 
-            a = AugGammaContrast('gamma=[3, 4]\n')
-
-        Note that the text must end with a newline character.
+            a = AugGammaContrast('gamma=[3, 4]')
         """
         return _ecvl.AugGammaContrast(txt)
 
@@ -1331,9 +1309,7 @@ class AugCoarseDropout(_ecvl.AugCoarseDropout):
         Create an AugCoarseDropout from a text description, e.g.::
 
             a = AugCoarseDropout('p=[0.5, 0.7] drop_size=[0.1, 0.2] '
-                                 'per_channel=0.4\n')
-
-        Note that the text must end with a newline character.
+                                 'per_channel=0.4')
         """
         return _ecvl.AugCoarseDropout(txt)
 
@@ -1359,9 +1335,7 @@ class AugTranspose(_ecvl.AugTranspose):
         r"""\
         Create an AugTranspose from a text description, e.g.::
 
-            a = AugTranspose('p=0.5\n')
-
-        Note that the text must end with a newline character.
+            a = AugTranspose('p=0.5')
         """
         return _ecvl.AugTranspose(txt)
 
@@ -1382,9 +1356,7 @@ class AugBrightness(_ecvl.AugBrightness):
         r"""\
         Create an AugBrightness from a text description, e.g.::
 
-            a = AugBrightness('beta=[30, 60]\n')
-
-        Note that the text must end with a newline character.
+            a = AugBrightness('beta=[30, 60]')
         """
         return _ecvl.AugBrightness(txt)
 
@@ -1409,9 +1381,7 @@ class AugGridDistortion(_ecvl.AugGridDistortion):
             a = AugGridDistortion('num_steps=[5,10] distort_limit=[-0.2,0.2] '
                                   'interp=\"linear\" '
                                   'border_type=\"reflect_101\" '
-                                  'border_value=0\n')
-
-        Note that the text must end with a newline character.
+                                  'border_value=0')
         """
         return _ecvl.AugGridDistortion(txt)
 
@@ -1445,9 +1415,7 @@ class AugElasticTransform(_ecvl.AugElasticTransform):
             a = AugElasticTransform('alpha=[34,60] sigma=[4,6] '
                                     'interp=\"linear\" '
                                     'border_type=\"reflect_101\" '
-                                    'border_value=0\n')
-
-        Note that the text must end with a newline character.
+                                    'border_value=0')
         """
         return _ecvl.AugElasticTransform(txt)
 
