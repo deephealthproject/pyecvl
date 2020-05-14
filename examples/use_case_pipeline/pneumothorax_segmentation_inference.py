@@ -93,7 +93,6 @@ def main(args):
             output = eddl.getTensor(out_sigm)
             for k in range(args.batch_size):
                 img = eddlT.select(output, k)
-                # img.mult_(255.)
                 img_I = ecvl.TensorToImage(img)
                 img_I.colortype_ = ecvl.ColorType.GRAY
                 img_I.channels_ = "xyc"

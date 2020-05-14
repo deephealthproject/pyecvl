@@ -236,40 +236,54 @@ def main(args):
 
             # Compute Dice metric and optionally save the output images
             for k in range(args.batch_size):
-                img = eddlT.select(output, k)
+                pred = eddlT.select(output, k)
                 gt = eddlT.select(y, k)
-                img_np = np.array(img, copy=False)
+                pred_np = np.array(pred, copy=False)
                 gt_np = np.array(gt, copy=False)
-                dice = evaluator.DiceCoefficient(img_np, gt_np, thresh=thresh)
+                # DiceCoefficient modifies image as a side effect
+                dice = evaluator.DiceCoefficient(pred_np, gt_np, thresh=thresh)
                 print("- Dice: {:.6f} ".format(dice), end="", flush=True)
 
                 if args.out_dir:
-                    # C++ BinaryIoU modifies image as a side effect
+                    # Save original image fused together with prediction and
+                    # ground truth
+                    pred_np *= 255
+                    pred_ecvl = ecvl.TensorToImage(pred)
+                    pred_ecvl.colortype_ = ecvl.ColorType.GRAY
+                    pred_ecvl.channels_ = "xyc"
+                    ecvl.ResizeDim(pred_ecvl, pred_ecvl, (1024, 1024),
+                                   ecvl.InterpolationType.nearest)
 
-                    # Get prediction image
-                    img.mult_(255)
-                    img_I = ecvl.TensorToView(img)
-                    img_I.colortype_ = ecvl.ColorType.GRAY
-                    img_I.channels_ = "xyc"
-
-                    # Get ground truth image
-                    gt.mult_(255)
-                    gt_I = ecvl.TensorToView(gt)
-                    gt_I.colortype_ = ecvl.ColorType.GRAY
-                    gt_I.channels_ = "xyc"
+                    filename_gt = names[n + 1]
+                    gt_ecvl = ecvl.ImRead(filename_gt,
+                                          ecvl.ImReadMode.GRAYSCALE)
 
                     filename = names[n]
-                    filename_gt = names[n + 1]
+
+                    # Image as BGR
+                    img_ecvl = ecvl.ImRead(filename)
+                    ecvl.Stack([img_ecvl, img_ecvl, img_ecvl], img_ecvl)
+                    img_ecvl.channels_ = "xyc"
+                    img_ecvl.colortype_ = ecvl.ColorType.BGR
+                    image_np = np.array(img_ecvl, copy=False)
+                    pred_np = np.array(pred_ecvl, copy=False)
+                    gt_np = np.array(gt_ecvl, copy=False)
+
+                    pred_np = pred_np.squeeze()
+                    gt_np = gt_np.squeeze()
+                    # Prediction summed in R channel
+                    image_np[:, :, -1] = np.where(pred_np == 255, pred_np,
+                                                  image_np[:, :, -1])
+                    # Ground truth summed in G channel
+                    image_np[:, :, 1] = np.where(gt_np == 255, gt_np,
+                                                 image_np[:, :, 1])
+
                     n += 2
                     head, tail = os.path.splitext(os.path.basename(filename))
                     bname = "{}.png".format(head)
                     filepath = os.path.join(args.out_dir, bname)
-                    ecvl.ImWrite(filepath, img_I)
+                    ecvl.ImWrite(filepath, img_ecvl)
 
-                    if filename_gt != 'black.png':
-                        bname = os.path.basename(filename_gt)
-                        filepath = os.path.join(args.out_dir, bname)
-                        ecvl.ImWrite(filepath, gt_I)
             print()
 
         mean_dice = evaluator.MeanMetric()
