@@ -16,12 +16,27 @@ class Evaluator:
         self.buf.append(rval)
         return rval
 
+    def DiceCoefficient(self, a, b, thresh=0.5):
+        a = Threshold(a, thresh)
+        b = Threshold(b, thresh)
+        intersection = np.logical_and(a, b).sum()
+        rval = (2 * intersection + self.eps) / (a.sum() + b.sum() + self.eps)
+
+        self.buf.append(rval)
+        return rval
+
     def MIoU(self):
         if not self.buf:
             return 0
         return sum(self.buf) / len(self.buf)
 
     MeanMetric = MIoU
+
+
+def Threshold(a, thresh=0.5):
+    a[a >= thresh] = 1
+    a[a < thresh] = 0
+    return a
 
 
 def ImageSqueeze(img):
