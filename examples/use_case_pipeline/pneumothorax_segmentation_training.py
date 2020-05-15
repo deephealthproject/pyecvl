@@ -1,5 +1,6 @@
 # PyECVL - Python wrapper for European Computer Vision Library
-# Copyright (c) 2020, Università degli Studi di Modena e Reggio Emilia (UNIMORE), AImageLab
+# Copyright (c) 2020, Università degli Studi di Modena e Reggio Emilia
+# (UNIMORE), AImageLab
 # Authors:
 #    Michele Cancilla (michele.cancilla@unimore.it)
 #    Laura Canalini (laura.canalini@unimore.it)
@@ -172,8 +173,12 @@ def main(args):
     num_batches_validation = num_samples_validation // args.batch_size
 
     black_images = list(black_images)
-    black_training = black_images[0: -(num_samples_validation - len(val_split))]
-    black_validation = black_images[-(num_samples_validation - len(val_split)):]
+    black_training = black_images[
+        0: -(num_samples_validation - len(val_split))
+    ]
+    black_validation = black_images[
+        -(num_samples_validation - len(val_split)):
+    ]
     indices = list(range(args.batch_size))
 
     evaluator = utils.Evaluator()

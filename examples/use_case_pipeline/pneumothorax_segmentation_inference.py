@@ -1,5 +1,6 @@
 # PyECVL - Python wrapper for European Computer Vision Library
-# Copyright (c) 2020, Università degli Studi di Modena e Reggio Emilia (UNIMORE), AImageLab
+# Copyright (c) 2020, Università degli Studi di Modena e Reggio Emilia
+# (UNIMORE), AImageLab
 # Authors:
 #    Michele Cancilla (michele.cancilla@unimore.it)
 #    Laura Canalini (laura.canalini@unimore.it)
@@ -17,7 +18,6 @@ https://github.com/deephealthproject/use_case_pipeline
 
 import argparse
 
-import numpy as np
 import os
 import pyecvl.ecvl as ecvl
 import pyeddl.eddl as eddl
