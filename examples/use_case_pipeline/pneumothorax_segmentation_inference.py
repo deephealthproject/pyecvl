@@ -17,11 +17,11 @@ https://github.com/deephealthproject/use_case_pipeline
 """
 
 import argparse
-
 import os
-import pyecvl.ecvl as ecvl
+
 import pyeddl.eddl as eddl
 import pyeddl.eddlT as eddlT
+import pyecvl.ecvl as ecvl
 
 import utils
 from models import SegNetBN
@@ -54,10 +54,10 @@ def main(args):
     eddl.load(net, args.ckpts, "bin")
 
     training_augs = ecvl.SequentialAugmentationContainer([
-        ecvl.AugResizeDim(size, ecvl.InterpolationType.nearest),
+        ecvl.AugResizeDim(size),
     ])
     test_augs = ecvl.SequentialAugmentationContainer([
-        ecvl.AugResizeDim(size, ecvl.InterpolationType.nearest),
+        ecvl.AugResizeDim(size),
     ])
     dataset_augs = ecvl.DatasetAugmentations([training_augs, None, test_augs])
 
