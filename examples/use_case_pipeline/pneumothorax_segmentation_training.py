@@ -18,13 +18,13 @@ https://github.com/deephealthproject/use_case_pipeline
 
 import argparse
 import math
+import os
+import random
 
 import numpy as np
-import os
-import pyecvl.ecvl as ecvl
 import pyeddl.eddl as eddl
 import pyeddl.eddlT as eddlT
-import random
+import pyecvl.ecvl as ecvl
 
 import utils
 from models import SegNetBN
@@ -134,12 +134,14 @@ def main(args):
         eddl.load(net, args.ckpts, 'bin')
 
     training_augs = ecvl.SequentialAugmentationContainer([
-        ecvl.AugResizeDim(size, ecvl.InterpolationType.nearest),
+        ecvl.AugResizeDim(size),
         ecvl.AugMirror(0.5),
-        ecvl.AugRotate([-180, 180]),
+        ecvl.AugRotate([-10, 10]),
+        ecvl.AugBrightness([0, 30]),
+        ecvl.AugGammaContrast([0, 3]),
     ])
     validation_augs = ecvl.SequentialAugmentationContainer([
-        ecvl.AugResizeDim(size, ecvl.InterpolationType.nearest)
+        ecvl.AugResizeDim(size)
     ])
     dataset_augs = ecvl.DatasetAugmentations([
         training_augs, validation_augs, None
@@ -174,11 +176,9 @@ def main(args):
 
     black_images = list(black_images)
     black_training = black_images[
-        0: -(num_samples_validation - len(val_split))
-    ]
+                     0: -(num_samples_validation - len(val_split))]
     black_validation = black_images[
-        -(num_samples_validation - len(val_split)):
-    ]
+                       -(num_samples_validation - len(val_split)):]
     indices = list(range(args.batch_size))
 
     evaluator = utils.Evaluator()
