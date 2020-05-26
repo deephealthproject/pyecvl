@@ -1,0 +1,13 @@
+FROM pyecvl
+
+RUN python3 -m pip install --upgrade --no-cache-dir \
+      sphinx sphinx_rtd_theme rinohtype
+
+COPY . /pyecvl
+WORKDIR /pyecvl
+
+RUN python3 setup.py build_py && \
+    python3 setup.py install --skip-build && \
+    sed -i 's/extensions = \[/extensions = ["rinoh.frontend.sphinx",/' docs/source/conf.py && \
+    make -C docs/source html && \
+    sphinx-build -b rinoh docs/source docs/source/_build/rinoh
