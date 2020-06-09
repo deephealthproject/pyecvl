@@ -19,5 +19,5 @@ deploy:
   user: "${CI_USER}"
   password: "${CI_PASS}"
   on:
-    repo: simleo/pyecvl
+    repo: deephealthproject/pyecvl
     tags: true
