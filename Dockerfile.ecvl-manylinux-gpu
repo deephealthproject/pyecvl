@@ -1,0 +1,73 @@
+FROM manylinux-cuda101
+
+RUN yum -y remove cmake && \
+    yum -y install wget zlib-devel
+
+RUN wget -q https://cmake.org/files/v3.17/cmake-3.17.2-Linux-x86_64.tar.gz && \
+    tar xf cmake-3.17.2-Linux-x86_64.tar.gz && \
+    cp -rf cmake-3.17.2-Linux-x86_64/bin /usr/ && \
+    cp -rf cmake-3.17.2-Linux-x86_64/share /usr/ && \
+    rm -rf cmake-3.17.2-Linux-x86_64.tar.gz cmake-3.17.2-Linux-x86_64
+
+RUN wget -q https://gitlab.com/libeigen/eigen/-/archive/3.3.7/eigen-3.3.7.tar.gz && \
+    tar xf eigen-3.3.7.tar.gz && \
+    cd eigen-3.3.7 && \
+    mkdir build && \
+    cd build && \
+    cmake .. && \
+    make install
+
+RUN wget -q https://github.com/protocolbuffers/protobuf/releases/download/v3.11.4/protobuf-all-3.11.4.tar.gz && \
+    tar xf protobuf-all-3.11.4.tar.gz && \
+    cd protobuf-3.11.4/ && \
+    ./configure && \
+    make -j$(nproc) && \
+    make install && \
+    ldconfig
+
+COPY third_party/pyeddl/third_party/eddl /eddl
+WORKDIR /eddl
+
+RUN mkdir build && \
+    cd build && \
+    cmake -D BUILD_TARGET=GPU -D BUILD_EXAMPLES=OFF -D BUILD_SHARED_LIB=ON -D BUILD_PROTOBUF=ON -D BUILD_TESTS=OFF .. && \
+    make -j$(nproc) && \
+    make install
+
+
+WORKDIR /
+
+RUN wget -q http://github.com/opencv/opencv/archive/3.4.10.zip && \
+    unzip 3.4.10.zip && \
+    cd opencv-3.4.10 && \
+    mkdir build && \
+    cd build && \
+    cmake -DCMAKE_BUILD_TYPE=RELEASE -DBUILD_LIST=core,imgproc,imgcodecs,photo -DBUILD_opencv_apps=OFF -DBUILD_opencv_java_bindings_generator=OFF -DBUILD_opencv_python3=OFF -DBUILD_opencv_python_bindings_generator=OFF -DBUILD_opencv_python_tests=OFF -DBUILD_EXAMPLES=OFF -DBUILD_DOCS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_ZLIB=OFF -DBUILD_JPEG=ON -DBUILD_PNG=ON -DBUILD_TIFF=ON -DWITH_FFMPEG=OFF -DWITH_OPENCL=OFF -DWITH_QT=OFF -DWITH_IPP=OFF -DWITH_MATLAB=OFF -DWITH_OPENGL=OFF -DWITH_TIFF=ON -DWITH_TBB=OFF -DWITH_V4L=OFF -DWITH_LAPACK=OFF -DINSTALL_C_EXAMPLES=OFF -DINSTALL_PYTHON_EXAMPLES=OFF -DWITH_OPENEXR=OFF .. && \
+    make -j$(nproc) && \
+    make install
+
+RUN yum -y install openjpeg2-devel libjpeg-devel libtiff-devel cairo-devel gdk-pixbuf2-devel libxml2-devel
+RUN wget -q https://github.com/openslide/openslide/releases/download/v3.4.1/openslide-3.4.1.tar.gz && \
+    tar xf openslide-3.4.1.tar.gz && \
+    cd openslide-3.4.1 && \
+    ./configure && \
+    make -j $(nproc) && \
+    make install
+
+COPY third_party/ecvl /ecvl
+WORKDIR /ecvl
+RUN mkdir build && \
+    sed -i 's/GIT_FOUND AND EXISTS/GIT_FOUND AND IS_DIRECTORY/' 3rdparty/CMakeLists.txt && \
+    cd build && \
+    cmake \
+      -DECVL_BUILD_EXAMPLES=ON \
+      -DECVL_WITH_DICOM=ON \
+      -DECVL_WITH_OPENSLIDE=ON \
+      -DECVL_DATASET=ON \
+      -DECVL_GPU=ON \
+      -DECVL_TESTS=OFF \
+      -DECVL_BUILD_EDDL=ON .. && \
+    make -j$(nproc) && \
+    make install
+
+ENV CPATH="/usr/local/include/eigen3:${CPATH}"
