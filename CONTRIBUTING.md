@@ -48,3 +48,14 @@ python3 -m pip install pyecvl -f /tmp/wheels/
 ```
 
 Note that the GPU wheels are built for CUDA 10.1.
+
+**NOTE:** as specified in the manylinux 2010 standard, some libraries are
+expected to be present in the target machine. See
+https://www.python.org/dev/peps/pep-0571/ for details. In particular, the
+PyECVL wheels need the following:
+
+    libglib-2.0.so.0
+    libgobject-2.0.so.0
+    libgthread-2.0.so.0
+    libX11.so.6
+    libXrender.so.1
