@@ -34,3 +34,17 @@ docker run --rm -it pyecvl bash
 cd examples
 python3 read_write.py
 ```
+
+
+## How to build the manylinux wheels
+
+A Docker setup is in place to build manylinux binary wheels for PyECVL. See
+the `build_manylinux_wheels_gpu.sh` script in the repository root
+directory. The script copies the generated wheels to `/tmp/wheels` on the
+host. You can test them with:
+
+```
+python3 -m pip install pyecvl -f /tmp/wheels/
+```
+
+Note that the GPU wheels are built for CUDA 10.1.
