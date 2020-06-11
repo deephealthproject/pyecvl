@@ -1,0 +1,12 @@
+FROM ecvl-manylinux-gpu
+
+COPY . /pyecvl
+WORKDIR /
+
+RUN for py in cp36-cp36m cp37-cp37m cp38-cp38; do \
+      /opt/python/${py}/bin/pip install numpy pybind11 pytest && \
+      /opt/python/${py}/bin/pip wheel /pyecvl/ -w wheels && \
+      auditwheel repair wheels/pyecvl-*-${py}-linux_x86_64.whl --plat manylinux2010_x86_64 -w /pyecvl/wheels/ && \
+      /opt/python/${py}/bin/pip install pyecvl --no-index -f /pyecvl/wheels && \
+      /opt/python/${py}/bin/pytest /pyecvl/tests; \
+    done
