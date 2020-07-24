@@ -1,48 +1,63 @@
-FROM crs4/cmake:3.14
+FROM eddl
 
-RUN \
-    export DEBIAN_FRONTEND=noninteractive \
- && apt-get update -y -q \
- && apt-get install -y --no-install-recommends \
-        gcc-8 \
-        g++-8 \
-        libopencv-dev \
-        libopenslide-dev \
-        wget \
-        zlib1g-dev \
-        libeigen3-dev \
-	ca-certificates \
- && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 70 \
-   --slave /usr/bin/g++ g++ /usr/bin/g++-7 \
-   --slave /usr/bin/x86_64-linux-gnu-gcc x86_64-linux-gnu-gcc /usr/bin/x86_64-linux-gnu-gcc-7 \
-   --slave /usr/bin/x86_64-linux-gnu-g++ x86_64-linux-gnu-g++ /usr/bin/x86_64-linux-gnu-g++-7 \
- && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 80 \
-   --slave /usr/bin/g++ g++ /usr/bin/g++-8 \
-   --slave /usr/bin/x86_64-linux-gnu-gcc x86_64-linux-gnu-gcc /usr/bin/x86_64-linux-gnu-gcc-8 \
-   --slave /usr/bin/x86_64-linux-gnu-g++ x86_64-linux-gnu-g++ /usr/bin/x86_64-linux-gnu-g++-8 \
- && apt-get clean
+RUN export DEBIAN_FRONTEND=noninteractive && \
+    apt-get update -y -q && \
+    apt-get install -y --no-install-recommends \
+        libopenslide-dev
 
-
-# Install EDDL. Assumes recursive submodule update.
-COPY third_party/pyeddl/third_party/eddl /eddl
-WORKDIR /eddl
-
-RUN wget -q https://github.com/protocolbuffers/protobuf/releases/download/v3.11.4/protobuf-all-3.11.4.tar.gz && \
-    tar xf protobuf-all-3.11.4.tar.gz && \
-    cd protobuf-3.11.4/ && \
-    ./configure && \
+RUN wget -q https://github.com/opencv/opencv/archive/3.4.10.tar.gz && \
+    tar xf 3.4.10.tar.gz && \
+    cd opencv-3.4.10 && \
+    mkdir build && \
+    cd build && \
+    cmake -DBUILD_LIST=core,imgproc,imgcodecs,photo,calib3d \
+          -DBUILD_opencv_apps=OFF \
+          -DBUILD_opencv_java_bindings_generator=OFF \
+          -DBUILD_opencv_python3=OFF \
+          -DBUILD_opencv_python_bindings_generator=OFF \
+          -DBUILD_opencv_python_tests=OFF \
+          -DBUILD_EXAMPLES=OFF \
+          -DBUILD_DOCS=OFF \
+          -DBUILD_JAVA=OFF \
+          -DBUILD_JPEG=ON \
+          -DBUILD_IPP_IW=OFF \
+          -DBUILD_ITT=OFF \
+          -DBUILD_PERF_TESTS=OFF \
+          -DBUILD_PNG=ON \
+          -DBUILD_SHARED_LIBS=OFF \
+          -DBUILD_TESTS=OFF \
+          -DBUILD_TIFF=ON \
+          -DBUILD_WEBP=OFF \
+          -DBUILD_ZLIB=OFF \
+          -DINSTALL_C_EXAMPLES=OFF \
+          -DINSTALL_PYTHON_EXAMPLES=OFF \
+          -DWITH_1394=OFF \
+          -DWITH_EIGEN=OFF \
+          -DWITH_FFMPEG=OFF \
+          -DWITH_GSTREAMER=OFF \
+          -DWITH_GTK=OFF \
+          -DWITH_IPP=OFF \
+          -DWITH_ITT=OFF \
+          -DWITH_JPEG=ON \
+          -DWITH_LAPACK=OFF \
+          -DWITH_MATLAB=OFF \
+          -DWITH_OPENCL=OFF \
+          -DWITH_OPENEXR=OFF \
+          -DWITH_OPENGL=OFF \
+          -DWITH_PNG=ON \
+          -DWITH_PROTOBUF=OFF \
+          -DWITH_QT=OFF \
+          -DWITH_QUIRC=OFF \
+          -DWITH_TBB=OFF \
+          -DWITH_TIFF=ON \
+          -DWITH_V4L=OFF \
+          -DWITH_VTK=OFF \
+          -DWITH_WEBP=OFF .. && \
     make -j$(nproc) && \
     make install && \
-    ldconfig
+    cd ../.. && \
+    rm -rf 3.4.10.tar.gz opencv-3.4.10
 
-RUN mkdir build && \
-    cd build && \
-    cmake -D BUILD_SHARED_LIB=ON -D BUILD_PROTOBUF=ON -D BUILD_TESTS=OFF .. && \
-    make -j$(nproc) && \
-    make install
-
-
-# Install ECVL with EDDL support. Assumes recursive submodule update.
 COPY third_party/ecvl /ecvl
 WORKDIR /ecvl
 RUN mkdir build && \
@@ -55,5 +70,3 @@ RUN mkdir build && \
       -DECVL_BUILD_EDDL=ON .. && \
     make -j$(nproc) && \
     make install
-
-ENV CPATH="/usr/include/eigen3:${CPATH}"

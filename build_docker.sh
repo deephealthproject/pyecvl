@@ -2,6 +2,9 @@
 
 set -euo pipefail
 
+pushd third_party/pyeddl
+docker build -t eddl -f Dockerfile.eddl .
+popd
 docker build -t ecvl -f Dockerfile.ecvl .
 docker build -t pyecvl .
 docker build -t pyecvl-docs -f Dockerfile.docs .
