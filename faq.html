@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Search &mdash; PyECVL  documentation</title>
+  <title>Frequently Asked Questions &mdash; PyECVL  documentation</title>
   
 
   
@@ -20,7 +20,6 @@
   
 
   
-    
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -35,9 +34,9 @@
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
-    <script type="text/javascript" src="_static/searchtools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="#" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="pyecvl.ecvl — ecvl API" href="api/ecvl.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -64,7 +63,7 @@
 
           
 <div role="search">
-  <form id="rtd-search-form" class="wy-form" action="#" method="get">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
@@ -83,11 +82,14 @@
             
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api/ecvl.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyecvl.ecvl</span></code> — ecvl API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Frequently Asked Questions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#can-i-use-pyeddl-0-7-0-with-pyecvl-0-3-0">Can I use PyEDDL 0.7.0 with PyECVL 0.3.0?</a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -134,12 +136,14 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Search</li>
+      <li>Frequently Asked Questions</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
+            <a href="_sources/faq.rst.txt" rel="nofollow"> View page source</a>
+          
         
       </li>
     
@@ -151,23 +155,41 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <noscript>
-  <div id="fallback" class="admonition warning">
-    <p class="last">
-      Please activate JavaScript to enable the search functionality.
-    </p>
-  </div>
-  </noscript>
+  <div class="section" id="frequently-asked-questions">
+<span id="faq"></span><h1>Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="can-i-use-pyeddl-0-7-0-with-pyecvl-0-3-0">
+<h2>Can I use PyEDDL 0.7.0 with PyECVL 0.3.0?<a class="headerlink" href="#can-i-use-pyeddl-0-7-0-with-pyecvl-0-3-0" title="Permalink to this headline">¶</a></h2>
+<p>PyEDDL 0.7.0 depends on EDDL 0.5.4a. PyECVL 0.3.0 depends on ECVL 0.2.1, which
+fails to build its EDDL support module for EDDL 0.5.4a due to a change in the
+EDDL CMake config file names since version 0.4.4.</p>
+<p>However, there’s a workaround to make it work. After installing EDDL 0.5.4a,
+change to the installation directory for CMake config files (e.g.,
+<code class="docutils literal notranslate"><span class="pre">/usr/local/lib/cmake/</span></code>) and create symlinks with the names expected by ECVL
+0.2.1. Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">cmake</span><span class="o">/</span><span class="n">eddl</span>
+<span class="n">ln</span> <span class="o">-</span><span class="n">s</span> <span class="n">EDDLConfig</span><span class="o">.</span><span class="n">cmake</span> <span class="n">eddlConfig</span><span class="o">.</span><span class="n">cmake</span>
+<span class="n">ln</span> <span class="o">-</span><span class="n">s</span> <span class="n">EDDLConfigVersion</span><span class="o">.</span><span class="n">cmake</span> <span class="n">eddlConfigVersion</span><span class="o">.</span><span class="n">cmake</span>
+<span class="n">ln</span> <span class="o">-</span><span class="n">s</span> <span class="n">EDDLTargets</span><span class="o">-</span><span class="n">release</span><span class="o">.</span><span class="n">cmake</span> <span class="n">eddlTargets</span><span class="o">-</span><span class="n">release</span><span class="o">.</span><span class="n">cmake</span>
+<span class="n">ln</span> <span class="o">-</span><span class="n">s</span> <span class="n">EDDLTargets</span><span class="o">.</span><span class="n">cmake</span> <span class="n">eddlTargets</span><span class="o">.</span><span class="n">cmake</span>
+</pre></div>
+</div>
+<p>This should allow you to build ECVL with EDDL support, after which you can
+build PyEDDL and PyECVL.</p>
+</div>
+</div>
 
-  
-  <div id="search-results">
-  
-  </div>
 
            </div>
            
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="api/ecvl.html" class="btn btn-neutral float-left" title="pyecvl.ecvl — ecvl API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -207,14 +229,7 @@
   
   
     
-  
-  <script type="text/javascript">
-    jQuery(function() { Search.loadIndex("searchindex.js"); });
-  </script>
-  
-  <script type="text/javascript" id="searchindexloader"></script>
    
-
 
 </body>
 </html>

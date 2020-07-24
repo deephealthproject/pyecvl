@@ -15,6 +15,7 @@ The source code for PyECVL is available on the `GitHub repo
    installation
    getting_started
    api/index
+   faq
 
 
 Indices and tables
