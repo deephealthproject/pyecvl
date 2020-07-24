@@ -24,7 +24,7 @@ RUN wget -q https://github.com/opencv/opencv/archive/3.4.10.tar.gz && \
           -DBUILD_ITT=OFF \
           -DBUILD_PERF_TESTS=OFF \
           -DBUILD_PNG=ON \
-          -DBUILD_SHARED_LIBS=OFF \
+          -DBUILD_SHARED_LIBS=ON \
           -DBUILD_TESTS=OFF \
           -DBUILD_TIFF=ON \
           -DBUILD_WEBP=OFF \

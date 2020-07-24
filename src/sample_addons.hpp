@@ -33,15 +33,15 @@ std::vector<std::string> getSampleLocation(ecvl::Sample &s) {
 }
 
 void setSampleLocation(ecvl::Sample &s, std::vector<std::string> loc) {
-    std::vector<std::filesystem::path> location_;
+    std::vector<ecvl::filesystem::path> location_;
     for (const auto &str: loc) {
-	location_.push_back(std::filesystem::path(str));
+	location_.push_back(ecvl::filesystem::path(str));
     }
     s.location_ = location_;
 }
 
 
-std::optional<std::string> getSampleLabelPath(ecvl::Sample &s) {
+ecvl::optional<std::string> getSampleLabelPath(ecvl::Sample &s) {
     if (s.label_path_) {
 	std::string rval = *(s.label_path_);
 	return rval;
@@ -51,7 +51,7 @@ std::optional<std::string> getSampleLabelPath(ecvl::Sample &s) {
 
 
 void setSampleLabelPath(ecvl::Sample &s, std::string lp) {
-    s.label_path_ = std::filesystem::path(lp);
+    s.label_path_ = ecvl::filesystem::path(lp);
 }
 
 

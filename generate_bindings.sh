@@ -7,7 +7,7 @@ this_dir=$(cd -P -- "$(dirname -- "${this}")" && pwd -P)
 
 pushd "${this_dir}"
 rm -rf include && mkdir include
-docker run --rm ecvl bash -c "tar -c -C /usr/include opencv2" | tar -x -C include
+docker run --rm ecvl bash -c "tar -c -C /usr/local/include opencv2" | tar -x -C include
 docker run --rm ecvl bash -c "tar -c -C /usr/local/include yaml-cpp" | tar -x -C include
 popd
 
