@@ -891,7 +891,8 @@ def Transpose(src, dst):
 
 def GridDistortion(src, dst, num_steps=5, distort_limit=None,
                    interp=InterpolationType.linear,
-                   border_type=BorderType.BORDER_REFLECT_101, border_value=0):
+                   border_type=BorderType.BORDER_REFLECT_101, border_value=0,
+                   seed=None):
     """\
     Divide the image into a cell grid and randomly stretch or reduce each cell.
 
@@ -903,18 +904,22 @@ def GridDistortion(src, dst, num_steps=5, distort_limit=None,
     :param border_type: pixel extrapolation method, see BorderType
     :param border_value: padding value if border_type is
       BorderType.BORDER_CONSTANT
+    :param seed: seed for the random number generator
     :return: None
     """
     if distort_limit is None:
         distort_limit = [-0.3, 0.3]
+    if seed is None:
+        return _ecvl.GridDistortion(src, dst, num_steps, distort_limit,
+                                    interp, border_type, border_value)
     return _ecvl.GridDistortion(src, dst, num_steps, distort_limit,
-                                interp, border_type, border_value)
+                                interp, border_type, border_value, seed)
 
 
 def ElasticTransform(src, dst, alpha=34, sigma=4,
                      interp=InterpolationType.linear,
                      border_type=BorderType.BORDER_REFLECT_101,
-                     border_value=0):
+                     border_value=0, seed=None):
     """\
     Elastic deformation of input image.
 
@@ -927,10 +932,93 @@ def ElasticTransform(src, dst, alpha=34, sigma=4,
     :param border_type: pixel extrapolation method, see BorderType
     :param border_value: padding value if border_type is
       BorderType.BORDER_CONSTANT
+    :param seed: seed for the random number generator
     :return: None
     """
+    if seed is None:
+        return _ecvl.ElasticTransform(src, dst, alpha, sigma, interp,
+                                      border_type, border_value)
     return _ecvl.ElasticTransform(src, dst, alpha, sigma, interp, border_type,
-                                  border_value)
+                                  border_value, seed)
+
+
+def OpticalDistortion(src, dst, distort_limit=None, shift_limit=None,
+                      interp=InterpolationType.linear,
+                      border_type=BorderType.BORDER_REFLECT_101,
+                      border_value=0, seed=None):
+    """\
+    Barrel / pincushion distortion.
+
+    :param src: input image
+    :param dst: output image
+    :param distort_limit: distortion intensity range
+    :param shift_limit: image shifting range
+    :param interp: InterpolationType to be used
+    :param border_type: pixel extrapolation method, see BorderType
+    :param border_value: padding value if border_type is
+      BorderType.BORDER_CONSTANT
+    :param seed: seed for the random number generator
+    :return: None
+    """
+    if distort_limit is None:
+        distort_limit = [-0.3, 0.3]
+    if shift_limit is None:
+        shift_limit = [-0.1, 0.1]
+    if seed is None:
+        return _ecvl.OpticalDistortion(src, dst, distort_limit, shift_limit,
+                                       interp, border_type, border_value)
+    return _ecvl.OpticalDistortion(src, dst, distort_limit, shift_limit,
+                                   interp, border_type, border_value, seed)
+
+
+def Salt(src, dst, p, per_channel=False, seed=None):
+    """\
+    Add salt noise (white pixels) to the input image.
+
+    :param src: input image
+    :param dst: output image
+    :param p: probability of replacing a pixel with salt noise
+    :param per_channel: if True, apply channel-wide noise
+    :param seed: seed for the random number generator
+    :return: None
+    """
+    if seed is None:
+        return _ecvl.Salt(src, dst, p, per_channel)
+    return _ecvl.Salt(src, dst, p, per_channel, seed)
+
+
+def Pepper(src, dst, p, per_channel=False, seed=None):
+    """\
+    Add pepper noise (black pixels) to the input image.
+
+    :param src: input image
+    :param dst: output image
+    :param p: probability of replacing a pixel with pepper noise
+    :param per_channel: if True, apply channel-wide noise
+    :param seed: seed for the random number generator
+    :return: None
+    """
+    if seed is None:
+        return _ecvl.Pepper(src, dst, p, per_channel)
+    return _ecvl.Pepper(src, dst, p, per_channel, seed)
+
+
+def SaltAndPepper(src, dst, p, per_channel=False, seed=None):
+    """\
+    Add salt and pepper noise (white and black pixels) to the input image.
+
+    White and black pixels are equally likely.
+
+    :param src: input image
+    :param dst: output image
+    :param p: probability of replacing a pixel with salt or pepper noise
+    :param per_channel: if True, apply channel-wide noise
+    :param seed: seed for the random number generator
+    :return: None
+    """
+    if seed is None:
+        return _ecvl.SaltAndPepper(src, dst, p, per_channel)
+    return _ecvl.SaltAndPepper(src, dst, p, per_channel, seed)
 
 
 # == dataset_parser ==

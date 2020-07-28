@@ -111,6 +111,8 @@ void bind_ecvl_functions(pybind11::module &m) {
   });
   // imgproc: GridDistortion
   m.def("GridDistortion", (void (*)(const ecvl::Image&, ecvl::Image&, int, const std::array<float, 2>&, ecvl::InterpolationType, ecvl::BorderType, const int&, const unsigned)) &ecvl::GridDistortion, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("num_steps") = 5, pybind11::arg("distort_limit") = std::array<float, 2>({-0.3f, 0.3f}), pybind11::arg("interp") = ecvl::InterpolationType::linear, pybind11::arg("border_type") = ecvl::BorderType::BORDER_REFLECT_101, pybind11::arg("border_value") = 0, pybind11::arg("seed") = std::default_random_engine::default_seed);
+  // imgproc: OpticalDistortion
+  m.def("OpticalDistortion", (void (*)(const ecvl::Image&, ecvl::Image&, const std::array<float, 2>&, const std::array<float, 2>&, ecvl::InterpolationType, ecvl::BorderType, const int&, const unsigned)) &ecvl::OpticalDistortion, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("distort_limit") = std::array<float, 2>({-0.3f, 0.3f}), pybind11::arg("shift_limit") = std::array<float, 2>({-0.1f, 0.1f}), pybind11::arg("interp") = ecvl::InterpolationType::linear, pybind11::arg("border_type") = ecvl::BorderType::BORDER_REFLECT_101, pybind11::arg("border_value") = 0, pybind11::arg("seed") = std::default_random_engine::default_seed);
 #ifdef ECVL_EDDL
   // augmentations: AugmentationParam
   {
