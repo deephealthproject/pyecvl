@@ -213,6 +213,67 @@ def test_AugGridDistortion(ecvl):
 
 
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_AugOpticalDistortion(ecvl):
+    img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    a = ecvl.AugOpticalDistortion([-0.2, 0.2], [-0.4, 0.4])
+    a.Apply(img)
+    a = ecvl.AugOpticalDistortion(
+        [-0.2, 0.2], [-0.4, 0.4], ecvl.InterpolationType.nearest
+    )
+    a.Apply(img)
+    a = ecvl.AugOpticalDistortion(
+        [-0.2, 0.2], [-0.4, 0.4], ecvl.InterpolationType.nearest,
+        ecvl.BorderType.BORDER_REFLECT_101
+    )
+    a.Apply(img)
+    a = ecvl.AugOpticalDistortion(
+        [-0.2, 0.2], [-0.4, 0.4], ecvl.InterpolationType.nearest,
+        ecvl.BorderType.BORDER_REFLECT_101, 0
+    )
+    a.Apply(img)
+    # fromtext
+    f = ecvl.AugOpticalDistortion if ecvl is ecvl_core else \
+        ecvl.AugOpticalDistortion.fromtext
+    a = f('distort_limit=[-0.2,0.2] shift_limit=[-0.4,0.4] interp=\"linear\" '
+          'border_type=\"reflect_101\" border_value=0')
+    a.Apply(img)
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_AugSalt(ecvl):
+    img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    a = ecvl.AugSalt([0.1, 0.3], 0.5)
+    a.Apply(img)
+    # fromtext
+    f = ecvl.AugSalt if ecvl is ecvl_core else ecvl.AugSalt.fromtext
+    a = f('p=[0.1,0.3] per_channel=0.5')
+    a.Apply(img)
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_AugPepper(ecvl):
+    img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    a = ecvl.AugPepper([0.1, 0.3], 0.5)
+    a.Apply(img)
+    # fromtext
+    f = ecvl.AugPepper if ecvl is ecvl_core else ecvl.AugPepper.fromtext
+    a = f('p=[0.1,0.3] per_channel=0.5')
+    a.Apply(img)
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_AugSaltAndPepper(ecvl):
+    img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    a = ecvl.AugSaltAndPepper([0.1, 0.3], 0.5)
+    a.Apply(img)
+    # fromtext
+    f = ecvl.AugSaltAndPepper if ecvl is ecvl_core else \
+        ecvl.AugSaltAndPepper.fromtext
+    a = f('p=[0.1,0.3] per_channel=0.5')
+    a.Apply(img)
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
 def test_AugElasticTransform(ecvl):
     img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     a = ecvl.AugElasticTransform([34, 60], [4, 6])

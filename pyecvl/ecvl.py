@@ -1554,6 +1554,110 @@ class AugElasticTransform(_ecvl.AugElasticTransform):
                                            border_type, border_value)
 
 
+class AugOpticalDistortion(_ecvl.AugOpticalDistortion):
+    """\
+    Augmentation wrapper for OpticalDistortion.
+    """
+
+    @staticmethod
+    def fromtext(txt):
+        r"""\
+        Create an AugOpticalDistortion from a text description, e.g.::
+
+            a = AugOpticalDistortion('distort_limit=[-0.2,0.2] '
+                                     'shift_limit=[-0.4,0.4] '
+                                     'interp=\"linear\" '
+                                     'border_type=\"reflect_101\" '
+                                     'border_value=0')
+        """
+        return _ecvl.AugOpticalDistortion(txt)
+
+    def __init__(self, distort_limit, shift_limit,
+                 interp=InterpolationType.linear,
+                 border_type=BorderType.BORDER_REFLECT_101, border_value=0):
+        """\
+        :param distort_limit: range of values ``[min, max]`` to randomly select
+          the distortion steps
+        :param num_steps: range of values ``[min, max]`` to randomly select
+          the image shifting
+        :param interp: InterpolationType to be used
+        :param border_type: pixel extrapolation method, see BorderType
+        :param border_value: padding value if border_type is
+          BorderType.BORDER_CONSTANT
+        """
+        _ecvl.AugOpticalDistortion.__init__(self, distort_limit, shift_limit,
+                                            interp, border_type, border_value)
+
+
+class AugSalt(_ecvl.AugSalt):
+    """\
+    Augmentation wrapper for Salt.
+    """
+
+    @staticmethod
+    def fromtext(txt):
+        r"""\
+        Create an AugSalt from a text description, e.g.::
+
+            a = AugSalt('p=[0.1,0.3] per_channel=0.5')
+        """
+        return _ecvl.AugSalt(txt)
+
+    def __init__(self, p, per_channel):
+        """\
+        :param p: range of values ``[min, max]`` for the probability of any
+          pixel to be set to white
+        :param per_channel: probability to use the same value for all channels
+        """
+        _ecvl.AugSalt.__init__(self, p, per_channel)
+
+
+class AugPepper(_ecvl.AugPepper):
+    """\
+    Augmentation wrapper for Pepper.
+    """
+
+    @staticmethod
+    def fromtext(txt):
+        r"""\
+        Create an AugPepper from a text description, e.g.::
+
+            a = AugPepper('p=[0.1,0.3] per_channel=0.5')
+        """
+        return _ecvl.AugPepper(txt)
+
+    def __init__(self, p, per_channel):
+        """\
+        :param p: range of values ``[min, max]`` for the probability of any
+          pixel to be set to black
+        :param per_channel: probability to use the same value for all channels
+        """
+        _ecvl.AugPepper.__init__(self, p, per_channel)
+
+
+class AugSaltAndPepper(_ecvl.AugSaltAndPepper):
+    """\
+    Augmentation wrapper for SaltAndPepper.
+    """
+
+    @staticmethod
+    def fromtext(txt):
+        r"""\
+        Create an AugSaltAndPepper from a text description, e.g.::
+
+            a = AugSaltAndPepper('p=[0.1,0.3] per_channel=0.5')
+        """
+        return _ecvl.AugSaltAndPepper(txt)
+
+    def __init__(self, p, per_channel):
+        """\
+        :param p: range of values ``[min, max]`` for the probability of any
+          pixel to be set to white or black
+        :param per_channel: probability to use the same value for all channels
+        """
+        _ecvl.AugSaltAndPepper.__init__(self, p, per_channel)
+
+
 # == support_imgcodecs ==
 
 class ImReadMode(_ecvl.ImReadMode):
