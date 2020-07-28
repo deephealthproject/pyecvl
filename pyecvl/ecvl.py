@@ -1578,7 +1578,7 @@ class AugOpticalDistortion(_ecvl.AugOpticalDistortion):
         """\
         :param distort_limit: range of values ``[min, max]`` to randomly select
           the distortion steps
-        :param num_steps: range of values ``[min, max]`` to randomly select
+        :param shift_limit: range of values ``[min, max]`` to randomly select
           the image shifting
         :param interp: InterpolationType to be used
         :param border_type: pixel extrapolation method, see BorderType
