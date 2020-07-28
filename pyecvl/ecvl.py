@@ -1179,6 +1179,37 @@ class SequentialAugmentationContainer(_ecvl.SequentialAugmentationContainer):
         _ecvl.SequentialAugmentationContainer.__init__(self, augs)
 
 
+class OneOfAugmentationContainer(_ecvl.OneOfAugmentationContainer):
+    """\
+    A container for multiple augmentations, from which one is randomly chosen.
+
+    The chosen augmentation will be applied with a user-specified probability.
+    """
+
+    @staticmethod
+    def fromtext(txt):
+        r"""\
+        Create a OneOfAugmentationContainer from a text description,
+        e.g.::
+
+            txt = '''\
+            p=0.7
+            AugFlip p=0.2
+            AugMirror p=0.4
+            end
+            '''
+            c = OneOfAugmentationContainer(txt)
+        """
+        return _ecvl.OneOfAugmentationContainer(txt)
+
+    def __init__(self, p, augs):
+        """\
+        :param p: probability of applying the chosen augmentation
+        :param augs: list of augmentations
+        """
+        _ecvl.OneOfAugmentationContainer.__init__(self, p, augs)
+
+
 class AugRotate(_ecvl.AugRotate):
     """\
     Augmentation wrapper for Rotate2D.

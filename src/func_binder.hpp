@@ -155,6 +155,16 @@ void bind_ecvl_functions(pybind11::module &m) {
     return new ecvl::SequentialAugmentationContainer((std::istream&)ss);
   }));
   }
+  // augmentations::OneOfAugmentationContainer
+  {
+  pybind11::class_<ecvl::OneOfAugmentationContainer, std::shared_ptr<ecvl::OneOfAugmentationContainer>, ecvl::Augmentation> cl(m, "OneOfAugmentationContainer", "Represents a container for multiple augmentations from which one will be randomly chosen, and applied with a probability specified by the user.");
+  cl.def(pybind11::init<double>());
+  cl.def(pybind11::init<double, std::vector<std::shared_ptr<ecvl::Augmentation>>>());
+  cl.def(pybind11::init([](const std::string& s) {
+    std::stringstream ss(s);
+    return new ecvl::OneOfAugmentationContainer((std::istream&)ss);
+  }));
+  }
   // augmentations: AugRotate
   {
   pybind11::class_<ecvl::AugRotate, std::shared_ptr<ecvl::AugRotate>, ecvl::Augmentation> cl(m, "AugRotate", "Augmentation wrapper for ecvl::Rotate2D.");

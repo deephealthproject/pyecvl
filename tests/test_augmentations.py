@@ -277,3 +277,23 @@ def test_SequentialAugmentationContainer(ecvl):
         ecvl.SequentialAugmentationContainer.fromtext
     c = f(txt)
     c.Apply(img)
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_OneOfAugmentationContainer(ecvl):
+    img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    # from list
+    c = ecvl.OneOfAugmentationContainer(0.7, [
+        ecvl.AugRotate([-5, 5]),
+        ecvl.AugMirror(.5),
+    ])
+    c.Apply(img)
+    # fromtext
+    txt = ('p=0.7\n'
+           'AugFlip p=0.2\n'
+           'AugMirror p=0.2\n'
+           'end')
+    f = ecvl.OneOfAugmentationContainer if ecvl is ecvl_core else \
+        ecvl.OneOfAugmentationContainer.fromtext
+    c = f(txt)
+    c.Apply(img)
