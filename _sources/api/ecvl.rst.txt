@@ -143,6 +143,14 @@ Image processing
 
 .. autofunction:: pyecvl.ecvl.ElasticTransform
 
+.. autofunction:: pyecvl.ecvl.OpticalDistortion
+
+.. autofunction:: pyecvl.ecvl.Salt
+
+.. autofunction:: pyecvl.ecvl.Pepper
+
+.. autofunction:: pyecvl.ecvl.SaltAndPepper
+
 
 DeepHealth dataset parser
 -------------------------
@@ -176,6 +184,10 @@ Augmentations
    :undoc-members:
 
 .. autoclass:: pyecvl.ecvl.SequentialAugmentationContainer
+   :members:
+   :undoc-members:
+
+.. autoclass:: pyecvl.ecvl.OneOfAugmentationContainer
    :members:
    :undoc-members:
 
@@ -232,6 +244,22 @@ Augmentations
    :undoc-members:
 
 .. autoclass:: pyecvl.ecvl.AugElasticTransform
+   :members:
+   :undoc-members:
+
+.. autoclass:: pyecvl.ecvl.AugOpticalDistortion
+   :members:
+   :undoc-members:
+
+.. autoclass:: pyecvl.ecvl.AugSalt
+   :members:
+   :undoc-members:
+
+.. autoclass:: pyecvl.ecvl.AugPepper
+   :members:
+   :undoc-members:
+
+.. autoclass:: pyecvl.ecvl.AugSaltAndPepper
    :members:
    :undoc-members:
 

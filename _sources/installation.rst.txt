@@ -35,13 +35,12 @@ Linux as an example platform.
 Install ECVL and EDDL dependencies
 ----------------------------------
 
-ECVL needs a compiler with C++17 support, such as gcc-8 or later. You also
-need to install the development version of the OpenCV and OpenSlide
-libraries. EDDL needs the development versions of the zlib and Eigen3
-libraries. To enable ONNX I/O, you also need to install Google protobuf. On
-Ubuntu, for instance, install the following with APT: ``gcc-8, g++-8,
-libopencv-dev, libopenslide-dev, zlib1g-dev, libeigen3-dev, wget,
-ca-certificates``. Install protobuf from source::
+ECVL needs a compiler with C++17 support. You also need to install the
+development version of the OpenCV and OpenSlide libraries. EDDL needs the
+development versions of the zlib and Eigen3 libraries. To enable ONNX I/O, you
+also need to install Google protobuf. On Ubuntu, for instance, install the
+following with APT: ``libopencv-dev, libopenslide-dev, zlib1g-dev,
+libeigen3-dev, wget, ca-certificates``. Install protobuf from source::
 
     wget -q https://github.com/protocolbuffers/protobuf/releases/download/v3.11.4/protobuf-all-3.11.4.tar.gz
     tar xf protobuf-all-3.11.4.tar.gz
@@ -75,7 +74,7 @@ Install ECVL::
     pushd third_party/ecvl
     mkdir build
     pushd build
-    cmake -DECVL_WITH_DICOM=ON -DECVL_WITH_OPENSLIDE=ON -DECVL_DATASET=ON -DECVL_BUILD_EDDL=ON
+    cmake -DECVL_SHARED=ON -DECVL_WITH_DICOM=ON -DECVL_WITH_OPENSLIDE=ON -DECVL_DATASET=ON -DECVL_BUILD_EDDL=ON
     make -j$(nproc)
     make install
     popd
@@ -90,7 +89,8 @@ You need the development version of python3 and pip. On Ubuntu, install
 
 Install the Python dependencies::
 
-    python3 -m pip install --upgrade setuptools pip numpy pybind11 pytest
+    python3 -m pip install --upgrade setuptools pip
+    python3 -m pip install --upgrade numpy pybind11 pytest
 
 The EDDL code includes Eigen headers like in this example: ``#include
 <Eigen/Dense>``, e.g., with ``Eigen`` as the root directory. However, Eigen
@@ -122,11 +122,13 @@ versions for each PyECVL version:
 +----------------+--------------+----------------+
 | 0.3.0          | 0.2.1        | 0.6.0          |
 +----------------+--------------+----------------+
+| 0.4.*          | 0.2.2        | 0.8.0          |
++----------------+--------------+----------------+
 
-Thus, for instance, to install PyECVL 0.3.0::
+Thus, for instance, to install PyECVL 0.4.0::
 
-    python3 -m pip install pyeddl==0.6.0
-    python3 -m pip install pyecvl==0.3.0
+    python3 -m pip install pyeddl==0.8.0
+    python3 -m pip install pyecvl==0.4.0
 
 
 Disabling unwanted modules

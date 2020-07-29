@@ -1420,7 +1420,7 @@ inpainted that is considered by the algorithm.</p></li>
 
 <dl class="py function">
 <dt id="pyecvl.ecvl.GridDistortion">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">GridDistortion</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">num_steps</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">distort_limit</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">interp</span><span class="o">=</span><span class="default_value">InterpolationType.linear</span></em>, <em class="sig-param"><span class="n">border_type</span><span class="o">=</span><span class="default_value">BorderType.BORDER_REFLECT_101</span></em>, <em class="sig-param"><span class="n">border_value</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.GridDistortion" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">GridDistortion</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">num_steps</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">distort_limit</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">interp</span><span class="o">=</span><span class="default_value">InterpolationType.linear</span></em>, <em class="sig-param"><span class="n">border_type</span><span class="o">=</span><span class="default_value">BorderType.BORDER_REFLECT_101</span></em>, <em class="sig-param"><span class="n">border_value</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.GridDistortion" title="Permalink to this definition">¶</a></dt>
 <dd><p>Divide the image into a cell grid and randomly stretch or reduce each cell.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1433,6 +1433,7 @@ inpainted that is considered by the algorithm.</p></li>
 <li><p><strong>border_type</strong> – pixel extrapolation method, see BorderType</p></li>
 <li><p><strong>border_value</strong> – padding value if border_type is
 BorderType.BORDER_CONSTANT</p></li>
+<li><p><strong>seed</strong> – seed for the random number generator</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1443,7 +1444,7 @@ BorderType.BORDER_CONSTANT</p></li>
 
 <dl class="py function">
 <dt id="pyecvl.ecvl.ElasticTransform">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">ElasticTransform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">34</span></em>, <em class="sig-param"><span class="n">sigma</span><span class="o">=</span><span class="default_value">4</span></em>, <em class="sig-param"><span class="n">interp</span><span class="o">=</span><span class="default_value">InterpolationType.linear</span></em>, <em class="sig-param"><span class="n">border_type</span><span class="o">=</span><span class="default_value">BorderType.BORDER_REFLECT_101</span></em>, <em class="sig-param"><span class="n">border_value</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ElasticTransform" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">ElasticTransform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">34</span></em>, <em class="sig-param"><span class="n">sigma</span><span class="o">=</span><span class="default_value">4</span></em>, <em class="sig-param"><span class="n">interp</span><span class="o">=</span><span class="default_value">InterpolationType.linear</span></em>, <em class="sig-param"><span class="n">border_type</span><span class="o">=</span><span class="default_value">BorderType.BORDER_REFLECT_101</span></em>, <em class="sig-param"><span class="n">border_value</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ElasticTransform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Elastic deformation of input image.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1457,6 +1458,92 @@ or DataType.int32, InterpolationType.nearest is used</p></li>
 <li><p><strong>border_type</strong> – pixel extrapolation method, see BorderType</p></li>
 <li><p><strong>border_value</strong> – padding value if border_type is
 BorderType.BORDER_CONSTANT</p></li>
+<li><p><strong>seed</strong> – seed for the random number generator</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.OpticalDistortion">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">OpticalDistortion</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">distort_limit</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">shift_limit</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">interp</span><span class="o">=</span><span class="default_value">InterpolationType.linear</span></em>, <em class="sig-param"><span class="n">border_type</span><span class="o">=</span><span class="default_value">BorderType.BORDER_REFLECT_101</span></em>, <em class="sig-param"><span class="n">border_value</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.OpticalDistortion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Barrel / pincushion distortion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – input image</p></li>
+<li><p><strong>dst</strong> – output image</p></li>
+<li><p><strong>distort_limit</strong> – distortion intensity range</p></li>
+<li><p><strong>shift_limit</strong> – image shifting range</p></li>
+<li><p><strong>interp</strong> – InterpolationType to be used</p></li>
+<li><p><strong>border_type</strong> – pixel extrapolation method, see BorderType</p></li>
+<li><p><strong>border_value</strong> – padding value if border_type is
+BorderType.BORDER_CONSTANT</p></li>
+<li><p><strong>seed</strong> – seed for the random number generator</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.Salt">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">Salt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">p</span></em>, <em class="sig-param"><span class="n">per_channel</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Salt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add salt noise (white pixels) to the input image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – input image</p></li>
+<li><p><strong>dst</strong> – output image</p></li>
+<li><p><strong>p</strong> – probability of replacing a pixel with salt noise</p></li>
+<li><p><strong>per_channel</strong> – if True, apply channel-wide noise</p></li>
+<li><p><strong>seed</strong> – seed for the random number generator</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.Pepper">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">Pepper</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">p</span></em>, <em class="sig-param"><span class="n">per_channel</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Pepper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add pepper noise (black pixels) to the input image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – input image</p></li>
+<li><p><strong>dst</strong> – output image</p></li>
+<li><p><strong>p</strong> – probability of replacing a pixel with pepper noise</p></li>
+<li><p><strong>per_channel</strong> – if True, apply channel-wide noise</p></li>
+<li><p><strong>seed</strong> – seed for the random number generator</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.SaltAndPepper">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">SaltAndPepper</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">p</span></em>, <em class="sig-param"><span class="n">per_channel</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.SaltAndPepper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add salt and pepper noise (white and black pixels) to the input image.</p>
+<p>White and black pixels are equally likely.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – input image</p></li>
+<li><p><strong>dst</strong> – output image</p></li>
+<li><p><strong>p</strong> – probability of replacing a pixel with salt or pepper noise</p></li>
+<li><p><strong>per_channel</strong> – if True, apply channel-wide noise</p></li>
+<li><p><strong>seed</strong> – seed for the random number generator</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1679,6 +1766,37 @@ e.g.:</p>
 <span class="s1">end</span>
 <span class="s1">&#39;&#39;&#39;</span>
 <span class="n">c</span> <span class="o">=</span> <span class="n">SequentialAugmentationContainer</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pyecvl.ecvl.OneOfAugmentationContainer">
+<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">OneOfAugmentationContainer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p</span></em>, <em class="sig-param"><span class="n">augs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.OneOfAugmentationContainer" title="Permalink to this definition">¶</a></dt>
+<dd><p>A container for multiple augmentations, from which one is randomly chosen.</p>
+<p>The chosen augmentation will be applied with a user-specified probability.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> – probability of applying the chosen augmentation</p></li>
+<li><p><strong>augs</strong> – list of augmentations</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="pyecvl.ecvl.OneOfAugmentationContainer.fromtext">
+<em class="property">static </em><code class="sig-name descname">fromtext</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">txt</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.OneOfAugmentationContainer.fromtext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a OneOfAugmentationContainer from a text description,
+e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">txt</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span><span class="se">\</span>
+<span class="s1">p=0.7</span>
+<span class="s1">AugFlip p=0.2</span>
+<span class="s1">AugMirror p=0.4</span>
+<span class="s1">end</span>
+<span class="s1">&#39;&#39;&#39;</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">OneOfAugmentationContainer</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2006,6 +2124,111 @@ BorderType.BORDER_CONSTANT</p></li>
                         <span class="s1">&#39;interp=</span><span class="se">\&quot;</span><span class="s1">linear</span><span class="se">\&quot;</span><span class="s1"> &#39;</span>
                         <span class="s1">&#39;border_type=</span><span class="se">\&quot;</span><span class="s1">reflect_101</span><span class="se">\&quot;</span><span class="s1"> &#39;</span>
                         <span class="s1">&#39;border_value=0&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pyecvl.ecvl.AugOpticalDistortion">
+<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">AugOpticalDistortion</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">distort_limit</span></em>, <em class="sig-param"><span class="n">shift_limit</span></em>, <em class="sig-param"><span class="n">interp</span><span class="o">=</span><span class="default_value">InterpolationType.linear</span></em>, <em class="sig-param"><span class="n">border_type</span><span class="o">=</span><span class="default_value">BorderType.BORDER_REFLECT_101</span></em>, <em class="sig-param"><span class="n">border_value</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugOpticalDistortion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Augmentation wrapper for OpticalDistortion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>distort_limit</strong> – range of values <code class="docutils literal notranslate"><span class="pre">[min,</span> <span class="pre">max]</span></code> to randomly select
+the distortion steps</p></li>
+<li><p><strong>shift_limit</strong> – range of values <code class="docutils literal notranslate"><span class="pre">[min,</span> <span class="pre">max]</span></code> to randomly select
+the image shifting</p></li>
+<li><p><strong>interp</strong> – InterpolationType to be used</p></li>
+<li><p><strong>border_type</strong> – pixel extrapolation method, see BorderType</p></li>
+<li><p><strong>border_value</strong> – padding value if border_type is
+BorderType.BORDER_CONSTANT</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="pyecvl.ecvl.AugOpticalDistortion.fromtext">
+<em class="property">static </em><code class="sig-name descname">fromtext</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">txt</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugOpticalDistortion.fromtext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an AugOpticalDistortion from a text description, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">AugOpticalDistortion</span><span class="p">(</span><span class="s1">&#39;distort_limit=[-0.2,0.2] &#39;</span>
+                         <span class="s1">&#39;shift_limit=[-0.4,0.4] &#39;</span>
+                         <span class="s1">&#39;interp=</span><span class="se">\&quot;</span><span class="s1">linear</span><span class="se">\&quot;</span><span class="s1"> &#39;</span>
+                         <span class="s1">&#39;border_type=</span><span class="se">\&quot;</span><span class="s1">reflect_101</span><span class="se">\&quot;</span><span class="s1"> &#39;</span>
+                         <span class="s1">&#39;border_value=0&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pyecvl.ecvl.AugSalt">
+<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">AugSalt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p</span></em>, <em class="sig-param"><span class="n">per_channel</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugSalt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Augmentation wrapper for Salt.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> – range of values <code class="docutils literal notranslate"><span class="pre">[min,</span> <span class="pre">max]</span></code> for the probability of any
+pixel to be set to white</p></li>
+<li><p><strong>per_channel</strong> – probability to use the same value for all channels</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="pyecvl.ecvl.AugSalt.fromtext">
+<em class="property">static </em><code class="sig-name descname">fromtext</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">txt</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugSalt.fromtext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an AugSalt from a text description, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">AugSalt</span><span class="p">(</span><span class="s1">&#39;p=[0.1,0.3] per_channel=0.5&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pyecvl.ecvl.AugPepper">
+<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">AugPepper</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p</span></em>, <em class="sig-param"><span class="n">per_channel</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugPepper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Augmentation wrapper for Pepper.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> – range of values <code class="docutils literal notranslate"><span class="pre">[min,</span> <span class="pre">max]</span></code> for the probability of any
+pixel to be set to black</p></li>
+<li><p><strong>per_channel</strong> – probability to use the same value for all channels</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="pyecvl.ecvl.AugPepper.fromtext">
+<em class="property">static </em><code class="sig-name descname">fromtext</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">txt</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugPepper.fromtext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an AugPepper from a text description, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">AugPepper</span><span class="p">(</span><span class="s1">&#39;p=[0.1,0.3] per_channel=0.5&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pyecvl.ecvl.AugSaltAndPepper">
+<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">AugSaltAndPepper</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p</span></em>, <em class="sig-param"><span class="n">per_channel</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugSaltAndPepper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Augmentation wrapper for SaltAndPepper.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> – range of values <code class="docutils literal notranslate"><span class="pre">[min,</span> <span class="pre">max]</span></code> for the probability of any
+pixel to be set to white or black</p></li>
+<li><p><strong>per_channel</strong> – probability to use the same value for all channels</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="pyecvl.ecvl.AugSaltAndPepper.fromtext">
+<em class="property">static </em><code class="sig-name descname">fromtext</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">txt</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugSaltAndPepper.fromtext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an AugSaltAndPepper from a text description, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">AugSaltAndPepper</span><span class="p">(</span><span class="s1">&#39;p=[0.1,0.3] per_channel=0.5&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
