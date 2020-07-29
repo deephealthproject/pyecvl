@@ -110,7 +110,9 @@ void bind_ecvl_functions(pybind11::module &m) {
     return pybind11::make_tuple(mean, stddev);
   });
   // imgproc: GridDistortion
-  m.def("GridDistortion", (void (*)(const ecvl::Image&, ecvl::Image&, int, const std::array<float, 2>&, ecvl::InterpolationType, ecvl::BorderType, const int&)) &ecvl::GridDistortion, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("num_steps") = 5, pybind11::arg("distort_limit") = std::array<float, 2>({-0.3f, 0.3f}), pybind11::arg("interp") = ecvl::InterpolationType::linear, pybind11::arg("border_type") = ecvl::BorderType::BORDER_REFLECT_101, pybind11::arg("border_value") = 0);
+  m.def("GridDistortion", (void (*)(const ecvl::Image&, ecvl::Image&, int, const std::array<float, 2>&, ecvl::InterpolationType, ecvl::BorderType, const int&, const unsigned)) &ecvl::GridDistortion, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("num_steps") = 5, pybind11::arg("distort_limit") = std::array<float, 2>({-0.3f, 0.3f}), pybind11::arg("interp") = ecvl::InterpolationType::linear, pybind11::arg("border_type") = ecvl::BorderType::BORDER_REFLECT_101, pybind11::arg("border_value") = 0, pybind11::arg("seed") = std::default_random_engine::default_seed);
+  // imgproc: OpticalDistortion
+  m.def("OpticalDistortion", (void (*)(const ecvl::Image&, ecvl::Image&, const std::array<float, 2>&, const std::array<float, 2>&, ecvl::InterpolationType, ecvl::BorderType, const int&, const unsigned)) &ecvl::OpticalDistortion, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("distort_limit") = std::array<float, 2>({-0.3f, 0.3f}), pybind11::arg("shift_limit") = std::array<float, 2>({-0.1f, 0.1f}), pybind11::arg("interp") = ecvl::InterpolationType::linear, pybind11::arg("border_type") = ecvl::BorderType::BORDER_REFLECT_101, pybind11::arg("border_value") = 0, pybind11::arg("seed") = std::default_random_engine::default_seed);
 #ifdef ECVL_EDDL
   // augmentations: AugmentationParam
   {
@@ -151,6 +153,16 @@ void bind_ecvl_functions(pybind11::module &m) {
   cl.def(pybind11::init([](const std::string& s) {
     std::stringstream ss(s);
     return new ecvl::SequentialAugmentationContainer((std::istream&)ss);
+  }));
+  }
+  // augmentations::OneOfAugmentationContainer
+  {
+  pybind11::class_<ecvl::OneOfAugmentationContainer, std::shared_ptr<ecvl::OneOfAugmentationContainer>, ecvl::Augmentation> cl(m, "OneOfAugmentationContainer", "Represents a container for multiple augmentations from which one will be randomly chosen, and applied with a probability specified by the user.");
+  cl.def(pybind11::init<double>());
+  cl.def(pybind11::init<double, std::vector<std::shared_ptr<ecvl::Augmentation>>>());
+  cl.def(pybind11::init([](const std::string& s) {
+    std::stringstream ss(s);
+    return new ecvl::OneOfAugmentationContainer((std::istream&)ss);
   }));
   }
   // augmentations: AugRotate
@@ -277,6 +289,42 @@ void bind_ecvl_functions(pybind11::module &m) {
   cl.def(pybind11::init([](const std::string& s) {
     std::stringstream ss(s);
     return new ecvl::AugElasticTransform(ss);
+  }));
+  }
+  // augmentations: AugOpticalDistortion
+  {
+  pybind11::class_<ecvl::AugOpticalDistortion, std::shared_ptr<ecvl::AugOpticalDistortion>, ecvl::Augmentation> cl(m, "AugOpticalDistortion", "Augmentation wrapper for ecvl::OpticalDistortion.");
+  cl.def(pybind11::init<const std::array<float, 2>&, const std::array<float, 2>&, const ecvl::InterpolationType&, const ecvl::BorderType&, const int&>(), pybind11::arg("distort_limit"), pybind11::arg("shift_limit"), pybind11::arg("interp") = ecvl::InterpolationType::linear, pybind11::arg("border_type") = ecvl::BorderType::BORDER_REFLECT_101, pybind11::arg("border_value") = 0);
+  cl.def(pybind11::init([](const std::string& s) {
+    std::stringstream ss(s);
+    return new ecvl::AugOpticalDistortion(ss);
+  }));
+  }
+  // augmentations: AugSalt
+  {
+  pybind11::class_<ecvl::AugSalt, std::shared_ptr<ecvl::AugSalt>, ecvl::Augmentation> cl(m, "AugSalt", "Augmentation wrapper for ecvl::Salt.");
+  cl.def(pybind11::init<const std::array<double, 2>&, const double&>(), pybind11::arg("p"), pybind11::arg("per_channel"));
+  cl.def(pybind11::init([](const std::string& s) {
+    std::stringstream ss(s);
+    return new ecvl::AugSalt(ss);
+  }));
+  }
+  // augmentations: AugPepper
+  {
+  pybind11::class_<ecvl::AugPepper, std::shared_ptr<ecvl::AugPepper>, ecvl::Augmentation> cl(m, "AugPepper", "Augmentation wrapper for ecvl::Pepper.");
+  cl.def(pybind11::init<const std::array<double, 2>&, const double&>(), pybind11::arg("p"), pybind11::arg("per_channel"));
+  cl.def(pybind11::init([](const std::string& s) {
+    std::stringstream ss(s);
+    return new ecvl::AugPepper(ss);
+  }));
+  }
+  // augmentations: AugSaltAndPepper
+  {
+  pybind11::class_<ecvl::AugSaltAndPepper, std::shared_ptr<ecvl::AugSaltAndPepper>, ecvl::Augmentation> cl(m, "AugSaltAndPepper", "Augmentation wrapper for ecvl::SaltAndPepper.");
+  cl.def(pybind11::init<const std::array<double, 2>&, const double&>(), pybind11::arg("p"), pybind11::arg("per_channel"));
+  cl.def(pybind11::init([](const std::string& s) {
+    std::stringstream ss(s);
+    return new ecvl::AugSaltAndPepper(ss);
   }));
   }
 

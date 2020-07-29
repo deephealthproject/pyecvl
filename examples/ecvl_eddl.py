@@ -26,7 +26,7 @@ import argparse
 import sys
 
 import pyecvl.ecvl as ecvl
-import pyeddl.eddlT as eddlT
+from pyeddl.tensor import Tensor
 
 
 AUG_TXT = '''\
@@ -56,8 +56,8 @@ def main(args):
     augs.Apply(img)
     print("Executing ImageToTensor")
     t = ecvl.ImageToTensor(img)
-    eddlT.div_(t, 128)
-    eddlT.mult_(t, 128)
+    t.div_(128)
+    t.mult_(128)
     print("Executing TensorToImage")
     img = ecvl.TensorToImage(t)
     print("Executing TensorToView")
@@ -81,10 +81,10 @@ def main(args):
     print("Creating a DLDataset")
     d = ecvl.DLDataset(args.in_ds, batch_size, ds_augs, ecvl.ColorType.GRAY)
     print("Create x and y")
-    x = eddlT.create(
+    x = Tensor(
         [batch_size, d.n_channels_, d.resize_dims_[0], d.resize_dims_[1]]
     )
-    y = eddlT.create([batch_size, len(d.classes_)])
+    y = Tensor([batch_size, len(d.classes_)])
 
     # Load a batch of d.batch_size_ images into x and corresponding labels
     # into y. Images are resized to the dimensions specified in the

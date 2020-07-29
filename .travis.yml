@@ -9,6 +9,7 @@ before_install: pip install flake8
 before_script: flake8 -v .
 
 script:
+  - pushd third_party/pyeddl; docker build -t eddl -f Dockerfile.eddl .; popd
   - docker build -t ecvl -f Dockerfile.ecvl .
   - docker build -t pyecvl .
   - docker run --rm pyecvl bash -c "pytest tests"

@@ -344,6 +344,10 @@ def test_GridDistortion(ecvl):
         img, tmp, 6, [-0.5, 0.5], ecvl.InterpolationType.nearest,
         ecvl.BorderType.BORDER_CONSTANT, 1
     )
+    ecvl.GridDistortion(
+        img, tmp, 6, [-0.5, 0.5], ecvl.InterpolationType.nearest,
+        ecvl.BorderType.BORDER_CONSTANT, 1, 12345
+    )
 
 
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
@@ -363,3 +367,59 @@ def test_ElasticTransform(ecvl):
         img, tmp, 35, 5, ecvl.InterpolationType.nearest,
         ecvl.BorderType.BORDER_CONSTANT, 1
     )
+    ecvl.ElasticTransform(
+        img, tmp, 35, 5, ecvl.InterpolationType.nearest,
+        ecvl.BorderType.BORDER_CONSTANT, 1, 12345
+    )
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_OpticalDistortion(ecvl):
+    dims = [20, 40, 3]
+    img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    tmp = _empty_img(ecvl)
+    ecvl.OpticalDistortion(img, tmp)
+    ecvl.OpticalDistortion(img, tmp)
+    ecvl.OpticalDistortion(img, tmp, [-0.5, 0.5])
+    ecvl.OpticalDistortion(img, tmp, [-0.5, 0.5], [-0.2, 0.2])
+    ecvl.OpticalDistortion(
+        img, tmp, [-0.5, 0.5], [-0.2, 0.2], ecvl.InterpolationType.nearest
+    )
+    ecvl.OpticalDistortion(
+        img, tmp, [-0.5, 0.5], [-0.2, 0.2], ecvl.InterpolationType.nearest,
+        ecvl.BorderType.BORDER_CONSTANT
+    )
+    ecvl.OpticalDistortion(
+        img, tmp, [-0.5, 0.5], [-0.2, 0.2], ecvl.InterpolationType.nearest,
+        ecvl.BorderType.BORDER_CONSTANT, 12345
+    )
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_Salt(ecvl):
+    dims = [20, 40, 3]
+    img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    tmp = _empty_img(ecvl)
+    ecvl.Salt(img, tmp, 0.4)
+    ecvl.Salt(img, tmp, 0.4, True)
+    ecvl.Salt(img, tmp, 0.4, True, 12345)
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_Pepper(ecvl):
+    dims = [20, 40, 3]
+    img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    tmp = _empty_img(ecvl)
+    ecvl.Pepper(img, tmp, 0.4)
+    ecvl.Pepper(img, tmp, 0.4, True)
+    ecvl.Pepper(img, tmp, 0.4, True, 12345)
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_SaltAndPepper(ecvl):
+    dims = [20, 40, 3]
+    img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    tmp = _empty_img(ecvl)
+    ecvl.SaltAndPepper(img, tmp, 0.4)
+    ecvl.SaltAndPepper(img, tmp, 0.4, True)
+    ecvl.SaltAndPepper(img, tmp, 0.4, True, 12345)

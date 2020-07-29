@@ -133,6 +133,56 @@ def main(args):
                    [images[0].dims_[0], images[0].dims_[1]])
     ecvl.Stack(images, tmp)
 
+    print("Morphology")
+    kernel = ecvl.Image(
+        [3, 3, 1], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR
+    )
+    a = np.array(kernel, copy=False)
+    a.fill(0.11)
+    ecvl.Morphology(img, tmp, ecvl.MorphType.MORPH_BLACKHAT, kernel)
+    ecvl.ImWrite("%s_morphology%s" % (head, ext), tmp)
+
+    print("Inpaint")
+    ecvl.CopyImage(img, tmp)
+    a = np.array(tmp, copy=False)
+    a[150:200, 100:150, :] = 0
+    ecvl.ImWrite("%s_inpaint_before%s" % (head, ext), tmp)
+    dims = tmp.dims_[:2] + [1]
+    mask = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    b = np.array(mask, copy=False)
+    b.fill(0)
+    b[150:200, 100:150, :] = 1
+    ecvl.Inpaint(tmp, tmp, mask, 3)
+    ecvl.ImWrite("%s_inpaint_after%s" % (head, ext), tmp)
+
+    print("Transpose")
+    ecvl.Transpose(img, tmp)
+    ecvl.ImWrite("%s_transpose%s" % (head, ext), tmp)
+
+    print("GridDistortion")
+    ecvl.GridDistortion(img, tmp)
+    ecvl.ImWrite("%s_grid_distortion%s" % (head, ext), tmp)
+
+    print("ElasticTransform")
+    ecvl.ElasticTransform(img, tmp)
+    ecvl.ImWrite("%s_elastic_transform%s" % (head, ext), tmp)
+
+    print("OpticalDistortion")
+    ecvl.OpticalDistortion(img, tmp)
+    ecvl.ImWrite("%s_optical_distortion%s" % (head, ext), tmp)
+
+    print("Salt")
+    ecvl.Salt(img, tmp, 0.1)
+    ecvl.ImWrite("%s_salt%s" % (head, ext), tmp)
+
+    print("Pepper")
+    ecvl.Pepper(img, tmp, 0.1)
+    ecvl.ImWrite("%s_pepper%s" % (head, ext), tmp)
+
+    print("SaltAndPepper")
+    ecvl.SaltAndPepper(img, tmp, 0.1)
+    ecvl.ImWrite("%s_salt_and_pepper%s" % (head, ext), tmp)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
