@@ -89,7 +89,8 @@ You need the development version of python3 and pip. On Ubuntu, install
 
 Install the Python dependencies::
 
-    python3 -m pip install --upgrade setuptools pip numpy pybind11 pytest
+    python3 -m pip install --upgrade setuptools pip
+    python3 -m pip install --upgrade numpy pybind11 pytest
 
 The EDDL code includes Eigen headers like in this example: ``#include
 <Eigen/Dense>``, e.g., with ``Eigen`` as the root directory. However, Eigen
@@ -121,7 +122,7 @@ versions for each PyECVL version:
 +----------------+--------------+----------------+
 | 0.3.0          | 0.2.1        | 0.6.0          |
 +----------------+--------------+----------------+
-| 0.4.0          | 0.2.2        | 0.8.0          |
+| 0.4.*          | 0.2.2        | 0.8.0          |
 +----------------+--------------+----------------+
 
 Thus, for instance, to install PyECVL 0.4.0::
