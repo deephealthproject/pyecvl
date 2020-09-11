@@ -70,4 +70,5 @@ RUN mkdir build && \
       -DECVL_DATASET=ON \
       -DECVL_BUILD_EDDL=ON .. && \
     make -j$(nproc) && \
-    make install
+    make install && \
+    ldconfig
