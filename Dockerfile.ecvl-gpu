@@ -71,4 +71,5 @@ RUN mkdir build && \
       -DECVL_GPU=ON \
       -DECVL_BUILD_EDDL=ON .. && \
     make -j$(nproc) && \
-    make install
+    make install && \
+    ldconfig
