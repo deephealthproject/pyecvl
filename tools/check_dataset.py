@@ -27,7 +27,7 @@ import io
 import os
 import yaml
 
-Loader = getattr(yaml, "CLoader", "Loader")
+Loader = getattr(yaml, "CLoader", getattr(yaml, "Loader"))
 SPLIT_KEYS = frozenset(["training", "validation", "test"])
 
 

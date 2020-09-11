@@ -30,8 +30,8 @@ import os
 import random
 import yaml
 
-Loader = getattr(yaml, "CLoader", "Loader")
-Dumper = getattr(yaml, "CDumper", "Dumper")
+Loader = getattr(yaml, "CLoader", getattr(yaml, "Loader"))
+Dumper = getattr(yaml, "CDumper", getattr(yaml, "Dumper"))
 
 
 def get_splits(doc):
