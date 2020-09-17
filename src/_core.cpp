@@ -418,6 +418,19 @@ struct PyCallBack_ecvl_HardwareAbstractionLayer : public ecvl::HardwareAbstracti
 		}
 		return HardwareAbstractionLayer::SaltAndPepper(a0, a1, a2, a3, a4);
 	}
+	void SliceTimingCorrection(const class ecvl::Image & a0, class ecvl::Image & a1, bool a2, bool a3) override { 
+		pybind11::gil_scoped_acquire gil;
+		pybind11::function overload = pybind11::get_overload(static_cast<const ecvl::HardwareAbstractionLayer *>(this), "SliceTimingCorrection");
+		if (overload) {
+			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0, a1, a2, a3);
+			if (pybind11::detail::cast_is_temporary_value_reference<void>::value) {
+				static pybind11::detail::overload_caster_t<void> caster;
+				return pybind11::detail::cast_ref<void>(std::move(o), caster);
+			}
+			else return pybind11::detail::cast_safe<void>(std::move(o));
+		}
+		return HardwareAbstractionLayer::SliceTimingCorrection(a0, a1, a2, a3);
+	}
 	bool IsOwner() const override { 
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const ecvl::HardwareAbstractionLayer *>(this), "IsOwner");
@@ -1460,6 +1473,7 @@ void bind_ecvl_core_datatype(std::function< pybind11::module &(std::string const
 		cl.def("Salt", (void (ecvl::HardwareAbstractionLayer::*)(const class ecvl::Image &, class ecvl::Image &, double, bool, const unsigned int)) &ecvl::HardwareAbstractionLayer::Salt, "C++: ecvl::HardwareAbstractionLayer::Salt(const class ecvl::Image &, class ecvl::Image &, double, bool, const unsigned int) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("p"), pybind11::arg("per_channel"), pybind11::arg("seed"));
 		cl.def("Pepper", (void (ecvl::HardwareAbstractionLayer::*)(const class ecvl::Image &, class ecvl::Image &, double, bool, const unsigned int)) &ecvl::HardwareAbstractionLayer::Pepper, "C++: ecvl::HardwareAbstractionLayer::Pepper(const class ecvl::Image &, class ecvl::Image &, double, bool, const unsigned int) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("p"), pybind11::arg("per_channel"), pybind11::arg("seed"));
 		cl.def("SaltAndPepper", (void (ecvl::HardwareAbstractionLayer::*)(const class ecvl::Image &, class ecvl::Image &, double, bool, const unsigned int)) &ecvl::HardwareAbstractionLayer::SaltAndPepper, "C++: ecvl::HardwareAbstractionLayer::SaltAndPepper(const class ecvl::Image &, class ecvl::Image &, double, bool, const unsigned int) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("p"), pybind11::arg("per_channel"), pybind11::arg("seed"));
+		cl.def("SliceTimingCorrection", (void (ecvl::HardwareAbstractionLayer::*)(const class ecvl::Image &, class ecvl::Image &, bool, bool)) &ecvl::HardwareAbstractionLayer::SliceTimingCorrection, "C++: ecvl::HardwareAbstractionLayer::SliceTimingCorrection(const class ecvl::Image &, class ecvl::Image &, bool, bool) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("odd"), pybind11::arg("down"));
 		cl.def("IsOwner", (bool (ecvl::HardwareAbstractionLayer::*)() const) &ecvl::HardwareAbstractionLayer::IsOwner, "C++: ecvl::HardwareAbstractionLayer::IsOwner() const --> bool");
 		cl.def("Neg", (void (ecvl::HardwareAbstractionLayer::*)(const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Neg, "C++: ecvl::HardwareAbstractionLayer::Neg(const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
 		cl.def("Add", (void (ecvl::HardwareAbstractionLayer::*)(const class ecvl::Image &, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Add, "C++: ecvl::HardwareAbstractionLayer::Add(const class ecvl::Image &, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
@@ -1746,6 +1760,11 @@ void bind_ecvl_core_imgproc_1(std::function< pybind11::module &(std::string cons
 	M("ecvl").def("SaltAndPepper", [](const class ecvl::Image & a0, class ecvl::Image & a1, double const & a2) -> void { return ecvl::SaltAndPepper(a0, a1, a2); }, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("p"));
 	M("ecvl").def("SaltAndPepper", [](const class ecvl::Image & a0, class ecvl::Image & a1, double const & a2, bool const & a3) -> void { return ecvl::SaltAndPepper(a0, a1, a2, a3); }, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("p"), pybind11::arg("per_channel"));
 	M("ecvl").def("SaltAndPepper", (void (*)(const class ecvl::Image &, class ecvl::Image &, double, bool, const unsigned int)) &ecvl::SaltAndPepper, "Adds salt and pepper noise (white and black pixels) to an Image. White and black pixels are equally likely.\n\n Input Image.\n\n Output Image.\n\n Probability of replacing a pixel with salt and pepper noise.\n\n If true, noise is not considered pixel-wise but channel-wise.\n\n Seed to use for this function's random number generator.\n\nC++: ecvl::SaltAndPepper(const class ecvl::Image &, class ecvl::Image &, double, bool, const unsigned int) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("p"), pybind11::arg("per_channel"), pybind11::arg("seed"));
+
+	// ecvl::SliceTimingCorrection(const class ecvl::Image &, class ecvl::Image &, bool, bool) file:ecvl/core/imgproc.h line:496
+	M("ecvl").def("SliceTimingCorrection", [](const class ecvl::Image & a0, class ecvl::Image & a1) -> void { return ecvl::SliceTimingCorrection(a0, a1); }, "", pybind11::arg("src"), pybind11::arg("dst"));
+	M("ecvl").def("SliceTimingCorrection", [](const class ecvl::Image & a0, class ecvl::Image & a1, bool const & a2) -> void { return ecvl::SliceTimingCorrection(a0, a1, a2); }, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("odd"));
+	M("ecvl").def("SliceTimingCorrection", (void (*)(const class ecvl::Image &, class ecvl::Image &, bool, bool)) &ecvl::SliceTimingCorrection, "Corrects each voxel's time-series.\n    Slice timing correction works by using (Hanning-windowed) sinc interpolation to shift each time-series by an appropriate fraction of a\n    TR relative to the middle of the TR period. The default slice order acquisition is from the bottom of the brain to the top.\n\n Input Image. It must be with channels \"xyzt\".\n\n Output Image.\n\n Slices were acquired with interleaved order (0, 2, 4... 1, 3, 5...)\n\n Slices were acquired from the top of the brain to the bottom\n\nC++: ecvl::SliceTimingCorrection(const class ecvl::Image &, class ecvl::Image &, bool, bool) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("odd"), pybind11::arg("down"));
 
 }
 
