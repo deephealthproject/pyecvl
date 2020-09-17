@@ -151,6 +151,8 @@ Image processing
 
 .. autofunction:: pyecvl.ecvl.SaltAndPepper
 
+.. autofunction:: pyecvl.ecvl.SliceTimingCorrection
+
 
 DeepHealth dataset parser
 -------------------------

@@ -1552,6 +1552,29 @@ BorderType.BORDER_CONSTANT</p></li>
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt id="pyecvl.ecvl.SliceTimingCorrection">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">SliceTimingCorrection</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">odd</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">down</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.SliceTimingCorrection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Correct each voxel’s time-series.</p>
+<p>Slice timing correction works by using (Hanning-windowed) sinc
+interpolation to shift each time-series by an appropriate fraction of a TR
+relative to the middle of the TR period. The default slice order
+acquisition is from the bottom of the brain to the top.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – input image. Channels must be <code class="docutils literal notranslate"><span class="pre">&quot;xyzt&quot;</span></code> and the image must
+have spacings (distance between consecutive voxels on each dimension)</p></li>
+<li><p><strong>dst</strong> – output image</p></li>
+<li><p><strong>odd</strong> – True if odd slices were acquired with interleaved order
+<code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">2,</span> <span class="pre">4,</span> <span class="pre">...,</span> <span class="pre">1,</span> <span class="pre">3,</span> <span class="pre">5,</span> <span class="pre">...)</span></code></p></li>
+<li><p><strong>down</strong> – True if down slices were acquired from the top of the brain
+to the bottom</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 <div class="section" id="deephealth-dataset-parser">
 <h2>DeepHealth dataset parser<a class="headerlink" href="#deephealth-dataset-parser" title="Permalink to this headline">¶</a></h2>
