@@ -425,12 +425,14 @@ def test_SaltAndPepper(ecvl):
     ecvl.SaltAndPepper(img, tmp, 0.4, True, 12345)
 
 
-# # https://github.com/deephealthproject/ecvl/issues/20
-# @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
-# def test_SliceTimingCorrection(ecvl):
-#     dims = [20, 40, 10, 30]
-#     img = ecvl.Image(dims, ecvl.DataType.float32, "xyzt", ecvl.ColorType.none) # noqa
-#     tmp = _empty_img(ecvl)
-#     ecvl.SliceTimingCorrection(img, tmp)
-#     ecvl.SliceTimingCorrection(img, tmp, True)
-#     ecvl.SliceTimingCorrection(img, tmp, True, True)
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_SliceTimingCorrection(ecvl):
+    dims = [20, 40, 10, 30]
+    spacings = [1, 2, 3, 4]
+    img = ecvl.Image(
+        dims, ecvl.DataType.float32, "xyzt", ecvl.ColorType.none, spacings
+    )
+    tmp = _empty_img(ecvl)
+    ecvl.SliceTimingCorrection(img, tmp)
+    ecvl.SliceTimingCorrection(img, tmp, True)
+    ecvl.SliceTimingCorrection(img, tmp, True, True)

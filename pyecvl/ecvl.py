@@ -1021,7 +1021,7 @@ def SaltAndPepper(src, dst, p, per_channel=False, seed=None):
     return _ecvl.SaltAndPepper(src, dst, p, per_channel, seed)
 
 
-def SliceTimingCorrection(src, dst, p, odd=False, down=False):
+def SliceTimingCorrection(src, dst, odd=False, down=False):
     """\
     Correct each voxel's time-series.
 
@@ -1030,13 +1030,13 @@ def SliceTimingCorrection(src, dst, p, odd=False, down=False):
     relative to the middle of the TR period. The default slice order
     acquisition is from the bottom of the brain to the top.
 
-    :param src: input image, channels must be ``"xyzt"``
+    :param src: input image. Channels must be ``"xyzt"`` and the image must
+      have spacings (distance between consecutive voxels on each dimension)
     :param dst: output image
     :param odd: True if odd slices were acquired with interleaved order
       ``(0, 2, 4, ..., 1, 3, 5, ...)``
     :param down: True if down slices were acquired from the top of the brain
       to the bottom
-    :param seed: seed for the random number generator
     """
     return _ecvl.SliceTimingCorrection(src, dst, odd, down)
 
