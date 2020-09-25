@@ -20,10 +20,9 @@
 
 import pytest
 
-
 import pyecvl._core.ecvl as ecvl_core
 import pyecvl.ecvl as ecvl_py
-eddlT = pytest.importorskip("pyeddl._core.eddlT")
+tensor = pytest.importorskip("pyeddl.tensor")
 
 
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
@@ -31,7 +30,7 @@ def test_ImageToTensor(ecvl):
     dims = [20, 30, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     t = ecvl.ImageToTensor(img)
-    eddlT.max(t)
+    t.max()
     assert t.shape == [dims[2], dims[1], dims[0]]
 
 
@@ -39,12 +38,12 @@ def test_ImageToTensor(ecvl):
 def test_TensorToImage(ecvl):
     # 3D
     shape = [3, 30, 20]
-    t = eddlT.create(shape)
+    t = tensor.Tensor(shape)
     img = ecvl.TensorToImage(t)
     assert img.dims_ == [shape[2], shape[1], shape[0]]
     # 4D
     shape = [5, 3, 30, 20]
-    t = eddlT.create(shape)
+    t = tensor.Tensor(shape)
     img = ecvl.TensorToImage(t)
     assert img.dims_ == [shape[3], shape[2], shape[0] * shape[1]]
 
@@ -53,11 +52,11 @@ def test_TensorToImage(ecvl):
 def test_TensorToView(ecvl):
     # 3D
     shape = [3, 30, 20]
-    t = eddlT.create(shape)
+    t = tensor.Tensor(shape)
     view = ecvl.TensorToView(t)
     assert view.dims_ == [shape[2], shape[1], shape[0]]
     # 4D
     shape = [5, 3, 30, 20]
-    t = eddlT.create(shape)
+    t = tensor.Tensor(shape)
     view = ecvl.TensorToView(t)
     assert view.dims_ == [shape[3], shape[2], shape[0] * shape[1]]
