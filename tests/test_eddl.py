@@ -26,6 +26,14 @@ import pyecvl.ecvl as ecvl_py
 tensor = pytest.importorskip("pyeddl.tensor")
 
 
+def _img_fromarray(ecvl, array, channels, colortype, spacings=None):
+    if spacings is None:
+        spacings = []
+    if ecvl is ecvl_core:
+        return ecvl.Image(array, channels, colortype, spacings)
+    return ecvl.Image.fromarray(array, channels, colortype, spacings)
+
+
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
 def test_ImageToTensor(ecvl):
     dims = [20, 30, 3]
@@ -35,12 +43,12 @@ def test_ImageToTensor(ecvl):
     assert t.shape == [dims[2], dims[1], dims[0]]
 
 
-@pytest.mark.parametrize("ecvl", [ecvl_core])  # TODO: add ecvl_py
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
 def test_ImageToTensor_offset(ecvl):
     a = np.arange(24).reshape((3, 4, 2)).astype(np.uint8)
     b = np.arange(24, 48).reshape((3, 4, 2)).astype(np.uint8)
-    a_img = ecvl.Image(a, "xyc", ecvl.ColorType.BGR)
-    b_img = ecvl.Image(b, "xyc", ecvl.ColorType.BGR)
+    a_img = _img_fromarray(ecvl, a, "xyc", ecvl.ColorType.BGR)
+    b_img = _img_fromarray(ecvl, b, "xyc", ecvl.ColorType.BGR)
     t = ecvl.ImageToTensor(a_img)
     u = ecvl.ImageToTensor(b_img)
     assert t.shape == [2, 4, 3]
