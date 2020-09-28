@@ -19,6 +19,7 @@
 # SOFTWARE.
 
 import pytest
+import numpy as np
 
 import pyecvl._core.ecvl as ecvl_core
 import pyecvl.ecvl as ecvl_py
@@ -32,6 +33,26 @@ def test_ImageToTensor(ecvl):
     t = ecvl.ImageToTensor(img)
     t.max()
     assert t.shape == [dims[2], dims[1], dims[0]]
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core])  # TODO: add ecvl_py
+def test_ImageToTensor_offset(ecvl):
+    a = np.arange(24).reshape((3, 4, 2)).astype(np.uint8)
+    b = np.arange(24, 48).reshape((3, 4, 2)).astype(np.uint8)
+    a_img = ecvl.Image(a, "xyc", ecvl.ColorType.BGR)
+    b_img = ecvl.Image(b, "xyc", ecvl.ColorType.BGR)
+    t = ecvl.ImageToTensor(a_img)
+    u = ecvl.ImageToTensor(b_img)
+    assert t.shape == [2, 4, 3]
+    t_arr = t.getdata()
+    assert u.shape == [2, 4, 3]
+    u_arr = u.getdata()
+    v = tensor.Tensor([4, 4, 3])
+    ecvl.ImageToTensor(a_img, v, 0)
+    ecvl.ImageToTensor(b_img, v, 1)
+    v_arr = v.getdata()
+    assert np.array_equal(v_arr[:2], t_arr)
+    assert np.array_equal(v_arr[2:], u_arr)
 
 
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
