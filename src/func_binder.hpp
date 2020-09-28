@@ -380,10 +380,8 @@ void bind_ecvl_functions(pybind11::module &m) {
     ecvl::ImageToTensor(img, t);
     return t;
   });
-  m.def("ImageToTensor", [](const ecvl::Image& img, int offset) {
-    Tensor* t;
+  m.def("ImageToTensor", [](const ecvl::Image& img, Tensor* t, int offset) {
     ecvl::ImageToTensor(img, t, offset);
-    return t;
   });
   // support_eddl: TensorToImage
   m.def("TensorToImage", [](Tensor* t) {

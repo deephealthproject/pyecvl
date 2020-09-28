@@ -1824,9 +1824,9 @@ class DLDataset(_ecvl.DLDataset):
 
 # FIXME: the version with offset does not make sense, since we are returning
 # the output tensor
-def ImageToTensor(img, offset=None):
+def ImageToTensor(img, t=None, offset=None):
     """\
-    Insert an ECVL Image into an EDDL Tensor.
+    Convert an ECVL Image to an EDDL Tensor.
 
     The input image must have 3 dimensions "xy[czo]" (in any order). The output
     tensor's dimensions will be C x H x W, where:
@@ -1835,13 +1835,24 @@ def ImageToTensor(img, offset=None):
     * H = height
     * W = width
 
+    If ``t`` and ``offset`` are None, a new tensor is created with the above
+    shape.
+
+    If ``t`` and ``offset`` are not None, the data are inserted into the
+    existing ``t`` tensor at the specified offset. This allows to insert more
+    than one image into a tensor, specifying how many images are already
+    stored in it.
+
     :param img: input image
+    :param t: output tensor
     :param offset: how many images are already stored in the tensor
     :return: output tensor
     """
-    if offset is None:
+    if t is None and offset is None:
         return _ecvl.ImageToTensor(img)
-    return _ecvl.ImageToTensor(img, offset)
+    else:
+        _ecvl.ImageToTensor(img, t, offset)
+        return t
 
 
 def TensorToImage(t):
