@@ -2535,8 +2535,8 @@ augmentation is required</p></li>
 
 <dl class="py function">
 <dt id="pyecvl.ecvl.ImageToTensor">
-<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">ImageToTensor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">img</span></em>, <em class="sig-param"><span class="n">offset</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ImageToTensor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Insert an ECVL Image into an EDDL Tensor.</p>
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">ImageToTensor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">img</span></em>, <em class="sig-param"><span class="n">t</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">offset</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ImageToTensor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert an ECVL Image to an EDDL Tensor.</p>
 <p>The input image must have 3 dimensions “xy[czo]” (in any order). The output
 tensor’s dimensions will be C x H x W, where:</p>
 <ul class="simple">
@@ -2544,10 +2544,17 @@ tensor’s dimensions will be C x H x W, where:</p>
 <li><p>H = height</p></li>
 <li><p>W = width</p></li>
 </ul>
+<p>If <code class="docutils literal notranslate"><span class="pre">t</span></code> and <code class="docutils literal notranslate"><span class="pre">offset</span></code> are None, a new tensor is created with the above
+shape.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">t</span></code> and <code class="docutils literal notranslate"><span class="pre">offset</span></code> are not None, the data are inserted into the
+existing <code class="docutils literal notranslate"><span class="pre">t</span></code> tensor at the specified offset. This allows to insert more
+than one image into a tensor, specifying how many images are already
+stored in it.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>img</strong> – input image</p></li>
+<li><p><strong>t</strong> – output tensor</p></li>
 <li><p><strong>offset</strong> – how many images are already stored in the tensor</p></li>
 </ul>
 </dd>
