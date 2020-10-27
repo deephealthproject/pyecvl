@@ -7,7 +7,7 @@ RUN apt-get -y update && apt-get -y install --no-install-recommends \
 RUN python3 -m pip install --upgrade --no-cache-dir \
       setuptools pip && \
     python3 -m pip install --upgrade --no-cache-dir \
-      numpy pybind11 pytest
+      numpy 'pybind11<2.6' pytest
 
 
 # Install PyEDDL. Assumes recursive submodule update.
