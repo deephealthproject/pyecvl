@@ -143,7 +143,7 @@ build time.  The build settings for these components must match across the two l
 
 .. warning::
     If you compile both libraries with the their respective default settings
-    the resulting Python extention won't work. (you'll have undefined symbols)
+    the resulting Python extention won't work (you'll have undefined symbols).
 
 By default, **PyECVL assumes a complete installation, but ECVL does not**.
 
@@ -158,33 +158,41 @@ This is the list of optional components and respective variable names.
 
 +------------+---------------------+----------------------+---------------------+--------------------+
 | Module     | PyECVL Variable     | Default PyECVL Value | ECVL Variable       | Default ECVL Value |
-+------------+---------------------+----------------------+---------------------+--------------------+
++============+=====================+======================+=====================+====================+
 | DICOM      | ECVL_WITH_DICOM     | ON                   | ECVL_WITH_DICOM     | OFF                |
++------------+---------------------+----------------------+---------------------+--------------------+
 | OPENSLIDE  | ECVL_WITH_OPENSLIDE | ON                   | ECVL_WITH_OPENSLIDE | OFF                |
-| DATASET    | ECVL_DATASET        | ON                   | ECVL_DATASET        | OFF                |
++------------+---------------------+----------------------+---------------------+--------------------+
+| DATASET    | (N/A)               | ON                   | ECVL_DATASET        | OFF                |
++------------+---------------------+----------------------+---------------------+--------------------+
 | EDDL       | ECVL_EDDL           | ON                   | ECVL_BUILD_EDDL     | ON                 |      
 +------------+---------------------+----------------------+---------------------+--------------------+
+
+Note that it's currently not possible to turn off the ``DATASET`` module in
+PyECVL, so you *must* compile ECVL with ``ECVL_DATASET`` support.
 
 For a description of the modules, [see the ecvl installation instructions](https://github.com/deephealthproject/ecvl).
 
 .. note::
+
     To set the variables for the ECVL build, pass them to `cmake` as in:
 
-        cmake -DECVL_SHARED=ON -DECVL_WITH_DICOM=ON
+        ``cmake -DECVL_SHARED=ON -DECVL_WITH_DICOM=ON``
 
     To set the variables for the PyECVL build, set them in the environment, as in:
 
-        export ECVL_WITH_OPENSLIDE=OFF
-        python3 setup.py install
+        ``export ECVL_WITH_OPENSLIDE=OFF; python3 setup.py install``
 
 
 For instance, suppose you wanted to install PyECVL with OpenSlide support:
-1. Build ECVL with at least `-DECVL_WITH_OPENSLIDE=ON`;
-2. Build PyECVL with the **environment variable** `ECVL_WITH_OPENSLIDE=ON` (default value).
+
+1. Build ECVL with at least ``-DECVL_WITH_OPENSLIDE=ON``;
+2. Build PyECVL with the **environment variable** ``ECVL_WITH_OPENSLIDE=ON`` (default value).
 
 Conversely, to build without OpenSlide support:
-1. Build ECVL with `-DECVL_WITH_OPENSLIDE=OFF` (default value);
-2. Build PyECVL with the **environment variable** `ECVL_WITH_OPENSLIDE=OFF`.
+
+1. Build ECVL with ``-DECVL_WITH_OPENSLIDE=OFF`` (default value);
+2. Build PyECVL with the **environment variable** ``ECVL_WITH_OPENSLIDE=OFF``.
 
 
 ECVL installed in an arbitrary directory
@@ -223,11 +231,11 @@ ImportError: undefined symbol ... ecvl ... OpenSlide
 +++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 You likely have an ECVL library build without OpenSlide support
-(`ECVL_WITH_OPENSLIDE=OFF` -- default value) and PyECVL library build with
-OpenSlide support (`ECVL_WITH_OPENSLIDE=ON` -- default value).
+(``ECVL_WITH_OPENSLIDE=OFF`` -- default value) and PyECVL library build with
+OpenSlide support (``ECVL_WITH_OPENSLIDE=ON`` -- default value).
 
-The full stack trace might look like this:
-::
+The full stack trace might look like this::
+
     ImportError                               Traceback (most recent call last)
     <ipython-input-3-ee58876f5538> in <module>
           4 
