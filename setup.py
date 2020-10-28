@@ -119,6 +119,6 @@ setup(
     ],
     packages=["pyecvl"],
     ext_modules=[ext],
-    install_requires=["setuptools", "pybind11", "numpy"],
+    install_requires=["setuptools", "pybind11<2.6", "numpy"],
     zip_safe=False,
 )
