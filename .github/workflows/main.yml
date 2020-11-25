@@ -1,0 +1,47 @@
+name: main
+
+on:
+  push:
+    branches-ignore:
+      - gh-pages
+    tags:
+      - '*'
+  pull_request:
+    branches-ignore:
+      - gh-pages
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.6
+      - name: checkout code
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: lint with flake8
+        run: |
+          pip install flake8
+          flake8 -v .
+      - name: build eddl image
+        run: pushd third_party/pyeddl; docker build -t eddl -f Dockerfile.eddl .; popd
+      - name: build ecvl image
+        run: docker build -t ecvl -f Dockerfile.ecvl .
+      - name: build pyecvl image
+        run: docker build -t pyecvl .
+      - name: run tests
+        run: docker run --rm pyecvl bash -c "pytest tests"
+      - name: run examples
+        run: docker run --rm pyecvl bash -c "bash examples/run_all.sh /ecvl/examples/data"
+      - name: build dist package
+        run: |
+          pip install pybind11
+          python setup.py sdist
+      - name: publish to PyPI
+        uses: pypa/gh-action-pypi-publish@master
+        if: startsWith(github.ref, 'refs/tags')
+        with:
+          user: __token__
+          password: ${{ secrets.pypi_password }}
