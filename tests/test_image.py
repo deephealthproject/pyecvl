@@ -284,3 +284,24 @@ def test_copy_image(ecvl):
     assert y.colortype_ == ctype
     b = np.array(y, copy=False)
     assert (b == 3).all()
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_shallow_copy_image(ecvl):
+    dims, dtype = [2, 4, 3], ecvl.DataType.int8
+    ch, ctype = "xyc", ecvl.ColorType.RGB
+    x = ecvl.Image(dims, dtype, ch, ctype)
+    a = np.array(x, copy=False)
+    a.fill(3)
+    y = _empty_img(ecvl)
+    ecvl.ShallowCopyImage(x, y)
+    assert y.dims_ == dims
+    assert y.elemtype_ == dtype
+    assert y.channels_ == ch
+    assert y.colortype_ == ctype
+    b = np.array(y, copy=False)
+    assert (b == 3).all()
+    b.fill(4)
+    assert (a == 4).all()
+    assert x.IsOwner()
+    assert not y.IsOwner()

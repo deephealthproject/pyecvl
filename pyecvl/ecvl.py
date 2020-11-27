@@ -312,6 +312,20 @@ def CopyImage(src, dst, new_type=None):
     return _ecvl.CopyImage(src, dst, new_type)
 
 
+def ShallowCopyImage(src, dst):
+    """\
+    Shallow copy of ``src`` to ``dst`` (``dst`` will point to the same data).
+
+    ``src`` and ``dst`` cannot be the same image. Even though ``dst`` will
+    point to the same data as ``src``, the latter will be the data owner.
+
+    :param src: source image
+    :param dst: destination image
+    :return: None
+    """
+    return _ecvl.ShallowCopyImage(src, dst)
+
+
 def RearrangeChannels(src, dst, channels, new_type=None):
     """\
     Change image dimensions order.

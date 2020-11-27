@@ -41,6 +41,8 @@ Image
 
 .. autofunction:: pyecvl.ecvl.CopyImage
 
+.. autofunction:: pyecvl.ecvl.ShallowCopyImage
+
 .. autofunction:: pyecvl.ecvl.RearrangeChannels
 
 
