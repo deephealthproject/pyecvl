@@ -462,3 +462,20 @@ def test_Moments(ecvl):
     ecvl.Moments(img, moments, 2, datatype)
     assert moments.dims_ == [3, 3]
     assert moments.elemtype_ == datatype
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_CentralMoments(ecvl):
+    dims = [20, 20, 3]
+    img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.GRAY)
+    moments = _empty_img(ecvl)
+    ecvl.CentralMoments(img, moments, [10., 10.])
+    assert moments.dims_ == [4, 4]
+    assert moments.elemtype_ == ecvl.DataType.float64
+    ecvl.CentralMoments(img, moments, [10., 10.], 2)
+    assert moments.dims_ == [3, 3]
+    assert moments.elemtype_ == ecvl.DataType.float64
+    datatype = ecvl.DataType.float32
+    ecvl.CentralMoments(img, moments, [10., 10.], 2, datatype)
+    assert moments.dims_ == [3, 3]
+    assert moments.elemtype_ == datatype

@@ -168,6 +168,14 @@ class Image(_ecvl.Image):
             self, dims, elemtype, channels, colortype, spacings, dev
         )
 
+    def copy(self):
+        """\
+        Create a deep copy of this image.
+
+        :return: a copy of this image
+        """
+        return _ecvl.Image(self)
+
     def IsEmpty(self):
         """\
         Whether the image contains data or not.
@@ -1071,6 +1079,23 @@ def Moments(src, dst, order=3, type_=DataType.float64):
 
     """
     return _ecvl.Moments(src, dst, order, type_)
+
+
+def CentralMoments(src, moments, center, order=3, type_=DataType.float64):
+    """\
+    Calculate central moments of the source image up to the specified order.
+
+    :param src: input image. It must be a grayscale (ColorType.GRAY) or a
+      data (ColorType.none) image.
+    :param moments: output data (ColorType.none) image containing the computed
+      moments. The size of the Image will be (order + 1, order + 1)
+    :param center: center coordinates (list of floats) ``len(center)`` and
+      ``src.dims_`` must match. The source axes order must be the same used to
+      specify the center coordinates.
+    :param order: moments order
+    :param type_: data type for the output image
+    """
+    return _ecvl.CentralMoments(src, moments, center, order, type_)
 
 
 def DrawEllipse(src, center, axes, angle, color, thickness=1):
