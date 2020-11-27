@@ -1073,6 +1073,21 @@ def Moments(src, dst, order=3, type_=DataType.float64):
     return _ecvl.Moments(src, dst, order, type_)
 
 
+def DrawEllipse(src, center, axes, angle, color, thickness=1):
+    """\
+    Draw an ellipse over the specified Image.
+
+    :param src: input (and output) image.
+    :param center: center of the ellipse
+    :param axes: ellipse axes half size
+    :param angle: rotation angle of the ellipse
+    :param color: ellipse color, e.g., ``[255]``, ``[5, 5, 5]`` (RGB)
+    :param thickness: ellipse border thickness. If negative all the pixels of
+      the ellipse will be filled with the specified color value.
+    """
+    return _ecvl.DrawEllipse(src, center, axes, angle, color, thickness)
+
+
 # == dataset_parser ==
 
 class SplitType(_ecvl.SplitType):

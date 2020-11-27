@@ -157,6 +157,8 @@ Image processing
 
 .. autofunction:: pyecvl.ecvl.Moments
 
+.. autofunction:: pyecvl.ecvl.DrawEllipse
+
 
 DeepHealth dataset parser
 -------------------------

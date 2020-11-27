@@ -439,6 +439,15 @@ def test_SliceTimingCorrection(ecvl):
 
 
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_DrawEllipse(ecvl):
+    dims = [20, 20, 3]
+    img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    ecvl.DrawEllipse(img, [10, 10], [7, 5], 15, [100])
+    ecvl.DrawEllipse(img, [10, 10], [7, 5], 15, [50, 50, 50])
+    ecvl.DrawEllipse(img, [10, 10], [7, 5], 15, [50, 50, 50], 2)
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
 def test_Moments(ecvl):
     dims = [20, 20, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.GRAY)
