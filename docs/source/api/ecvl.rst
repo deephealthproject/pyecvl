@@ -155,6 +155,8 @@ Image processing
 
 .. autofunction:: pyecvl.ecvl.SliceTimingCorrection
 
+.. autofunction:: pyecvl.ecvl.Moments
+
 
 DeepHealth dataset parser
 -------------------------

@@ -1055,6 +1055,24 @@ def SliceTimingCorrection(src, dst, odd=False, down=False):
     return _ecvl.SliceTimingCorrection(src, dst, odd, down)
 
 
+def Moments(src, dst, order=3, type_=DataType.float64):
+    """\
+    Calculate raw image moments of the source image up to the specified order.
+
+    Moments are stored in the output image in the same order as for source
+    channels. The output image will be on the same device as the source image.
+
+    :param src: input image. It must be a grayscale (ColorType.GRAY) or a
+      data (ColorType.none) image.
+    :param dst: output image (ColorType.none) containing the computed raw
+      image moments. The size of the Image will be (order + 1, order + 1)
+    :param order: moments order
+    :param type_: data type for the output image
+
+    """
+    return _ecvl.Moments(src, dst, order, type_)
+
+
 # == dataset_parser ==
 
 class SplitType(_ecvl.SplitType):
