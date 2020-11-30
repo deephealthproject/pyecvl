@@ -183,6 +183,13 @@ def main(args):
     ecvl.SaltAndPepper(img, tmp, 0.1)
     ecvl.ImWrite("%s_salt_and_pepper%s" % (head, ext), tmp)
 
+    print("Applying multiple thresholds")
+    ecvl.ChangeColorSpace(img, tmp, ecvl.ColorType.GRAY)
+    thresholds = ecvl.OtsuMultiThreshold(tmp, 2)
+    print("  otsu thresholds: %r" % (thresholds,))
+    ecvl.MultiThreshold(tmp, tmp, thresholds)
+    ecvl.ImWrite("%s_multi_threshold%s" % (head, ext), tmp)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
