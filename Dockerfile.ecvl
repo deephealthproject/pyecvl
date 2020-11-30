@@ -1,4 +1,5 @@
-FROM eddl
+ARG eddl_rev=latest
+FROM eddl:${eddl_rev}
 
 RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get update -y -q && \
