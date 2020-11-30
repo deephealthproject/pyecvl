@@ -45,7 +45,7 @@ Create an image with data initialized from a NumPy array:
     import pyecvl.ecvl as ecvl
     import numpy as np
     a = np.arange(12).reshape(3, 4).astype(np.int16)
-    img = ecvl.Image.fromarray(a, "xyc", ecvl.ColorType.GRAY)
+    img = ecvl.Image.fromarray(a, "xy", ecvl.ColorType.GRAY)
 
 Convert an image to a NumPy array:
 
@@ -58,6 +58,30 @@ Convert an image to a NumPy array:
 
 You can also do ``a = np.array(img, copy=False)`` to view the image data as an
 array without copying the data.
+
+NumPy compatibility allows to perform a wide range of operations on images,
+some of which are implemented by dedicated methods in the C++ API. For
+instance, to set all image elements to a value (``SetTo`` in C++):
+
+.. code-block:: python
+
+    import pyecvl.ecvl as ecvl
+    import numpy as np
+    img = ecvl.ImRead(img_path)
+    a = np.array(img, copy=False)
+    a.fill(100)
+    ecvl.ImWrite("filled.png", img)
+
+To slice an image:
+
+.. code-block:: python
+
+    import pyecvl.ecvl as ecvl
+    import numpy as np
+    img = ecvl.ImRead(img_path)
+    a = np.array(img, copy=False)[:256, :256, :]
+    sliced = ecvl.Image.fromarray(a, img.channels_, img.colortype_)
+    ecvl.ImWrite("sliced.png", sliced)
 
 
 Image processing

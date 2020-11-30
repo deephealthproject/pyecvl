@@ -119,6 +119,22 @@ def test_Threshold(ecvl):
 
 
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_MultiThreshold(ecvl):
+    dims = [20, 40, 1]
+    img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.GRAY)
+    thresholds = ecvl.OtsuMultiThreshold(img)
+    tmp = _empty_img(ecvl)
+    ecvl.MultiThreshold(img, tmp, thresholds)
+    ecvl.MultiThreshold(img, tmp, thresholds, 1)
+    ecvl.MultiThreshold(img, tmp, thresholds, 1, 254)
+    thresholds = ecvl.OtsuMultiThreshold(img, 3)
+    tmp = _empty_img(ecvl)
+    ecvl.MultiThreshold(img, tmp, thresholds)
+    ecvl.MultiThreshold(img, tmp, thresholds, 1)
+    ecvl.MultiThreshold(img, tmp, thresholds, 1, 254)
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
 def test_Filter2D(ecvl):
     dims = [20, 40, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
@@ -436,3 +452,56 @@ def test_SliceTimingCorrection(ecvl):
     ecvl.SliceTimingCorrection(img, tmp)
     ecvl.SliceTimingCorrection(img, tmp, True)
     ecvl.SliceTimingCorrection(img, tmp, True, True)
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_DrawEllipse(ecvl):
+    dims = [20, 20, 3]
+    img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    ecvl.DrawEllipse(img, [10, 10], [7, 5], 15, [100])
+    ecvl.DrawEllipse(img, [10, 10], [7, 5], 15, [50, 50, 50])
+    ecvl.DrawEllipse(img, [10, 10], [7, 5], 15, [50, 50, 50], 2)
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_Moments(ecvl):
+    dims = [20, 20, 3]
+    img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.GRAY)
+    moments = _empty_img(ecvl)
+    ecvl.Moments(img, moments)
+    assert moments.dims_ == [4, 4]
+    assert moments.elemtype_ == ecvl.DataType.float64
+    ecvl.Moments(img, moments, 2)
+    assert moments.dims_ == [3, 3]
+    assert moments.elemtype_ == ecvl.DataType.float64
+    datatype = ecvl.DataType.float32
+    ecvl.Moments(img, moments, 2, datatype)
+    assert moments.dims_ == [3, 3]
+    assert moments.elemtype_ == datatype
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_CentralMoments(ecvl):
+    dims = [20, 20, 3]
+    img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.GRAY)
+    moments = _empty_img(ecvl)
+    ecvl.CentralMoments(img, moments, [10., 10.])
+    assert moments.dims_ == [4, 4]
+    assert moments.elemtype_ == ecvl.DataType.float64
+    ecvl.CentralMoments(img, moments, [10., 10.], 2)
+    assert moments.dims_ == [3, 3]
+    assert moments.elemtype_ == ecvl.DataType.float64
+    datatype = ecvl.DataType.float32
+    ecvl.CentralMoments(img, moments, [10., 10.], 2, datatype)
+    assert moments.dims_ == [3, 3]
+    assert moments.elemtype_ == datatype
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_DropColorChannel(ecvl):
+    dims = [20, 20, 3]
+    img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.GRAY)
+    ecvl.DropColorChannel(img)
+    assert img.dims_ == [20, 20]
+    assert img.channels_ == "xy"
+    assert img.colortype_ == ecvl.ColorType.none

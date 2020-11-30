@@ -168,6 +168,14 @@ class Image(_ecvl.Image):
             self, dims, elemtype, channels, colortype, spacings, dev
         )
 
+    def copy(self):
+        """\
+        Create a deep copy of this image.
+
+        :return: a copy of this image
+        """
+        return _ecvl.Image(self)
+
     def IsEmpty(self):
         """\
         Whether the image contains data or not.
@@ -310,6 +318,20 @@ def CopyImage(src, dst, new_type=None):
     if new_type is None:
         return _ecvl.CopyImage(src, dst)
     return _ecvl.CopyImage(src, dst, new_type)
+
+
+def ShallowCopyImage(src, dst):
+    """\
+    Shallow copy of ``src`` to ``dst`` (``dst`` will point to the same data).
+
+    ``src`` and ``dst`` cannot be the same image. Even though ``dst`` will
+    point to the same data as ``src``, the latter will be the data owner.
+
+    :param src: source image
+    :param dst: destination image
+    :return: None
+    """
+    return _ecvl.ShallowCopyImage(src, dst)
 
 
 def RearrangeChannels(src, dst, channels, new_type=None):
@@ -611,6 +633,23 @@ def Threshold(src, dst, thresh, maxval, thresh_type=ThresholdingType.BINARY):
     return _ecvl.Threshold(src, dst, thresh, maxval, thresh_type)
 
 
+def MultiThreshold(src, dst, thresholds, minval=0, maxval=255):
+    """\
+    Apply multiple thresholds to an image.
+
+    The resulting image is quantized based on the provided ``thresholds``
+    values. Output values will range uniformly from ``minval`` to ``maxval``.
+
+    :param src: source image
+    :param dst: destination image
+    :param thresh: threshold values
+    :param maxval: minimum value in the output image
+    :param maxval: maximum value in the output image
+    :return: None
+    """
+    return _ecvl.MultiThreshold(src, dst, thresholds, minval, maxval)
+
+
 def OtsuThreshold(src):
     """\
     Calculate the Otsu thresholding value.
@@ -621,6 +660,19 @@ def OtsuThreshold(src):
     :return: Otsu threshold value
     """
     return _ecvl.OtsuThreshold(src)
+
+
+def OtsuMultiThreshold(src, n_thresholds=2):
+    """\
+    Calculate the Otsu thresholding values.
+
+    The image must be ColorType.GRAY. The number of thresholds to be found is
+    defined by the n_thresholds parameter (default is 2).
+
+    :param src: source image
+    :return: Otsu threshold values (list of integers)
+    """
+    return _ecvl.OtsuMultiThreshold(src, n_thresholds)
 
 
 def Filter2D(src, dst, ker, type=DataType.none):
@@ -1039,6 +1091,70 @@ def SliceTimingCorrection(src, dst, odd=False, down=False):
       to the bottom
     """
     return _ecvl.SliceTimingCorrection(src, dst, odd, down)
+
+
+def Moments(src, dst, order=3, type_=DataType.float64):
+    """\
+    Calculate raw image moments of the source image up to the specified order.
+
+    Moments are stored in the output image in the same order as for source
+    channels. The output image will be on the same device as the source image.
+
+    :param src: input image. It must be a grayscale (ColorType.GRAY) or a
+      data (ColorType.none) image.
+    :param dst: output image (ColorType.none) containing the computed raw
+      image moments. The size of the Image will be (order + 1, order + 1)
+    :param order: moments order
+    :param type_: data type for the output image
+
+    """
+    return _ecvl.Moments(src, dst, order, type_)
+
+
+def CentralMoments(src, moments, center, order=3, type_=DataType.float64):
+    """\
+    Calculate central moments of the source image up to the specified order.
+
+    :param src: input image. It must be a grayscale (ColorType.GRAY) or a
+      data (ColorType.none) image.
+    :param moments: output data (ColorType.none) image containing the computed
+      moments. The size of the Image will be (order + 1, order + 1)
+    :param center: center coordinates (list of floats) ``len(center)`` and
+      ``src.dims_`` must match. The source axes order must be the same used to
+      specify the center coordinates.
+    :param order: moments order
+    :param type_: data type for the output image
+    """
+    return _ecvl.CentralMoments(src, moments, center, order, type_)
+
+
+def DrawEllipse(src, center, axes, angle, color, thickness=1):
+    """\
+    Draw an ellipse over the specified Image.
+
+    :param src: input (and output) image.
+    :param center: center of the ellipse
+    :param axes: ellipse axes half size
+    :param angle: rotation angle of the ellipse
+    :param color: ellipse color, e.g., ``[255]``, ``[5, 5, 5]`` (RGB)
+    :param thickness: ellipse border thickness. If negative all the pixels of
+      the ellipse will be filled with the specified color value.
+    """
+    return _ecvl.DrawEllipse(src, center, axes, angle, color, thickness)
+
+
+def DropColorChannel(src):
+    """\
+    Remove color channel from the input image.
+
+    Remove the color channel ("c") from the specified input image, modifying
+    all other attributes accordingly. This function can only be applied to
+    images with ``ColorType.GRAY``, i.e., having the color channel dimension
+    equal to 1.
+
+    :param src: input image.
+    """
+    return _ecvl.DropColorChannel(src)
 
 
 # == dataset_parser ==

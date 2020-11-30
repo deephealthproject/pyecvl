@@ -613,6 +613,19 @@ struct PyCallBack_ecvl_HardwareAbstractionLayer : public ecvl::HardwareAbstracti
 		}
 		return HardwareAbstractionLayer::Div(a0, a1, a2, a3, a4);
 	}
+	void SetTo(class ecvl::Image & a0, signed char a1) override { 
+		pybind11::gil_scoped_acquire gil;
+		pybind11::function overload = pybind11::get_overload(static_cast<const ecvl::HardwareAbstractionLayer *>(this), "SetTo");
+		if (overload) {
+			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0, a1);
+			if (pybind11::detail::cast_is_temporary_value_reference<void>::value) {
+				static pybind11::detail::overload_caster_t<void> caster;
+				return pybind11::detail::cast_ref<void>(std::move(o), caster);
+			}
+			else return pybind11::detail::cast_safe<void>(std::move(o));
+		}
+		return HardwareAbstractionLayer::SetTo(a0, a1);
+	}
 	void Add(const class ecvl::Image & a0, short a1, class ecvl::Image & a2, enum ecvl::DataType a3, bool a4) override { 
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const ecvl::HardwareAbstractionLayer *>(this), "Add");
@@ -716,6 +729,19 @@ struct PyCallBack_ecvl_HardwareAbstractionLayer : public ecvl::HardwareAbstracti
 			else return pybind11::detail::cast_safe<void>(std::move(o));
 		}
 		return HardwareAbstractionLayer::Div(a0, a1, a2, a3, a4);
+	}
+	void SetTo(class ecvl::Image & a0, short a1) override { 
+		pybind11::gil_scoped_acquire gil;
+		pybind11::function overload = pybind11::get_overload(static_cast<const ecvl::HardwareAbstractionLayer *>(this), "SetTo");
+		if (overload) {
+			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0, a1);
+			if (pybind11::detail::cast_is_temporary_value_reference<void>::value) {
+				static pybind11::detail::overload_caster_t<void> caster;
+				return pybind11::detail::cast_ref<void>(std::move(o), caster);
+			}
+			else return pybind11::detail::cast_safe<void>(std::move(o));
+		}
+		return HardwareAbstractionLayer::SetTo(a0, a1);
 	}
 	void Add(const class ecvl::Image & a0, int a1, class ecvl::Image & a2, enum ecvl::DataType a3, bool a4) override { 
 		pybind11::gil_scoped_acquire gil;
@@ -821,6 +847,19 @@ struct PyCallBack_ecvl_HardwareAbstractionLayer : public ecvl::HardwareAbstracti
 		}
 		return HardwareAbstractionLayer::Div(a0, a1, a2, a3, a4);
 	}
+	void SetTo(class ecvl::Image & a0, int a1) override { 
+		pybind11::gil_scoped_acquire gil;
+		pybind11::function overload = pybind11::get_overload(static_cast<const ecvl::HardwareAbstractionLayer *>(this), "SetTo");
+		if (overload) {
+			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0, a1);
+			if (pybind11::detail::cast_is_temporary_value_reference<void>::value) {
+				static pybind11::detail::overload_caster_t<void> caster;
+				return pybind11::detail::cast_ref<void>(std::move(o), caster);
+			}
+			else return pybind11::detail::cast_safe<void>(std::move(o));
+		}
+		return HardwareAbstractionLayer::SetTo(a0, a1);
+	}
 	void Add(const class ecvl::Image & a0, long a1, class ecvl::Image & a2, enum ecvl::DataType a3, bool a4) override { 
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const ecvl::HardwareAbstractionLayer *>(this), "Add");
@@ -924,6 +963,19 @@ struct PyCallBack_ecvl_HardwareAbstractionLayer : public ecvl::HardwareAbstracti
 			else return pybind11::detail::cast_safe<void>(std::move(o));
 		}
 		return HardwareAbstractionLayer::Div(a0, a1, a2, a3, a4);
+	}
+	void SetTo(class ecvl::Image & a0, long a1) override { 
+		pybind11::gil_scoped_acquire gil;
+		pybind11::function overload = pybind11::get_overload(static_cast<const ecvl::HardwareAbstractionLayer *>(this), "SetTo");
+		if (overload) {
+			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0, a1);
+			if (pybind11::detail::cast_is_temporary_value_reference<void>::value) {
+				static pybind11::detail::overload_caster_t<void> caster;
+				return pybind11::detail::cast_ref<void>(std::move(o), caster);
+			}
+			else return pybind11::detail::cast_safe<void>(std::move(o));
+		}
+		return HardwareAbstractionLayer::SetTo(a0, a1);
 	}
 	void Add(const class ecvl::Image & a0, float a1, class ecvl::Image & a2, enum ecvl::DataType a3, bool a4) override { 
 		pybind11::gil_scoped_acquire gil;
@@ -1029,6 +1081,19 @@ struct PyCallBack_ecvl_HardwareAbstractionLayer : public ecvl::HardwareAbstracti
 		}
 		return HardwareAbstractionLayer::Div(a0, a1, a2, a3, a4);
 	}
+	void SetTo(class ecvl::Image & a0, float a1) override { 
+		pybind11::gil_scoped_acquire gil;
+		pybind11::function overload = pybind11::get_overload(static_cast<const ecvl::HardwareAbstractionLayer *>(this), "SetTo");
+		if (overload) {
+			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0, a1);
+			if (pybind11::detail::cast_is_temporary_value_reference<void>::value) {
+				static pybind11::detail::overload_caster_t<void> caster;
+				return pybind11::detail::cast_ref<void>(std::move(o), caster);
+			}
+			else return pybind11::detail::cast_safe<void>(std::move(o));
+		}
+		return HardwareAbstractionLayer::SetTo(a0, a1);
+	}
 	void Add(const class ecvl::Image & a0, double a1, class ecvl::Image & a2, enum ecvl::DataType a3, bool a4) override { 
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const ecvl::HardwareAbstractionLayer *>(this), "Add");
@@ -1132,6 +1197,19 @@ struct PyCallBack_ecvl_HardwareAbstractionLayer : public ecvl::HardwareAbstracti
 			else return pybind11::detail::cast_safe<void>(std::move(o));
 		}
 		return HardwareAbstractionLayer::Div(a0, a1, a2, a3, a4);
+	}
+	void SetTo(class ecvl::Image & a0, double a1) override { 
+		pybind11::gil_scoped_acquire gil;
+		pybind11::function overload = pybind11::get_overload(static_cast<const ecvl::HardwareAbstractionLayer *>(this), "SetTo");
+		if (overload) {
+			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0, a1);
+			if (pybind11::detail::cast_is_temporary_value_reference<void>::value) {
+				static pybind11::detail::overload_caster_t<void> caster;
+				return pybind11::detail::cast_ref<void>(std::move(o), caster);
+			}
+			else return pybind11::detail::cast_safe<void>(std::move(o));
+		}
+		return HardwareAbstractionLayer::SetTo(a0, a1);
 	}
 	void Add(const class ecvl::Image & a0, unsigned char a1, class ecvl::Image & a2, enum ecvl::DataType a3, bool a4) override { 
 		pybind11::gil_scoped_acquire gil;
@@ -1237,6 +1315,19 @@ struct PyCallBack_ecvl_HardwareAbstractionLayer : public ecvl::HardwareAbstracti
 		}
 		return HardwareAbstractionLayer::Div(a0, a1, a2, a3, a4);
 	}
+	void SetTo(class ecvl::Image & a0, unsigned char a1) override { 
+		pybind11::gil_scoped_acquire gil;
+		pybind11::function overload = pybind11::get_overload(static_cast<const ecvl::HardwareAbstractionLayer *>(this), "SetTo");
+		if (overload) {
+			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0, a1);
+			if (pybind11::detail::cast_is_temporary_value_reference<void>::value) {
+				static pybind11::detail::overload_caster_t<void> caster;
+				return pybind11::detail::cast_ref<void>(std::move(o), caster);
+			}
+			else return pybind11::detail::cast_safe<void>(std::move(o));
+		}
+		return HardwareAbstractionLayer::SetTo(a0, a1);
+	}
 	void Add(const class ecvl::Image & a0, unsigned short a1, class ecvl::Image & a2, enum ecvl::DataType a3, bool a4) override { 
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const ecvl::HardwareAbstractionLayer *>(this), "Add");
@@ -1341,12 +1432,25 @@ struct PyCallBack_ecvl_HardwareAbstractionLayer : public ecvl::HardwareAbstracti
 		}
 		return HardwareAbstractionLayer::Div(a0, a1, a2, a3, a4);
 	}
+	void SetTo(class ecvl::Image & a0, unsigned short a1) override { 
+		pybind11::gil_scoped_acquire gil;
+		pybind11::function overload = pybind11::get_overload(static_cast<const ecvl::HardwareAbstractionLayer *>(this), "SetTo");
+		if (overload) {
+			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0, a1);
+			if (pybind11::detail::cast_is_temporary_value_reference<void>::value) {
+				static pybind11::detail::overload_caster_t<void> caster;
+				return pybind11::detail::cast_ref<void>(std::move(o), caster);
+			}
+			else return pybind11::detail::cast_safe<void>(std::move(o));
+		}
+		return HardwareAbstractionLayer::SetTo(a0, a1);
+	}
 };
 
 void bind_ecvl_core_datatype(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
 
-	// ecvl::DataType file:ecvl/core/datatype.h line:39
+	// ecvl::DataType file:ecvl/core/datatype.h line:43
 	pybind11::enum_<ecvl::DataType>(M("ecvl"), "DataType", "DataType is an enum class which defines\ndata types allowed for images.\n\n  DataType")
 		.value("int8", ecvl::DataType::int8)
 		.value("int16", ecvl::DataType::int16)
@@ -1360,13 +1464,13 @@ void bind_ecvl_core_datatype(std::function< pybind11::module &(std::string const
 
 ;
 
-	// ecvl::DataTypeSize(enum ecvl::DataType) file:ecvl/core/datatype.h line:53
+	// ecvl::DataTypeSize(enum ecvl::DataType) file:ecvl/core/datatype.h line:57
 	M("ecvl").def("DataTypeSize", (unsigned char (*)(enum ecvl::DataType)) &ecvl::DataTypeSize, "Provides the size in bytes of a given DataType.\n\nGiven one of the \n\n A DataType.\n\n The DataType size in bytes\n\nC++: ecvl::DataTypeSize(enum ecvl::DataType) --> unsigned char", pybind11::arg("dt"));
 
-	// ecvl::DataTypeSize() file:ecvl/core/datatype.h line:69
+	// ecvl::DataTypeSize() file:ecvl/core/datatype.h line:73
 	M("ecvl").def("DataTypeSize", (unsigned long (*)()) &ecvl::DataTypeSize, "Function to get the number of existing DataType at compile time.\n\n The number of existing DataType.\n\nC++: ecvl::DataTypeSize() --> unsigned long");
 
-	// ecvl::DataTypeSignedSize() file:ecvl/core/datatype.h line:82
+	// ecvl::DataTypeSignedSize() file:ecvl/core/datatype.h line:86
 	M("ecvl").def("DataTypeSignedSize", (unsigned long (*)()) &ecvl::DataTypeSignedSize, "Function to get the number of existing signed DataType at compile time.\n\n The number of existing signed DataType.\n\nC++: ecvl::DataTypeSignedSize() --> unsigned long");
 
 	// ecvl::Device file:ecvl/core/hal.h line:30
@@ -1488,6 +1592,7 @@ void bind_ecvl_core_datatype(std::function< pybind11::module &(std::string const
 		cl.def("Mul", (void (ecvl::HardwareAbstractionLayer::*)(signed char, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Mul, "C++: ecvl::HardwareAbstractionLayer::Mul(signed char, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
 		cl.def("Div", (void (ecvl::HardwareAbstractionLayer::*)(const class ecvl::Image &, signed char, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Div, "C++: ecvl::HardwareAbstractionLayer::Div(const class ecvl::Image &, signed char, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
 		cl.def("Div", (void (ecvl::HardwareAbstractionLayer::*)(signed char, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Div, "C++: ecvl::HardwareAbstractionLayer::Div(signed char, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
+		cl.def("SetTo", (void (ecvl::HardwareAbstractionLayer::*)(class ecvl::Image &, signed char)) &ecvl::HardwareAbstractionLayer::SetTo, "C++: ecvl::HardwareAbstractionLayer::SetTo(class ecvl::Image &, signed char) --> void", pybind11::arg("src"), pybind11::arg("value"));
 		cl.def("Add", (void (ecvl::HardwareAbstractionLayer::*)(const class ecvl::Image &, short, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Add, "C++: ecvl::HardwareAbstractionLayer::Add(const class ecvl::Image &, short, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
 		cl.def("Add", (void (ecvl::HardwareAbstractionLayer::*)(short, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Add, "C++: ecvl::HardwareAbstractionLayer::Add(short, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
 		cl.def("Sub", (void (ecvl::HardwareAbstractionLayer::*)(const class ecvl::Image &, short, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Sub, "C++: ecvl::HardwareAbstractionLayer::Sub(const class ecvl::Image &, short, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
@@ -1496,6 +1601,7 @@ void bind_ecvl_core_datatype(std::function< pybind11::module &(std::string const
 		cl.def("Mul", (void (ecvl::HardwareAbstractionLayer::*)(short, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Mul, "C++: ecvl::HardwareAbstractionLayer::Mul(short, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
 		cl.def("Div", (void (ecvl::HardwareAbstractionLayer::*)(const class ecvl::Image &, short, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Div, "C++: ecvl::HardwareAbstractionLayer::Div(const class ecvl::Image &, short, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
 		cl.def("Div", (void (ecvl::HardwareAbstractionLayer::*)(short, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Div, "C++: ecvl::HardwareAbstractionLayer::Div(short, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
+		cl.def("SetTo", (void (ecvl::HardwareAbstractionLayer::*)(class ecvl::Image &, short)) &ecvl::HardwareAbstractionLayer::SetTo, "C++: ecvl::HardwareAbstractionLayer::SetTo(class ecvl::Image &, short) --> void", pybind11::arg("src"), pybind11::arg("value"));
 		cl.def("Add", (void (ecvl::HardwareAbstractionLayer::*)(const class ecvl::Image &, int, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Add, "C++: ecvl::HardwareAbstractionLayer::Add(const class ecvl::Image &, int, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
 		cl.def("Add", (void (ecvl::HardwareAbstractionLayer::*)(int, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Add, "C++: ecvl::HardwareAbstractionLayer::Add(int, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
 		cl.def("Sub", (void (ecvl::HardwareAbstractionLayer::*)(const class ecvl::Image &, int, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Sub, "C++: ecvl::HardwareAbstractionLayer::Sub(const class ecvl::Image &, int, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
@@ -1504,6 +1610,7 @@ void bind_ecvl_core_datatype(std::function< pybind11::module &(std::string const
 		cl.def("Mul", (void (ecvl::HardwareAbstractionLayer::*)(int, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Mul, "C++: ecvl::HardwareAbstractionLayer::Mul(int, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
 		cl.def("Div", (void (ecvl::HardwareAbstractionLayer::*)(const class ecvl::Image &, int, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Div, "C++: ecvl::HardwareAbstractionLayer::Div(const class ecvl::Image &, int, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
 		cl.def("Div", (void (ecvl::HardwareAbstractionLayer::*)(int, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Div, "C++: ecvl::HardwareAbstractionLayer::Div(int, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
+		cl.def("SetTo", (void (ecvl::HardwareAbstractionLayer::*)(class ecvl::Image &, int)) &ecvl::HardwareAbstractionLayer::SetTo, "C++: ecvl::HardwareAbstractionLayer::SetTo(class ecvl::Image &, int) --> void", pybind11::arg("src"), pybind11::arg("value"));
 		cl.def("Add", (void (ecvl::HardwareAbstractionLayer::*)(const class ecvl::Image &, long, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Add, "C++: ecvl::HardwareAbstractionLayer::Add(const class ecvl::Image &, long, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
 		cl.def("Add", (void (ecvl::HardwareAbstractionLayer::*)(long, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Add, "C++: ecvl::HardwareAbstractionLayer::Add(long, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
 		cl.def("Sub", (void (ecvl::HardwareAbstractionLayer::*)(const class ecvl::Image &, long, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Sub, "C++: ecvl::HardwareAbstractionLayer::Sub(const class ecvl::Image &, long, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
@@ -1512,6 +1619,7 @@ void bind_ecvl_core_datatype(std::function< pybind11::module &(std::string const
 		cl.def("Mul", (void (ecvl::HardwareAbstractionLayer::*)(long, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Mul, "C++: ecvl::HardwareAbstractionLayer::Mul(long, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
 		cl.def("Div", (void (ecvl::HardwareAbstractionLayer::*)(const class ecvl::Image &, long, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Div, "C++: ecvl::HardwareAbstractionLayer::Div(const class ecvl::Image &, long, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
 		cl.def("Div", (void (ecvl::HardwareAbstractionLayer::*)(long, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Div, "C++: ecvl::HardwareAbstractionLayer::Div(long, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
+		cl.def("SetTo", (void (ecvl::HardwareAbstractionLayer::*)(class ecvl::Image &, long)) &ecvl::HardwareAbstractionLayer::SetTo, "C++: ecvl::HardwareAbstractionLayer::SetTo(class ecvl::Image &, long) --> void", pybind11::arg("src"), pybind11::arg("value"));
 		cl.def("Add", (void (ecvl::HardwareAbstractionLayer::*)(const class ecvl::Image &, float, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Add, "C++: ecvl::HardwareAbstractionLayer::Add(const class ecvl::Image &, float, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
 		cl.def("Add", (void (ecvl::HardwareAbstractionLayer::*)(float, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Add, "C++: ecvl::HardwareAbstractionLayer::Add(float, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
 		cl.def("Sub", (void (ecvl::HardwareAbstractionLayer::*)(const class ecvl::Image &, float, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Sub, "C++: ecvl::HardwareAbstractionLayer::Sub(const class ecvl::Image &, float, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
@@ -1520,6 +1628,7 @@ void bind_ecvl_core_datatype(std::function< pybind11::module &(std::string const
 		cl.def("Mul", (void (ecvl::HardwareAbstractionLayer::*)(float, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Mul, "C++: ecvl::HardwareAbstractionLayer::Mul(float, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
 		cl.def("Div", (void (ecvl::HardwareAbstractionLayer::*)(const class ecvl::Image &, float, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Div, "C++: ecvl::HardwareAbstractionLayer::Div(const class ecvl::Image &, float, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
 		cl.def("Div", (void (ecvl::HardwareAbstractionLayer::*)(float, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Div, "C++: ecvl::HardwareAbstractionLayer::Div(float, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
+		cl.def("SetTo", (void (ecvl::HardwareAbstractionLayer::*)(class ecvl::Image &, float)) &ecvl::HardwareAbstractionLayer::SetTo, "C++: ecvl::HardwareAbstractionLayer::SetTo(class ecvl::Image &, float) --> void", pybind11::arg("src"), pybind11::arg("value"));
 		cl.def("Add", (void (ecvl::HardwareAbstractionLayer::*)(const class ecvl::Image &, double, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Add, "C++: ecvl::HardwareAbstractionLayer::Add(const class ecvl::Image &, double, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
 		cl.def("Add", (void (ecvl::HardwareAbstractionLayer::*)(double, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Add, "C++: ecvl::HardwareAbstractionLayer::Add(double, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
 		cl.def("Sub", (void (ecvl::HardwareAbstractionLayer::*)(const class ecvl::Image &, double, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Sub, "C++: ecvl::HardwareAbstractionLayer::Sub(const class ecvl::Image &, double, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
@@ -1528,6 +1637,7 @@ void bind_ecvl_core_datatype(std::function< pybind11::module &(std::string const
 		cl.def("Mul", (void (ecvl::HardwareAbstractionLayer::*)(double, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Mul, "C++: ecvl::HardwareAbstractionLayer::Mul(double, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
 		cl.def("Div", (void (ecvl::HardwareAbstractionLayer::*)(const class ecvl::Image &, double, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Div, "C++: ecvl::HardwareAbstractionLayer::Div(const class ecvl::Image &, double, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
 		cl.def("Div", (void (ecvl::HardwareAbstractionLayer::*)(double, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Div, "C++: ecvl::HardwareAbstractionLayer::Div(double, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
+		cl.def("SetTo", (void (ecvl::HardwareAbstractionLayer::*)(class ecvl::Image &, double)) &ecvl::HardwareAbstractionLayer::SetTo, "C++: ecvl::HardwareAbstractionLayer::SetTo(class ecvl::Image &, double) --> void", pybind11::arg("src"), pybind11::arg("value"));
 		cl.def("Add", (void (ecvl::HardwareAbstractionLayer::*)(const class ecvl::Image &, unsigned char, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Add, "C++: ecvl::HardwareAbstractionLayer::Add(const class ecvl::Image &, unsigned char, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
 		cl.def("Add", (void (ecvl::HardwareAbstractionLayer::*)(unsigned char, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Add, "C++: ecvl::HardwareAbstractionLayer::Add(unsigned char, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
 		cl.def("Sub", (void (ecvl::HardwareAbstractionLayer::*)(const class ecvl::Image &, unsigned char, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Sub, "C++: ecvl::HardwareAbstractionLayer::Sub(const class ecvl::Image &, unsigned char, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
@@ -1536,6 +1646,7 @@ void bind_ecvl_core_datatype(std::function< pybind11::module &(std::string const
 		cl.def("Mul", (void (ecvl::HardwareAbstractionLayer::*)(unsigned char, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Mul, "C++: ecvl::HardwareAbstractionLayer::Mul(unsigned char, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
 		cl.def("Div", (void (ecvl::HardwareAbstractionLayer::*)(const class ecvl::Image &, unsigned char, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Div, "C++: ecvl::HardwareAbstractionLayer::Div(const class ecvl::Image &, unsigned char, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
 		cl.def("Div", (void (ecvl::HardwareAbstractionLayer::*)(unsigned char, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Div, "C++: ecvl::HardwareAbstractionLayer::Div(unsigned char, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
+		cl.def("SetTo", (void (ecvl::HardwareAbstractionLayer::*)(class ecvl::Image &, unsigned char)) &ecvl::HardwareAbstractionLayer::SetTo, "C++: ecvl::HardwareAbstractionLayer::SetTo(class ecvl::Image &, unsigned char) --> void", pybind11::arg("src"), pybind11::arg("value"));
 		cl.def("Add", (void (ecvl::HardwareAbstractionLayer::*)(const class ecvl::Image &, unsigned short, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Add, "C++: ecvl::HardwareAbstractionLayer::Add(const class ecvl::Image &, unsigned short, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
 		cl.def("Add", (void (ecvl::HardwareAbstractionLayer::*)(unsigned short, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Add, "C++: ecvl::HardwareAbstractionLayer::Add(unsigned short, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
 		cl.def("Sub", (void (ecvl::HardwareAbstractionLayer::*)(const class ecvl::Image &, unsigned short, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Sub, "C++: ecvl::HardwareAbstractionLayer::Sub(const class ecvl::Image &, unsigned short, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
@@ -1544,6 +1655,7 @@ void bind_ecvl_core_datatype(std::function< pybind11::module &(std::string const
 		cl.def("Mul", (void (ecvl::HardwareAbstractionLayer::*)(unsigned short, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Mul, "C++: ecvl::HardwareAbstractionLayer::Mul(unsigned short, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
 		cl.def("Div", (void (ecvl::HardwareAbstractionLayer::*)(const class ecvl::Image &, unsigned short, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Div, "C++: ecvl::HardwareAbstractionLayer::Div(const class ecvl::Image &, unsigned short, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
 		cl.def("Div", (void (ecvl::HardwareAbstractionLayer::*)(unsigned short, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Div, "C++: ecvl::HardwareAbstractionLayer::Div(unsigned short, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
+		cl.def("SetTo", (void (ecvl::HardwareAbstractionLayer::*)(class ecvl::Image &, unsigned short)) &ecvl::HardwareAbstractionLayer::SetTo, "C++: ecvl::HardwareAbstractionLayer::SetTo(class ecvl::Image &, unsigned short) --> void", pybind11::arg("src"), pybind11::arg("value"));
 		cl.def("assign", (class ecvl::HardwareAbstractionLayer & (ecvl::HardwareAbstractionLayer::*)(const class ecvl::HardwareAbstractionLayer &)) &ecvl::HardwareAbstractionLayer::operator=, "C++: ecvl::HardwareAbstractionLayer::operator=(const class ecvl::HardwareAbstractionLayer &) --> class ecvl::HardwareAbstractionLayer &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 	}
 }
@@ -1610,9 +1722,12 @@ void bind_ecvl_core_image(std::function< pybind11::module &(std::string const &n
 
 		image_addons(cl);
 	}
-	// ecvl::CopyImage(const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType) file:ecvl/core/image.h line:900
+	// ecvl::CopyImage(const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType) file:ecvl/core/image.h line:908
 	M("ecvl").def("CopyImage", [](const class ecvl::Image & a0, class ecvl::Image & a1) -> void { return ecvl::CopyImage(a0, a1); }, "", pybind11::arg("src"), pybind11::arg("dst"));
 	M("ecvl").def("CopyImage", (void (*)(const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType)) &ecvl::CopyImage, "Copies the source Image into the destination Image.\n\nThe CopyImage() procedure takes an Image and copies its data into the destination Image.\nSource and destination cannot be the same Image. Source cannot be a Image with DataType::none.\nThe optional new_type parameter can\nbe used to change the DataType of the destination Image. This function is mainly designed to\nchange the DataType of an Image, copying its data into a new Image or to copy an Image into a\nView as a patch. So if you just want to copy an Image as it is, use the copy constructor or =\ninstead. Anyway, the procedure will handle all the possible situations that may happen trying\nto avoid unnecessary allocations.\nWhen the DataType is not specified the function will have the following behaviors:\n    - if the destination Image is empty the source will be directly copied into the destination.\n    - if source and destination have different size in memory or different channels and the destination\n        is the owner of data, the procedure will overwrite the destination Image creating a new Image\n        (channels and dimensions will be the same of the source Image, pixels type (DataType) will be the\n        same of the destination Image if they are not none or the same of the source otherwise).\n    - if source and destination have different size in memory or different channels and the destination is not\n        the owner of data, the procedure will throw an exception.\n    - if source and destination have different color types and the destination is the owner of\n        data, the procedure produces a destination Image with the same color type of the source.\n    - if source and destination have different color types and the destination is not the owner\n        of data, the procedure will throw an exception.\n    - if source and destination are the same Image, there are two options. If new_type is the same of the two\n        Image(s) or it is DataType::none, nothing happens. Otherwise, an exception is thrown.\nWhen the DataType is specified the function will have the same behavior, but the destination Image will have\nthe specified DataType.\n\n Source Image to be copied into destination Image.\n\n Destination Image that will hold a copy of the source Image. Cannot be the source Image.\n\n Desired type for the destination Image after the copy. If none (default) the destination\n            Image will preserve its type if it is not empty, otherwise it will have the same type of the\n            source Image.\n\n CopyImage\n\nC++: ecvl::CopyImage(const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("new_type"));
+
+	// ecvl::ShallowCopyImage(const class ecvl::Image &, class ecvl::Image &) file:ecvl/core/image.h line:934
+	M("ecvl").def("ShallowCopyImage", (void (*)(const class ecvl::Image &, class ecvl::Image &)) &ecvl::ShallowCopyImage, "Performs a shallow copy of the source Image into the destination.\n\nThe ShallowCopyImage() procedure takes an Image and copies the fields values into destination Image. \nThis means that source and destination Image(s) will point to the same Image data in memory. The data ownership \nof the source Image will be preserved, i.e. the result of the IsOwner() method on the source Image\nwill be the same before and after the execution of the ShallowCopyImage(). Destination Image will never \nbe the owner of the data. Source and destination Image(s) cannot be the same. \n\n Source Image to be shallow copied into destination Image.\n\n Destination Image that will hold a copy of the source Image field value. Cannot be the source Image.\n\n ShallowCopyImage\n\nC++: ecvl::ShallowCopyImage(const class ecvl::Image &, class ecvl::Image &) --> void", pybind11::arg("src"), pybind11::arg("dst"));
 
 }
 
@@ -1663,52 +1778,52 @@ void bind_ecvl_core_imgproc(std::function< pybind11::module &(std::string const 
 
 	// ecvl::Threshold(const class ecvl::Image &, class ecvl::Image &, double, double, enum ecvl::ThresholdingType) file:ecvl/core/imgproc.h line:165
 	M("ecvl").def("Threshold", [](const class ecvl::Image & a0, class ecvl::Image & a1, double const & a2, double const & a3) -> void { return ecvl::Threshold(a0, a1, a2, a3); }, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("thresh"), pybind11::arg("maxval"));
-	M("ecvl").def("Threshold", (void (*)(const class ecvl::Image &, class ecvl::Image &, double, double, enum ecvl::ThresholdingType)) &ecvl::Threshold, "Applies a fixed threshold to an input Image.\n\nThe Threshold function applies a fixed thresholding to an input Image. The function is useful to get a binary\nimage out of a grayscale (ColorType::GRAY) Image or to remove noise filtering out pixels with too small or too\nlarge values. Anyway, the function can be applied to any input Image. The pixels up to \"thresh\" value will be\nset to 0, the pixels above this value will be set to \"maxvalue\" if \"thresh_type\" is ThresholdingType::BINARY\n(default). The opposite will happen if \"thresh_type\" is ThresholdingType::BINARY_INV.\n\n Input Image on which to apply the threshold.\n\n The output thresholded Image.\n\n Threshold value.\n\n The maximum values in the thresholded Image.\n\n Type of threshold to be applied, see \n\nC++: ecvl::Threshold(const class ecvl::Image &, class ecvl::Image &, double, double, enum ecvl::ThresholdingType) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("thresh"), pybind11::arg("maxval"), pybind11::arg("thresh_type"));
+	M("ecvl").def("Threshold", (void (*)(const class ecvl::Image &, class ecvl::Image &, double, double, enum ecvl::ThresholdingType)) &ecvl::Threshold, "Applies a fixed threshold to an input Image.\n\nThe Threshold() function applies a fixed thresholding to an input Image. The function is useful to get a binary\nimage out of a grayscale (ColorType::GRAY) Image or to remove noise filtering out pixels with too small or too\nlarge values. Anyway, the function can be applied to any input Image. The pixels up to \"thresh\" value will be\nset to 0, the pixels above this value will be set to \"maxvalue\" if \"thresh_type\" is ThresholdingType::BINARY\n(default). The opposite will happen if \"thresh_type\" is ThresholdingType::BINARY_INV.\n\n Input Image on which to apply the threshold.\n\n The output thresholded Image.\n\n Threshold value.\n\n The maximum values in the thresholded Image.\n\n Type of threshold to be applied, see \n\nC++: ecvl::Threshold(const class ecvl::Image &, class ecvl::Image &, double, double, enum ecvl::ThresholdingType) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("thresh"), pybind11::arg("maxval"), pybind11::arg("thresh_type"));
 
-	// ecvl::OtsuThreshold(const class ecvl::Image &) file:ecvl/core/imgproc.h line:175
-	M("ecvl").def("OtsuThreshold", (int (*)(const class ecvl::Image &)) &ecvl::OtsuThreshold, "Calculates the Otsu thresholding value.\n\nThe OtsuThreshold function calculates the Otsu threshold value over a given input Image. the Image must by ColorType::GRAY.\n\n Input Image on which to calculate the Otsu threshold value.\n\n Otsu threshold value.\n\nC++: ecvl::OtsuThreshold(const class ecvl::Image &) --> int", pybind11::arg("src"));
+	// ecvl::OtsuThreshold(const class ecvl::Image &) file:ecvl/core/imgproc.h line:189
+	M("ecvl").def("OtsuThreshold", (int (*)(const class ecvl::Image &)) &ecvl::OtsuThreshold, "Calculates the Otsu thresholding value.\n\nThe OtsuThreshold() function calculates the Otsu threshold value over a given input Image. The Image must be of ColorType::GRAY.\nThis function implements the algorithm described in  Otsu1979.\n\n Input Image on which to calculate the Otsu threshold value.\n\n Otsu threshold value.\n\nC++: ecvl::OtsuThreshold(const class ecvl::Image &) --> int", pybind11::arg("src"));
 
-	// ecvl::Filter2D(const class ecvl::Image &, class ecvl::Image &, const class ecvl::Image &, enum ecvl::DataType) file:ecvl/core/imgproc.h line:185
+	// ecvl::Filter2D(const class ecvl::Image &, class ecvl::Image &, const class ecvl::Image &, enum ecvl::DataType) file:ecvl/core/imgproc.h line:213
 	M("ecvl").def("Filter2D", [](const class ecvl::Image & a0, class ecvl::Image & a1, const class ecvl::Image & a2) -> void { return ecvl::Filter2D(a0, a1, a2); }, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("ker"));
 	M("ecvl").def("Filter2D", (void (*)(const class ecvl::Image &, class ecvl::Image &, const class ecvl::Image &, enum ecvl::DataType)) &ecvl::Filter2D, "Convolves an Image with a kernel\n\n Input Image.\n\n Output Image.\n\n Convolution kernel.\n\n Destination ecvl::DataType. If DataType::none, the same of src is used.\n\nC++: ecvl::Filter2D(const class ecvl::Image &, class ecvl::Image &, const class ecvl::Image &, enum ecvl::DataType) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("ker"), pybind11::arg("type"));
 
-	// ecvl::GaussianBlur(const class ecvl::Image &, class ecvl::Image &, int, int, double, double) file:ecvl/core/imgproc.h line:208
+	// ecvl::GaussianBlur(const class ecvl::Image &, class ecvl::Image &, int, int, double, double) file:ecvl/core/imgproc.h line:236
 	M("ecvl").def("GaussianBlur", [](const class ecvl::Image & a0, class ecvl::Image & a1, int const & a2, int const & a3, double const & a4) -> void { return ecvl::GaussianBlur(a0, a1, a2, a3, a4); }, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("sizeX"), pybind11::arg("sizeY"), pybind11::arg("sigmaX"));
 	M("ecvl").def("GaussianBlur", (void (*)(const class ecvl::Image &, class ecvl::Image &, int, int, double, double)) &ecvl::GaussianBlur, "Blurs an Image using a Gaussian kernel.\n\n Input Image.\n\n Output Image.\n\n Horizontal size of the kernel. Must be positive and odd.\n\n Vertical size of the kernel. Must be positive and odd.\n\n Gaussian kernel standard deviation in X direction.\n\n Gaussian kernel standard deviation in Y direction. If zero, sigmaX is used. If both are zero, they are calculated from sizeX and sizeY.\n\nC++: ecvl::GaussianBlur(const class ecvl::Image &, class ecvl::Image &, int, int, double, double) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("sizeX"), pybind11::arg("sizeY"), pybind11::arg("sigmaX"), pybind11::arg("sigmaY"));
 
-	// ecvl::GaussianBlur(const class ecvl::Image &, class ecvl::Image &, double) file:ecvl/core/imgproc.h line:209
+	// ecvl::GaussianBlur(const class ecvl::Image &, class ecvl::Image &, double) file:ecvl/core/imgproc.h line:237
 	M("ecvl").def("GaussianBlur", (void (*)(const class ecvl::Image &, class ecvl::Image &, double)) &ecvl::GaussianBlur, "C++: ecvl::GaussianBlur(const class ecvl::Image &, class ecvl::Image &, double) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("sigma"));
 
-	// ecvl::AdditiveLaplaceNoise(const class ecvl::Image &, class ecvl::Image &, double) file:ecvl/core/imgproc.h line:218
+	// ecvl::AdditiveLaplaceNoise(const class ecvl::Image &, class ecvl::Image &, double) file:ecvl/core/imgproc.h line:246
 	M("ecvl").def("AdditiveLaplaceNoise", (void (*)(const class ecvl::Image &, class ecvl::Image &, double)) &ecvl::AdditiveLaplaceNoise, "Adds Laplace distributed noise to an Image.\n\n Input Image.\n\n Output Image.\n\n Standard deviation of the noise generating distribution. Suggested values are around 255 * 0.05 for uint8 Images.\n\nC++: ecvl::AdditiveLaplaceNoise(const class ecvl::Image &, class ecvl::Image &, double) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("std_dev"));
 
-	// ecvl::AdditivePoissonNoise(const class ecvl::Image &, class ecvl::Image &, double) file:ecvl/core/imgproc.h line:227
+	// ecvl::AdditivePoissonNoise(const class ecvl::Image &, class ecvl::Image &, double) file:ecvl/core/imgproc.h line:255
 	M("ecvl").def("AdditivePoissonNoise", (void (*)(const class ecvl::Image &, class ecvl::Image &, double)) &ecvl::AdditivePoissonNoise, "Adds Poisson distributed noise to an Image.\n\n Input Image.\n\n Output Image.\n\n Lambda parameter of the Poisson distribution.\n\nC++: ecvl::AdditivePoissonNoise(const class ecvl::Image &, class ecvl::Image &, double) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("lambda"));
 
-	// ecvl::GammaContrast(const class ecvl::Image &, class ecvl::Image &, double) file:ecvl/core/imgproc.h line:235
+	// ecvl::GammaContrast(const class ecvl::Image &, class ecvl::Image &, double) file:ecvl/core/imgproc.h line:263
 	M("ecvl").def("GammaContrast", (void (*)(const class ecvl::Image &, class ecvl::Image &, double)) &ecvl::GammaContrast, "Adjust contrast by scaling each pixel value X to 255 * ((X/255) ** gamma).\n\n Input Image.\n\n Output Image.\n\n Exponent for the contrast adjustment.\n\nC++: ecvl::GammaContrast(const class ecvl::Image &, class ecvl::Image &, double) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("gamma"));
 
-	// ecvl::CoarseDropout(const class ecvl::Image &, class ecvl::Image &, double, double, bool) file:ecvl/core/imgproc.h line:246
+	// ecvl::CoarseDropout(const class ecvl::Image &, class ecvl::Image &, double, double, bool) file:ecvl/core/imgproc.h line:274
 	M("ecvl").def("CoarseDropout", (void (*)(const class ecvl::Image &, class ecvl::Image &, double, double, bool)) &ecvl::CoarseDropout, "Sets rectangular areas within an Image to zero.\n\n Input Image.\n\n Output Image.\n\n Probability of any rectangle being set to zero.\n\n Size of rectangles in percentage of the input Image.\n\n Whether to use the same value for all channels of a pixel or not.\n\nC++: ecvl::CoarseDropout(const class ecvl::Image &, class ecvl::Image &, double, double, bool) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("p"), pybind11::arg("drop_size"), pybind11::arg("per_channel"));
 
-	// ecvl::IntegralImage(const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType) file:ecvl/core/imgproc.h line:254
+	// ecvl::IntegralImage(const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType) file:ecvl/core/imgproc.h line:282
 	M("ecvl").def("IntegralImage", [](const class ecvl::Image & a0, class ecvl::Image & a1) -> void { return ecvl::IntegralImage(a0, a1); }, "", pybind11::arg("src"), pybind11::arg("dst"));
 	M("ecvl").def("IntegralImage", (void (*)(const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType)) &ecvl::IntegralImage, "Calculate the integral image of the source Image.\n\n Input Image. It must be with ColorType::GRAY, \"xyc\" and DataType::uint8.\n\n Output Image.\n\n DataType of the destination Image.\n\nC++: ecvl::IntegralImage(const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("dst_type"));
 
-	// ecvl::NonMaximaSuppression(const class ecvl::Image &, class ecvl::Image &) file:ecvl/core/imgproc.h line:261
+	// ecvl::NonMaximaSuppression(const class ecvl::Image &, class ecvl::Image &) file:ecvl/core/imgproc.h line:289
 	M("ecvl").def("NonMaximaSuppression", (void (*)(const class ecvl::Image &, class ecvl::Image &)) &ecvl::NonMaximaSuppression, "Calculate the Non-Maxima suppression of the source Image.\n\n Input Image. It must be with ColorType::GRAY, \"xyc\" and DataType::int32.\n\n Output Image.\n\nC++: ecvl::NonMaximaSuppression(const class ecvl::Image &, class ecvl::Image &) --> void", pybind11::arg("src"), pybind11::arg("dst"));
 
-	// ecvl::ConnectedComponentsLabeling(const class ecvl::Image &, class ecvl::Image &) file:ecvl/core/imgproc.h line:276
-	M("ecvl").def("ConnectedComponentsLabeling", (void (*)(const class ecvl::Image &, class ecvl::Image &)) &ecvl::ConnectedComponentsLabeling, "Labels connected components in an binary Image\n\n Input Image. It must be with channels \"xyc\", only one color channel and DataType::uint8.\n\n Output Image.\n\nC++: ecvl::ConnectedComponentsLabeling(const class ecvl::Image &, class ecvl::Image &) --> void", pybind11::arg("src"), pybind11::arg("dst"));
+	// ecvl::ConnectedComponentsLabeling(const class ecvl::Image &, class ecvl::Image &) file:ecvl/core/imgproc.h line:307
+	M("ecvl").def("ConnectedComponentsLabeling", (void (*)(const class ecvl::Image &, class ecvl::Image &)) &ecvl::ConnectedComponentsLabeling, "Labels connected components in a binary Image\n\nThe ConnectedComponentsLabeling() procedure implement the Spaghetti algorithm described in  Bolelli2019, an extremely \nefficient algorithm to label connected components inside binary images using 8-way connectivity.\n\n Input Image. It must be with channels \"xyc\", only one color channel and DataType::uint8.\n\n Output Image.\n\nC++: ecvl::ConnectedComponentsLabeling(const class ecvl::Image &, class ecvl::Image &) --> void", pybind11::arg("src"), pybind11::arg("dst"));
 
-	// ecvl::Inpaint(const class ecvl::Image &, class ecvl::Image &, const class ecvl::Image &, double, enum ecvl::InpaintType) file:ecvl/core/imgproc.h line:377
+	// ecvl::Inpaint(const class ecvl::Image &, class ecvl::Image &, const class ecvl::Image &, double, enum ecvl::InpaintType) file:ecvl/core/imgproc.h line:408
 	M("ecvl").def("Inpaint", [](const class ecvl::Image & a0, class ecvl::Image & a1, const class ecvl::Image & a2, double const & a3) -> void { return ecvl::Inpaint(a0, a1, a2, a3); }, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("inpaintMask"), pybind11::arg("inpaintRadius"));
 	M("ecvl").def("Inpaint", (void (*)(const class ecvl::Image &, class ecvl::Image &, const class ecvl::Image &, double, enum ecvl::InpaintType)) &ecvl::Inpaint, "Restores the selected region in an image using the region neighborhood.\n\n Input Image.\n\n Output Image.\n\n Inpainting mask, an Image with 1-channel and DataType::uint8. Non-zero pixels indicate the area that needs to be inpainted.\n\n Radius of a circular neighborhood of each point inpainted that is considered by the algorithm.\n\n Inpainting method that could be InpaintType::INPAINT_NS or InpaintType::INPAINT_TELEA.\n\nC++: ecvl::Inpaint(const class ecvl::Image &, class ecvl::Image &, const class ecvl::Image &, double, enum ecvl::InpaintType) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("inpaintMask"), pybind11::arg("inpaintRadius"), pybind11::arg("flag"));
 
-	// ecvl::Transpose(const class ecvl::Image &, class ecvl::Image &) file:ecvl/core/imgproc.h line:392
+	// ecvl::Transpose(const class ecvl::Image &, class ecvl::Image &) file:ecvl/core/imgproc.h line:423
 	M("ecvl").def("Transpose", (void (*)(const class ecvl::Image &, class ecvl::Image &)) &ecvl::Transpose, "Swap rows and columns of an Image.\n\n Input Image.\n\n Output transposed Image.\n\nC++: ecvl::Transpose(const class ecvl::Image &, class ecvl::Image &) --> void", pybind11::arg("src"), pybind11::arg("dst"));
 
-	// ecvl::ElasticTransform(const class ecvl::Image &, class ecvl::Image &, double, double, enum ecvl::InterpolationType, enum ecvl::BorderType, const int &, const unsigned int) file:ecvl/core/imgproc.h line:427
+	// ecvl::ElasticTransform(const class ecvl::Image &, class ecvl::Image &, double, double, enum ecvl::InterpolationType, enum ecvl::BorderType, const int &, const unsigned int) file:ecvl/core/imgproc.h line:458
 	M("ecvl").def("ElasticTransform", [](const class ecvl::Image & a0, class ecvl::Image & a1) -> void { return ecvl::ElasticTransform(a0, a1); }, "", pybind11::arg("src"), pybind11::arg("dst"));
 	M("ecvl").def("ElasticTransform", [](const class ecvl::Image & a0, class ecvl::Image & a1, double const & a2) -> void { return ecvl::ElasticTransform(a0, a1, a2); }, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("alpha"));
 	M("ecvl").def("ElasticTransform", [](const class ecvl::Image & a0, class ecvl::Image & a1, double const & a2, double const & a3) -> void { return ecvl::ElasticTransform(a0, a1, a2, a3); }, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("alpha"), pybind11::arg("sigma"));
@@ -1721,6 +1836,7 @@ void bind_ecvl_core_imgproc(std::function< pybind11::module &(std::string const 
 
 
 // File: ecvl/core/imgproc_1.cpp
+#include <array>
 #include <ecvl/core/datatype.h>
 #include <ecvl/core/hal.h>
 #include <ecvl/core/image.h>
@@ -1746,25 +1862,33 @@ void bind_ecvl_core_imgproc(std::function< pybind11::module &(std::string const 
 
 void bind_ecvl_core_imgproc_1(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
-	// ecvl::Salt(const class ecvl::Image &, class ecvl::Image &, double, bool, const unsigned int) file:ecvl/core/imgproc.h line:465
+	// ecvl::Salt(const class ecvl::Image &, class ecvl::Image &, double, bool, const unsigned int) file:ecvl/core/imgproc.h line:496
 	M("ecvl").def("Salt", [](const class ecvl::Image & a0, class ecvl::Image & a1, double const & a2) -> void { return ecvl::Salt(a0, a1, a2); }, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("p"));
 	M("ecvl").def("Salt", [](const class ecvl::Image & a0, class ecvl::Image & a1, double const & a2, bool const & a3) -> void { return ecvl::Salt(a0, a1, a2, a3); }, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("p"), pybind11::arg("per_channel"));
 	M("ecvl").def("Salt", (void (*)(const class ecvl::Image &, class ecvl::Image &, double, bool, const unsigned int)) &ecvl::Salt, "Adds salt noise (white pixels) to an Image.\n\n Input Image.\n\n Output Image.\n\n Probability of replacing a pixel with salt noise.\n\n If true, noise is not considered pixel-wise but channel-wise.\n\n Seed to use for this function's random number generator.\n\nC++: ecvl::Salt(const class ecvl::Image &, class ecvl::Image &, double, bool, const unsigned int) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("p"), pybind11::arg("per_channel"), pybind11::arg("seed"));
 
-	// ecvl::Pepper(const class ecvl::Image &, class ecvl::Image &, double, bool, const unsigned int) file:ecvl/core/imgproc.h line:475
+	// ecvl::Pepper(const class ecvl::Image &, class ecvl::Image &, double, bool, const unsigned int) file:ecvl/core/imgproc.h line:506
 	M("ecvl").def("Pepper", [](const class ecvl::Image & a0, class ecvl::Image & a1, double const & a2) -> void { return ecvl::Pepper(a0, a1, a2); }, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("p"));
 	M("ecvl").def("Pepper", [](const class ecvl::Image & a0, class ecvl::Image & a1, double const & a2, bool const & a3) -> void { return ecvl::Pepper(a0, a1, a2, a3); }, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("p"), pybind11::arg("per_channel"));
 	M("ecvl").def("Pepper", (void (*)(const class ecvl::Image &, class ecvl::Image &, double, bool, const unsigned int)) &ecvl::Pepper, "Adds pepper noise (black pixels) to an Image.\n\n Input Image.\n\n Output Image.\n\n Probability of replacing a pixel with pepper noise.\n\n If true, noise is not considered pixel-wise but channel-wise.\n\n Seed to use for this function's random number generator.\n\nC++: ecvl::Pepper(const class ecvl::Image &, class ecvl::Image &, double, bool, const unsigned int) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("p"), pybind11::arg("per_channel"), pybind11::arg("seed"));
 
-	// ecvl::SaltAndPepper(const class ecvl::Image &, class ecvl::Image &, double, bool, const unsigned int) file:ecvl/core/imgproc.h line:485
+	// ecvl::SaltAndPepper(const class ecvl::Image &, class ecvl::Image &, double, bool, const unsigned int) file:ecvl/core/imgproc.h line:516
 	M("ecvl").def("SaltAndPepper", [](const class ecvl::Image & a0, class ecvl::Image & a1, double const & a2) -> void { return ecvl::SaltAndPepper(a0, a1, a2); }, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("p"));
 	M("ecvl").def("SaltAndPepper", [](const class ecvl::Image & a0, class ecvl::Image & a1, double const & a2, bool const & a3) -> void { return ecvl::SaltAndPepper(a0, a1, a2, a3); }, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("p"), pybind11::arg("per_channel"));
 	M("ecvl").def("SaltAndPepper", (void (*)(const class ecvl::Image &, class ecvl::Image &, double, bool, const unsigned int)) &ecvl::SaltAndPepper, "Adds salt and pepper noise (white and black pixels) to an Image. White and black pixels are equally likely.\n\n Input Image.\n\n Output Image.\n\n Probability of replacing a pixel with salt and pepper noise.\n\n If true, noise is not considered pixel-wise but channel-wise.\n\n Seed to use for this function's random number generator.\n\nC++: ecvl::SaltAndPepper(const class ecvl::Image &, class ecvl::Image &, double, bool, const unsigned int) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("p"), pybind11::arg("per_channel"), pybind11::arg("seed"));
 
-	// ecvl::SliceTimingCorrection(const class ecvl::Image &, class ecvl::Image &, bool, bool) file:ecvl/core/imgproc.h line:496
+	// ecvl::SliceTimingCorrection(const class ecvl::Image &, class ecvl::Image &, bool, bool) file:ecvl/core/imgproc.h line:527
 	M("ecvl").def("SliceTimingCorrection", [](const class ecvl::Image & a0, class ecvl::Image & a1) -> void { return ecvl::SliceTimingCorrection(a0, a1); }, "", pybind11::arg("src"), pybind11::arg("dst"));
 	M("ecvl").def("SliceTimingCorrection", [](const class ecvl::Image & a0, class ecvl::Image & a1, bool const & a2) -> void { return ecvl::SliceTimingCorrection(a0, a1, a2); }, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("odd"));
-	M("ecvl").def("SliceTimingCorrection", (void (*)(const class ecvl::Image &, class ecvl::Image &, bool, bool)) &ecvl::SliceTimingCorrection, "Corrects each voxel's time-series.\n    Slice timing correction works by using (Hanning-windowed) sinc interpolation to shift each time-series by an appropriate fraction of a\n    TR relative to the middle of the TR period. The default slice order acquisition is from the bottom of the brain to the top.\n\n Input Image. It must be with channels \"xyzt\".\n\n Output Image.\n\n Slices were acquired with interleaved order (0, 2, 4... 1, 3, 5...)\n\n Slices were acquired from the top of the brain to the bottom\n\nC++: ecvl::SliceTimingCorrection(const class ecvl::Image &, class ecvl::Image &, bool, bool) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("odd"), pybind11::arg("down"));
+	M("ecvl").def("SliceTimingCorrection", (void (*)(const class ecvl::Image &, class ecvl::Image &, bool, bool)) &ecvl::SliceTimingCorrection, "Corrects each voxel's time-series.\n    Slice timing correction works by using (Hanning-windowed) sinc interpolation to shift each time-series by an appropriate fraction of a\n    TR relative to the middle of the TR period. The default slice order acquisition is from the bottom of the brain to the top.\n\n Input Image. It must be with channels \"xyzt\" and with spacings (distance between consecutive voxels on each dimensions).\n\n Output Image. It will be with DataType::float32.\n\n Slices were acquired with interleaved order (0, 2, 4... 1, 3, 5...)\n\n Slices were acquired from the top of the brain to the bottom\n\nC++: ecvl::SliceTimingCorrection(const class ecvl::Image &, class ecvl::Image &, bool, bool) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("odd"), pybind11::arg("down"));
+
+	// ecvl::Moments(const class ecvl::Image &, class ecvl::Image &, int, enum ecvl::DataType) file:ecvl/core/imgproc.h line:549
+	M("ecvl").def("Moments", [](const class ecvl::Image & a0, class ecvl::Image & a1) -> void { return ecvl::Moments(a0, a1); }, "", pybind11::arg("src"), pybind11::arg("moments"));
+	M("ecvl").def("Moments", [](const class ecvl::Image & a0, class ecvl::Image & a1, int const & a2) -> void { return ecvl::Moments(a0, a1, a2); }, "", pybind11::arg("src"), pybind11::arg("moments"), pybind11::arg("order"));
+	M("ecvl").def("Moments", (void (*)(const class ecvl::Image &, class ecvl::Image &, int, enum ecvl::DataType)) &ecvl::Moments, "Calculate all raw image moments of the source Image up to the specified order.\n\nWhen working with a 2D image, naming the pixel intensities as \n, raw image moments \n are calculated with the following formula:\n\n\n\nThe following properties can be derived from raw image moments:\n- Area (for binary images) or sum of grey level (for grayscale images): \n\n, accessible through moments(0,0) i.e. moments(x,y);\n- Centroid: \n\n.\n\nThe formula above can be accordingly extended when working with higher dimensions. Note that raw moments are neither translation, scale nor rotation invariant.\nMoments are stored in the output moments Image in the same order as for source channels. The output moments Image will be on the same device of the source Image. \n\n Input Image on which calculating row moments up to the specified order. It must be a grayscale (ColorType::GRAY) or a data (ColorType::none) Image.\n\n Output data (ColorType:none) Image containing the computed raw image moments. The moments DataType is specified by the type parameter. The size of the Image will be (order + 1, order + 1)\n\n Raw image moments will be calculated up to the specified order. Default is 3.\n\n Specify the ecvl::DataType to be used for the moments Image. It could be either DataType::float32 or DataType::float64. Default is DataType::float64.\n\nC++: ecvl::Moments(const class ecvl::Image &, class ecvl::Image &, int, enum ecvl::DataType) --> void", pybind11::arg("src"), pybind11::arg("moments"), pybind11::arg("order"), pybind11::arg("type"));
+
+	// ecvl::DropColorChannel(class ecvl::Image &) file:ecvl/core/imgproc.h line:637
+	M("ecvl").def("DropColorChannel", (void (*)(class ecvl::Image &)) &ecvl::DropColorChannel, "Remove color channel from the input Image. \n\nThe DropColorChannel() procedure remove the color channel (\"c\") from the specified input Image, modifying all the other attribute accordingly. \nThis function can be only applied on Images with ColorType::GRAY, i.e. images having the color channel dimension equal to 1.\n\n Image from which to drop the color channel.\n\nC++: ecvl::DropColorChannel(class ecvl::Image &) --> void", pybind11::arg("src"));
 
 }
 
@@ -1803,7 +1927,8 @@ void bind_ecvl_core_imgcodecs(std::function< pybind11::module &(std::string cons
 	// ecvl::ImReadMode file:ecvl/core/imgcodecs.h line:28
 	pybind11::enum_<ecvl::ImReadMode>(M("ecvl"), "ImReadMode", "Enum class representing the ECVL ImRead flags.\n\n     ImReadMode")
 		.value("GRAYSCALE", ecvl::ImReadMode::GRAYSCALE)
-		.value("COLOR", ecvl::ImReadMode::COLOR);
+		.value("COLOR", ecvl::ImReadMode::COLOR)
+		.value("ANYCOLOR", ecvl::ImReadMode::ANYCOLOR);
 
 ;
 
@@ -1981,7 +2106,7 @@ void bind_ecvl_dataset_generator(std::function< pybind11::module &(std::string c
 
 		generateclassificationdataset_addons(cl);
 	}
-	{ // ecvl::View file:ecvl/core/image.h line:566
+	{ // ecvl::View file:ecvl/core/image.h line:574
 		pybind11::class_<ecvl::View<ecvl::DataType::int8>, std::shared_ptr<ecvl::View<ecvl::DataType::int8>>, ecvl::Image> cl(M("ecvl"), "View_ecvl_DataType_int8_t", "");
 		cl.def( pybind11::init( [](){ return new ecvl::View<ecvl::DataType::int8>(); } ) );
 		cl.def( pybind11::init<class ecvl::Image &>(), pybind11::arg("img") );
@@ -2011,7 +2136,7 @@ void bind_ecvl_dataset_generator(std::function< pybind11::module &(std::string c
 		cl.def("__imul__", (class ecvl::Image & (ecvl::Image::*)(const class ecvl::Image &)) &ecvl::Image::operator*=, "C++: ecvl::Image::operator*=(const class ecvl::Image &) --> class ecvl::Image &", pybind11::return_value_policy::automatic, pybind11::arg("rhs"));
 		cl.def("__idiv__", (class ecvl::Image & (ecvl::Image::*)(const class ecvl::Image &)) &ecvl::Image::operator/=, "C++: ecvl::Image::operator/=(const class ecvl::Image &) --> class ecvl::Image &", pybind11::return_value_policy::automatic, pybind11::arg("rhs"));
 	}
-	{ // ecvl::View file:ecvl/core/image.h line:566
+	{ // ecvl::View file:ecvl/core/image.h line:574
 		pybind11::class_<ecvl::View<ecvl::DataType::int16>, std::shared_ptr<ecvl::View<ecvl::DataType::int16>>, ecvl::Image> cl(M("ecvl"), "View_ecvl_DataType_int16_t", "");
 		cl.def( pybind11::init( [](){ return new ecvl::View<ecvl::DataType::int16>(); } ) );
 		cl.def( pybind11::init<class ecvl::Image &>(), pybind11::arg("img") );
@@ -2041,7 +2166,7 @@ void bind_ecvl_dataset_generator(std::function< pybind11::module &(std::string c
 		cl.def("__imul__", (class ecvl::Image & (ecvl::Image::*)(const class ecvl::Image &)) &ecvl::Image::operator*=, "C++: ecvl::Image::operator*=(const class ecvl::Image &) --> class ecvl::Image &", pybind11::return_value_policy::automatic, pybind11::arg("rhs"));
 		cl.def("__idiv__", (class ecvl::Image & (ecvl::Image::*)(const class ecvl::Image &)) &ecvl::Image::operator/=, "C++: ecvl::Image::operator/=(const class ecvl::Image &) --> class ecvl::Image &", pybind11::return_value_policy::automatic, pybind11::arg("rhs"));
 	}
-	{ // ecvl::View file:ecvl/core/image.h line:566
+	{ // ecvl::View file:ecvl/core/image.h line:574
 		pybind11::class_<ecvl::View<ecvl::DataType::float32>, std::shared_ptr<ecvl::View<ecvl::DataType::float32>>, ecvl::Image> cl(M("ecvl"), "View_ecvl_DataType_float32_t", "");
 		cl.def( pybind11::init( [](){ return new ecvl::View<ecvl::DataType::float32>(); } ) );
 		cl.def( pybind11::init<class ecvl::Image &>(), pybind11::arg("img") );
@@ -2071,7 +2196,7 @@ void bind_ecvl_dataset_generator(std::function< pybind11::module &(std::string c
 		cl.def("__imul__", (class ecvl::Image & (ecvl::Image::*)(const class ecvl::Image &)) &ecvl::Image::operator*=, "C++: ecvl::Image::operator*=(const class ecvl::Image &) --> class ecvl::Image &", pybind11::return_value_policy::automatic, pybind11::arg("rhs"));
 		cl.def("__idiv__", (class ecvl::Image & (ecvl::Image::*)(const class ecvl::Image &)) &ecvl::Image::operator/=, "C++: ecvl::Image::operator/=(const class ecvl::Image &) --> class ecvl::Image &", pybind11::return_value_policy::automatic, pybind11::arg("rhs"));
 	}
-	{ // ecvl::View file:ecvl/core/image.h line:566
+	{ // ecvl::View file:ecvl/core/image.h line:574
 		pybind11::class_<ecvl::View<ecvl::DataType::uint8>, std::shared_ptr<ecvl::View<ecvl::DataType::uint8>>, ecvl::Image> cl(M("ecvl"), "View_ecvl_DataType_uint8_t", "");
 		cl.def( pybind11::init( [](){ return new ecvl::View<ecvl::DataType::uint8>(); } ) );
 		cl.def( pybind11::init<class ecvl::Image &>(), pybind11::arg("img") );
