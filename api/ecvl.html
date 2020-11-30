@@ -512,6 +512,17 @@ get to the next pixel/voxel in the corresponding dimension</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="pyecvl.ecvl.Image.copy">
+<code class="sig-name descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Image.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a deep copy of this image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a copy of this image</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="pyecvl.ecvl.Image.empty">
 <em class="property">static </em><code class="sig-name descname">empty</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Image.empty" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create an empty image.</p>
@@ -575,6 +586,25 @@ data owner, the procedure will throw an exception</p></li>
 <li><p><strong>src</strong> – source image</p></li>
 <li><p><strong>dst</strong> – destination image</p></li>
 <li><p><strong>new_type</strong> – new DataType for the destination image</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.ShallowCopyImage">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">ShallowCopyImage</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ShallowCopyImage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shallow copy of <code class="docutils literal notranslate"><span class="pre">src</span></code> to <code class="docutils literal notranslate"><span class="pre">dst</span></code> (<code class="docutils literal notranslate"><span class="pre">dst</span></code> will point to the same data).</p>
+<p><code class="docutils literal notranslate"><span class="pre">src</span></code> and <code class="docutils literal notranslate"><span class="pre">dst</span></code> cannot be the same image. Even though <code class="docutils literal notranslate"><span class="pre">dst</span></code> will
+point to the same data as <code class="docutils literal notranslate"><span class="pre">src</span></code>, the latter will be the data owner.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – source image</p></li>
+<li><p><strong>dst</strong> – destination image</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1040,6 +1070,28 @@ set to ThresholdingType.BINARY_INV.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt id="pyecvl.ecvl.MultiThreshold">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">MultiThreshold</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">thresholds</span></em>, <em class="sig-param"><span class="n">minval</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">maxval</span><span class="o">=</span><span class="default_value">255</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.MultiThreshold" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply multiple thresholds to an image.</p>
+<p>The resulting image is quantized based on the provided <code class="docutils literal notranslate"><span class="pre">thresholds</span></code>
+values. Output values will range uniformly from <code class="docutils literal notranslate"><span class="pre">minval</span></code> to <code class="docutils literal notranslate"><span class="pre">maxval</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – source image</p></li>
+<li><p><strong>dst</strong> – destination image</p></li>
+<li><p><strong>thresh</strong> – threshold values</p></li>
+<li><p><strong>maxval</strong> – minimum value in the output image</p></li>
+<li><p><strong>maxval</strong> – maximum value in the output image</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt id="pyecvl.ecvl.OtsuThreshold">
 <code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">OtsuThreshold</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.OtsuThreshold" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the Otsu thresholding value.</p>
@@ -1050,6 +1102,22 @@ set to ThresholdingType.BINARY_INV.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Otsu threshold value</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.OtsuMultiThreshold">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">OtsuMultiThreshold</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">n_thresholds</span><span class="o">=</span><span class="default_value">2</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.OtsuMultiThreshold" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the Otsu thresholding values.</p>
+<p>The image must be ColorType.GRAY. The number of thresholds to be found is
+defined by the n_thresholds parameter (default is 2).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>src</strong> – source image</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Otsu threshold values (list of integers)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1571,6 +1639,81 @@ have spacings (distance between consecutive voxels on each dimension)</p></li>
 <li><p><strong>down</strong> – True if down slices were acquired from the top of the brain
 to the bottom</p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.Moments">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">Moments</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">order</span><span class="o">=</span><span class="default_value">3</span></em>, <em class="sig-param"><span class="n">type_</span><span class="o">=</span><span class="default_value">DataType.float64</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Moments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate raw image moments of the source image up to the specified order.</p>
+<p>Moments are stored in the output image in the same order as for source
+channels. The output image will be on the same device as the source image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – input image. It must be a grayscale (ColorType.GRAY) or a
+data (ColorType.none) image.</p></li>
+<li><p><strong>dst</strong> – output image (ColorType.none) containing the computed raw
+image moments. The size of the Image will be (order + 1, order + 1)</p></li>
+<li><p><strong>order</strong> – moments order</p></li>
+<li><p><strong>type</strong> – data type for the output image</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.CentralMoments">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">CentralMoments</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">moments</span></em>, <em class="sig-param"><span class="n">center</span></em>, <em class="sig-param"><span class="n">order</span><span class="o">=</span><span class="default_value">3</span></em>, <em class="sig-param"><span class="n">type_</span><span class="o">=</span><span class="default_value">DataType.float64</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.CentralMoments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate central moments of the source image up to the specified order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – input image. It must be a grayscale (ColorType.GRAY) or a
+data (ColorType.none) image.</p></li>
+<li><p><strong>moments</strong> – output data (ColorType.none) image containing the computed
+moments. The size of the Image will be (order + 1, order + 1)</p></li>
+<li><p><strong>center</strong> – center coordinates (list of floats) <code class="docutils literal notranslate"><span class="pre">len(center)</span></code> and
+<code class="docutils literal notranslate"><span class="pre">src.dims_</span></code> must match. The source axes order must be the same used to
+specify the center coordinates.</p></li>
+<li><p><strong>order</strong> – moments order</p></li>
+<li><p><strong>type</strong> – data type for the output image</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.DrawEllipse">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">DrawEllipse</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">center</span></em>, <em class="sig-param"><span class="n">axes</span></em>, <em class="sig-param"><span class="n">angle</span></em>, <em class="sig-param"><span class="n">color</span></em>, <em class="sig-param"><span class="n">thickness</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.DrawEllipse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw an ellipse over the specified Image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – input (and output) image.</p></li>
+<li><p><strong>center</strong> – center of the ellipse</p></li>
+<li><p><strong>axes</strong> – ellipse axes half size</p></li>
+<li><p><strong>angle</strong> – rotation angle of the ellipse</p></li>
+<li><p><strong>color</strong> – ellipse color, e.g., <code class="docutils literal notranslate"><span class="pre">[255]</span></code>, <code class="docutils literal notranslate"><span class="pre">[5,</span> <span class="pre">5,</span> <span class="pre">5]</span></code> (RGB)</p></li>
+<li><p><strong>thickness</strong> – ellipse border thickness. If negative all the pixels of
+the ellipse will be filled with the specified color value.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.DropColorChannel">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">DropColorChannel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.DropColorChannel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove color channel from the input image.</p>
+<p>Remove the color channel (“c”) from the specified input image, modifying
+all other attributes accordingly. This function can only be applied to
+images with <code class="docutils literal notranslate"><span class="pre">ColorType.GRAY</span></code>, i.e., having the color channel dimension
+equal to 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>src</strong> – input image.</p>
 </dd>
 </dl>
 </dd></dl>

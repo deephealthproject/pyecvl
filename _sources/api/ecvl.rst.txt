@@ -41,6 +41,8 @@ Image
 
 .. autofunction:: pyecvl.ecvl.CopyImage
 
+.. autofunction:: pyecvl.ecvl.ShallowCopyImage
+
 .. autofunction:: pyecvl.ecvl.RearrangeChannels
 
 
@@ -97,7 +99,11 @@ Image processing
 
 .. autofunction:: pyecvl.ecvl.Threshold
 
+.. autofunction:: pyecvl.ecvl.MultiThreshold
+
 .. autofunction:: pyecvl.ecvl.OtsuThreshold
+
+.. autofunction:: pyecvl.ecvl.OtsuMultiThreshold
 
 .. autofunction:: pyecvl.ecvl.Filter2D
 
@@ -152,6 +158,14 @@ Image processing
 .. autofunction:: pyecvl.ecvl.SaltAndPepper
 
 .. autofunction:: pyecvl.ecvl.SliceTimingCorrection
+
+.. autofunction:: pyecvl.ecvl.Moments
+
+.. autofunction:: pyecvl.ecvl.CentralMoments
+
+.. autofunction:: pyecvl.ecvl.DrawEllipse
+
+.. autofunction:: pyecvl.ecvl.DropColorChannel
 
 
 DeepHealth dataset parser

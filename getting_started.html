@@ -188,7 +188,7 @@ directory of the <a class="reference external" href="https://github.com/deepheal
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyecvl.ecvl</span> <span class="k">as</span> <span class="nn">ecvl</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">)</span>
-<span class="n">img</span> <span class="o">=</span> <span class="n">ecvl</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s2">&quot;xyc&quot;</span><span class="p">,</span> <span class="n">ecvl</span><span class="o">.</span><span class="n">ColorType</span><span class="o">.</span><span class="n">GRAY</span><span class="p">)</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">ecvl</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s2">&quot;xy&quot;</span><span class="p">,</span> <span class="n">ecvl</span><span class="o">.</span><span class="n">ColorType</span><span class="o">.</span><span class="n">GRAY</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Convert an image to a NumPy array:</p>
@@ -200,6 +200,26 @@ directory of the <a class="reference external" href="https://github.com/deepheal
 </div>
 <p>You can also do <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">np.array(img,</span> <span class="pre">copy=False)</span></code> to view the image data as an
 array without copying the data.</p>
+<p>NumPy compatibility allows to perform a wide range of operations on images,
+some of which are implemented by dedicated methods in the C++ API. For
+instance, to set all image elements to a value (<code class="docutils literal notranslate"><span class="pre">SetTo</span></code> in C++):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyecvl.ecvl</span> <span class="k">as</span> <span class="nn">ecvl</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">ecvl</span><span class="o">.</span><span class="n">ImRead</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">a</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">ecvl</span><span class="o">.</span><span class="n">ImWrite</span><span class="p">(</span><span class="s2">&quot;filled.png&quot;</span><span class="p">,</span> <span class="n">img</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To slice an image:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyecvl.ecvl</span> <span class="k">as</span> <span class="nn">ecvl</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">ecvl</span><span class="o">.</span><span class="n">ImRead</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)[:</span><span class="mi">256</span><span class="p">,</span> <span class="p">:</span><span class="mi">256</span><span class="p">,</span> <span class="p">:]</span>
+<span class="n">sliced</span> <span class="o">=</span> <span class="n">ecvl</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">channels_</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">colortype_</span><span class="p">)</span>
+<span class="n">ecvl</span><span class="o">.</span><span class="n">ImWrite</span><span class="p">(</span><span class="s2">&quot;sliced.png&quot;</span><span class="p">,</span> <span class="n">sliced</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="image-processing">
 <h2>Image processing<a class="headerlink" href="#image-processing" title="Permalink to this headline">¶</a></h2>
