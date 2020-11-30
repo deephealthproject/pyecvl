@@ -116,4 +116,7 @@ void image_addons(pybind11::class_<type_, options...> &cl) {
     cl.def("Sub", &ecvl::Image::Sub<ecvl::Image>, "In-place subtraction", pybind11::arg("rhs"), pybind11::arg("saturate") = true);
     cl.def("Mul", &ecvl::Image::Mul<ecvl::Image>, "In-place multiplication", pybind11::arg("rhs"), pybind11::arg("saturate") = true);
     cl.def("Div", &ecvl::Image::Div<ecvl::Image>, "In-place division", pybind11::arg("rhs"), pybind11::arg("saturate") = true);
+    cl.def("copy", [](ecvl::Image& img) -> ecvl::Image {
+      return ecvl::Image(img);  // copy constructor
+    });
 }
