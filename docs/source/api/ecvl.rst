@@ -99,7 +99,11 @@ Image processing
 
 .. autofunction:: pyecvl.ecvl.Threshold
 
+.. autofunction:: pyecvl.ecvl.MultiThreshold
+
 .. autofunction:: pyecvl.ecvl.OtsuThreshold
+
+.. autofunction:: pyecvl.ecvl.OtsuMultiThreshold
 
 .. autofunction:: pyecvl.ecvl.Filter2D
 
@@ -160,6 +164,8 @@ Image processing
 .. autofunction:: pyecvl.ecvl.CentralMoments
 
 .. autofunction:: pyecvl.ecvl.DrawEllipse
+
+.. autofunction:: pyecvl.ecvl.DropColorChannel
 
 
 DeepHealth dataset parser

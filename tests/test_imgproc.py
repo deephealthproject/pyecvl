@@ -119,6 +119,22 @@ def test_Threshold(ecvl):
 
 
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_MultiThreshold(ecvl):
+    dims = [20, 40, 1]
+    img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.GRAY)
+    thresholds = ecvl.OtsuMultiThreshold(img)
+    tmp = _empty_img(ecvl)
+    ecvl.MultiThreshold(img, tmp, thresholds)
+    ecvl.MultiThreshold(img, tmp, thresholds, 1)
+    ecvl.MultiThreshold(img, tmp, thresholds, 1, 254)
+    thresholds = ecvl.OtsuMultiThreshold(img, 3)
+    tmp = _empty_img(ecvl)
+    ecvl.MultiThreshold(img, tmp, thresholds)
+    ecvl.MultiThreshold(img, tmp, thresholds, 1)
+    ecvl.MultiThreshold(img, tmp, thresholds, 1, 254)
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
 def test_Filter2D(ecvl):
     dims = [20, 40, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
@@ -479,3 +495,13 @@ def test_CentralMoments(ecvl):
     ecvl.CentralMoments(img, moments, [10., 10.], 2, datatype)
     assert moments.dims_ == [3, 3]
     assert moments.elemtype_ == datatype
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_DropColorChannel(ecvl):
+    dims = [20, 20, 3]
+    img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.GRAY)
+    ecvl.DropColorChannel(img)
+    assert img.dims_ == [20, 20]
+    assert img.channels_ == "xy"
+    assert img.colortype_ == ecvl.ColorType.none

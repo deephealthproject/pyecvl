@@ -633,6 +633,23 @@ def Threshold(src, dst, thresh, maxval, thresh_type=ThresholdingType.BINARY):
     return _ecvl.Threshold(src, dst, thresh, maxval, thresh_type)
 
 
+def MultiThreshold(src, dst, thresholds, minval=0, maxval=255):
+    """\
+    Apply multiple thresholds to an image.
+
+    The resulting image is quantized based on the provided ``thresholds``
+    values. Output values will range uniformly from ``minval`` to ``maxval``.
+
+    :param src: source image
+    :param dst: destination image
+    :param thresh: threshold values
+    :param maxval: minimum value in the output image
+    :param maxval: maximum value in the output image
+    :return: None
+    """
+    return _ecvl.MultiThreshold(src, dst, thresholds, minval, maxval)
+
+
 def OtsuThreshold(src):
     """\
     Calculate the Otsu thresholding value.
@@ -643,6 +660,19 @@ def OtsuThreshold(src):
     :return: Otsu threshold value
     """
     return _ecvl.OtsuThreshold(src)
+
+
+def OtsuMultiThreshold(src, n_thresholds=2):
+    """\
+    Calculate the Otsu thresholding values.
+
+    The image must be ColorType.GRAY. The number of thresholds to be found is
+    defined by the n_thresholds parameter (default is 2).
+
+    :param src: source image
+    :return: Otsu threshold values (list of integers)
+    """
+    return _ecvl.OtsuMultiThreshold(src, n_thresholds)
 
 
 def Filter2D(src, dst, ker, type=DataType.none):
@@ -1111,6 +1141,20 @@ def DrawEllipse(src, center, axes, angle, color, thickness=1):
       the ellipse will be filled with the specified color value.
     """
     return _ecvl.DrawEllipse(src, center, axes, angle, color, thickness)
+
+
+def DropColorChannel(src):
+    """\
+    Remove color channel from the input image.
+
+    Remove the color channel ("c") from the specified input image, modifying
+    all other attributes accordingly. This function can only be applied to
+    images with ``ColorType.GRAY``, i.e., having the color channel dimension
+    equal to 1.
+
+    :param src: input image.
+    """
+    return _ecvl.DropColorChannel(src)
 
 
 # == dataset_parser ==
