@@ -301,6 +301,18 @@ def test_AugElasticTransform(ecvl):
 
 
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_AugNormalize(ecvl):
+    img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    a = ecvl.AugNormalize(20, 5.5)
+    a.Apply(img)
+    # fromtext
+    f = ecvl.AugNormalize if ecvl is ecvl_core else \
+        ecvl.AugNormalize.fromtext
+    a = f('mean=20 std=5.5')
+    a.Apply(img)
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
 def test_AugmentationFactory(ecvl):
     img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     # one arg

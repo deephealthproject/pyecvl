@@ -183,6 +183,10 @@ def main(args):
     ecvl.SaltAndPepper(img, tmp, 0.1)
     ecvl.ImWrite("%s_salt_and_pepper%s" % (head, ext), tmp)
 
+    print("Normalize")
+    ecvl.Normalize(img, tmp, 20, 1.5)
+    ecvl.ImWrite("%s_normalize%s" % (head, ext), tmp)
+
     print("Applying multiple thresholds")
     ecvl.ChangeColorSpace(img, tmp, ecvl.ColorType.GRAY)
     thresholds = ecvl.OtsuMultiThreshold(tmp, 2)
