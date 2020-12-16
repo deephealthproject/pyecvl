@@ -167,6 +167,8 @@ Image processing
 
 .. autofunction:: pyecvl.ecvl.DropColorChannel
 
+.. autofunction:: pyecvl.ecvl.Normalize
+
 
 DeepHealth dataset parser
 -------------------------
@@ -276,6 +278,10 @@ Augmentations
    :undoc-members:
 
 .. autoclass:: pyecvl.ecvl.AugSaltAndPepper
+   :members:
+   :undoc-members:
+
+.. autoclass:: pyecvl.ecvl.AugNormalize
    :members:
    :undoc-members:
 

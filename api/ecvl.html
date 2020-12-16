@@ -1718,6 +1718,24 @@ equal to 1.</p>
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt id="pyecvl.ecvl.Normalize">
+<code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">Normalize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">mean</span></em>, <em class="sig-param"><span class="n">std</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Normalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalize the input image with mean and standard deviation.</p>
+<p>For each pixel, subtract mean and divide by std. Useful to normalize a
+dataset, getting the data within a range.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – input image.</p></li>
+<li><p><strong>dst</strong> – output image.</p></li>
+<li><p><strong>mean</strong> – mean to use for normalization.</p></li>
+<li><p><strong>std</strong> – standard deviation to use for normalization.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 <div class="section" id="deephealth-dataset-parser">
 <h2>DeepHealth dataset parser<a class="headerlink" href="#deephealth-dataset-parser" title="Permalink to this headline">¶</a></h2>
@@ -2395,6 +2413,29 @@ pixel to be set to white or black</p></li>
 <em class="property">static </em><code class="sig-name descname">fromtext</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">txt</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugSaltAndPepper.fromtext" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create an AugSaltAndPepper from a text description, e.g.:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">AugSaltAndPepper</span><span class="p">(</span><span class="s1">&#39;p=[0.1,0.3] per_channel=0.5&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pyecvl.ecvl.AugNormalize">
+<em class="property">class </em><code class="sig-prename descclassname">pyecvl.ecvl.</code><code class="sig-name descname">AugNormalize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mean</span></em>, <em class="sig-param"><span class="n">std</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugNormalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Augmentation wrapper for Normalize.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mean</strong> – mean to use for normalization</p></li>
+<li><p><strong>std</strong> – standard deviation to use for normalization</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="pyecvl.ecvl.AugNormalize.fromtext">
+<em class="property">static </em><code class="sig-name descname">fromtext</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">txt</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugNormalize.fromtext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an AugNormalize from a text description, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">AugNormalize</span><span class="p">(</span><span class="s1">&#39;mean=20 std=5.5&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
