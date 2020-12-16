@@ -505,3 +505,11 @@ def test_DropColorChannel(ecvl):
     assert img.dims_ == [20, 20]
     assert img.channels_ == "xy"
     assert img.colortype_ == ecvl.ColorType.none
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_Normalize(ecvl):
+    dims = [20, 40, 3]
+    img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    tmp = _empty_img(ecvl)
+    ecvl.Normalize(img, tmp, 20, 5.5)

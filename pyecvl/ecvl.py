@@ -1157,6 +1157,21 @@ def DropColorChannel(src):
     return _ecvl.DropColorChannel(src)
 
 
+def Normalize(src, dst, mean, std):
+    """\
+    Normalize the input image with mean and standard deviation.
+
+    For each pixel, subtract mean and divide by std. Useful to normalize a
+    dataset, getting the data within a range.
+
+    :param src: input image.
+    :param dst: output image.
+    :param mean: mean to use for normalization.
+    :param std: standard deviation to use for normalization.
+    """
+    return _ecvl.Normalize(src, dst, mean, std)
+
+
 # == dataset_parser ==
 
 class SplitType(_ecvl.SplitType):
@@ -1792,6 +1807,28 @@ class AugSaltAndPepper(_ecvl.AugSaltAndPepper):
         :param per_channel: probability to use the same value for all channels
         """
         _ecvl.AugSaltAndPepper.__init__(self, p, per_channel)
+
+
+class AugNormalize(_ecvl.AugNormalize):
+    """\
+    Augmentation wrapper for Normalize.
+    """
+
+    @staticmethod
+    def fromtext(txt):
+        r"""\
+        Create an AugNormalize from a text description, e.g.::
+
+            a = AugNormalize('mean=20 std=5.5')
+        """
+        return _ecvl.AugNormalize(txt)
+
+    def __init__(self, mean, std):
+        """\
+        :param mean: mean to use for normalization
+        :param std: standard deviation to use for normalization
+        """
+        _ecvl.AugNormalize.__init__(self, mean, std)
 
 
 # == support_imgcodecs ==

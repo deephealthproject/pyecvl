@@ -332,6 +332,15 @@ void bind_ecvl_functions(pybind11::module &m) {
     return new ecvl::AugSaltAndPepper(ss);
   }));
   }
+  // augmentations: AugNormalize
+  {
+  pybind11::class_<ecvl::AugNormalize, std::shared_ptr<ecvl::AugNormalize>, ecvl::Augmentation> cl(m, "AugNormalize", "Augmentation wrapper for ecvl::Normalize.");
+  cl.def(pybind11::init<const double&, const double&>(), pybind11::arg("mean"), pybind11::arg("std"));
+  cl.def(pybind11::init([](const std::string& s) {
+    std::stringstream ss(s);
+    return new ecvl::AugNormalize(ss);
+  }));
+  }
 
   // support_eddl: DatasetAugmentations
   {
