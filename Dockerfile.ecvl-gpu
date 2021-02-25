@@ -53,7 +53,7 @@ RUN wget -q https://github.com/opencv/opencv/archive/3.4.10.tar.gz && \
           -DWITH_V4L=OFF \
           -DWITH_VTK=OFF \
           -DWITH_WEBP=OFF .. && \
-    make -j$(nproc) && \
+    make -j$(( $(nproc) < 24 ? $(nproc) : 24 )) && \
     make install && \
     cd ../.. && \
     rm -rf 3.4.10.tar.gz opencv-3.4.10
@@ -70,6 +70,6 @@ RUN mkdir build && \
       -DECVL_DATASET=ON \
       -DECVL_GPU=ON \
       -DECVL_BUILD_EDDL=ON .. && \
-    make -j$(nproc) && \
+    make -j$(( $(nproc) < 24 ? $(nproc) : 24 )) && \
     make install && \
     ldconfig
