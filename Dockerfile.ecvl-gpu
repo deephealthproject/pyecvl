@@ -58,6 +58,8 @@ RUN wget -q https://github.com/opencv/opencv/archive/3.4.10.tar.gz && \
     cd ../.. && \
     rm -rf 3.4.10.tar.gz opencv-3.4.10
 
+RUN apt-get install -y --no-install-recommends git
+
 COPY third_party/ecvl /ecvl
 WORKDIR /ecvl
 RUN mkdir build && \
@@ -69,6 +71,8 @@ RUN mkdir build && \
       -DECVL_WITH_OPENSLIDE=ON \
       -DECVL_DATASET=ON \
       -DECVL_GPU=ON \
+      -DCMAKE_CUDA_STANDARD=14 \
+      -DCMAKE_CUDA_STANDARD_REQUIRED=TRUE \
       -DECVL_BUILD_EDDL=ON .. && \
     make -j$(( $(nproc) < 24 ? $(nproc) : 24 )) && \
     make install && \
