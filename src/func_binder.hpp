@@ -173,7 +173,7 @@ void bind_ecvl_functions(pybind11::module &m) {
   // augmentations: AugRotate
   {
   pybind11::class_<ecvl::AugRotate, std::shared_ptr<ecvl::AugRotate>, ecvl::Augmentation> cl(m, "AugRotate", "Augmentation wrapper for ecvl::Rotate2D.");
-  cl.def(pybind11::init<const std::array<double, 2>&, const std::vector<double>&, const double&, const ecvl::InterpolationType&>(), pybind11::arg("angle"), pybind11::arg("center") = std::vector<double>(), pybind11::arg("scale") = 1., pybind11::arg("interp") = ecvl::InterpolationType::linear);
+  cl.def(pybind11::init<const std::array<double, 2>&, const std::vector<double>&, const double&, const ecvl::InterpolationType&, const ecvl::InterpolationType&>(), pybind11::arg("angle"), pybind11::arg("center") = std::vector<double>(), pybind11::arg("scale") = 1., pybind11::arg("interp") = ecvl::InterpolationType::linear, pybind11::arg("gt_interp") = ecvl::InterpolationType::nearest);
   cl.def(pybind11::init([](const std::string& s) {
     std::stringstream ss(s);
     return new ecvl::AugRotate(ss);
@@ -182,7 +182,7 @@ void bind_ecvl_functions(pybind11::module &m) {
   // augmentations: AugResizeDim
   {
   pybind11::class_<ecvl::AugResizeDim, std::shared_ptr<ecvl::AugResizeDim>, ecvl::Augmentation> cl(m, "AugResizeDim", "Augmentation wrapper for ecvl::ResizeDim.");
-  cl.def(pybind11::init<const std::vector<int>&, const ecvl::InterpolationType&>(), pybind11::arg("dims"), pybind11::arg("interp") = ecvl::InterpolationType::linear);
+  cl.def(pybind11::init<const std::vector<int>&, const ecvl::InterpolationType&, const ecvl::InterpolationType&>(), pybind11::arg("dims"), pybind11::arg("interp") = ecvl::InterpolationType::linear, pybind11::arg("gt_interp") = ecvl::InterpolationType::nearest);
   cl.def(pybind11::init([](const std::string& s) {
     std::stringstream ss(s);
     return new ecvl::AugResizeDim(ss);
@@ -191,7 +191,7 @@ void bind_ecvl_functions(pybind11::module &m) {
   // augmentations: AugResizeScale
   {
   pybind11::class_<ecvl::AugResizeScale, std::shared_ptr<ecvl::AugResizeScale>, ecvl::Augmentation> cl(m, "AugResizeScale", "Augmentation wrapper for ecvl::ResizeScale.");
-  cl.def(pybind11::init<const std::vector<double>&, const ecvl::InterpolationType&>(), pybind11::arg("scale"), pybind11::arg("interp") = ecvl::InterpolationType::linear);
+  cl.def(pybind11::init<const std::vector<double>&, const ecvl::InterpolationType&, const ecvl::InterpolationType&>(), pybind11::arg("scale"), pybind11::arg("interp") = ecvl::InterpolationType::linear, pybind11::arg("gt_interp") = ecvl::InterpolationType::nearest);
   cl.def(pybind11::init([](const std::string& s) {
     std::stringstream ss(s);
     return new ecvl::AugResizeScale(ss);

@@ -1377,13 +1377,15 @@ class AugRotate(_ecvl.AugRotate):
         return _ecvl.AugRotate(txt)
 
     def __init__(self, angle, center=None, scale=1.0,
-                 interp=InterpolationType.linear):
+                 interp=InterpolationType.linear,
+                 gt_interp=InterpolationType.nearest):
         """\
         :param angle: range of degrees ``[min, max]`` to randomly select from
         :param center: a list of floats representing the coordinates of the
           rotation center. If None, the center of the image is used
         :param scale: scaling factor
         :param interp: InterpolationType to be used
+        :param gt_interp: InterpolationType to be used for ground truth
         """
         if center is None:
             center = []
@@ -1404,11 +1406,13 @@ class AugResizeDim(_ecvl.AugResizeDim):
         """
         return _ecvl.AugResizeDim(txt)
 
-    def __init__(self, dims, interp=InterpolationType.linear):
+    def __init__(self, dims, interp=InterpolationType.linear,
+                 gt_interp=InterpolationType.nearest):
         """\
         :param dims: list of integers that specifies the new size of each
           dimension
         :param interp: InterpolationType to be used
+        :param gt_interp: InterpolationType to be used for ground truth
         """
         _ecvl.AugResizeDim.__init__(self, dims, interp)
 
@@ -1427,11 +1431,13 @@ class AugResizeScale(_ecvl.AugResizeScale):
         """
         return _ecvl.AugResizeScale(txt)
 
-    def __init__(self, scale, interp=InterpolationType.linear):
+    def __init__(self, scale, interp=InterpolationType.linear,
+                 gt_interp=InterpolationType.nearest):
         """\
         :param scale: list of floats that specifies the scale to apply to
           each dimension
         :param interp: InterpolationType to be used
+        :param gt_interp: InterpolationType to be used for ground truth
         """
         _ecvl.AugResizeScale.__init__(self, scale, interp)
 

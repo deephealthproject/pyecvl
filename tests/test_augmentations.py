@@ -47,9 +47,13 @@ def test_AugRotate(ecvl):
     a.Apply(img)
     a = ecvl.AugRotate([30, 50], [2, 3], 1.1, ecvl.InterpolationType.nearest)
     a.Apply(img)
+    a = ecvl.AugRotate([30, 50], [2, 3], 1.1, ecvl.InterpolationType.nearest,
+                       ecvl.InterpolationType.linear)
+    a.Apply(img)
     # fromtext
     f = ecvl.AugRotate if ecvl is ecvl_core else ecvl.AugRotate.fromtext
-    a = f('angle=[30, 50] center=(2, 3) scale=1.1 interp="nearest"')
+    a = f('angle=[30, 50] center=(2, 3) scale=1.1 interp="nearest" '
+          'gt_interp="linear"')
     a.Apply(img)
 
 
@@ -58,11 +62,12 @@ def test_AugResizeDim(ecvl):
     img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     a = ecvl.AugResizeDim([4, 3])
     a.Apply(img)
-    a = ecvl.AugResizeDim([4, 3], ecvl.InterpolationType.nearest)
+    a = ecvl.AugResizeDim([4, 3], ecvl.InterpolationType.nearest,
+                          ecvl.InterpolationType.linear)
     a.Apply(img)
     # fromtext
     f = ecvl.AugResizeDim if ecvl is ecvl_core else ecvl.AugResizeDim.fromtext
-    a = f('dims=(4, 3) interp="linear"')
+    a = f('dims=(4, 3) interp="linear" gt_interp="nearest"')
     a.Apply(img)
 
 
@@ -71,12 +76,13 @@ def test_AugResizeScale(ecvl):
     img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     a = ecvl.AugResizeScale([0.5, 0.5])
     a.Apply(img)
-    a = ecvl.AugResizeScale([0.5, 0.5], ecvl.InterpolationType.nearest)
+    a = ecvl.AugResizeScale([0.5, 0.5], ecvl.InterpolationType.nearest,
+                            ecvl.InterpolationType.linear)
     a.Apply(img)
     # fromtext
     f = ecvl.AugResizeScale if ecvl is ecvl_core else \
         ecvl.AugResizeScale.fromtext
-    a = f('scale=(0.5, 0.5) interp="linear"')
+    a = f('scale=(0.5, 0.5) interp="linear" gt_interp="nearest"')
     a.Apply(img)
 
 
