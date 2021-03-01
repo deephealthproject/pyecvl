@@ -1,4 +1,4 @@
-# Copyright (c) 2020 CRS4
+# Copyright (c) 2019-2021 CRS4
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -26,16 +26,17 @@ import re
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 THIS_YEAR = datetime.date.today().year
-C_YEAR = THIS_YEAR if THIS_YEAR == 2020 else f"2020-{THIS_YEAR}"
+C_YEAR = THIS_YEAR if THIS_YEAR == 2019 else f"2019-{THIS_YEAR}"
 LICENSE_FN = os.path.join(THIS_DIR, "LICENSE")
 COM_MAP = {
     ".py": "#",
     ".hpp": "//",
 }
 EXCLUDE_FILES = {
+    "conf.py",
     "all_includes.hpp",
 }
-PATTERN = re.compile(r"Copyright \(c\) \d+")
+PATTERN = re.compile(r"Copyright \(c\) [0-9-]+")
 REPL = f"Copyright (c) {C_YEAR}"
 
 

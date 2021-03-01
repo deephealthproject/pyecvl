@@ -18,7 +18,7 @@
 # -- Project information -----------------------------------------------------
 
 project = 'PyECVL'
-copyright = '2019-2020, CRS4'
+copyright = '2019-2021, CRS4'
 author = 'CRS4'
 
 
