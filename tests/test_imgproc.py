@@ -513,3 +513,11 @@ def test_Normalize(ecvl):
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     tmp = _empty_img(ecvl)
     ecvl.Normalize(img, tmp, 20, 5.5)
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_CenterCrop(ecvl):
+    dims = [20, 40, 3]
+    img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    tmp = _empty_img(ecvl)
+    ecvl.CenterCrop(img, tmp, [10, 20])
