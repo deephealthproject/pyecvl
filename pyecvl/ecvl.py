@@ -1848,6 +1848,27 @@ class AugNormalize(_ecvl.AugNormalize):
         _ecvl.AugNormalize.__init__(self, mean, std)
 
 
+class AugCenterCrop(_ecvl.AugCenterCrop):
+    """\
+    Augmentation wrapper for CenterCrop.
+    """
+
+    @staticmethod
+    def fromtext(txt):
+        r"""\
+        Create an AugCenterCrop from a text description, e.g.::
+
+            a = AugCenterCrop('size=(10, 20)')
+        """
+        return _ecvl.AugCenterCrop(txt)
+
+    def __init__(self, size):
+        """\
+        :param size: list of integers [w, h] specifying the output size
+        """
+        _ecvl.AugCenterCrop.__init__(self, size)
+
+
 # == support_imgcodecs ==
 
 class ImReadMode(_ecvl.ImReadMode):

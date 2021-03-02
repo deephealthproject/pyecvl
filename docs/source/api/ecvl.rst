@@ -287,6 +287,10 @@ Augmentations
    :members:
    :undoc-members:
 
+.. autoclass:: pyecvl.ecvl.AugCenterCrop
+   :members:
+   :undoc-members:
+
 
 Image I/O
 ---------

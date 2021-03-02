@@ -332,6 +332,15 @@ void bind_ecvl_functions(pybind11::module &m) {
     return new ecvl::AugNormalize(ss);
   }));
   }
+  // augmentations: AugCenterCrop
+  {
+  pybind11::class_<ecvl::AugCenterCrop, std::shared_ptr<ecvl::AugCenterCrop>, ecvl::Augmentation> cl(m, "AugCenterCrop", "Augmentation wrapper for ecvl::CenterCrop.");
+  cl.def(pybind11::init<const std::vector<int>&>(), pybind11::arg("size"));
+  cl.def(pybind11::init([](const std::string& s) {
+    std::stringstream ss(s);
+    return new ecvl::AugCenterCrop(ss);
+  }));
+  }
 
   // support_eddl: DatasetAugmentations
   {
