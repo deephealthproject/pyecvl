@@ -187,6 +187,10 @@ def main(args):
     ecvl.Normalize(img, tmp, 20, 1.5)
     ecvl.ImWrite("%s_normalize%s" % (head, ext), tmp)
 
+    print("CenterCrop")
+    ecvl.CenterCrop(img, tmp, [200, 300])
+    ecvl.ImWrite("%s_center_crop%s" % (head, ext), tmp)
+
     print("Applying multiple thresholds")
     ecvl.ChangeColorSpace(img, tmp, ecvl.ColorType.GRAY)
     thresholds = ecvl.OtsuMultiThreshold(tmp, 2)

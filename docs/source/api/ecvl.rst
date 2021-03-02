@@ -169,6 +169,8 @@ Image processing
 
 .. autofunction:: pyecvl.ecvl.Normalize
 
+.. autofunction:: pyecvl.ecvl.CenterCrop
+
 
 DeepHealth dataset parser
 -------------------------

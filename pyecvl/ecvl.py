@@ -1172,6 +1172,17 @@ def Normalize(src, dst, mean, std):
     return _ecvl.Normalize(src, dst, mean, std)
 
 
+def CenterCrop(src, dst, size):
+    """\
+    Crop the given image at the center.
+
+    :param src: input image.
+    :param dst: output image.
+    :param size: list of integers [w, h] specifying the desired output size
+    """
+    return _ecvl.CenterCrop(src, dst, size)
+
+
 # == dataset_parser ==
 
 class SplitType(_ecvl.SplitType):

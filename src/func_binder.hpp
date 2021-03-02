@@ -47,6 +47,7 @@ public:
 
 
 void bind_ecvl_functions(pybind11::module &m) {
+
   m.def("RearrangeChannels", [](const ecvl::Image& src, ecvl::Image& dst, const std::string& channels) {
     ecvl::RearrangeChannels(src, dst, channels);
   });
@@ -70,54 +71,44 @@ void bind_ecvl_functions(pybind11::module &m) {
 	      throw std::runtime_error("Can't write " + filename);
 	  }
       });
-  // imgproc: ResizeDim
+
+  // imgproc
   m.def("ResizeDim", [](const class ecvl::Image& src, class ecvl::Image& dst, const std::vector<int>& newdims) -> void { return ecvl::ResizeDim(src, dst, newdims); }, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("newdims"));
   m.def("ResizeDim", (void (*)(const class ecvl::Image&, class ecvl::Image&, const std::vector<int>&, enum ecvl::InterpolationType)) &ecvl::ResizeDim, "Resizes an Image to the specified dimensions.\n\nC++: ecvl::ResizeDim(const class ecvl::Image&, class ecvl::Image&, const std::vector<int>&, enum ecvl::InterpolationType) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("newdims"), pybind11::arg("interp"));
-  // imgproc: ResizeScale
   m.def("ResizeScale", [](const class ecvl::Image& src, class ecvl::Image& dst, const std::vector<double>& scales) -> void { return ecvl::ResizeScale(src, dst, scales); }, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("scales"));
   m.def("ResizeScale", (void (*)(const class ecvl::Image&, class ecvl::Image&, const std::vector<double>&, enum ecvl::InterpolationType)) &ecvl::ResizeScale, "Resizes an Image by scaling the dimensions to a given scale factor.\n\nC++: ecvl::ResizeScale(const class ecvl::Image&, class ecvl::Image&, const std::vector<double>&, enum ecvl::InterpolationType) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("scales"), pybind11::arg("interp"));
-  // imgproc: Rotate2D
   m.def("Rotate2D", [](const class ecvl::Image& src, class ecvl::Image& dst, double angle) -> void { return ecvl::Rotate2D(src, dst, angle); }, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("angle"));
   m.def("Rotate2D", [](const class ecvl::Image& src, class ecvl::Image& dst, double angle, const std::vector<double>& center) -> void { return ecvl::Rotate2D(src, dst, angle, center); }, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("angle"), pybind11::arg("center"));
   m.def("Rotate2D", [](const class ecvl::Image& src, class ecvl::Image& dst, double angle, const std::vector<double>& center, double scale) -> void { return ecvl::Rotate2D(src, dst, angle, center, scale); }, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("angle"), pybind11::arg("center"), pybind11::arg("scale"));
   m.def("Rotate2D", (void (*)(const class ecvl::Image&, class ecvl::Image&, double, const std::vector<double>&, double, enum ecvl::InterpolationType)) &ecvl::Rotate2D, "Rotates an Image.\n\nC++: ecvl::Rotate2D(const class ecvl::Image&, class ecvl::Image&, double, const std::vector<double>&, double, enum ecvl::InterpolationType) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("angle"), pybind11::arg("center"), pybind11::arg("scale"), pybind11::arg("interp"));
   m.def("MultiThreshold", (void (*)(const ecvl::Image&, ecvl::Image&, const std::vector<int>&, int, int)) &ecvl::MultiThreshold, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("thresholds"), pybind11::arg("minval") = 0, pybind11::arg("maxval") = 255);
   m.def("OtsuMultiThreshold", (std::vector<int> (*)(const ecvl::Image&, int)) &ecvl::OtsuMultiThreshold, "", pybind11::arg("src"), pybind11::arg("n_thresholds") = 2);
-  // imgproc: SeparableFilter2D
   m.def("SeparableFilter2D", [](const class ecvl::Image& src, class ecvl::Image& dst, const std::vector<double>& kerX, const std::vector<double>& kerY) -> void { return ecvl::SeparableFilter2D(src, dst, kerX, kerY); }, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("kerX"), pybind11::arg("kerY"));
   m.def("SeparableFilter2D", (void (*)(const class ecvl::Image&, class ecvl::Image&, const std::vector<double>&, const std::vector<double>&, enum ecvl::DataType)) &ecvl::SeparableFilter2D, "Convolves an Image with a couple of 1-dimensional kernels.\n\nC++: ecvl::SeparableFilter2D(const class ecvl::Image&, class ecvl::Image&, const std::vector<double>&, const std::vector<double>&, enum ecvl::DataType) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("kerX"), pybind11::arg("kerY"), pybind11::arg("type"));
-  // imgproc: GetMaxN
   m.def("GetMaxN", (std::vector<std::array<int, 2>> (*)(const class ecvl::Image&, size_t)) &ecvl::GetMaxN, "Get the n maximum values that are in the source Image.\n\nC++: ecvl::GetMaxN(const class ecvl::Image&, size_t) --> std::vector<std::array<int, 2>>", pybind11::arg("src"), pybind11::arg("n"));
-  // imgproc: FindContours
   m.def("FindContours", [](const class ecvl::Image& src) -> std::vector<std::vector<std::array<int, 2>>> {
 	  std::vector<std::vector<ecvl::Point2i>> contours;
 	  ecvl::FindContours(src, contours);
 	  return contours;
       }, "Find contours in a binary image");
-  // imgproc: Stack
   m.def("Stack", (void (*)(const std::vector<ecvl::Image>&, class ecvl::Image &)) &ecvl::Stack, "Stack a sequence of Images along a new depth dimension (images dimensions must match)", pybind11::arg("src"), pybind11::arg("dst"));
-  // imgproc: HConcat
   m.def("HConcat", (void (*)(const std::vector<ecvl::Image>&, class ecvl::Image &)) &ecvl::HConcat, "Horizontal concatenation of images (with the same number of rows)", pybind11::arg("src"), pybind11::arg("dst"));
-  // imgproc: VConcat
   m.def("VConcat", (void (*)(const std::vector<ecvl::Image>&, class ecvl::Image &)) &ecvl::VConcat, "Vertical concatenation of images (with the same number of columns)", pybind11::arg("src"), pybind11::arg("dst"));
-  // imgproc: Morphology
   m.def("Morphology", (void (*)(const ecvl::Image&, ecvl::Image&, ecvl::MorphType, ecvl::Image&, ecvl::Point2i, int, ecvl::BorderType, const int&)) &ecvl::Morphology, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("op"), pybind11::arg("kernel"), pybind11::arg("anchor") = std::array<int, 2>({-1, -1}), pybind11::arg("iterations") = 1, pybind11::arg("border_type") = ecvl::BorderType::BORDER_CONSTANT, pybind11::arg("border_value") = 0);
-  // imgproc: Inpaint
   m.def("Inpaint", (void (*)(const ecvl::Image&, ecvl::Image&, const ecvl::Image&, double, ecvl::InpaintType)) &ecvl::Inpaint, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("inpaintMask"), pybind11::arg("inpaintRadius"), pybind11::arg("flag") = ecvl::InpaintType::INPAINT_TELEA);
-  // imgproc: MeanStdDev
   m.def("MeanStdDev", [](const ecvl::Image& src) -> pybind11::tuple {
     std::vector<double> mean;
     std::vector<double> stddev;
     ecvl::MeanStdDev(src, mean, stddev);
     return pybind11::make_tuple(mean, stddev);
   });
-  // imgproc: GridDistortion
   m.def("GridDistortion", (void (*)(const ecvl::Image&, ecvl::Image&, int, const std::array<float, 2>&, ecvl::InterpolationType, ecvl::BorderType, const int&, const unsigned)) &ecvl::GridDistortion, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("num_steps") = 5, pybind11::arg("distort_limit") = std::array<float, 2>({-0.3f, 0.3f}), pybind11::arg("interp") = ecvl::InterpolationType::linear, pybind11::arg("border_type") = ecvl::BorderType::BORDER_REFLECT_101, pybind11::arg("border_value") = 0, pybind11::arg("seed") = std::default_random_engine::default_seed);
-  // imgproc: OpticalDistortion
   m.def("OpticalDistortion", (void (*)(const ecvl::Image&, ecvl::Image&, const std::array<float, 2>&, const std::array<float, 2>&, ecvl::InterpolationType, ecvl::BorderType, const int&, const unsigned)) &ecvl::OpticalDistortion, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("distort_limit") = std::array<float, 2>({-0.3f, 0.3f}), pybind11::arg("shift_limit") = std::array<float, 2>({-0.1f, 0.1f}), pybind11::arg("interp") = ecvl::InterpolationType::linear, pybind11::arg("border_type") = ecvl::BorderType::BORDER_REFLECT_101, pybind11::arg("border_value") = 0, pybind11::arg("seed") = std::default_random_engine::default_seed);
   m.def("CentralMoments", (void (*)(const ecvl::Image&, ecvl::Image&, std::vector<double>, int, ecvl::DataType)) &ecvl::CentralMoments, "", pybind11::arg("src"), pybind11::arg("moments"), pybind11::arg("center"), pybind11::arg("order") = 3, pybind11::arg("type") = ecvl::DataType::float64);
   m.def("DrawEllipse", (void (*)(ecvl::Image&, ecvl::Point2i, ecvl::Size2i, double, const ecvl::Scalar&, int)) &ecvl::DrawEllipse, "", pybind11::arg("src"), pybind11::arg("center"), pybind11::arg("axes"), pybind11::arg("angle"), pybind11::arg("color"), pybind11::arg("thickness") = 1);
   m.def("DropColorChannel", (void (*)(ecvl::Image&)) &ecvl::DropColorChannel, "", pybind11::arg("src"));
+  m.def("CenterCrop", (void (*)(const ecvl::Image&, ecvl::Image&, const std::vector<int>&)) &ecvl::CenterCrop, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("size"));
+
 #ifdef ECVL_EDDL
   // augmentations: AugmentationParam
   {
