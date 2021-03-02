@@ -169,6 +169,8 @@ Image processing
 
 .. autofunction:: pyecvl.ecvl.Normalize
 
+.. autofunction:: pyecvl.ecvl.CenterCrop
+
 
 DeepHealth dataset parser
 -------------------------
@@ -282,6 +284,10 @@ Augmentations
    :undoc-members:
 
 .. autoclass:: pyecvl.ecvl.AugNormalize
+   :members:
+   :undoc-members:
+
+.. autoclass:: pyecvl.ecvl.AugCenterCrop
    :members:
    :undoc-members:
 
