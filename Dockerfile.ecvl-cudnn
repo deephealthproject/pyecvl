@@ -71,8 +71,6 @@ RUN mkdir build && \
       -DECVL_WITH_OPENSLIDE=ON \
       -DECVL_DATASET=ON \
       -DECVL_GPU=ON \
-      -DCMAKE_CUDA_STANDARD=14 \
-      -DCMAKE_CUDA_STANDARD_REQUIRED=TRUE \
       -DECVL_BUILD_EDDL=ON .. && \
     make -j$(( $(nproc) < 24 ? $(nproc) : 24 )) && \
     make install && \
