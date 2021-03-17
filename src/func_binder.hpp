@@ -107,6 +107,7 @@ void bind_ecvl_functions(pybind11::module &m) {
   m.def("CentralMoments", (void (*)(const ecvl::Image&, ecvl::Image&, std::vector<double>, int, ecvl::DataType)) &ecvl::CentralMoments, "", pybind11::arg("src"), pybind11::arg("moments"), pybind11::arg("center"), pybind11::arg("order") = 3, pybind11::arg("type") = ecvl::DataType::float64);
   m.def("DrawEllipse", (void (*)(ecvl::Image&, ecvl::Point2i, ecvl::Size2i, double, const ecvl::Scalar&, int)) &ecvl::DrawEllipse, "", pybind11::arg("src"), pybind11::arg("center"), pybind11::arg("axes"), pybind11::arg("angle"), pybind11::arg("color"), pybind11::arg("thickness") = 1);
   m.def("DropColorChannel", (void (*)(ecvl::Image&)) &ecvl::DropColorChannel, "", pybind11::arg("src"));
+  m.def("Normalize", (void (*)(const ecvl::Image&, ecvl::Image&, const std::vector<double>&, const std::vector<double>&)) &ecvl::Normalize, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("mean"), pybind11::arg("std"));
   m.def("CenterCrop", (void (*)(const ecvl::Image&, ecvl::Image&, const std::vector<int>&)) &ecvl::CenterCrop, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("size"));
 
 #ifdef ECVL_EDDL
@@ -327,6 +328,7 @@ void bind_ecvl_functions(pybind11::module &m) {
   {
   pybind11::class_<ecvl::AugNormalize, std::shared_ptr<ecvl::AugNormalize>, ecvl::Augmentation> cl(m, "AugNormalize", "Augmentation wrapper for ecvl::Normalize.");
   cl.def(pybind11::init<const double&, const double&>(), pybind11::arg("mean"), pybind11::arg("std"));
+  cl.def(pybind11::init<const std::vector<double>&, const std::vector<double>&>(), pybind11::arg("mean"), pybind11::arg("std"));
   cl.def(pybind11::init([](const std::string& s) {
     std::stringstream ss(s);
     return new ecvl::AugNormalize(ss);
@@ -339,6 +341,33 @@ void bind_ecvl_functions(pybind11::module &m) {
   cl.def(pybind11::init([](const std::string& s) {
     std::stringstream ss(s);
     return new ecvl::AugCenterCrop(ss);
+  }));
+  }
+  // augmentations: AugToFloat32
+  {
+  pybind11::class_<ecvl::AugToFloat32, std::shared_ptr<ecvl::AugToFloat32>, ecvl::Augmentation> cl(m, "AugToFloat32", "Augmentation ToFloat32.");
+  cl.def(pybind11::init<const double&, const double&>(), pybind11::arg("divisor") = 1., pybind11::arg("divisor_gt") = 1.);
+  cl.def(pybind11::init([](const std::string& s) {
+    std::stringstream ss(s);
+    return new ecvl::AugToFloat32(ss);
+  }));
+  }
+  // augmentations: AugDivBy255
+  {
+  pybind11::class_<ecvl::AugDivBy255, std::shared_ptr<ecvl::AugDivBy255>, ecvl::Augmentation> cl(m, "AugDivBy255", "Augmentation DivBy255.");
+  cl.def(pybind11::init<>());
+  cl.def(pybind11::init([](const std::string& s) {
+    std::stringstream ss(s);
+    return new ecvl::AugDivBy255(ss);
+  }));
+  }
+  // augmentations: AugScaleTo
+  {
+  pybind11::class_<ecvl::AugScaleTo, std::shared_ptr<ecvl::AugScaleTo>, ecvl::Augmentation> cl(m, "AugScaleTo", "Augmentation wrapper for ecvl::ScaleTo.");
+  cl.def(pybind11::init<const double&, const double&>(), pybind11::arg("new_min"), pybind11::arg("new_max"));
+  cl.def(pybind11::init([](const std::string& s) {
+    std::stringstream ss(s);
+    return new ecvl::AugScaleTo(ss);
   }));
   }
 

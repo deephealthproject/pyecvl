@@ -265,6 +265,15 @@ class Image(_ecvl.Image):
         """
         return _ecvl.Image.To(self, dev)
 
+    def ConvertTo(self, dtype, saturate=True):
+        """\
+        Convert Image to another DataType.
+
+        :param dtype: target DataType
+        :param saturate: whether to apply saturation or not
+        """
+        return _ecvl.Image.ConvertTo(self, dtype, saturate)
+
 
 class View_int8(_ecvl.View_int8):
     pass
@@ -352,6 +361,18 @@ def RearrangeChannels(src, dst, channels, new_type=None):
     if new_type is None:
         return _ecvl.RearrangeChannels(src, dst, channels)
     return _ecvl.RearrangeChannels(src, dst, channels, new_type)
+
+
+def ConvertTo(src, dst, dtype, saturate=True):
+    """\
+    Convert Image to another DataType.
+
+    :param src: source image
+    :param dst: destination image
+    :param dtype: target DataType
+    :param saturate: whether to apply saturation or not
+    """
+    return _ecvl.ConvertTo(src, dst, dtype, saturate)
 
 
 # == arithmetic ==
@@ -1164,6 +1185,9 @@ def Normalize(src, dst, mean, std):
     For each pixel, subtract mean and divide by std. Useful to normalize a
     dataset, getting the data within a range.
 
+    For xyc input images, ``mean`` and ``std`` can be lists of floats,
+    representing separate mean and standard deviation for each color channel.
+
     :param src: input image.
     :param dst: output image.
     :param mean: mean to use for normalization.
@@ -1181,6 +1205,18 @@ def CenterCrop(src, dst, size):
     :param size: list of integers [w, h] specifying the desired output size
     """
     return _ecvl.CenterCrop(src, dst, size)
+
+
+def ScaleTo(src, dst, new_min, new_max):
+    """\
+    Linearly scale an Image to a new range.
+
+    :param src: input image.
+    :param dst: output image.
+    :param new_min: new minimum value
+    :param new_max: new maximum value
+    """
+    return _ecvl.ScaleTo(src, dst, new_min, new_max)
 
 
 # == dataset_parser ==
@@ -1837,11 +1873,19 @@ class AugNormalize(_ecvl.AugNormalize):
         Create an AugNormalize from a text description, e.g.::
 
             a = AugNormalize('mean=20 std=5.5')
+
+        Separate mean and std for xyc images::
+
+            a = AugNormalize('mean=(20,19,21) std=(5,5.5,6)')
         """
         return _ecvl.AugNormalize(txt)
 
     def __init__(self, mean, std):
         """\
+        For xyc input images, ``mean`` and ``std`` can be lists of floats,
+        representing separate mean and standard deviation for each color
+        channel.
+
         :param mean: mean to use for normalization
         :param std: standard deviation to use for normalization
         """
@@ -1867,6 +1911,73 @@ class AugCenterCrop(_ecvl.AugCenterCrop):
         :param size: list of integers [w, h] specifying the output size
         """
         _ecvl.AugCenterCrop.__init__(self, size)
+
+
+class AugToFloat32(_ecvl.AugToFloat32):
+    """\
+    Augmentation ToFloat32.
+
+    Converts an Image (and ground truth) to DataType::float32 dividing it by
+    divisor (or divisor_gt) parameter.
+    """
+
+    @staticmethod
+    def fromtext(txt):
+        r"""\
+        Create an AugToFloat32 from a text description, e.g.::
+
+            a = AugToFloat32('divisor=2. divisor_gt=3.')
+        """
+        return _ecvl.AugToFloat32(txt)
+
+    def __init__(self, divisor=1., divisor_gt=1.):
+        """\
+        :param divisor: divisor for the image
+        :param divisor: divisor for the ground truth
+        """
+        _ecvl.AugToFloat32.__init__(self, divisor, divisor_gt)
+
+
+class AugDivBy255(_ecvl.AugDivBy255):
+    """\
+    Augmentation DivBy255.
+
+    Divides an Image (and ground truth) by 255.
+    """
+
+    @staticmethod
+    def fromtext(txt):
+        r"""\
+        Create an AugDivBy255 from a text description, e.g.::
+
+            a = AugDivBy255('')
+        """
+        return _ecvl.AugDivBy255(txt)
+
+    def __init__(self):
+        _ecvl.AugDivBy255.__init__(self)
+
+
+class AugScaleTo(_ecvl.AugScaleTo):
+    """\
+    Augmentation wrapper for ScaleTo.
+    """
+
+    @staticmethod
+    def fromtext(txt):
+        r"""\
+        Create an AugScaleTo from a text description, e.g.::
+
+            a = AugScaleTo('new_min=1 new_max=255')
+        """
+        return _ecvl.AugScaleTo(txt)
+
+    def __init__(self, divisor=1., divisor_gt=1.):
+        """\
+        :param new_min: new minimum value
+        :param new_max: new maximum value
+        """
+        _ecvl.AugScaleTo.__init__(self, divisor, divisor_gt)
 
 
 # == support_imgcodecs ==
