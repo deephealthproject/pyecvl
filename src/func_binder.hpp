@@ -343,6 +343,15 @@ void bind_ecvl_functions(pybind11::module &m) {
     return new ecvl::AugCenterCrop(ss);
   }));
   }
+  // augmentations: AugToFloat32
+  {
+  pybind11::class_<ecvl::AugToFloat32, std::shared_ptr<ecvl::AugToFloat32>, ecvl::Augmentation> cl(m, "AugToFloat32", "Augmentation ToFloat32.");
+  cl.def(pybind11::init<const double&, const double&>(), pybind11::arg("divisor") = 1., pybind11::arg("divisor_gt") = 1.);
+  cl.def(pybind11::init([](const std::string& s) {
+    std::stringstream ss(s);
+    return new ecvl::AugToFloat32(ss);
+  }));
+  }
 
   // support_eddl: DatasetAugmentations
   {

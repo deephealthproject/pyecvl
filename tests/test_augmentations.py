@@ -343,6 +343,24 @@ def test_AugCenterCrop(ecvl):
 
 
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_AugToFloat32(ecvl):
+    img = ecvl.Image([8, 6, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    a = ecvl.AugToFloat32()
+    a.Apply(img)
+    img = ecvl.Image([8, 6, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    a = ecvl.AugToFloat32(2.)
+    a.Apply(img)
+    img = ecvl.Image([8, 6, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    a = ecvl.AugToFloat32(2., 3.)
+    a.Apply(img)
+    # fromtext
+    f = ecvl.AugToFloat32 if ecvl is ecvl_core else \
+        ecvl.AugToFloat32.fromtext
+    a = f('divisor=2. divisor_gt=3.')
+    a.Apply(img)
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
 def test_AugmentationFactory(ecvl):
     img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     # one arg

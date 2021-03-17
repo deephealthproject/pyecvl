@@ -1901,6 +1901,31 @@ class AugCenterCrop(_ecvl.AugCenterCrop):
         _ecvl.AugCenterCrop.__init__(self, size)
 
 
+class AugToFloat32(_ecvl.AugToFloat32):
+    """\
+    Augmentation ToFloat32.
+
+    Converts an Image (and ground truth) to DataType::float32 dividing it by
+    divisor (or divisor_gt) parameter.
+    """
+
+    @staticmethod
+    def fromtext(txt):
+        r"""\
+        Create an AugToFloat32 from a text description, e.g.::
+
+            a = AugToFloat32('divisor=2. divisor_gt=3.')
+        """
+        return _ecvl.AugToFloat32(txt)
+
+    def __init__(self, divisor=1., divisor_gt=1.):
+        """\
+        :param divisor: divisor for the image
+        :param divisor: divisor for the ground truth
+        """
+        _ecvl.AugToFloat32.__init__(self, divisor, divisor_gt)
+
+
 # == support_imgcodecs ==
 
 class ImReadMode(_ecvl.ImReadMode):

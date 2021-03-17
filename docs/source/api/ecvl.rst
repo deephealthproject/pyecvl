@@ -293,6 +293,10 @@ Augmentations
    :members:
    :undoc-members:
 
+.. autoclass:: pyecvl.ecvl.AugToFloat32
+   :members:
+   :undoc-members:
+
 
 Image I/O
 ---------
