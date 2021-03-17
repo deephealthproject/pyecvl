@@ -319,6 +319,18 @@ def test_AugNormalize(ecvl):
 
 
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_AugNormalize_separate(ecvl):
+    img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    a = ecvl.AugNormalize([20, 19, 21], [5, 5.5, 6])
+    a.Apply(img)
+    # fromtext
+    f = ecvl.AugNormalize if ecvl is ecvl_core else \
+        ecvl.AugNormalize.fromtext
+    a = f('mean=(20,19,21) std=(5,5.5,6)')
+    a.Apply(img)
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
 def test_AugCenterCrop(ecvl):
     img = ecvl.Image([8, 6, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     a = ecvl.AugCenterCrop([4, 3])

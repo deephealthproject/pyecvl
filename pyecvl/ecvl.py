@@ -1164,6 +1164,9 @@ def Normalize(src, dst, mean, std):
     For each pixel, subtract mean and divide by std. Useful to normalize a
     dataset, getting the data within a range.
 
+    For xyc input images, ``mean`` and ``std`` can be lists of floats,
+    representing separate mean and standard deviation for each color channel.
+
     :param src: input image.
     :param dst: output image.
     :param mean: mean to use for normalization.
@@ -1837,11 +1840,19 @@ class AugNormalize(_ecvl.AugNormalize):
         Create an AugNormalize from a text description, e.g.::
 
             a = AugNormalize('mean=20 std=5.5')
+
+        Separate mean and std for xyc images::
+
+            a = AugNormalize('mean=(20,19,21) std=(5,5.5,6)')
         """
         return _ecvl.AugNormalize(txt)
 
     def __init__(self, mean, std):
         """\
+        For xyc input images, ``mean`` and ``std`` can be lists of floats,
+        representing separate mean and standard deviation for each color
+        channel.
+
         :param mean: mean to use for normalization
         :param std: standard deviation to use for normalization
         """
