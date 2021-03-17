@@ -265,6 +265,15 @@ class Image(_ecvl.Image):
         """
         return _ecvl.Image.To(self, dev)
 
+    def ConvertTo(self, dtype, saturate=True):
+        """\
+        Convert Image to another DataType.
+
+        :param dtype: target DataType
+        :param saturate: whether to apply saturation or not
+        """
+        return _ecvl.Image.ConvertTo(self, dtype, saturate)
+
 
 class View_int8(_ecvl.View_int8):
     pass
