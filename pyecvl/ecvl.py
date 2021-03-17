@@ -354,6 +354,18 @@ def RearrangeChannels(src, dst, channels, new_type=None):
     return _ecvl.RearrangeChannels(src, dst, channels, new_type)
 
 
+def ConvertTo(src, dst, dtype, saturate=True):
+    """\
+    Convert Image to another DataType.
+
+    :param src: source image
+    :param dst: destination image
+    :param dtype: target DataType
+    :param saturate: whether to apply saturation or not
+    """
+    return _ecvl.ConvertTo(src, dst, dtype, saturate)
+
+
 # == arithmetic ==
 
 def Neg(src, dst, dst_type=DataType.none, saturate=True):

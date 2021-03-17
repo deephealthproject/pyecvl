@@ -45,6 +45,8 @@ Image
 
 .. autofunction:: pyecvl.ecvl.RearrangeChannels
 
+.. autofunction:: pyecvl.ecvl.ConvertTo
+
 
 Arithmetic operations
 ---------------------

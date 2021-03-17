@@ -330,3 +330,17 @@ def test_shallow_copy_image(ecvl):
     assert (a == 4).all()
     assert x.IsOwner()
     assert not y.IsOwner()
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_ConvertTo(ecvl):
+    x = ecvl.Image([2, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.RGB)
+    y = _empty_img(ecvl)
+    a = np.array(x, copy=False)
+    a.fill(128)
+    ecvl.ConvertTo(x, y, ecvl.DataType.int8, False)
+    b = np.array(y, copy=False)
+    assert (b == -128).all()
+    ecvl.ConvertTo(x, y, ecvl.DataType.int8, True)
+    b = np.array(y, copy=False)
+    assert (b == 127).all()
