@@ -1938,6 +1938,48 @@ class AugToFloat32(_ecvl.AugToFloat32):
         _ecvl.AugToFloat32.__init__(self, divisor, divisor_gt)
 
 
+class AugDivBy255(_ecvl.AugDivBy255):
+    """\
+    Augmentation DivBy255.
+
+    Divides an Image (and ground truth) by 255.
+    """
+
+    @staticmethod
+    def fromtext(txt):
+        r"""\
+        Create an AugDivBy255 from a text description, e.g.::
+
+            a = AugDivBy255('')
+        """
+        return _ecvl.AugDivBy255(txt)
+
+    def __init__(self):
+        _ecvl.AugDivBy255.__init__(self)
+
+
+class AugScaleTo(_ecvl.AugScaleTo):
+    """\
+    Augmentation wrapper for ScaleTo.
+    """
+
+    @staticmethod
+    def fromtext(txt):
+        r"""\
+        Create an AugScaleTo from a text description, e.g.::
+
+            a = AugScaleTo('new_min=1 new_max=255')
+        """
+        return _ecvl.AugScaleTo(txt)
+
+    def __init__(self, divisor=1., divisor_gt=1.):
+        """\
+        :param new_min: new minimum value
+        :param new_max: new maximum value
+        """
+        _ecvl.AugScaleTo.__init__(self, divisor, divisor_gt)
+
+
 # == support_imgcodecs ==
 
 class ImReadMode(_ecvl.ImReadMode):

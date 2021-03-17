@@ -352,6 +352,24 @@ void bind_ecvl_functions(pybind11::module &m) {
     return new ecvl::AugToFloat32(ss);
   }));
   }
+  // augmentations: AugDivBy255
+  {
+  pybind11::class_<ecvl::AugDivBy255, std::shared_ptr<ecvl::AugDivBy255>, ecvl::Augmentation> cl(m, "AugDivBy255", "Augmentation DivBy255.");
+  cl.def(pybind11::init<>());
+  cl.def(pybind11::init([](const std::string& s) {
+    std::stringstream ss(s);
+    return new ecvl::AugDivBy255(ss);
+  }));
+  }
+  // augmentations: AugScaleTo
+  {
+  pybind11::class_<ecvl::AugScaleTo, std::shared_ptr<ecvl::AugScaleTo>, ecvl::Augmentation> cl(m, "AugScaleTo", "Augmentation wrapper for ecvl::ScaleTo.");
+  cl.def(pybind11::init<const double&, const double&>(), pybind11::arg("new_min"), pybind11::arg("new_max"));
+  cl.def(pybind11::init([](const std::string& s) {
+    std::stringstream ss(s);
+    return new ecvl::AugScaleTo(ss);
+  }));
+  }
 
   // support_eddl: DatasetAugmentations
   {

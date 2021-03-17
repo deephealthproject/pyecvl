@@ -361,6 +361,30 @@ def test_AugToFloat32(ecvl):
 
 
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_AugDivBy255(ecvl):
+    img = ecvl.Image([8, 6, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    a = ecvl.AugDivBy255()
+    a.Apply(img)
+    # fromtext
+    f = ecvl.AugDivBy255 if ecvl is ecvl_core else \
+        ecvl.AugDivBy255.fromtext
+    a = f('')
+    a.Apply(img)
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_AugScaleTo(ecvl):
+    img = ecvl.Image([8, 6, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    a = ecvl.AugScaleTo(1, 254)
+    a.Apply(img)
+    # fromtext
+    f = ecvl.AugScaleTo if ecvl is ecvl_core else \
+        ecvl.AugScaleTo.fromtext
+    a = f('new_min=1 new_max=255')
+    a.Apply(img)
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
 def test_AugmentationFactory(ecvl):
     img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     # one arg

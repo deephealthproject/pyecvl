@@ -299,6 +299,14 @@ Augmentations
    :members:
    :undoc-members:
 
+.. autoclass:: pyecvl.ecvl.AugDivBy255
+   :members:
+   :undoc-members:
+
+.. autoclass:: pyecvl.ecvl.AugScaleTo
+   :members:
+   :undoc-members:
+
 
 Image I/O
 ---------
