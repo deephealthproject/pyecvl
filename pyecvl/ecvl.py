@@ -1207,6 +1207,18 @@ def CenterCrop(src, dst, size):
     return _ecvl.CenterCrop(src, dst, size)
 
 
+def ScaleTo(src, dst, new_min, new_max):
+    """\
+    Linearly scale an Image to a new range.
+
+    :param src: input image.
+    :param dst: output image.
+    :param new_min: new minimum value
+    :param new_max: new maximum value
+    """
+    return _ecvl.ScaleTo(src, dst, new_min, new_max)
+
+
 # == dataset_parser ==
 
 class SplitType(_ecvl.SplitType):

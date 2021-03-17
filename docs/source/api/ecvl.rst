@@ -173,6 +173,8 @@ Image processing
 
 .. autofunction:: pyecvl.ecvl.CenterCrop
 
+.. autofunction:: pyecvl.ecvl.ScaleTo
+
 
 DeepHealth dataset parser
 -------------------------
