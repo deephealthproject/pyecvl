@@ -1955,6 +1955,8 @@ class AugDivBy255(_ecvl.AugDivBy255):
         return _ecvl.AugDivBy255(txt)
 
     def __init__(self):
+        """\
+        """
         _ecvl.AugDivBy255.__init__(self)
 
 
