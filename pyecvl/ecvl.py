@@ -1972,12 +1972,12 @@ class AugScaleTo(_ecvl.AugScaleTo):
         """
         return _ecvl.AugScaleTo(txt)
 
-    def __init__(self, divisor=1., divisor_gt=1.):
+    def __init__(self, new_min, new_max):
         """\
         :param new_min: new minimum value
         :param new_max: new maximum value
         """
-        _ecvl.AugScaleTo.__init__(self, divisor, divisor_gt)
+        _ecvl.AugScaleTo.__init__(self, new_min, new_max)
 
 
 # == support_imgcodecs ==

@@ -338,11 +338,18 @@ def test_ConvertTo(ecvl):
     y = _empty_img(ecvl)
     a = np.array(x, copy=False)
     a.fill(128)
+    # saturate = False
     ecvl.ConvertTo(x, y, ecvl.DataType.int8, False)
     assert y.elemtype_ == ecvl.DataType.int8
     b = np.array(y, copy=False)
     assert (b == -128).all()
+    # saturate = True
     ecvl.ConvertTo(x, y, ecvl.DataType.int8, True)
+    assert y.elemtype_ == ecvl.DataType.int8
+    b = np.array(y, copy=False)
+    assert (b == 127).all()
+    # saturate = True by default
+    ecvl.ConvertTo(x, y, ecvl.DataType.int8)
     assert y.elemtype_ == ecvl.DataType.int8
     b = np.array(y, copy=False)
     assert (b == 127).all()
@@ -350,6 +357,7 @@ def test_ConvertTo(ecvl):
 
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
 def test_ConvertTo_method(ecvl):
+    # saturate = False
     x = ecvl.Image([2, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.RGB)
     a = np.array(x, copy=False)
     a.fill(128)
@@ -357,10 +365,19 @@ def test_ConvertTo_method(ecvl):
     assert x.elemtype_ == ecvl.DataType.int8
     a = np.array(x, copy=False)
     assert (a == -128).all()
+    # saturate = True
     x = ecvl.Image([2, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.RGB)
     a = np.array(x, copy=False)
     a.fill(128)
     x.ConvertTo(ecvl.DataType.int8, True)
+    assert x.elemtype_ == ecvl.DataType.int8
+    a = np.array(x, copy=False)
+    assert (a == 127).all()
+    # saturate = True by default
+    x = ecvl.Image([2, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.RGB)
+    a = np.array(x, copy=False)
+    a.fill(128)
+    x.ConvertTo(ecvl.DataType.int8)
     assert x.elemtype_ == ecvl.DataType.int8
     a = np.array(x, copy=False)
     assert (a == 127).all()

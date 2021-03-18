@@ -347,17 +347,22 @@ def test_AugToFloat32(ecvl):
     img = ecvl.Image([8, 6, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     a = ecvl.AugToFloat32()
     a.Apply(img)
+    assert img.elemtype_ == ecvl.DataType.float32
     img = ecvl.Image([8, 6, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     a = ecvl.AugToFloat32(2.)
     a.Apply(img)
+    assert img.elemtype_ == ecvl.DataType.float32
     img = ecvl.Image([8, 6, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     a = ecvl.AugToFloat32(2., 3.)
     a.Apply(img)
+    assert img.elemtype_ == ecvl.DataType.float32
     # fromtext
     f = ecvl.AugToFloat32 if ecvl is ecvl_core else \
         ecvl.AugToFloat32.fromtext
+    img = ecvl.Image([8, 6, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     a = f('divisor=2. divisor_gt=3.')
     a.Apply(img)
+    assert img.elemtype_ == ecvl.DataType.float32
 
 
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
