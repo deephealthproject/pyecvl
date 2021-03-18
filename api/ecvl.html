@@ -407,6 +407,20 @@ get to the next pixel/voxel in the corresponding dimension</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="pyecvl.ecvl.Image.ConvertTo">
+<code class="sig-name descname"><span class="pre">ConvertTo</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">saturate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Image.ConvertTo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert Image to another DataType.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dtype</strong> – target DataType</p></li>
+<li><p><strong>saturate</strong> – whether to apply saturation or not</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="pyecvl.ecvl.Image.Div">
 <code class="sig-name descname"><span class="pre">Div</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">saturate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Image.Div" title="Permalink to this definition">¶</a></dt>
 <dd><p>Divide data from this image by another image’s data.</p>
@@ -633,6 +647,22 @@ the <code class="docutils literal notranslate"><span class="pre">dst</span></cod
 <li><p><strong>new_type</strong> – new DataType for the destination image. If None, the
 destination image will preserve its type if it is not empty, otherwise
 it will have the same type as the source image</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.ConvertTo">
+<code class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></code><code class="sig-name descname"><span class="pre">ConvertTo</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">saturate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ConvertTo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert Image to another DataType.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – source image</p></li>
+<li><p><strong>dst</strong> – destination image</p></li>
+<li><p><strong>dtype</strong> – target DataType</p></li>
+<li><p><strong>saturate</strong> – whether to apply saturation or not</p></li>
 </ul>
 </dd>
 </dl>
@@ -1728,6 +1758,8 @@ equal to 1.</p>
 <dd><p>Normalize the input image with mean and standard deviation.</p>
 <p>For each pixel, subtract mean and divide by std. Useful to normalize a
 dataset, getting the data within a range.</p>
+<p>For xyc input images, <code class="docutils literal notranslate"><span class="pre">mean</span></code> and <code class="docutils literal notranslate"><span class="pre">std</span></code> can be lists of floats,
+representing separate mean and standard deviation for each color channel.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1750,6 +1782,22 @@ dataset, getting the data within a range.</p>
 <li><p><strong>src</strong> – input image.</p></li>
 <li><p><strong>dst</strong> – output image.</p></li>
 <li><p><strong>size</strong> – list of integers [w, h] specifying the desired output size</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pyecvl.ecvl.ScaleTo">
+<code class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></code><code class="sig-name descname"><span class="pre">ScaleTo</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_max</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ScaleTo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Linearly scale an Image to a new range.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – input image.</p></li>
+<li><p><strong>dst</strong> – output image.</p></li>
+<li><p><strong>new_min</strong> – new minimum value</p></li>
+<li><p><strong>new_max</strong> – new maximum value</p></li>
 </ul>
 </dd>
 </dl>
@@ -2445,6 +2493,9 @@ pixel to be set to white or black</p></li>
 <dt id="pyecvl.ecvl.AugNormalize">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></code><code class="sig-name descname"><span class="pre">AugNormalize</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mean</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugNormalize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Augmentation wrapper for Normalize.</p>
+<p>For xyc input images, <code class="docutils literal notranslate"><span class="pre">mean</span></code> and <code class="docutils literal notranslate"><span class="pre">std</span></code> can be lists of floats,
+representing separate mean and standard deviation for each color
+channel.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -2458,6 +2509,10 @@ pixel to be set to white or black</p></li>
 <em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">fromtext</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">txt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugNormalize.fromtext" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create an AugNormalize from a text description, e.g.:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">AugNormalize</span><span class="p">(</span><span class="s1">&#39;mean=20 std=5.5&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Separate mean and std for xyc images:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">AugNormalize</span><span class="p">(</span><span class="s1">&#39;mean=(20,19,21) std=(5,5.5,6)&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2478,6 +2533,75 @@ pixel to be set to white or black</p></li>
 <em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">fromtext</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">txt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugCenterCrop.fromtext" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create an AugCenterCrop from a text description, e.g.:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">AugCenterCrop</span><span class="p">(</span><span class="s1">&#39;size=(10, 20)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pyecvl.ecvl.AugToFloat32">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></code><code class="sig-name descname"><span class="pre">AugToFloat32</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">divisor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">divisor_gt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugToFloat32" title="Permalink to this definition">¶</a></dt>
+<dd><p>Augmentation ToFloat32.</p>
+<p>Converts an Image (and ground truth) to DataType::float32 dividing it by
+divisor (or divisor_gt) parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>divisor</strong> – divisor for the image</p></li>
+<li><p><strong>divisor</strong> – divisor for the ground truth</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="pyecvl.ecvl.AugToFloat32.fromtext">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">fromtext</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">txt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugToFloat32.fromtext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an AugToFloat32 from a text description, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">AugToFloat32</span><span class="p">(</span><span class="s1">&#39;divisor=2. divisor_gt=3.&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pyecvl.ecvl.AugDivBy255">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></code><code class="sig-name descname"><span class="pre">AugDivBy255</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugDivBy255" title="Permalink to this definition">¶</a></dt>
+<dd><p>Augmentation DivBy255.</p>
+<p>Divides an Image (and ground truth) by 255.</p>
+<p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>__init__(self: pyecvl._core.ecvl.AugDivBy255) -&gt; None</p></li>
+<li><p>__init__(self: pyecvl._core.ecvl.AugDivBy255, arg0: str) -&gt; None</p></li>
+</ol>
+<dl class="py method">
+<dt id="pyecvl.ecvl.AugDivBy255.fromtext">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">fromtext</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">txt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugDivBy255.fromtext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an AugDivBy255 from a text description, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">AugDivBy255</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pyecvl.ecvl.AugScaleTo">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></code><code class="sig-name descname"><span class="pre">AugScaleTo</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">divisor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">divisor_gt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugScaleTo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Augmentation wrapper for ScaleTo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>new_min</strong> – new minimum value</p></li>
+<li><p><strong>new_max</strong> – new maximum value</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="pyecvl.ecvl.AugScaleTo.fromtext">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">fromtext</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">txt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugScaleTo.fromtext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an AugScaleTo from a text description, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">AugScaleTo</span><span class="p">(</span><span class="s1">&#39;new_min=1 new_max=255&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>

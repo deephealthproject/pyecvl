@@ -45,6 +45,8 @@ Image
 
 .. autofunction:: pyecvl.ecvl.RearrangeChannels
 
+.. autofunction:: pyecvl.ecvl.ConvertTo
+
 
 Arithmetic operations
 ---------------------
@@ -171,6 +173,8 @@ Image processing
 
 .. autofunction:: pyecvl.ecvl.CenterCrop
 
+.. autofunction:: pyecvl.ecvl.ScaleTo
+
 
 DeepHealth dataset parser
 -------------------------
@@ -288,6 +292,18 @@ Augmentations
    :undoc-members:
 
 .. autoclass:: pyecvl.ecvl.AugCenterCrop
+   :members:
+   :undoc-members:
+
+.. autoclass:: pyecvl.ecvl.AugToFloat32
+   :members:
+   :undoc-members:
+
+.. autoclass:: pyecvl.ecvl.AugDivBy255
+   :members:
+   :undoc-members:
+
+.. autoclass:: pyecvl.ecvl.AugScaleTo
    :members:
    :undoc-members:
 
