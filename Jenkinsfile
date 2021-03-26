@@ -7,7 +7,7 @@ pipeline {
                     agent {
                         docker {
                             label 'docker'
-                            image 'simleo/pyecvl-base:33fb26d-cf34cca'
+                            image 'simleo/pyecvl-base:45eb941-f54581c'
                         }
                     }
                     stages {
