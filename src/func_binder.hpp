@@ -36,6 +36,7 @@
 #endif
 
 
+#ifdef ECVL_EDDL
 class PyAugmentation : public ecvl::Augmentation {
 public:
     using ecvl::Augmentation::Augmentation;
@@ -44,6 +45,7 @@ public:
 	PYBIND11_OVERLOAD_PURE(void, ecvl::Augmentation, RealApply, img, gt);
     }
 };
+#endif
 
 
 void bind_ecvl_functions(pybind11::module &m) {
