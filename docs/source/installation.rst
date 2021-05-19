@@ -3,12 +3,53 @@
 Installation
 ============
 
+
+Conda packages
+--------------
+
+`Conda <https://docs.conda.io/en/latest/>`_ packages for PyECVL come in three
+flavors:
+
+* ``pyecvl-cpu``: CPU-only
+* ``pyecvl-gpu``: GPU-enabled
+* ``pyecvl-cudnn``: GPU-enabled, with cuDNN support
+
+Note that PyECVL / ECVL does not actually offer cuDNN support. The ``cudnn``
+tag in this case simply means that the package pulls the corresponding
+``pyeddl-cudnn`` dependency.
+
+Choose one of the above, then install it as follows::
+
+  conda install -c dhealth -c bioconda -c conda-forge pyecvl-cpu
+  conda install -c dhealth -c bioconda -c conda-forge pyecvl-gpu
+  conda install -c dhealth -c bioconda -c conda-forge pyecvl-cudnn
+
+Each PyECVL package installs the corresponding ECVL one as a dependency, as
+well as any other requirement including `PyEDDL
+<https://github.com/deephealthproject/pyeddl>`_ and `EDDL
+<https://github.com/deephealthproject/eddl>`_, so there's no need to
+separately install ECVL or PyEDDL / EDDL when installing via Conda.
+
 .. note::
 
-    We recommend using the `DeepHealth Docker images
-    <https://github.com/deephealthproject/docker-libs>`_, which provide
-    ready-to-use containers for the DeepHealth components, including
-    PyECVL. If you want to install PyECVL manually instead, read on.
+   The highest version available from Conda might be less than the latest
+   version on PyPI for recent releases.
+
+Head over to https://github.com/deephealthproject/conda_builds for further
+information.
+
+
+Docker images
+-------------
+
+If you don't want to install on bare metal, the `DeepHealth Docker images
+<https://github.com/deephealthproject/docker-libs>`_ provide ready-to-use
+containers for the DeepHealth components, including PyECVL. Refer to the above
+link for further information.
+
+
+Installing from source
+----------------------
 
 To install PyECVL, you need to install ECVL first. Installation instructions
 for ECVL are available in the `ECVL README
@@ -33,7 +74,7 @@ Linux as an example platform.
 
 
 Install ECVL and EDDL dependencies
-----------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ECVL needs a compiler with C++17 support. You also need to install the
 development version of the OpenCV and OpenSlide libraries. EDDL needs the
@@ -51,7 +92,7 @@ libeigen3-dev, wget, ca-certificates``. Install protobuf from source::
 
 
 Install EDDL and ECVL
----------------------
+^^^^^^^^^^^^^^^^^^^^^
 
 Clone the GitHub repo::
 
@@ -82,7 +123,7 @@ Install ECVL::
 
 
 Install PyEDDL and PyECVL
--------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You need the development version of python3 and pip. On Ubuntu, install
 ``python3-dev`` and ``python3-pip``.
@@ -153,7 +194,7 @@ Thus, for instance, to install PyECVL 0.6.0::
 
 
 Disabling optional modules
---------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ECVL and PyECVL have a number of optional components whose compilation can be disabled at
 build time.  The build settings for these components must match across the two libraries.
@@ -213,7 +254,7 @@ Conversely, to build without OpenSlide support:
 
 
 ECVL installed in an arbitrary directory
-----------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The above installation instructions assume installation in standard system
 paths (such as ``/usr/local/include``, ``/usr/local/lib``). However, ECVL can
@@ -242,10 +283,10 @@ script via the ``EDDL_DIR`` environment variable.
 
 
 FAQ
------
+---
 
 ImportError: undefined symbol ... ecvl ... OpenSlide
-+++++++++++++++++++++++++++++++++++++++++++++++++++++
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You likely have an ECVL library build without OpenSlide support
 (``ECVL_WITH_OPENSLIDE=OFF`` -- default value) and PyECVL library build with
@@ -265,4 +306,3 @@ The full stack trace might look like this::
     ---> 21 from . import _core
          22 _ecvl = _core.ecvl
          23 ImportError: /home/jovyan/projects/p138-dh2/.conda/envs/p138-dh2-env-kdh467/lib/python3.6/site-packages/pyecvl/_core.cpython-36m-x86_64-linux-gnu.so: undefined symbol: _ZN4ecvl18OpenSlideGetLevelsERKNSt10filesystem7__cxx114pathERSt6vectorISt5arrayIiLm2EESaIS7_EE
-
