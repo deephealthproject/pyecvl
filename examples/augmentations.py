@@ -30,6 +30,9 @@ import pyecvl.ecvl as ecvl
 
 
 def main(args):
+    if not ecvl.ECVL_EDDL:
+        print("No EDDL support - quitting")
+        sys.exit(0)
     head, ext = os.path.splitext(os.path.basename(args.in_fn))
     img = ecvl.ImRead(args.in_fn)
     c = ecvl.SequentialAugmentationContainer([ecvl.AugFlip(0.5)])

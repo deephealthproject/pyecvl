@@ -26,7 +26,11 @@ import argparse
 import sys
 
 import pyecvl.ecvl as ecvl
-from pyeddl.tensor import Tensor
+try:
+    from pyeddl.tensor import Tensor
+except ImportError:
+    print("PyEDDL not installed - quitting")
+    sys.exit(0)
 
 
 AUG_TXT = '''\
@@ -41,6 +45,9 @@ end
 
 
 def main(args):
+    if not ecvl.ECVL_EDDL:
+        print("No EDDL support - quitting")
+        sys.exit(0)
     img = ecvl.ImRead(args.in_img)
     augs = ecvl.SequentialAugmentationContainer([
         ecvl.AugRotate([-5, 5]),

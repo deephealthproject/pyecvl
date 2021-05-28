@@ -53,6 +53,9 @@ def dicom_io(fn):
 
 
 def main(args):
+    if not ecvl.ECVL_WITH_DICOM:
+        print("No DICOM support - quitting")
+        sys.exit(0)
     nifti_io(args.nifti_fn)
     dicom_io(args.dicom_fn)
 

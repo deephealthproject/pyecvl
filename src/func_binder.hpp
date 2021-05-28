@@ -50,6 +50,22 @@ public:
 
 void bind_ecvl_functions(pybind11::module &m) {
 
+#ifdef ECVL_EDDL
+  m.attr("ECVL_EDDL") = pybind11::bool_(true);
+#else
+  m.attr("ECVL_EDDL") = pybind11::bool_(false);
+#endif
+#ifdef ECVL_WITH_OPENSLIDE
+  m.attr("ECVL_WITH_OPENSLIDE") = pybind11::bool_(true);
+#else
+  m.attr("ECVL_WITH_OPENSLIDE") = pybind11::bool_(false);
+#endif
+#ifdef ECVL_WITH_DICOM
+  m.attr("ECVL_WITH_DICOM") = pybind11::bool_(true);
+#else
+  m.attr("ECVL_WITH_DICOM") = pybind11::bool_(false);
+#endif
+
   m.def("RearrangeChannels", [](const ecvl::Image& src, ecvl::Image& dst, const std::string& channels) {
     ecvl::RearrangeChannels(src, dst, channels);
   });

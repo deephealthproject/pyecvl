@@ -18,34 +18,44 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-"""\
-OpenSlide I/O.
-"""
-
-import argparse
-import os
-import sys
-
-import pyecvl.ecvl as ecvl
+from . import _core
+_ecvl = _core.ecvl
 
 
-def main(args):
-    if not ecvl.ECVL_WITH_OPENSLIDE:
-        print("No OpenSlide support - quitting")
-        sys.exit(0)
-    head, _ = os.path.splitext(os.path.basename(args.in_fn))
-    levels = ecvl.OpenSlideGetLevels(args.in_fn)
-    # for each level, extract a region with size = size of the last level
-    dims = [0, 0] + levels[-1]  # [x, y, w, h] region to read
-    print("Reading %s" % args.in_fn)
-    for i in range(len(levels)):
-        img = ecvl.OpenSlideRead(args.in_fn, i, dims)
-        out_fn = "%s_level_%d.png" % (head, i)
-        print("Writing %s" % out_fn)
-        ecvl.ImWrite(out_fn, img)
+__all__ = [
+    "ImReadMode",
+    "ImRead",
+    "ImWrite",
+]
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("in_fn", metavar="INPUT_PATH")
-    main(parser.parse_args(sys.argv[1:]))
+class ImReadMode(_ecvl.ImReadMode):
+    """\
+    Enum class representing the possible image read modes.
+    """
+    GRAYSCALE = _ecvl.ImReadMode.GRAYSCALE
+    COLOR = _ecvl.ImReadMode.COLOR
+
+
+def ImRead(filename, flags=ImReadMode.COLOR):
+    """\
+    Load an image from a file.
+
+    :param filename: name of the input file
+    :param flags: an ImReadMode indicating how to read the image
+    :return: an Image object
+    """
+    return _ecvl.ImRead(filename, flags)
+
+
+def ImWrite(filename, src):
+    """\
+    Save an image to a file.
+
+    The image format is chosen based on the filename extension.
+
+    :param filename: name of the output file
+    :param src: Image to be saved
+    :return: None
+    """
+    return _ecvl.ImWrite(filename, src)

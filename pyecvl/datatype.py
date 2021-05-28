@@ -21,22 +21,48 @@
 from . import _core
 _ecvl = _core.ecvl
 
-ECVL_EDDL = _ecvl.ECVL_EDDL
-ECVL_WITH_OPENSLIDE = _ecvl.ECVL_WITH_OPENSLIDE
-ECVL_WITH_DICOM = _ecvl.ECVL_WITH_DICOM
 
-from .arithmetic import *  # noqa: E402,F401,F403
-from .dataset_generator import *  # noqa: E402,F401,F403
-from .dataset_parser import *  # noqa: E402,F401,F403
-from .datatype import *  # noqa: E402,F401,F403
-from .image import *  # noqa: E402,F401,F403
-from .imgproc import *  # noqa: E402,F401,F403
-from .support_imgcodecs import *  # noqa: E402,F401,F403
-from .support_nifti import *  # noqa: E402,F401,F403
-if ECVL_EDDL:
-    from .augmentations import *  # noqa: E402,F401,F403
-    from .eddl_support import *  # noqa: E402,F401,F403
-if ECVL_WITH_OPENSLIDE:
-    from .support_openslide import *  # noqa: E402,F401,F403
-if ECVL_WITH_DICOM:
-    from .support_dcmtk import *  # noqa: E402,F401,F403
+__all__ = [
+    "DataType",
+    "DataTypeSize",
+    "DataTypeSignedSize",
+]
+
+
+class DataType(_ecvl.DataType):
+    """\
+    Enum class which defines data types allowed for images.
+    """
+    int8 = _ecvl.DataType.int8
+    int16 = _ecvl.DataType.int16
+    int32 = _ecvl.DataType.int32
+    int64 = _ecvl.DataType.int64
+    float32 = _ecvl.DataType.float32
+    float64 = _ecvl.DataType.float64
+    uint8 = _ecvl.DataType.uint8
+    uint16 = _ecvl.DataType.uint16
+    none = _ecvl.DataType.none
+
+
+def DataTypeSize(dt=None):
+    """\
+    Get the size in bytes of a given DataType.
+
+    With no arguments, get the number of existing DataType members.
+
+    :param dt: a DataType.
+    :return: the DataType size in bytes, or the number of existing DataType
+      members if called with no arguments
+    """
+    if dt is None:
+        return _ecvl.DataTypeSize()
+    return _ecvl.DataTypeSize(dt)
+
+
+def DataTypeSignedSize():
+    """\
+    Get the number of existing signed DataType members.
+
+    :return: the number of existing signed DataType members
+    """
+    return _ecvl.DataTypeSignedSize()
