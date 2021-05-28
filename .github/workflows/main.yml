@@ -25,10 +25,10 @@ jobs:
         run: |
           pip install flake8
           flake8 -v .
-      - name: build eddl image
-        run: pushd third_party/pyeddl; docker build -t eddl -f Dockerfile.eddl .; popd
-      - name: build ecvl image
-        run: docker build -t ecvl -f Dockerfile.ecvl .
+      - name: get prebuilt ecvl image
+        run: |
+          docker pull simleo/ecvl:latest
+          docker tag simleo/ecvl:latest ecvl:latest
       - name: build pyecvl image
         run: docker build -t pyecvl .
       - name: run tests
