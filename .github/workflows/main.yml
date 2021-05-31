@@ -13,6 +13,9 @@ on:
 jobs:
   main:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        tag: ['cpu', 'minimal']
     steps:
       - uses: actions/setup-python@v2
         with:
@@ -27,10 +30,10 @@ jobs:
           flake8 -v .
       - name: get prebuilt ecvl image
         run: |
-          docker pull simleo/ecvl:latest
-          docker tag simleo/ecvl:latest ecvl:latest
+          docker pull simleo/ecvl-${{ matrix.tag }}
+          docker tag simleo/ecvl-${{ matrix.tag }} ecvl-${{ matrix.tag }}
       - name: build pyecvl image
-        run: docker build -t pyecvl .
+        run: docker build -t pyecvl -f Dockerfile.${{ matrix.tag }} .
       - name: run tests
         run: docker run --rm pyecvl bash -c "pytest tests"
       - name: run examples

@@ -1,4 +1,4 @@
-FROM ecvl
+FROM ecvl-cpu
 
 RUN apt-get -y update && apt-get -y install --no-install-recommends \
       python3-dev \
