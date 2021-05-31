@@ -23,6 +23,8 @@ import pytest
 import pyecvl._core.ecvl as ecvl_core
 import pyecvl.ecvl as ecvl_py
 
+pytest.importorskip("pyecvl.augmentations")
+
 
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
 def test_AugmentationParam(ecvl):
