@@ -142,6 +142,11 @@ you can either add a symlink or set ``CPATH``, e.g.::
 
     export CPATH="/usr/include/eigen3:${CPATH}"
 
+If you have OpenCV 4, you might also need to add the `opencv4` directory to
+the include path::
+
+    export CPATH="/usr/local/include/opencv4:${CPATH}"
+
 Install pyeddl and pyecvl::
 
     pushd third_party/pyeddl
