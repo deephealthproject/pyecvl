@@ -1,14 +1,15 @@
 ARG eddl_rev=latest
 FROM eddl:${eddl_rev}
+ARG cv_version=3.4.10
 
 RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get update -y -q && \
     apt-get install -y --no-install-recommends \
         libopenslide-dev
 
-RUN wget -q https://github.com/opencv/opencv/archive/3.4.10.tar.gz && \
-    tar xf 3.4.10.tar.gz && \
-    cd opencv-3.4.10 && \
+RUN wget -q https://github.com/opencv/opencv/archive/${cv_version}.tar.gz && \
+    tar xf ${cv_version}.tar.gz && \
+    cd opencv-${cv_version} && \
     mkdir build && \
     cd build && \
     cmake -DBUILD_LIST=core,imgproc,imgcodecs,photo,calib3d \
@@ -57,7 +58,7 @@ RUN wget -q https://github.com/opencv/opencv/archive/3.4.10.tar.gz && \
     make -j$(nproc) && \
     make install && \
     cd ../.. && \
-    rm -rf 3.4.10.tar.gz opencv-3.4.10
+    rm -rf ${cv_version}.tar.gz opencv-${cv_version}
 
 RUN apt-get install -y --no-install-recommends git
 
