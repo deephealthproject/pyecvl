@@ -295,6 +295,11 @@ you can either add a symlink or set <code class="docutils literal notranslate"><
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">CPATH</span><span class="o">=</span><span class="s2">&quot;/usr/include/eigen3:$</span><span class="si">{CPATH}</span><span class="s2">&quot;</span>
 </pre></div>
 </div>
+<p>If you have OpenCV 4, you might also need to add the <cite>opencv4</cite> directory to
+the include path:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">CPATH</span><span class="o">=</span><span class="s2">&quot;/usr/local/include/opencv4:$</span><span class="si">{CPATH}</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
 <p>Install pyeddl and pyecvl:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pushd</span> <span class="n">third_party</span><span class="o">/</span><span class="n">pyeddl</span>
 <span class="n">python3</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
@@ -374,9 +379,13 @@ versions for each PyECVL version:</p>
 <td><p>0.3.4</p></td>
 <td><p>0.13.0</p></td>
 </tr>
-<tr class="row-even"><td><p>0.10.*</p></td>
+<tr class="row-even"><td><p>0.10.0</p></td>
 <td><p>0.3.5</p></td>
 <td><p>0.14.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>0.10.1</p></td>
+<td><p>0.3.5</p></td>
+<td><p>1.0.0</p></td>
 </tr>
 </tbody>
 </table>
