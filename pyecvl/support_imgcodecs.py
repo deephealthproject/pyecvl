@@ -33,8 +33,10 @@ class ImReadMode(_ecvl.ImReadMode):
     """\
     Enum class representing the possible image read modes.
     """
+    UNCHANGED = _ecvl.ImReadMode.UNCHANGED
     GRAYSCALE = _ecvl.ImReadMode.GRAYSCALE
     COLOR = _ecvl.ImReadMode.COLOR
+    ANYCOLOR = _ecvl.ImReadMode.ANYCOLOR
 
 
 def ImRead(filename, flags=ImReadMode.COLOR):

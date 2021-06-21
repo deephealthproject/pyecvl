@@ -25,6 +25,7 @@ _ecvl = _core.ecvl
 
 __all__ = [
     "SplitType",
+    "Task",
     "Sample",
     "Split",
     "Dataset",
@@ -38,6 +39,14 @@ class SplitType(_ecvl.SplitType):
     training = _ecvl.SplitType.training
     validation = _ecvl.SplitType.validation
     test = _ecvl.SplitType.test
+
+
+class Task(_ecvl.Task):
+    """\
+    Enum class representing allowed tasks for a dataset.
+    """
+    classification = _ecvl.Task.classification
+    segmentation = _ecvl.Task.segmentation
 
 
 class Sample(_ecvl.Sample):
@@ -68,11 +77,17 @@ class Sample(_ecvl.Sample):
 
 class Split(_ecvl.Split):
     r"""\
-    Provides the splits a dataset can have: training, validation, and test.
+    Represents a subset of a dataset.
 
-    :var training\_: training samples indices (list of integers)
-    :var validation\_: validation samples indices (list of integers)
-    :var test\_: test samples indices (list of integers)
+    :var split_name\_: split name (string)
+    :var split_type\_: split type (SplitType), if the split name is
+      "training", "validation" or "test"
+    :var samples_indices\_: sample indices of the split (list of integers)
+    :var drop_last\_: whether to drop elements that don't fit in the batch
+      (boolean)
+    :var num_batches\_: number of batches in this split (integer)
+    :var last_batch\_: dimension of the last batch (integer)
+    :var no_label\_: whether the split has samples with labels (boolean)
     """
 
 
@@ -89,6 +104,8 @@ class Dataset(_ecvl.Dataset):
     :var features\_: features available in the dataset (list of strings)
     :var samples\_: list of dataset samples
     :var split\_: dataset splits
+    :var current_split\_: current split from which images are loaded
+    :var task\_: dataset task (classification or segmentation)
     """
     def __init__(self, filename):
         """\

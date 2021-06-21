@@ -42,10 +42,7 @@ class DatasetAugmentations(_ecvl.DatasetAugmentations):
     """
     def __init__(self, augs):
         """\
-        :param augs: three-element list containing the augmentations to be \
-          applied to the training, validation and test splits respectively. \
-          If no augmentations need to be defined for a split, set the \
-          corresponding list element to None.
+        :param augs: augmentations to be applied to each split.
         """
         _ecvl.DatasetAugmentations.__init__(self, augs)
 
@@ -62,6 +59,38 @@ class DatasetAugmentations(_ecvl.DatasetAugmentations):
         if gt is None:
             return _ecvl.DatasetAugmentations.Apply(self, st, img)
         return _ecvl.DatasetAugmentations.Apply(self, st, img, gt)
+
+
+class LabelClass(_ecvl.LabelClass):
+    """\
+    Label for classification tasks.
+    """
+    def ToTensorPlane(self, tensor, offset):
+        """\
+        Convert the sample labels to a one-hot encoded tensor and copy it to
+        the batch tensor.
+
+        :param tensor: copy labels to this EDDL Tensor (dimensions:
+          batch_size x num_classes)
+        :param offset: position of the tensor from which to insert the labels
+        """
+        return _ecvl.LabelClass.ToTensorPlane(self, tensor, offset)
+
+
+class LabelImage(_ecvl.LabelImage):
+    """\
+    Label for segmentation tasks.
+    """
+    def ToTensorPlane(self, tensor, offset):
+        """\
+        Convert the sample ground truth image to a tensor and copy it to
+        the batch tensor.
+
+        :param tensor: copy ground truth to this EDDL Tensor (dimensions:
+          batch_size x num_classes x height x width)
+        :param offset: position of the tensor from which to insert the gt
+        """
+        return _ecvl.LabelImage.ToTensorPlane(self, tensor, offset)
 
 
 class DLDataset(_ecvl.DLDataset):
@@ -109,19 +138,27 @@ class DLDataset(_ecvl.DLDataset):
             return _ecvl.DLDataset.GetSplit(self)
         return _ecvl.DLDataset.GetSplit(self, split)
 
-    def ResetCurrentBatch(self):
+    def ResetBatch(self, split=-1, shuffle=False):
         """\
-        Reset the batch counter of the current split.
+        Reset the batch counter and optionally shuffle the split's sample
+        indices.
+
+        If a negative value is provided, the current split is reset (default).
+
+        :param split: index, name or SplitType of the split
+        :param shuffle: whether to shuffle the split's sample indices
         :return: None
         """
-        return _ecvl.DLDataset.ResetCurrentBatch(self)
+        return _ecvl.DLDataset.ResetBatch(self, split, shuffle)
 
-    def ResetAllBatches(self):
+    def ResetAllBatches(self, shuffle=False):
         """\
         Reset the batch counter of each split.
+
+        :param shuffle: whether to shuffle each split's sample indices
         :return: None
         """
-        return _ecvl.DLDataset.ResetAllBatches(self)
+        return _ecvl.DLDataset.ResetAllBatches(self, shuffle)
 
     def SetSplit(self, split):
         """\
@@ -144,8 +181,6 @@ class DLDataset(_ecvl.DLDataset):
         return _ecvl.DLDataset.LoadBatch(self, images, labels)
 
 
-# FIXME: the version with offset does not make sense, since we are returning
-# the output tensor
 def ImageToTensor(img, t=None, offset=None):
     """\
     Convert an ECVL Image to an EDDL Tensor.
@@ -158,9 +193,7 @@ def ImageToTensor(img, t=None, offset=None):
     * W = width
 
     If ``t`` and ``offset`` are None, a new tensor is created with the above
-    shape.
-
-    If ``t`` and ``offset`` are not None, the data are inserted into the
+    shape. Otherwise, they are inserted into the
     existing ``t`` tensor at the specified offset. This allows to insert more
     than one image into a tensor, specifying how many images are already
     stored in it.
