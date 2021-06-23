@@ -23,13 +23,40 @@
 #include <pybind11/pybind11.h>
 #include <ecvl/dataset_parser.h>
 
+
+ecvl::any toSplit(pybind11::object o) {
+    ecvl::any split;
+    try {
+	split = o.cast<ecvl::SplitType*>();
+    } catch (const pybind11::cast_error) {
+	try {
+	    split = o.cast<std::string>();
+	} catch (const pybind11::cast_error) {
+	    try {
+		split = o.cast<int>();
+	    } catch (const pybind11::cast_error) {
+		split = -1;
+	    }
+	}
+    }
+    return split;
+}
+
+
 template <typename type_, typename... options>
 void dataset_addons(pybind11::class_<type_, options...> &cl) {
     cl.def(pybind11::init([](const std::string& filename) {
       return new ecvl::Dataset(filename);
     }));
-    cl.def("GetSplit", &ecvl::Dataset::GetSplit);
-    cl.def("SetSplit", &ecvl::Dataset::SetSplit);
+    cl.def("GetSplit", [](ecvl::Dataset& d) {
+      return d.GetSplit();
+    });
+    cl.def("GetSplit", [](ecvl::Dataset& d, pybind11::object o) {
+      return d.GetSplit(toSplit(o));
+    });
+    cl.def("SetSplit", [](ecvl::Dataset& d, pybind11::object o) {
+      d.SetSplit(toSplit(o));
+    });
     cl.def("Dump", [](ecvl::Dataset& d, const std::string& file_path) {
       d.Dump(file_path);
     });
