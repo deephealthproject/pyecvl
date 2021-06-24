@@ -23,11 +23,10 @@
 #include <pybind11/pybind11.h>
 #include <ecvl/dataset_parser.h>
 
-
 ecvl::any toSplit(pybind11::object o) {
     ecvl::any split;
     try {
-	split = o.cast<ecvl::SplitType*>();
+	split = o.cast<ecvl::SplitType>();
     } catch (const pybind11::cast_error) {
 	try {
 	    split = o.cast<std::string>();

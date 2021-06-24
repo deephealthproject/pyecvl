@@ -40,12 +40,16 @@ images:
   label: 0
 - location: foo_2.png
   label: 1
+- location: foo_3.png
+  label: 1
 split:
   training:
   - 0
   - 1
   test:
   - 2
+  validation:
+  - 3
 """
 
 
@@ -59,23 +63,35 @@ def test_load(ecvl, tmp_path):
     assert d.description_ == "FooDesc"
     assert d.classes_ == ["0", "1", "2"]
     assert not d.features_
-    assert len(d.samples_) == 3
+    assert len(d.samples_) == 4
     with pytest.raises(RuntimeError):
         d.samples_[0].LoadImage()
     locations = [os.path.basename(_.location_[0]) for _ in d.samples_]
-    assert locations == ["foo_0.png", "foo_1.png", "foo_2.png"]
+    assert locations == ["foo_0.png", "foo_1.png", "foo_2.png", "foo_3.png"]
     assert d.task_ == ecvl.Task.classification
-    split_map = {_.split_name_: _ for _ in d.split_}
-    assert set(split_map) == {"training", "test"}
-    assert split_map["training"].split_type_ == ecvl.SplitType.training
-    assert set(split_map["training"].samples_indices_) == {0, 1}
+    # check splits
+    split_by_name = {_.split_name_: _ for _ in d.split_}
+    assert set(split_by_name) == {"training", "test", "validation"}
+    assert split_by_name["training"].split_type_ == ecvl.SplitType.training
+    assert set(split_by_name["training"].samples_indices_) == {0, 1}
     assert set(d.GetSplit("training")) == {0, 1}
-    assert split_map["test"].split_type_ == ecvl.SplitType.test
-    assert set(split_map["test"].samples_indices_) == {2}
+    assert set(d.GetSplit(ecvl.SplitType.training)) == {0, 1}
+    assert split_by_name["test"].split_type_ == ecvl.SplitType.test
+    assert set(split_by_name["test"].samples_indices_) == {2}
     assert set(d.GetSplit("test")) == {2}
-    for t in "training", "test":
+    assert set(d.GetSplit(ecvl.SplitType.test)) == {2}
+    assert split_by_name["validation"].split_type_ == ecvl.SplitType.validation
+    assert set(split_by_name["validation"].samples_indices_) == {3}
+    assert set(d.GetSplit("validation")) == {3}
+    assert set(d.GetSplit(ecvl.SplitType.validation)) == {3}
+    # set / get current split
+    split_by_type = {_.split_type_: _ for _ in d.split_}
+    for t in "training", "test", "validation":
         d.SetSplit(t)
-        assert d.GetSplit(-1) == split_map[t].samples_indices_
+        assert d.GetSplit(-1) == split_by_name[t].samples_indices_
+    for t in ecvl.SplitType.training, ecvl.SplitType.test, ecvl.SplitType.validation:
+        d.SetSplit(t)
+        assert d.GetSplit(-1) == split_by_type[t].samples_indices_
     for i, s in enumerate(d.split_):
         d.SetSplit(i)
         assert d.GetSplit(-1) == d.split_[i].samples_indices_
