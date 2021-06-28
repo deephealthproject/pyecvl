@@ -39,7 +39,7 @@ class ImReadMode(_ecvl.ImReadMode):
     ANYCOLOR = _ecvl.ImReadMode.ANYCOLOR
 
 
-def ImRead(filename, flags=ImReadMode.COLOR):
+def ImRead(filename, flags=None):
     """\
     Load an image from a file.
 
@@ -47,6 +47,8 @@ def ImRead(filename, flags=ImReadMode.COLOR):
     :param flags: an ImReadMode indicating how to read the image
     :return: an Image object
     """
+    if flags is None:
+        return _ecvl.ImRead(filename)
     return _ecvl.ImRead(filename, flags)
 
 

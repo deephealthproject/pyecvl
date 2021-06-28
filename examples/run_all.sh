@@ -22,9 +22,6 @@ python3 dataset.py "${root}"/mnist/mnist.yml
 echo "*** Running dataset_generator.py ***"
 python3 dataset_generator.py "${root}"/fake_classification_dataset "${root}"/fake_segmentation_dataset
 
-# WIP
-exit 0
-
 echo "*** Running ecvl_eddl.py ***"
 python3 ecvl_eddl.py "${root}"/test.jpg "${root}"/mnist/mnist.yml
 

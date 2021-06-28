@@ -30,6 +30,7 @@ if not _ecvl.ECVL_EDDL:
 __all__ = [
     "DatasetAugmentations",
     "DLDataset",
+    "MakeGrid",
     "ImageToTensor",
     "TensorToImage",
     "TensorToView",
@@ -97,20 +98,14 @@ class DLDataset(_ecvl.DLDataset):
     r"""\
     DeepHealth deep learning dataset.
 
-    :var batch_size\_: size of each dataset mini batch
     :var n_channels\_: number of image channels
     :var n_channels_gt\_: number of ground truth image channels
-    :var current_split\_: = Current SplitType from which images are loaded
     :var resize_dims\_: dimensions ``[H, W]`` to which images must be resized
-    :var current_batch\_: number of batches already loaded for each split
-    :var ctype\_: ColorType of the dataset images
-    :var ctype_gt\_: ColorType of the dataset ground truth images
-    :var augs\_: DatasetAugmentations to be applied to the dataset images
-      (and ground truth if existing) for each split
     """
-    def __init__(self, filename, batch_size, augs=None, ctype=ColorType.BGR,
-                 ctype_gt=ColorType.GRAY, verify=False):
-        """\
+    def __init__(self, filename, batch_size, augs=None, ctype=ColorType.RGB,
+                 ctype_gt=ColorType.GRAY, num_workers=1, queue_ratio_size=1,
+                 drop_last=None, verify=False):
+        r"""\
         :param filename: path to the dataset file
         :param batch_size: size of each dataset mini batch
         :param augs: a DatasetAugmentations object specifying the training,
@@ -119,24 +114,23 @@ class DLDataset(_ecvl.DLDataset):
           augmentation is required
         :param ctype: ColorType of the dataset images
         :param ctype_gt: ColorType of the dataset ground truth images
+        :param num_workers: number of parallel threads spawned
+        :param queue_ratio_size: the producers-consumer queue will have a
+          maximum size equal to ``batch\_size`` x ``queue\_ratio\_size``
+          x ``num\_workers``
+        :param drop_last: For each split, whether to drop the last samples
+          that don't fit the batch size. The vector dimensions must match the
+          number of splits.
         :param verify: if True, verify image existence
         """
         if augs is None:
             augs = _ecvl.DatasetAugmentations()
+        if drop_last is None:
+            drop_last = []
         _ecvl.DLDataset.__init__(
-            self, filename, batch_size, augs, ctype, ctype_gt
+            self, filename, batch_size, augs, ctype, ctype_gt, num_workers,
+            queue_ratio_size, drop_last, verify
         )
-
-    def GetSplit(self, split=None):
-        """\
-        Get the image indexes for a split.
-
-        :param split: a SplitType; if None, will default to the current split
-        :return: list of image indexes for the split
-        """
-        if split is None:
-            return _ecvl.DLDataset.GetSplit(self)
-        return _ecvl.DLDataset.GetSplit(self, split)
 
     def ResetBatch(self, split=-1, shuffle=False):
         """\
@@ -159,15 +153,6 @@ class DLDataset(_ecvl.DLDataset):
         :return: None
         """
         return _ecvl.DLDataset.ResetAllBatches(self, shuffle)
-
-    def SetSplit(self, split):
-        """\
-        Set the current Split.
-
-        :param split: a SplitType
-        :return: None
-        """
-        return _ecvl.DLDataset.SetSplit(self, split)
 
     def LoadBatch(self, images, labels=None):
         """\
@@ -231,3 +216,15 @@ def TensorToImage(t):
 
 def TensorToView(t):
     return _ecvl.TensorToView(t)
+
+
+def MakeGrid(t, cols=8, normalize=False):
+    """\
+    Generate a grid of images from an EDDL tensor.
+
+    :param t: B x C x H x W Tensor
+    :param cols: number of images per row
+    :param normalize: If ``True``, convert the image to the ``[0, 1]`` range
+    @return image grid as an Image
+    """
+    return _ecvl.MakeGrid(t, cols, normalize)

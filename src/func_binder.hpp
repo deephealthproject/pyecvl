@@ -370,6 +370,7 @@ void bind_ecvl_functions(pybind11::module &m) {
   // augmentations: AugCenterCrop
   {
   pybind11::class_<ecvl::AugCenterCrop, std::shared_ptr<ecvl::AugCenterCrop>, ecvl::Augmentation> cl(m, "AugCenterCrop", "Augmentation wrapper for ecvl::CenterCrop.");
+  cl.def(pybind11::init<>());
   cl.def(pybind11::init<const std::vector<int>&>(), pybind11::arg("size"));
   cl.def(pybind11::init([](const std::string& s) {
     std::stringstream ss(s);
@@ -536,11 +537,11 @@ void bind_ecvl_functions(pybind11::module &m) {
     return view;
   });
   // support_eddl: MakeGrid
-  m.def("MakeGrid", [](Tensor* t, int cols) {
+  m.def("MakeGrid", [](Tensor* t) {
     return ecvl::MakeGrid(t);
   });
   m.def("MakeGrid", [](Tensor* t, int cols) {
-    return ecvl::MakeGrid(t);
+    return ecvl::MakeGrid(t, cols);
   });
   m.def("MakeGrid", [](Tensor* t, int cols, bool normalize) {
     return ecvl::MakeGrid(t, cols, normalize);
