@@ -37,6 +37,9 @@ python3 moments.py "${root}"/example_ISIC_01.jpg
 echo "*** Running openslide.py ***"
 python3 openslide.py "${root}/hamamatsu/test3-DAPI 2 (387).ndpi"
 
+echo "*** Running pipeline.py ***"
+python3 pipeline.py "${root}"/mnist/mnist_reduced.yml
+
 echo "*** Running read_write.py ***"
 python3 read_write.py "${root}"/test.jpg test_mod.jpg
 

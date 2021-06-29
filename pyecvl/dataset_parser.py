@@ -113,6 +113,25 @@ class Dataset(_ecvl.Dataset):
         """
         _ecvl.Dataset.__init__(self, filename)
 
+    def GetSplit(self, split=-1):
+        """\
+        Get the image indices of the specified split.
+
+        By default, return the image indices of the current split.
+
+        :param split: index, name or ``SplitType`` of the split to get
+        :return: list of integers representing the image indices
+        """
+        return _ecvl.Dataset.GetSplit(self, split)
+
+    def SetSplit(self, split):
+        """\
+        Set the current split.
+
+        :param split: index, name or ``SplitType`` of the split to set
+        """
+        return _ecvl.Dataset.SetSplit(self, split)
+
     def Dump(self, path):
         """\
         Dump the dataset to YAML following the DeepHealth Dataset Format.
@@ -123,4 +142,15 @@ class Dataset(_ecvl.Dataset):
         :param path: output file path
         :return: None
         """
-        _ecvl.Dataset.Dump(self, path)
+        return _ecvl.Dataset.Dump(self, path)
+
+    def GetLocations(self):
+        """\
+        Get the locations of all samples in the dataset.
+
+        Note that a single sample can have multiple locations (e.g., different
+        acquisitions of the same image).
+
+        :return: a list of lists of image paths
+        """
+        return _ecvl.Dataset.GetLocations(self)

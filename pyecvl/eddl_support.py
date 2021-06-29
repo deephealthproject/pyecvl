@@ -18,6 +18,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+from datetime import timedelta
+
 from .image import ColorType
 from . import _core
 _ecvl = _core.ecvl
@@ -164,6 +166,107 @@ class DLDataset(_ecvl.DLDataset):
         if labels is None:
             return _ecvl.DLDataset.LoadBatch(self, images)
         return _ecvl.DLDataset.LoadBatch(self, images, labels)
+
+    def SetSplitSeed(self, seed):
+        """\
+        Set a fixed seed for the randomly generated values.
+
+        Useful to reproduce experiments with same shuffling during training.
+
+        :param seed: seed for the random engine
+        """
+        return _ecvl.DLDataset.SetSplitSeed(self, seed)
+
+    def SetBatchSize(self, bs):
+        """\
+        Set the batch size.
+
+        Note that this does not affect the EDDL network's batch size.
+
+        :param bs: value of the batch size
+        """
+        return _ecvl.DLDataset.SetBatchSize(self, bs)
+
+    def ProduceImageLabel(self, augs, elem):
+        """\
+        Load a sample and its label and push them to the producers-consumer queue.
+
+        :param augs: DatasetAugmentations to apply to the sample image
+        :param elem: Sample to load and push
+        """
+        return _ecvl.DLDataset.ProduceImageLabel(self, augs, elem)
+
+    def ThreadFunc(self, thread_index):
+        """\
+        Called when a thread is spawned.
+
+        ``ProduceImageLabel`` is called for each sample handled by the thread.
+
+        :param thread_index: index of the thread
+        """
+        return _ecvl.DLDataset.ThreadFunc(self, thread_index)
+
+    def GetBatch(self):
+        """\
+        Pop ``batch_size`` samples from the queue and copy them into tensors.
+
+        :return: a tuple of three elements: a vector of samples; a tensor
+          containing the image; a tensor containing the label.
+        """
+        return _ecvl.DLDataset.GetBatch(self)
+
+    def Start(self, split_index=-1):
+        """\
+        Spawn ``num_workers`` threads.
+
+        :param split_index: index of the split for ``GetBatch`` (default = current)
+        """
+        return _ecvl.DLDataset.Start(self, split_index)
+
+    def Stop(self):
+        """\
+        Join all threads.
+        """
+        return _ecvl.DLDataset.Stop(self)
+
+    def GetQueueSize(self):
+        """\
+        Get the current size of the producers-consumer queue.
+
+        :return: size of the queue
+        """
+        return _ecvl.DLDataset.GetQueueSize(self)
+
+    def SetAugmentations(self, da):
+        """\
+        Set the dataset augmentations.
+
+        :param da: DatasetAugmentations to set
+        """
+        return _ecvl.DLDataset.SetAugmentations(self, da)
+
+    def GetNumBatches(self, split=-1):
+        """\
+        Get the number of batches in the specified split.
+
+        By default, return the number of batches in the current split.
+
+        :param split: index, name or ``SplitType`` of the split from which
+        to get the number of batches.
+        """
+        return _ecvl.DLDataset.GetNumBatches(self, split)
+
+    def sleep_for(self, delta):
+        """\
+        Block the execution of the current thread for the specified duration.
+
+        :param delta: a datetime.timedelta representing the sleep duration. If
+          a different type is provided, conversion to a timedelta with
+          seconds = delta will be attempted.
+        """
+        if not isinstance(delta, timedelta):
+            delta = timedelta(seconds=delta)
+        _ecvl.DLDataset.sleep_for(self, delta)
 
 
 def ImageToTensor(img, t=None, offset=None):

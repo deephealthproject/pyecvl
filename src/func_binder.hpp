@@ -20,12 +20,14 @@
 
 #pragma once
 #include <pybind11/pybind11.h>
+#include <pybind11/chrono.h>
 #include <ecvl/core/image.h>
 #include <ecvl/core/imgcodecs.h>
 #include <ecvl/core/imgproc.h>
 #ifdef ECVL_EDDL
 #include <ecvl/augmentations.h>
 #include <ecvl/support_eddl.h>
+#include <dataset_addons.hpp>
 #endif
 #ifdef ECVL_WITH_OPENSLIDE
 #include <ecvl/core/support_openslide.h>
@@ -62,6 +64,8 @@ public:
 
 
 void bind_ecvl_functions(pybind11::module &m) {
+
+using timedelta = std::chrono::duration<int64_t, std::nano>;
 
 #ifdef ECVL_EDDL
   m.attr("ECVL_EDDL") = pybind11::bool_(true);
@@ -495,7 +499,15 @@ void bind_ecvl_functions(pybind11::module &m) {
   cl.def_readwrite("n_channels_", &ecvl::DLDataset::n_channels_);
   cl.def_readwrite("n_channels_gt_", &ecvl::DLDataset::n_channels_gt_);
   cl.def_readwrite("resize_dims_", &ecvl::DLDataset::resize_dims_);
-  cl.def("ResetBatch", &ecvl::DLDataset::ResetBatch);
+  cl.def("ResetBatch", [](ecvl::DLDataset& d) {
+	  return d.ResetBatch();
+  });
+  cl.def("ResetBatch", [](ecvl::DLDataset& d, pybind11::object o) {
+	  return d.ResetBatch(toSplit(o));
+  });
+  cl.def("ResetBatch", [](ecvl::DLDataset& d, pybind11::object o, bool shuffle) {
+	  return d.ResetBatch(toSplit(o), shuffle);
+  });
   cl.def("ResetAllBatches", &ecvl::DLDataset::ResetAllBatches);
   cl.def("LoadBatch", [](ecvl::DLDataset& d, Tensor* images, Tensor* labels) {
     d.LoadBatch(images, labels);
@@ -507,12 +519,26 @@ void bind_ecvl_functions(pybind11::module &m) {
   cl.def("SetBatchSize", &ecvl::DLDataset::SetBatchSize);
   cl.def("ProduceImageLabel", &ecvl::DLDataset::ProduceImageLabel);
   cl.def("ThreadFunc", &ecvl::DLDataset::ThreadFunc);
-  cl.def("GetBatch", &ecvl::DLDataset::GetBatch);
+  cl.def("GetBatch", [](ecvl::DLDataset& d) -> pybind11::tuple {
+    auto [samples, x_u, y_u] = d.GetBatch();
+    std::shared_ptr<Tensor> x = std::move(x_u);
+    std::shared_ptr<Tensor> y = std::move(y_u);
+    return pybind11::make_tuple(samples, x, y);
+  });
   cl.def("Start", &ecvl::DLDataset::Start);
   cl.def("Stop", &ecvl::DLDataset::Stop);
   cl.def("GetQueueSize", &ecvl::DLDataset::GetQueueSize);
   cl.def("SetAugmentations", &ecvl::DLDataset::SetAugmentations);
-  cl.def("GetNumBatches", &ecvl::DLDataset::GetNumBatches);
+  cl.def("GetNumBatches", [](ecvl::DLDataset& d) {
+    return d.GetNumBatches();
+  });
+  cl.def("GetNumBatches", [](ecvl::DLDataset& d, pybind11::object o) {
+    return d.GetNumBatches(toSplit(o));
+  });
+  cl.def("sleep_for", [](ecvl::DLDataset& d, timedelta delta) {
+    std::this_thread::sleep_for(delta);
+  });
+
   }
 
   // support_eddl: ImageToTensor
