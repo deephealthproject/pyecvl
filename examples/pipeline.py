@@ -30,18 +30,13 @@ import sys
 import pyecvl.ecvl as ecvl
 try:
     # make pyeddl types visible to ecvl functions that return them
-    import pyeddl._core  # noqa
+    import pyeddl.eddl as eddl  # noqa
 except ImportError:
     print("PyEDDL not installed - quitting")
     sys.exit(0)
 
 
 def main(args):
-
-    epochs = 5
-    batch_size = 200
-    num_workers = 4
-    queue_ratio = 5
 
     training_augs = ecvl.SequentialAugmentationContainer([
         ecvl.AugRotate([-5, 5]),
@@ -55,9 +50,17 @@ def main(args):
     ])
     ecvl.AugmentationParam.SetSeed(0)
     ds_augs = ecvl.DatasetAugmentations([training_augs, test_augs])
-    print("Creating a DLDataset")
-    d = ecvl.DLDataset(args.in_ds, batch_size, ds_augs, ecvl.ColorType.GRAY,
-                       ecvl.ColorType.none, num_workers, queue_ratio, [True, False])
+    print("Reading the dataset")
+    d = ecvl.DLDataset(
+        args.in_ds,
+        args.batch_size,
+        ds_augs,
+        ecvl.ColorType.GRAY,
+        ecvl.ColorType.none,
+        args.num_workers,
+        args.queue_ratio,
+        [True, False]
+    )
 
     num_batches_training = d.GetNumBatches(ecvl.SplitType.training)
     num_batches_test = d.GetNumBatches(ecvl.SplitType.test)
@@ -65,7 +68,7 @@ def main(args):
     print("n. training batches:", num_batches_training)
     print("n. test batches:", num_batches_test)
 
-    for i in range(epochs):
+    for i in range(args.epochs):
         tm_epoch = time.perf_counter()
         print("Starting training")
         d.SetSplit(ecvl.SplitType.training)
@@ -74,13 +77,13 @@ def main(args):
         d.Start()
         for j in range(num_batches_training):
             tm = time.perf_counter()
-            print(f"Epoch {i}/{epochs-1} (batch {j}/{num_batches_training-1}) - ", end="")
+            print(f"Epoch {i}/{args.epochs-1} (batch {j}/{num_batches_training-1}) - ", end="")
             print(f"|fifo| {d.GetQueueSize()} - ", end="")
             samples, x, y = d.GetBatch()
             # Sleep to simulate EDDL train_batch
             print("sleeping... - ", end="")
             d.sleep_for(datetime.timedelta(milliseconds=500))
-            # eddl.train_batch(net, [x.get()], [y.get()])
+            # eddl.train_batch(net, [x], [y])
             elapsed = time.perf_counter() - tm
             print(f"Elapsed time: {1e3*elapsed:.3f} ms")
         d.Stop()
@@ -92,19 +95,19 @@ def main(args):
         d.Start()
         for j in range(num_batches_test):
             tm = time.perf_counter()
-            print(f"Test: Epoch {i}/{epochs-1} (batch {j}/{num_batches_test-1}) - ", end="")
+            print(f"Test: Epoch {i}/{args.epochs-1} (batch {j}/{num_batches_test-1}) - ", end="")
             print(f"|fifo| {d.GetQueueSize()} - ", end="")
             _, x, y = d.GetBatch()
 
             # # Resize net for last batch
-            # if j == num_batches_test - 1 and x.shape[0] != batch_size:
+            # if j == num_batches_test - 1 and x.shape[0] != args.batch_size:
             #     # last mini-batch could have different size
-            #     net.resize(x_batch)
+            #     net.resize(x.shape[0])
 
             # Sleep to simulate EDDL evaluate_batch
             print("sleeping... - ", end="")
             d.sleep_for(datetime.timedelta(milliseconds=500))
-            # eddl.eval_batch(net, [x.get()], [y.get()])
+            # eddl.eval_batch(net, [x], [y])
 
             elapsed = time.perf_counter() - tm
             print(f"Elapsed time: {1e3*elapsed:.3f} ms")
@@ -117,4 +120,8 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("in_ds", metavar="INPUT_DATASET")
+    parser.add_argument("--epochs", type=int, metavar="INT", default=5)
+    parser.add_argument("--batch-size", type=int, metavar="INT", default=200)
+    parser.add_argument("--num-workers", type=int, metavar="INT", default=4)
+    parser.add_argument("--queue-ratio", type=int, metavar="INT", default=5)
     main(parser.parse_args(sys.argv[1:]))
