@@ -142,7 +142,14 @@ using timedelta = std::chrono::duration<int64_t, std::nano>;
   m.def("CentralMoments", (void (*)(const ecvl::Image&, ecvl::Image&, std::vector<double>, int, ecvl::DataType)) &ecvl::CentralMoments, "", pybind11::arg("src"), pybind11::arg("moments"), pybind11::arg("center"), pybind11::arg("order") = 3, pybind11::arg("type") = ecvl::DataType::float64);
   m.def("DrawEllipse", (void (*)(ecvl::Image&, ecvl::Point2i, ecvl::Size2i, double, const ecvl::Scalar&, int)) &ecvl::DrawEllipse, "", pybind11::arg("src"), pybind11::arg("center"), pybind11::arg("axes"), pybind11::arg("angle"), pybind11::arg("color"), pybind11::arg("thickness") = 1);
   m.def("DropColorChannel", (void (*)(ecvl::Image&)) &ecvl::DropColorChannel, "", pybind11::arg("src"));
-  m.def("Normalize", (void (*)(const ecvl::Image&, ecvl::Image&, const std::vector<double>&, const std::vector<double>&)) &ecvl::Normalize, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("mean"), pybind11::arg("std"));
+  m.def("Normalize", [](const ecvl::Image& src, ecvl::Image& dst, const std::vector<double>& mean, const std::vector<double>& std) -> void {
+    if (mean.size() == 1 && std.size() == 1) {
+      // Make it consistent with C++ Normalize(src, dst, {1.2}, {0.2})
+      Normalize(src, dst, mean[0], std[0]);
+    } else {
+      Normalize(src, dst, mean, std);
+    }
+  });
   m.def("CenterCrop", (void (*)(const ecvl::Image&, ecvl::Image&, const std::vector<int>&)) &ecvl::CenterCrop, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("size"));
 
 #ifdef ECVL_EDDL
