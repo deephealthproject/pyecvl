@@ -2033,6 +2033,7 @@ void bind_ecvl_core_imgcodecs(std::function< pybind11::module &(std::string cons
 #include <iterator>
 #include <memory>
 #include <sample_addons.hpp>
+#include <split_addons.hpp>
 #include <sstream> // __str__
 #include <string>
 #include <string_view>
@@ -2111,6 +2112,8 @@ void bind_unknown_unknown(std::function< pybind11::module &(std::string const &n
 		cl.def("SetNumBatches", (void (ecvl::Split::*)(int)) &ecvl::Split::SetNumBatches, "C++: ecvl::Split::SetNumBatches(int) --> void", pybind11::arg("batch_size"));
 		cl.def("SetLastBatch", (void (ecvl::Split::*)(int)) &ecvl::Split::SetLastBatch, "C++: ecvl::Split::SetLastBatch(int) --> void", pybind11::arg("batch_size"));
 		cl.def("assign", (class ecvl::Split & (ecvl::Split::*)(const class ecvl::Split &)) &ecvl::Split::operator=, "C++: ecvl::Split::operator=(const class ecvl::Split &) --> class ecvl::Split &", pybind11::return_value_policy::automatic, pybind11::arg(""));
+
+		split_addons(cl);
 	}
 	{ // ecvl::Dataset file:ecvl/dataset_parser.h line:128
 		pybind11::class_<ecvl::Dataset, std::shared_ptr<ecvl::Dataset>> cl(M("ecvl"), "Dataset", "DeepHealth Dataset.\n\nThis class implements the DeepHealth Dataset Format (https://github.com/deephealthproject/ecvl/wiki/DeepHealth-Toolkit-Dataset-Format).\n\n Dataset");

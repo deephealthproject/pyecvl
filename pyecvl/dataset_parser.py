@@ -61,7 +61,7 @@ class Sample(_ecvl.Sample):
     :var values\_: feature index-to-value mapping
     :var size\_: original x and y dimensions of the sample
     """
-    def LoadImage(self, ctype=ColorType.BGR, is_gt=False):
+    def LoadImage(self, ctype=ColorType.RGB, is_gt=False):
         """\
         Return the dataset image for this sample.
 
@@ -89,6 +89,34 @@ class Split(_ecvl.Split):
     :var last_batch\_: dimension of the last batch (integer)
     :var no_label\_: whether the split has samples with labels (boolean)
     """
+
+    def __init__(self, split_name="", samples_indices=None):
+        """\
+        :param split_name: name of the split
+        :param samples_indices: indices of samples within the split
+        """
+        if samples_indices is None:
+            samples_indices = []
+        _ecvl.Split.__init__(self, split_name, samples_indices)
+
+    def SetNumBatches(self, batch_size):
+        """\
+        Set the number of batches for the given batch size.
+
+        :param batch_size: number of samples for each batch (except the last
+          one, if drop_last is False and there is a remainder)
+        """
+        return _ecvl.Split.SetNumBatches(self, batch_size)
+
+    def SetLastBatch(self, batch_size):
+        """\
+        Set the size of the last batch for the given batch size.
+
+
+        :param batch_size: number of samples for each batch (except the last
+          one, if drop_last is False and there is a remainder)
+        """
+        return _ecvl.Split.SetLastBatch(self, batch_size)
 
 
 class Dataset(_ecvl.Dataset):

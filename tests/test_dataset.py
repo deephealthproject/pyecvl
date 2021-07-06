@@ -54,6 +54,42 @@ split:
 
 
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_split(ecvl, tmp_path):
+    s = ecvl.Split()
+    n_samples = 7
+    samples_indices = list(range(n_samples))
+    for name in "test", "training", "validation":
+        s = ecvl.Split(name, samples_indices)
+        assert s.split_name_ == name
+        assert s.split_type_ == getattr(ecvl.SplitType, name)
+        assert s.samples_indices_ == samples_indices
+    s = ecvl.Split("foo", samples_indices)
+    assert not s.drop_last_
+    batch_size = 3
+    s.SetNumBatches(batch_size)
+    s.SetLastBatch(batch_size)
+    assert s.num_batches_ == 3
+    assert s.last_batch_ == 1
+    s.drop_last_ = True
+    s.SetNumBatches(batch_size)
+    s.SetLastBatch(batch_size)
+    assert s.num_batches_ == 2
+    assert s.last_batch_ == batch_size
+    n_samples = 9
+    samples_indices = list(range(n_samples))
+    s = ecvl.Split("bar", samples_indices)
+    s.SetNumBatches(batch_size)
+    s.SetLastBatch(batch_size)
+    assert s.num_batches_ == 3
+    assert s.last_batch_ == 3
+    s.drop_last_ = True
+    s.SetNumBatches(batch_size)
+    s.SetLastBatch(batch_size)
+    assert s.num_batches_ == 3
+    assert s.last_batch_ == batch_size
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
 def test_load(ecvl, tmp_path):
     fn = str(tmp_path / "foo.yml")
     with io.open(fn, "wt") as f:
