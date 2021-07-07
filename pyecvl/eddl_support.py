@@ -280,8 +280,8 @@ def ImageToTensor(img, t=None, offset=None):
     * H = height
     * W = width
 
-    If ``t`` and ``offset`` are None, a new tensor is created with the above
-    shape. Otherwise, they are inserted into the
+    If ``t`` and ``offset`` are not specified, a new tensor is created with
+    the above shape. Otherwise, the specified image is inserted into the
     existing ``t`` tensor at the specified offset. This allows to insert more
     than one image into a tensor, specifying how many images are already
     stored in it.
@@ -293,9 +293,10 @@ def ImageToTensor(img, t=None, offset=None):
     """
     if t is None and offset is None:
         return _ecvl.ImageToTensor(img)
-    else:
-        _ecvl.ImageToTensor(img, t, offset)
-        return t
+    if t is None or offset is None:
+        raise ValueError("Either both or none of t and offset must be specified")
+    _ecvl.ImageToTensor(img, t, offset)
+    return t
 
 
 def TensorToImage(t):

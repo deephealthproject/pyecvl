@@ -61,6 +61,11 @@ def test_ImageToTensor_offset(ecvl):
     v_arr = v.getdata()
     assert np.array_equal(v_arr[:2], t_arr)
     assert np.array_equal(v_arr[2:], u_arr)
+    if ecvl is ecvl_py:
+        with pytest.raises(ValueError):
+            ecvl.ImageToTensor(a_img, None, 0)
+        with pytest.raises(ValueError):
+            ecvl.ImageToTensor(a_img, v, None)
 
 
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
