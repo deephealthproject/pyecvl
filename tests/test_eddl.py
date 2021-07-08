@@ -112,6 +112,20 @@ def test_ProducersConsumerQueue(ecvl):
 
 
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_ThreadCounters(ecvl):
+    tc = ecvl.ThreadCounters(10, 30)
+    assert tc.counter_ == tc.min_ == 10
+    assert tc.max_ == 30
+    tc = ecvl.ThreadCounters(20, 10, 30)
+    assert tc.counter_ == 20
+    assert tc.min_ == 10
+    assert tc.max_ == 30
+    tc.counter_ = 25
+    tc.Reset()
+    assert tc.counter_ == 10
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
 def test_ImageToTensor(ecvl):
     dims = [20, 30, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)

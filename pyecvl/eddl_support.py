@@ -39,6 +39,7 @@ __all__ = [
     "ProducersConsumerQueue",
     "TensorToImage",
     "TensorToView",
+    "ThreadCounters",
 ]
 
 
@@ -351,6 +352,33 @@ class ProducersConsumerQueue(_ecvl.ProducersConsumerQueue):
         Remove all elements from the queue.
         """
         return _ecvl.ProducersConsumerQueue.Clear(self)
+
+
+class ThreadCounters(_ecvl.ThreadCounters):
+    """\
+    Manages the thread counters.
+
+    Each thread manages its own indices.
+
+    :var counter_: index of the sample currently used by the thread
+    :var min_: smallest sample index managed by the thread
+    :var max_: largest sample index managed by the thread
+    """
+    def __init__(self, *args):
+        """\
+        Can be called with two or three arguments. In the former case, it sets
+        ``min_`` and ``max_``; in the latter, it sets ``counter_``, ``min_``
+        and ``max_``.
+        """
+        if len(args) < 2 or len(args) > 3:
+            raise ValueError("wrong number of arguments")
+        _ecvl.ThreadCounters.__init__(self, *args)
+
+    def Reset(self):
+        """\
+        Reset the thread counter to its minimum value.
+        """
+        return _ecvl.ThreadCounters.Reset(self)
 
 
 def ImageToTensor(img, t=None, offset=None):
