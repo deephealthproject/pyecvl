@@ -35,6 +35,83 @@ def _img_fromarray(ecvl, array, channels, colortype, spacings=None):
 
 
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_DatasetAugmentations(ecvl):
+    img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.RGB)
+    training_augs = ecvl.SequentialAugmentationContainer([
+        ecvl.AugRotate([-5, 5]),
+        ecvl.AugMirror(.5),
+    ])
+    validation_augs = ecvl.SequentialAugmentationContainer([
+        ecvl.AugResizeDim([30, 30]),
+        ecvl.AugToFloat32(255),
+    ])
+    ds_augs = ecvl.DatasetAugmentations([training_augs, validation_augs])
+    assert not ds_augs.IsEmpty()
+    ds_augs.Apply(ecvl.SplitType.training, img)
+    ds_augs.Apply(ecvl.SplitType.validation, img)
+    assert ecvl.DatasetAugmentations([]).IsEmpty()
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_LabelClass(ecvl):
+    lc = ecvl.LabelClass()
+    lc.label = [0, 1, 3, 5]
+    t = tensor.Tensor.zeros([4, 6])
+    lc.ToTensorPlane(t, 2)
+    a = t.getdata()
+    for j in lc.label:
+        assert a[2, j] == 1.0
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_LabelImage(ecvl):
+    a = np.arange(24).reshape((3, 4, 2)).astype(np.uint8)
+    a_img = _img_fromarray(ecvl, a, "xyc", ecvl.ColorType.BGR)
+    a_tensor = ecvl.ImageToTensor(a_img)
+    assert a_tensor.shape == [2, 4, 3]
+    t = tensor.Tensor.zeros([4, 4, 3])
+    li = ecvl.LabelImage()
+    li.gt = a_img
+    li.ToTensorPlane(t, 1)
+    t_arr = t.getdata()
+    assert np.array_equal(t_arr[2:], a_tensor.getdata())
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_ProducersConsumerQueue(ecvl):
+    s = ecvl.Sample()
+    s.location_, s.size_ = ["foo.png"], [400, 300]
+    img = ecvl.Image([3, 4, 5], ecvl.DataType.uint8, "xyc", ecvl.ColorType.RGB)
+    lc = ecvl.LabelClass()
+    lc.label = [0, 2]
+    q = ecvl.ProducersConsumerQueue(5)
+    assert not q.IsFull()
+    assert q.IsEmpty()
+    assert q.Length() == 0
+    q.Push(s, img, lc)
+    assert not q.IsFull()
+    assert not q.IsEmpty()
+    assert q.Length() == 1
+    s_, img_, lc_ = q.Pop()
+    assert not q.IsFull()
+    assert q.IsEmpty()
+    assert q.Length() == 0
+    assert s_.location_ == s.location_
+    assert s_.size_ == s.size_
+    assert img_.dims_ == img.dims_
+    assert img_.elemtype_ == img.elemtype_
+    assert img_.channels_ == img.channels_
+    assert img_.colortype_ == img.colortype_
+    q.SetSize(1, -1)
+    q.Push(s, img, lc)
+    assert q.IsFull()
+    q.SetSize(8)
+    assert not q.IsFull()
+    q.Clear()
+    assert q.IsEmpty()
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
 def test_ImageToTensor(ecvl):
     dims = [20, 30, 3]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)

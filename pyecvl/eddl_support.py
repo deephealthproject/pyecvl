@@ -32,8 +32,11 @@ if not _ecvl.ECVL_EDDL:
 __all__ = [
     "DatasetAugmentations",
     "DLDataset",
+    "LabelClass",
+    "LabelImage",
     "MakeGrid",
     "ImageToTensor",
+    "ProducersConsumerQueue",
     "TensorToImage",
     "TensorToView",
 ]
@@ -66,12 +69,14 @@ class DatasetAugmentations(_ecvl.DatasetAugmentations):
 
 class LabelClass(_ecvl.LabelClass):
     """\
-    Label for classification tasks.
+    Sample label for classification tasks.
+
+    :var label: list of sample labels
     """
     def ToTensorPlane(self, tensor, offset):
         """\
         Convert the sample labels to a one-hot encoded tensor and copy it to
-        the batch tensor.
+        the batch tensor at the specified offset.
 
         :param tensor: copy labels to this EDDL Tensor (dimensions:
           batch_size x num_classes)
@@ -82,7 +87,9 @@ class LabelClass(_ecvl.LabelClass):
 
 class LabelImage(_ecvl.LabelImage):
     """\
-    Label for segmentation tasks.
+    Sample label for segmentation tasks.
+
+    :var gt: ground truth image
     """
     def ToTensorPlane(self, tensor, offset):
         """\
@@ -267,6 +274,83 @@ class DLDataset(_ecvl.DLDataset):
         if not isinstance(delta, timedelta):
             delta = timedelta(seconds=delta)
         _ecvl.DLDataset.sleep_for(self, delta)
+
+
+class ProducersConsumerQueue(_ecvl.ProducersConsumerQueue):
+    """\
+    Manages the producers-consumer queue of samples.
+    """
+    def __init__(self, mxsz=None, thresh=None):
+        if mxsz is None:
+            _ecvl.ProducersConsumerQueue.__init__(self)
+        elif thresh is None:
+            _ecvl.ProducersConsumerQueue.__init__(self, mxsz)
+        else:
+            _ecvl.ProducersConsumerQueue.__init__(self, mxsz, thresh)
+
+    def Push(self, sample, image, label):
+        """\
+        Push a sample.
+
+        Lock the queue's mutex, wait until the queue is not full and push a
+        sample, image, label tuple into the queue.
+
+        :param sample: sample to push
+        :param image: image to push
+        :param label: label to push
+        """
+        return _ecvl.ProducersConsumerQueue.Push(self, sample, image, label)
+
+    def Pop(self):
+        """\
+        Pop a sample.
+
+        Lock the queue's mutex, wait until the queue is not empty and pop a
+        sample, image, label tuple from the queue.
+
+        :return: sample, image, label tuple
+        """
+        return _ecvl.ProducersConsumerQueue.Pop(self)
+
+    def IsFull(self):
+        """\
+        Check whether the queue is full or not.
+
+        :return: True if the queue is full, False otherwise
+        """
+        return _ecvl.ProducersConsumerQueue.IsFull(self)
+
+    def IsEmpty(self):
+        """\
+        Check whether the queue is empty or not.
+
+        :return: True if the queue is empty, False otherwise
+        """
+        return _ecvl.ProducersConsumerQueue.IsEmpty(self)
+
+    def Length(self):
+        """\
+        Return the current size of the queue.
+
+        :return: queue size
+        """
+        return _ecvl.ProducersConsumerQueue.Length(self)
+
+    def SetSize(self, max_size, thresh=-1):
+        """\
+        Set the maximum size of the queue.
+
+        :param max_size: maximum queue size
+        :param thresh: threshold from which to restart producing samples. If
+          not specified, it's set to half the maximum size.
+        """
+        return _ecvl.ProducersConsumerQueue.SetSize(self, max_size, thresh)
+
+    def Clear(self):
+        """\
+        Remove all elements from the queue.
+        """
+        return _ecvl.ProducersConsumerQueue.Clear(self)
 
 
 def ImageToTensor(img, t=None, offset=None):

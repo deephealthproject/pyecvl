@@ -457,14 +457,27 @@ using timedelta = std::chrono::duration<int64_t, std::nano>;
   cl.def(pybind11::init<>());
   cl.def(pybind11::init<unsigned>(), pybind11::arg("mxsz"));
   cl.def(pybind11::init<unsigned, unsigned>(), pybind11::arg("mxsz"), pybind11::arg("thresh"));
-  cl.def("Push", &ecvl::ProducersConsumerQueue::Push);
-  cl.def("Pop", [](ecvl::ProducersConsumerQueue& q, ecvl::Sample& sample, ecvl::Image& image, ecvl::Label* label) {
+  cl.def("Push", [](ecvl::ProducersConsumerQueue& q, const ecvl::Sample& sample, pybind11::object image, ecvl::Label* const label) -> void {
+   // Cast to ecvl::Image crashes with a segfault for empty images
+   if (image.attr("IsEmpty")().cast<bool>()) {
+     throw std::invalid_argument("image is empty");
+   }
+   q.Push(sample, image.cast<ecvl::Image>(), label);
+  });
+  cl.def("Pop", [](ecvl::ProducersConsumerQueue& q) -> pybind11::tuple {
+    ecvl::Sample sample;
+    ecvl::Image image;
+    ecvl::Label* label;
     q.Pop(sample, image, label);
+    return pybind11::make_tuple(sample, image, label);
   });
   cl.def("IsFull", &ecvl::ProducersConsumerQueue::IsFull);
   cl.def("IsEmpty", &ecvl::ProducersConsumerQueue::IsEmpty);
   cl.def("Length", &ecvl::ProducersConsumerQueue::Length);
-  cl.def("SetSize", &ecvl::ProducersConsumerQueue::SetSize);
+  cl.def("SetSize", [](ecvl::ProducersConsumerQueue& q, int max_size) -> void {
+    q.SetSize(max_size);
+  });
+  cl.def("SetSize", (void (ecvl::ProducersConsumerQueue::*)(int, int)) &ecvl::ProducersConsumerQueue::SetSize, "", pybind11::arg("max_size"), pybind11::arg("thresh"));
   cl.def("Clear", &ecvl::ProducersConsumerQueue::Clear);
   }
 
