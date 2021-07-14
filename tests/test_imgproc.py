@@ -513,6 +513,7 @@ def test_Normalize(ecvl):
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     tmp = _empty_img(ecvl)
     ecvl.Normalize(img, tmp, 20, 5.5)
+    ecvl.Normalize(img, tmp, [20], [5.5])
 
 
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])

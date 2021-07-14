@@ -663,11 +663,17 @@ class AugCenterCrop(_ecvl.AugCenterCrop):
         """
         return _ecvl.AugCenterCrop(txt)
 
-    def __init__(self, size):
+    def __init__(self, size=None):
         """\
+        If size is ``None``, the crop size is inferred from the minimum
+        image dimension.
+
         :param size: list of integers [w, h] specifying the output size
         """
-        _ecvl.AugCenterCrop.__init__(self, size)
+        if size is None:
+            _ecvl.AugCenterCrop.__init__(self)
+        else:
+            _ecvl.AugCenterCrop.__init__(self, size)
 
 
 class AugToFloat32(_ecvl.AugToFloat32):

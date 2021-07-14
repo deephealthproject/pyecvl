@@ -35,7 +35,7 @@ from .support_imgcodecs import *  # noqa: E402,F401,F403
 from .support_nifti import *  # noqa: E402,F401,F403
 if ECVL_EDDL:
     from .augmentations import *  # noqa: E402,F401,F403
-    from .eddl_support import *  # noqa: E402,F401,F403
+    from .support_eddl import *  # noqa: E402,F401,F403
 if ECVL_WITH_OPENSLIDE:
     from .support_openslide import *  # noqa: E402,F401,F403
 if ECVL_WITH_DICOM:

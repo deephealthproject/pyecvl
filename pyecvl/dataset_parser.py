@@ -25,6 +25,7 @@ _ecvl = _core.ecvl
 
 __all__ = [
     "SplitType",
+    "Task",
     "Sample",
     "Split",
     "Dataset",
@@ -40,6 +41,14 @@ class SplitType(_ecvl.SplitType):
     test = _ecvl.SplitType.test
 
 
+class Task(_ecvl.Task):
+    """\
+    Enum class representing allowed tasks for a dataset.
+    """
+    classification = _ecvl.Task.classification
+    segmentation = _ecvl.Task.segmentation
+
+
 class Sample(_ecvl.Sample):
     r"""\
     Sample image in a dataset.
@@ -52,7 +61,7 @@ class Sample(_ecvl.Sample):
     :var values\_: feature index-to-value mapping
     :var size\_: original x and y dimensions of the sample
     """
-    def LoadImage(self, ctype=ColorType.BGR, is_gt=False):
+    def LoadImage(self, ctype=ColorType.RGB, is_gt=False):
         """\
         Return the dataset image for this sample.
 
@@ -68,12 +77,46 @@ class Sample(_ecvl.Sample):
 
 class Split(_ecvl.Split):
     r"""\
-    Provides the splits a dataset can have: training, validation, and test.
+    Represents a subset of a dataset.
 
-    :var training\_: training samples indices (list of integers)
-    :var validation\_: validation samples indices (list of integers)
-    :var test\_: test samples indices (list of integers)
+    :var split_name\_: split name (string)
+    :var split_type\_: split type (SplitType), if the split name is
+      "training", "validation" or "test"
+    :var samples_indices\_: sample indices of the split (list of integers)
+    :var drop_last\_: whether to drop elements that don't fit in the batch
+      (boolean)
+    :var num_batches\_: number of batches in this split (integer)
+    :var last_batch\_: dimension of the last batch (integer)
+    :var no_label\_: whether the split has samples with labels (boolean)
     """
+
+    def __init__(self, split_name="", samples_indices=None):
+        """\
+        :param split_name: name of the split
+        :param samples_indices: indices of samples within the split
+        """
+        if samples_indices is None:
+            samples_indices = []
+        _ecvl.Split.__init__(self, split_name, samples_indices)
+
+    def SetNumBatches(self, batch_size):
+        """\
+        Set the number of batches for the given batch size.
+
+        :param batch_size: number of samples for each batch (except the last
+          one, if drop_last is False and there is a remainder)
+        """
+        return _ecvl.Split.SetNumBatches(self, batch_size)
+
+    def SetLastBatch(self, batch_size):
+        """\
+        Set the size of the last batch for the given batch size.
+
+
+        :param batch_size: number of samples for each batch (except the last
+          one, if drop_last is False and there is a remainder)
+        """
+        return _ecvl.Split.SetLastBatch(self, batch_size)
 
 
 class Dataset(_ecvl.Dataset):
@@ -89,12 +132,33 @@ class Dataset(_ecvl.Dataset):
     :var features\_: features available in the dataset (list of strings)
     :var samples\_: list of dataset samples
     :var split\_: dataset splits
+    :var current_split\_: current split from which images are loaded
+    :var task\_: dataset task (classification or segmentation)
     """
     def __init__(self, filename):
         """\
         :param filename: path to the dataset file
         """
         _ecvl.Dataset.__init__(self, filename)
+
+    def GetSplit(self, split=-1):
+        """\
+        Get the image indices of the specified split.
+
+        By default, return the image indices of the current split.
+
+        :param split: index, name or ``SplitType`` of the split to get
+        :return: list of integers representing the image indices
+        """
+        return _ecvl.Dataset.GetSplit(self, split)
+
+    def SetSplit(self, split):
+        """\
+        Set the current split.
+
+        :param split: index, name or ``SplitType`` of the split to set
+        """
+        return _ecvl.Dataset.SetSplit(self, split)
 
     def Dump(self, path):
         """\
@@ -106,4 +170,15 @@ class Dataset(_ecvl.Dataset):
         :param path: output file path
         :return: None
         """
-        _ecvl.Dataset.Dump(self, path)
+        return _ecvl.Dataset.Dump(self, path)
+
+    def GetLocations(self):
+        """\
+        Get the locations of all samples in the dataset.
+
+        Note that a single sample can have multiple locations (e.g., different
+        acquisitions of the same image).
+
+        :return: a list of lists of image paths
+        """
+        return _ecvl.Dataset.GetLocations(self)

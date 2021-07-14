@@ -35,11 +35,13 @@ except ImportError:
 
 AUG_TXT = '''\
 SequentialAugmentationContainer
-    AugRotate angle=[-5,5] center=(0,0) scale=0.5 interp="linear"
+    AugRotate angle=[-5,5] center=(0,0) interp="linear"
     AugAdditiveLaplaceNoise std_dev=[0,0.51]
     AugCoarseDropout p=[0,0.55] drop_size=[0.02,0.1] per_channel=0
     AugAdditivePoissonNoise lambda=[0,40]
-    AugResizeDim dims=(30,30) interp="linear"
+    AugResizeDim dims=(224,224) interp="linear"
+    AugToFloat32 divisor=255
+    AugNormalize mean=(0.485, 0.456, 0.406) std=(0.229, 0.224, 0.225)
 end
 '''
 
@@ -50,6 +52,7 @@ def main(args):
         sys.exit(0)
     img = ecvl.ImRead(args.in_img)
     augs = ecvl.SequentialAugmentationContainer([
+        ecvl.AugCenterCrop(),  # Make image square
         ecvl.AugRotate([-5, 5]),
         ecvl.AugMirror(.5),
         ecvl.AugFlip(.5),
@@ -58,8 +61,12 @@ def main(args):
         ecvl.AugCoarseDropout([0, 0.55], [0.02, 0.1], 0.5),
         ecvl.AugAdditivePoissonNoise([0, 40]),
         ecvl.AugResizeDim([500, 500]),
+        ecvl.AugCenterCrop([224, 224]),
+        ecvl.AugToFloat32(255),
+        ecvl.AugNormalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
     ])
     ecvl.AugmentationParam.SetSeed(0)
+    print("Applying augmentations")
     augs.Apply(img)
     print("Executing ImageToTensor")
     t = ecvl.ImageToTensor(img)
@@ -70,7 +77,9 @@ def main(args):
     print("Executing TensorToView")
     ecvl.TensorToView(t)
 
-    _ = ecvl.AugmentationFactory.create(AUG_TXT)
+    print("Applying augmentations (from text)")
+    newdeal_augs = ecvl.AugmentationFactory.create(AUG_TXT)
+    newdeal_augs.Apply(img)
 
     training_augs = ecvl.SequentialAugmentationContainer([
         ecvl.AugRotate([-5, 5]),
@@ -78,11 +87,16 @@ def main(args):
         ecvl.AugCoarseDropout([0, 0.55], [0.02, 0.1], 0),
         ecvl.AugAdditivePoissonNoise([0, 40]),
         ecvl.AugResizeDim([30, 30]),
+        ecvl.AugToFloat32(255),
+        ecvl.AugNormalize(0.449, 0.226),  # mean of imagenet stats
     ])
     test_augs = ecvl.SequentialAugmentationContainer([
         ecvl.AugResizeDim([30, 30]),
+        ecvl.AugToFloat32(255),
+        ecvl.AugNormalize(0.449, 0.226),  # mean of imagenet stats
     ])
-    ds_augs = ecvl.DatasetAugmentations([training_augs, None, test_augs])
+    # number of augmentation containers must match number of dataset splits
+    ds_augs = ecvl.DatasetAugmentations([training_augs, test_augs])
 
     batch_size = 64
     print("Creating a DLDataset")
@@ -108,6 +122,10 @@ def main(args):
     print("Executing LoadBatch on test set")
     d.SetSplit(ecvl.SplitType.test)
     d.LoadBatch(x, y)
+
+    # Save some input images
+    ecvl.ImWrite("mnist_batch.png", ecvl.MakeGrid(x, 8, False))
+    ecvl.ImWrite("mnist_batch_normalized.png", ecvl.MakeGrid(x, 8, True))
 
 
 if __name__ == "__main__":
