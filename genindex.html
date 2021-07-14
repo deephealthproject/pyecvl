@@ -85,7 +85,7 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
@@ -195,6 +195,8 @@
       <li><a href="api/ecvl.html#pyecvl.ecvl.AdditiveLaplaceNoise">AdditiveLaplaceNoise() (in module pyecvl.ecvl)</a>
 </li>
       <li><a href="api/ecvl.html#pyecvl.ecvl.AdditivePoissonNoise">AdditivePoissonNoise() (in module pyecvl.ecvl)</a>
+</li>
+      <li><a href="api/ecvl.html#pyecvl.ecvl.ImReadMode.ANYCOLOR">ANYCOLOR (pyecvl.ecvl.ImReadMode attribute)</a>
 </li>
       <li><a href="api/ecvl.html#pyecvl.ecvl.DatasetAugmentations.Apply">Apply() (pyecvl.ecvl.DatasetAugmentations method)</a>
 </li>
@@ -456,11 +458,19 @@
 </li>
       <li><a href="api/ecvl.html#pyecvl.ecvl.AugmentationParam.GenerateValue">GenerateValue() (pyecvl.ecvl.AugmentationParam method)</a>
 </li>
+      <li><a href="api/ecvl.html#pyecvl.ecvl.DLDataset.GetBatch">GetBatch() (pyecvl.ecvl.DLDataset method)</a>
+</li>
+      <li><a href="api/ecvl.html#pyecvl.ecvl.Dataset.GetLocations">GetLocations() (pyecvl.ecvl.Dataset method)</a>
+</li>
       <li><a href="api/ecvl.html#pyecvl.ecvl.GetMaxN">GetMaxN() (in module pyecvl.ecvl)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/ecvl.html#pyecvl.ecvl.DLDataset.GetSplit">GetSplit() (pyecvl.ecvl.DLDataset method)</a>
+      <li><a href="api/ecvl.html#pyecvl.ecvl.DLDataset.GetNumBatches">GetNumBatches() (pyecvl.ecvl.DLDataset method)</a>
+</li>
+      <li><a href="api/ecvl.html#pyecvl.ecvl.DLDataset.GetQueueSize">GetQueueSize() (pyecvl.ecvl.DLDataset method)</a>
+</li>
+      <li><a href="api/ecvl.html#pyecvl.ecvl.Dataset.GetSplit">GetSplit() (pyecvl.ecvl.Dataset method)</a>
 </li>
       <li><a href="api/ecvl.html#pyecvl.ecvl.Device.GPU">GPU (pyecvl.ecvl.Device attribute)</a>
 </li>
@@ -641,6 +651,10 @@
       <li><a href="api/ecvl.html#pyecvl.ecvl.Pepper">Pepper() (in module pyecvl.ecvl)</a>
 </li>
   </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/ecvl.html#pyecvl.ecvl.DLDataset.ProduceImageLabel">ProduceImageLabel() (pyecvl.ecvl.DLDataset method)</a>
+</li>
+  </ul></td>
 </tr></table>
 
 <h2 id="R">R</h2>
@@ -650,7 +664,7 @@
 </li>
       <li><a href="api/ecvl.html#pyecvl.ecvl.DLDataset.ResetAllBatches">ResetAllBatches() (pyecvl.ecvl.DLDataset method)</a>
 </li>
-      <li><a href="api/ecvl.html#pyecvl.ecvl.DLDataset.ResetCurrentBatch">ResetCurrentBatch() (pyecvl.ecvl.DLDataset method)</a>
+      <li><a href="api/ecvl.html#pyecvl.ecvl.DLDataset.ResetBatch">ResetBatch() (pyecvl.ecvl.DLDataset method)</a>
 </li>
       <li><a href="api/ecvl.html#pyecvl.ecvl.ResizeDim">ResizeDim() (in module pyecvl.ecvl)</a>
 </li>
@@ -684,13 +698,25 @@
 </li>
       <li><a href="api/ecvl.html#pyecvl.ecvl.SequentialAugmentationContainer">SequentialAugmentationContainer (class in pyecvl.ecvl)</a>
 </li>
+      <li><a href="api/ecvl.html#pyecvl.ecvl.DLDataset.SetAugmentations">SetAugmentations() (pyecvl.ecvl.DLDataset method)</a>
+</li>
+      <li><a href="api/ecvl.html#pyecvl.ecvl.DLDataset.SetBatchSize">SetBatchSize() (pyecvl.ecvl.DLDataset method)</a>
+</li>
+      <li><a href="api/ecvl.html#pyecvl.ecvl.Split.SetLastBatch">SetLastBatch() (pyecvl.ecvl.Split method)</a>
+</li>
+      <li><a href="api/ecvl.html#pyecvl.ecvl.Split.SetNumBatches">SetNumBatches() (pyecvl.ecvl.Split method)</a>
+</li>
       <li><a href="api/ecvl.html#pyecvl.ecvl.AugmentationParam.SetSeed">SetSeed() (pyecvl.ecvl.AugmentationParam static method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/ecvl.html#pyecvl.ecvl.DLDataset.SetSplit">SetSplit() (pyecvl.ecvl.DLDataset method)</a>
+      <li><a href="api/ecvl.html#pyecvl.ecvl.Dataset.SetSplit">SetSplit() (pyecvl.ecvl.Dataset method)</a>
+</li>
+      <li><a href="api/ecvl.html#pyecvl.ecvl.DLDataset.SetSplitSeed">SetSplitSeed() (pyecvl.ecvl.DLDataset method)</a>
 </li>
       <li><a href="api/ecvl.html#pyecvl.ecvl.ShallowCopyImage">ShallowCopyImage() (in module pyecvl.ecvl)</a>
+</li>
+      <li><a href="api/ecvl.html#pyecvl.ecvl.DLDataset.sleep_for">sleep_for() (pyecvl.ecvl.DLDataset method)</a>
 </li>
       <li><a href="api/ecvl.html#pyecvl.ecvl.SliceTimingCorrection">SliceTimingCorrection() (in module pyecvl.ecvl)</a>
 </li>
@@ -699,6 +725,10 @@
       <li><a href="api/ecvl.html#pyecvl.ecvl.SplitType">SplitType (class in pyecvl.ecvl)</a>
 </li>
       <li><a href="api/ecvl.html#pyecvl.ecvl.Stack">Stack() (in module pyecvl.ecvl)</a>
+</li>
+      <li><a href="api/ecvl.html#pyecvl.ecvl.DLDataset.Start">Start() (pyecvl.ecvl.DLDataset method)</a>
+</li>
+      <li><a href="api/ecvl.html#pyecvl.ecvl.DLDataset.Stop">Stop() (pyecvl.ecvl.DLDataset method)</a>
 </li>
       <li><a href="api/ecvl.html#pyecvl.ecvl.Sub">Sub() (in module pyecvl.ecvl)</a>
 
@@ -715,6 +745,8 @@
       <li><a href="api/ecvl.html#pyecvl.ecvl.TensorToImage">TensorToImage() (in module pyecvl.ecvl)</a>
 </li>
       <li><a href="api/ecvl.html#pyecvl.ecvl.SplitType.test">test (pyecvl.ecvl.SplitType attribute)</a>
+</li>
+      <li><a href="api/ecvl.html#pyecvl.ecvl.DLDataset.ThreadFunc">ThreadFunc() (pyecvl.ecvl.DLDataset method)</a>
 </li>
       <li><a href="api/ecvl.html#pyecvl.ecvl.Threshold">Threshold() (in module pyecvl.ecvl)</a>
 </li>
@@ -739,6 +771,8 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/ecvl.html#pyecvl.ecvl.DataType.uint8">uint8 (pyecvl.ecvl.DataType attribute)</a>
+</li>
+      <li><a href="api/ecvl.html#pyecvl.ecvl.ImReadMode.UNCHANGED">UNCHANGED (pyecvl.ecvl.ImReadMode attribute)</a>
 </li>
   </ul></td>
 </tr></table>
