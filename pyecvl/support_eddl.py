@@ -115,7 +115,7 @@ class DLDataset(_ecvl.DLDataset):
     def __init__(self, filename, batch_size, augs=None, ctype=ColorType.RGB,
                  ctype_gt=ColorType.GRAY, num_workers=1, queue_ratio_size=1,
                  drop_last=None, verify=False):
-        r"""\
+        """\
         :param filename: path to the dataset file
         :param batch_size: size of each dataset mini batch
         :param augs: a DatasetAugmentations object specifying the training,
@@ -126,8 +126,8 @@ class DLDataset(_ecvl.DLDataset):
         :param ctype_gt: ColorType of the dataset ground truth images
         :param num_workers: number of parallel threads spawned
         :param queue_ratio_size: the producers-consumer queue will have a
-          maximum size equal to ``batch\_size`` x ``queue\_ratio\_size``
-          x ``num\_workers``
+          maximum size equal to ``batch_size`` x ``queue_ratio_size``
+          x ``num_workers``
         :param drop_last: For each split, whether to drop the last samples
           that don't fit the batch size. The vector dimensions must match the
           number of splits.
@@ -260,7 +260,7 @@ class DLDataset(_ecvl.DLDataset):
         By default, return the number of batches in the current split.
 
         :param split: index, name or ``SplitType`` of the split from which
-        to get the number of batches.
+          to get the number of batches.
         """
         return _ecvl.DLDataset.GetNumBatches(self, split)
 
