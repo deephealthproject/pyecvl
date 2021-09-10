@@ -1831,6 +1831,22 @@ representing separate mean and standard deviation for each color channel.</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="pyecvl.ecvl.Task">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">Task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pyecvl._core.ecvl.Task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyecvl.ecvl.Task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enum class representing allowed tasks for a dataset.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyecvl.ecvl.Task.classification">
+<span class="sig-name descname"><span class="pre">classification</span></span><em class="property"> <span class="pre">=</span> <span class="pre">Task.classification</span></em><a class="headerlink" href="#pyecvl.ecvl.Task.classification" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyecvl.ecvl.Task.segmentation">
+<span class="sig-name descname"><span class="pre">segmentation</span></span><em class="property"> <span class="pre">=</span> <span class="pre">Task.segmentation</span></em><a class="headerlink" href="#pyecvl.ecvl.Task.segmentation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="pyecvl.ecvl.Sample">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">Sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Sample" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sample image in a dataset.</p>
@@ -2875,6 +2891,60 @@ should be applied</p></li>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="pyecvl.ecvl.LabelClass">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">LabelClass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pyecvl._core.ecvl.LabelClass</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyecvl.ecvl.LabelClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sample label for classification tasks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><p><strong>label</strong> – list of sample labels</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyecvl.ecvl.LabelClass.ToTensorPlane">
+<span class="sig-name descname"><span class="pre">ToTensorPlane</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.LabelClass.ToTensorPlane" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the sample labels to a one-hot encoded tensor and copy it to
+the batch tensor at the specified offset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tensor</strong> – copy labels to this EDDL Tensor (dimensions:
+batch_size x num_classes)</p></li>
+<li><p><strong>offset</strong> – position of the tensor from which to insert the labels</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyecvl.ecvl.LabelImage">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">LabelImage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pyecvl._core.ecvl.LabelImage</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyecvl.ecvl.LabelImage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sample label for segmentation tasks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><p><strong>gt</strong> – ground truth image</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyecvl.ecvl.LabelImage.ToTensorPlane">
+<span class="sig-name descname"><span class="pre">ToTensorPlane</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.LabelImage.ToTensorPlane" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the sample ground truth image to a tensor and copy it to
+the batch tensor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tensor</strong> – copy ground truth to this EDDL Tensor (dimensions:
+batch_size x num_classes x height x width)</p></li>
+<li><p><strong>offset</strong> – position of the tensor from which to insert the gt</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="pyecvl.ecvl.DLDataset">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">DLDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">augs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">ColorType.RGB</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctype_gt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">ColorType.GRAY</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queue_ratio_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_last</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.DLDataset" title="Permalink to this definition">¶</a></dt>
 <dd><p>DeepHealth deep learning dataset.</p>
@@ -3083,6 +3153,127 @@ seconds = delta will be attempted.</p>
 
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="pyecvl.ecvl.ProducersConsumerQueue">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">ProducersConsumerQueue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ProducersConsumerQueue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manages the producers-consumer queue of samples.</p>
+<p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>__init__(self: pyecvl._core.ecvl.ProducersConsumerQueue) -&gt; None</p></li>
+<li><p>__init__(self: pyecvl._core.ecvl.ProducersConsumerQueue, mxsz: int) -&gt; None</p></li>
+<li><p>__init__(self: pyecvl._core.ecvl.ProducersConsumerQueue, mxsz: int, thresh: int) -&gt; None</p></li>
+</ol>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyecvl.ecvl.ProducersConsumerQueue.Clear">
+<span class="sig-name descname"><span class="pre">Clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ProducersConsumerQueue.Clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove all elements from the queue.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyecvl.ecvl.ProducersConsumerQueue.IsEmpty">
+<span class="sig-name descname"><span class="pre">IsEmpty</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ProducersConsumerQueue.IsEmpty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether the queue is empty or not.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if the queue is empty, False otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyecvl.ecvl.ProducersConsumerQueue.IsFull">
+<span class="sig-name descname"><span class="pre">IsFull</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ProducersConsumerQueue.IsFull" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether the queue is full or not.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True if the queue is full, False otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyecvl.ecvl.ProducersConsumerQueue.Length">
+<span class="sig-name descname"><span class="pre">Length</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ProducersConsumerQueue.Length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the current size of the queue.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>queue size</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyecvl.ecvl.ProducersConsumerQueue.Pop">
+<span class="sig-name descname"><span class="pre">Pop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ProducersConsumerQueue.Pop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pop a sample.</p>
+<p>Lock the queue’s mutex, wait until the queue is not empty and pop a
+sample, image, label tuple from the queue.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>sample, image, label tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyecvl.ecvl.ProducersConsumerQueue.Push">
+<span class="sig-name descname"><span class="pre">Push</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ProducersConsumerQueue.Push" title="Permalink to this definition">¶</a></dt>
+<dd><p>Push a sample.</p>
+<p>Lock the queue’s mutex, wait until the queue is not full and push a
+sample, image, label tuple into the queue.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sample</strong> – sample to push</p></li>
+<li><p><strong>image</strong> – image to push</p></li>
+<li><p><strong>label</strong> – label to push</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyecvl.ecvl.ProducersConsumerQueue.SetSize">
+<span class="sig-name descname"><span class="pre">SetSize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ProducersConsumerQueue.SetSize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the maximum size of the queue.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>max_size</strong> – maximum queue size</p></li>
+<li><p><strong>thresh</strong> – threshold from which to restart producing samples. If
+not specified, it’s set to half the maximum size.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyecvl.ecvl.ThreadCounters">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">ThreadCounters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ThreadCounters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manages the thread counters.</p>
+<p>Each thread manages its own indices.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>counter</strong> – index of the sample currently used by the thread</p></li>
+<li><p><strong>min</strong> – smallest sample index managed by the thread</p></li>
+<li><p><strong>max</strong> – largest sample index managed by the thread</p></li>
+</ul>
+</dd>
+</dl>
+<p>Can be called with two or three arguments. In the former case, it sets
+<code class="docutils literal notranslate"><span class="pre">min_</span></code> and <code class="docutils literal notranslate"><span class="pre">max_</span></code>; in the latter, it sets <code class="docutils literal notranslate"><span class="pre">counter_</span></code>, <code class="docutils literal notranslate"><span class="pre">min_</span></code>
+and <code class="docutils literal notranslate"><span class="pre">max_</span></code>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyecvl.ecvl.ThreadCounters.Reset">
+<span class="sig-name descname"><span class="pre">Reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ThreadCounters.Reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the thread counter to its minimum value.</p>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="pyecvl.ecvl.ImageToTensor">
 <span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">ImageToTensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ImageToTensor" title="Permalink to this definition">¶</a></dt>
@@ -3133,6 +3324,22 @@ stored in it.</p>
 <dd class="field-even"><p>output image</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyecvl.ecvl.MakeGrid">
+<span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">MakeGrid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.MakeGrid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a grid of images from an EDDL tensor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t</strong> – B x C x H x W Tensor</p></li>
+<li><p><strong>cols</strong> – number of images per row</p></li>
+<li><p><strong>normalize</strong> – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, convert the image to the <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code> range</p></li>
+</ul>
+</dd>
+</dl>
+<p>&#64;return image grid as an Image</p>
 </dd></dl>
 
 </div>

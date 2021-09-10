@@ -183,6 +183,10 @@ DeepHealth dataset parser
    :members:
    :undoc-members:
 
+.. autoclass:: pyecvl.ecvl.Task
+   :members:
+   :undoc-members:
+
 .. autoclass:: pyecvl.ecvl.Sample
    :members:
    :undoc-members:
@@ -339,10 +343,28 @@ EDDL support
    :members:
    :undoc-members:
 
+.. autoclass:: pyecvl.ecvl.LabelClass
+   :members:
+   :undoc-members:
+
+.. autoclass:: pyecvl.ecvl.LabelImage
+   :members:
+   :undoc-members:
+
 .. autoclass:: pyecvl.ecvl.DLDataset
+   :members:
+   :undoc-members:
+
+.. autoclass:: pyecvl.ecvl.ProducersConsumerQueue
+   :members:
+   :undoc-members:
+
+.. autoclass:: pyecvl.ecvl.ThreadCounters
    :members:
    :undoc-members:
 
 .. autofunction:: pyecvl.ecvl.ImageToTensor
 
 .. autofunction:: pyecvl.ecvl.TensorToImage
+
+.. autofunction:: pyecvl.ecvl.MakeGrid
