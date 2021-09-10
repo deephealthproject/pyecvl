@@ -29,5 +29,5 @@ using namespace std;
 template <typename type_, typename... options>
 void split_addons(py::class_<type_, options...> &cl) {
     cl.def(py::init<const string&, const vector<int>&>(),
-           py::arg("split_name"), py::arg(" samples_indices"));
+           py::arg("split_name"), py::arg("samples_indices"));
 }
