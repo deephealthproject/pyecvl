@@ -478,7 +478,15 @@ using timedelta = std::chrono::duration<int64_t, std::nano>;
     q.SetSize(max_size);
   });
   cl.def("SetSize", (void (ecvl::ProducersConsumerQueue::*)(int, int)) &ecvl::ProducersConsumerQueue::SetSize, "", pybind11::arg("max_size"), pybind11::arg("thresh"));
-  cl.def("Clear", &ecvl::ProducersConsumerQueue::Clear);
+  // Don't bind directly since Clear calls delete on the labels
+  cl.def("Clear", [](ecvl::ProducersConsumerQueue& q) -> void {
+    ecvl::Sample sample;
+    ecvl::Image image;
+    ecvl::Label* label;
+    while (!q.IsEmpty()) {
+      q.Pop(sample, image, label);
+    }
+  });
   }
 
   // support_eddl: ThreadCounters
@@ -539,12 +547,7 @@ using timedelta = std::chrono::duration<int64_t, std::nano>;
   cl.def("SetBatchSize", &ecvl::DLDataset::SetBatchSize);
   cl.def("ProduceImageLabel", &ecvl::DLDataset::ProduceImageLabel);
   cl.def("ThreadFunc", &ecvl::DLDataset::ThreadFunc);
-  cl.def("GetBatch", [](ecvl::DLDataset& d) -> pybind11::tuple {
-    auto [samples, x_u, y_u] = d.GetBatch();
-    std::shared_ptr<Tensor> x = std::move(x_u);
-    std::shared_ptr<Tensor> y = std::move(y_u);
-    return pybind11::make_tuple(samples, x, y);
-  });
+  cl.def("GetBatch", &ecvl::DLDataset::GetBatch);
   cl.def("Start", &ecvl::DLDataset::Start);
   cl.def("Stop", &ecvl::DLDataset::Stop);
   cl.def("GetQueueSize", &ecvl::DLDataset::GetQueueSize);
@@ -555,6 +558,7 @@ using timedelta = std::chrono::duration<int64_t, std::nano>;
   cl.def("GetNumBatches", [](ecvl::DLDataset& d, pybind11::object o) {
     return d.GetNumBatches(toSplit(o));
   });
+  cl.def("SetWorkers", &ecvl::DLDataset::SetWorkers);
   cl.def("sleep_for", [](ecvl::DLDataset& d, timedelta delta) {
     std::this_thread::sleep_for(delta);
   });
