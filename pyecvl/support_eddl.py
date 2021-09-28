@@ -449,6 +449,6 @@ def MakeGrid(t, cols=8, normalize=False):
     :param t: B x C x H x W Tensor
     :param cols: number of images per row
     :param normalize: If ``True``, convert the image to the ``[0, 1]`` range
-    @return image grid as an Image
+    :return: image grid as an Image
     """
     return _ecvl.MakeGrid(t, cols, normalize)
