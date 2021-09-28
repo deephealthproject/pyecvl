@@ -87,6 +87,9 @@ def test_split(ecvl, tmp_path):
     s.SetLastBatch(batch_size)
     assert s.num_batches_ == 3
     assert s.last_batch_ == batch_size
+    s = ecvl.Split("tar", samples_indices, drop_last=True, no_label=True)
+    assert s.drop_last_
+    assert s.no_label_
 
 
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
