@@ -19,7 +19,7 @@
 # SOFTWARE.
 
 """\
-Example pipeline.
+Pipeline example.
 """
 
 import argparse
@@ -36,32 +36,7 @@ except ImportError:
     sys.exit(0)
 
 
-def main(args):
-
-    training_augs = ecvl.SequentialAugmentationContainer([
-        ecvl.AugRotate([-5, 5]),
-        ecvl.AugAdditiveLaplaceNoise([0, 0.2 * 255]),
-        ecvl.AugCoarseDropout([0, 0.55], [0.02, 0.1], 0),
-        ecvl.AugAdditivePoissonNoise([0, 40]),
-        ecvl.AugToFloat32(255),
-    ])
-    test_augs = ecvl.SequentialAugmentationContainer([
-        ecvl.AugToFloat32(255),
-    ])
-    ecvl.AugmentationParam.SetSeed(0)
-    ds_augs = ecvl.DatasetAugmentations([training_augs, test_augs])
-    print("Reading the dataset")
-    d = ecvl.DLDataset(
-        args.in_ds,
-        args.batch_size,
-        ds_augs,
-        ecvl.ColorType.GRAY,
-        ecvl.ColorType.none,
-        args.num_workers,
-        args.queue_ratio,
-        [True, False]
-    )
-
+def run(d, args):
     num_batches_training = d.GetNumBatches(ecvl.SplitType.training)
     num_batches_test = d.GetNumBatches(ecvl.SplitType.test)
 
@@ -82,7 +57,7 @@ def main(args):
             samples, x, y = d.GetBatch()
             # Sleep to simulate EDDL train_batch
             print("sleeping... - ", end="")
-            d.sleep_for(datetime.timedelta(milliseconds=500))
+            d.sleep_for(datetime.timedelta(milliseconds=50))
             # eddl.train_batch(net, [x], [y])
             elapsed = time.perf_counter() - tm
             print(f"Elapsed time: {1e3*elapsed:.3f} ms")
@@ -106,7 +81,7 @@ def main(args):
 
             # Sleep to simulate EDDL evaluate_batch
             print("sleeping... - ", end="")
-            d.sleep_for(datetime.timedelta(milliseconds=500))
+            d.sleep_for(datetime.timedelta(milliseconds=50))
             # eddl.eval_batch(net, [x], [y])
 
             elapsed = time.perf_counter() - tm
@@ -117,11 +92,41 @@ def main(args):
         print(f"Epoch elapsed time: {elapsed:.3f} s")
 
 
+def main(args):
+
+    training_augs = ecvl.SequentialAugmentationContainer([
+        ecvl.AugRotate([-5, 5]),
+        ecvl.AugAdditiveLaplaceNoise([0, 0.2 * 255]),
+        ecvl.AugCoarseDropout([0, 0.55], [0.02, 0.1], 0),
+        ecvl.AugAdditivePoissonNoise([0, 40]),
+        ecvl.AugToFloat32(255),
+    ])
+    test_augs = ecvl.SequentialAugmentationContainer([
+        ecvl.AugToFloat32(255),
+    ])
+    ecvl.AugmentationParam.SetSeed(0)
+    ds_augs = ecvl.DatasetAugmentations([training_augs, test_augs])
+    print("Reading the dataset")
+    d = ecvl.DLDataset(
+        args.in_ds,
+        args.batch_size,
+        ds_augs,
+        ecvl.ColorType.GRAY,
+        ecvl.ColorType.none,
+        1,
+        args.queue_ratio,
+        [True, False]
+    )
+    for nw in 1, 2, 8:
+        print(f"Running with {nw} workers")
+        d.SetWorkers(nw)
+        run(d, args)
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("in_ds", metavar="INPUT_DATASET")
-    parser.add_argument("--epochs", type=int, metavar="INT", default=5)
-    parser.add_argument("--batch-size", type=int, metavar="INT", default=200)
-    parser.add_argument("--num-workers", type=int, metavar="INT", default=4)
-    parser.add_argument("--queue-ratio", type=int, metavar="INT", default=5)
+    parser.add_argument("--epochs", type=int, metavar="INT", default=1)
+    parser.add_argument("--batch-size", type=int, metavar="INT", default=500)
+    parser.add_argument("--queue-ratio", type=int, metavar="INT", default=20)
     main(parser.parse_args(sys.argv[1:]))

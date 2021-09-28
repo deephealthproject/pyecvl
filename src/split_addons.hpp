@@ -28,6 +28,6 @@ using namespace std;
 
 template <typename type_, typename... options>
 void split_addons(py::class_<type_, options...> &cl) {
-    cl.def(py::init<const string&, const vector<int>&>(),
-           py::arg("split_name"), py::arg("samples_indices"));
+    cl.def(py::init<const string&, const vector<int>&, const bool, const bool>(),
+           py::arg("split_name"), py::arg("samples_indices"), py::arg("drop_last") = false, py::arg("no_label") = false);
 }

@@ -264,6 +264,14 @@ class DLDataset(_ecvl.DLDataset):
         """
         return _ecvl.DLDataset.GetNumBatches(self, split)
 
+    def SetWorkers(self, num_workers):
+        """\
+        Set the number of workers.
+
+        :param num_workers: number of worker threads to spawn
+        """
+        return _ecvl.DLDataset.SetWorkers(self, num_workers)
+
     def sleep_for(self, delta):
         """\
         Block the execution of the current thread for the specified duration.
@@ -441,6 +449,6 @@ def MakeGrid(t, cols=8, normalize=False):
     :param t: B x C x H x W Tensor
     :param cols: number of images per row
     :param normalize: If ``True``, convert the image to the ``[0, 1]`` range
-    @return image grid as an Image
+    :return: image grid as an Image
     """
     return _ecvl.MakeGrid(t, cols, normalize)

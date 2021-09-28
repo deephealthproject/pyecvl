@@ -90,14 +90,16 @@ class Split(_ecvl.Split):
     :var no_label\_: whether the split has samples with labels (boolean)
     """
 
-    def __init__(self, split_name="", samples_indices=None):
+    def __init__(self, split_name="", samples_indices=None, drop_last=False, no_label=False):
         """\
         :param split_name: name of the split
         :param samples_indices: indices of samples within the split
+        :param drop_last: whether to drop elements that don't fit in the batch
+        :param no_label: whether the split has samples with labels
         """
         if samples_indices is None:
             samples_indices = []
-        _ecvl.Split.__init__(self, split_name, samples_indices)
+        _ecvl.Split.__init__(self, split_name, samples_indices, drop_last, no_label)
 
     def SetNumBatches(self, batch_size):
         """\

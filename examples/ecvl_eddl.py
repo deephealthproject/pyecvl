@@ -101,6 +101,7 @@ def main(args):
     batch_size = 64
     print("Creating a DLDataset")
     d = ecvl.DLDataset(args.in_ds, batch_size, ds_augs, ecvl.ColorType.GRAY)
+    d.SetWorkers(2)
     print("Create x and y")
     x = Tensor(
         [batch_size, d.n_channels_, d.resize_dims_[0], d.resize_dims_[1]]

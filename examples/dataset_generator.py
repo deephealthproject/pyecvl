@@ -45,7 +45,7 @@ def main(args):
     gsd = ecvl.GenerateSegmentationDataset(args.seg_dir, suffix, gt_name)
     seg_d = gsd.GetDataset()
     # remove from training set all the images with a "black" ground truth
-    training_split = seg_d.GetSplit("training")
+    training_split = seg_d.GetSplit(ecvl.SplitType.training)
     training_split[:] = [
         i for i in training_split
         if os.path.basename(seg_d.samples_[i].label_path_) != "black.png"
