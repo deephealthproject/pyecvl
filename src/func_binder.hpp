@@ -457,7 +457,7 @@ using timedelta = std::chrono::duration<int64_t, std::nano>;
   cl.def(pybind11::init<>());
   cl.def(pybind11::init<unsigned>(), pybind11::arg("mxsz"));
   cl.def(pybind11::init<unsigned, unsigned>(), pybind11::arg("mxsz"), pybind11::arg("thresh"));
-  cl.def("Push", [](ecvl::ProducersConsumerQueue& q, const ecvl::Sample& sample, pybind11::object image, ecvl::Label* const label) -> void {
+  cl.def("Push", [](ecvl::ProducersConsumerQueue& q, const ecvl::Sample& sample, pybind11::object image, const std::shared_ptr<ecvl::Label>& label) -> void {
    // Cast to ecvl::Image crashes with a segfault for empty images
    if (image.attr("IsEmpty")().cast<bool>()) {
      throw std::invalid_argument("image is empty");
@@ -467,7 +467,7 @@ using timedelta = std::chrono::duration<int64_t, std::nano>;
   cl.def("Pop", [](ecvl::ProducersConsumerQueue& q) -> pybind11::tuple {
     ecvl::Sample sample;
     ecvl::Image image;
-    ecvl::Label* label;
+    std::shared_ptr<ecvl::Label> label;
     q.Pop(sample, image, label);
     return pybind11::make_tuple(sample, image, label);
   });
@@ -478,15 +478,7 @@ using timedelta = std::chrono::duration<int64_t, std::nano>;
     q.SetSize(max_size);
   });
   cl.def("SetSize", (void (ecvl::ProducersConsumerQueue::*)(int, int)) &ecvl::ProducersConsumerQueue::SetSize, "", pybind11::arg("max_size"), pybind11::arg("thresh"));
-  // Don't bind directly since Clear calls delete on the labels
-  cl.def("Clear", [](ecvl::ProducersConsumerQueue& q) -> void {
-    ecvl::Sample sample;
-    ecvl::Image image;
-    ecvl::Label* label;
-    while (!q.IsEmpty()) {
-      q.Pop(sample, image, label);
-    }
-  });
+  cl.def("Clear", &ecvl::ProducersConsumerQueue::Clear);
   }
 
   // support_eddl: ThreadCounters
