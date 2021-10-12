@@ -4,25 +4,25 @@ Installation
 ============
 
 
-Conda packages
---------------
+`Conda <https://docs.conda.io/en/latest/>`_ packages
+----------------------------------------------------
 
-`Conda <https://docs.conda.io/en/latest/>`_ packages for PyECVL come in three
-flavors:
+Before installing, configure the Conda channels as follows::
 
-* ``pyecvl-cpu``: CPU-only
-* ``pyecvl-gpu``: GPU-enabled
-* ``pyecvl-cudnn``: GPU-enabled, with cuDNN support
+  conda config --add channels dhealth
+  conda config --add channels bioconda
+  conda config --add channels conda-forge
+  conda config --set channel_priority strict
+
+Then run:
+
+* ``conda install pyecvl-cpu``: for the CPU-only version
+* ``conda install pyecvl-gpu``: for the GPU-enabled version
+* ``conda install pyecvl-cudnn``: for GPU-enabled with cuDNN support
 
 Note that PyECVL / ECVL does not actually offer cuDNN support. The ``cudnn``
 tag in this case simply means that the package pulls the corresponding
 ``pyeddl-cudnn`` dependency.
-
-Choose one of the above, then install it as follows::
-
-  conda install -c dhealth -c bioconda -c conda-forge pyecvl-cpu
-  conda install -c dhealth -c bioconda -c conda-forge pyecvl-gpu
-  conda install -c dhealth -c bioconda -c conda-forge pyecvl-cudnn
 
 Each PyECVL package installs the corresponding ECVL one as a dependency, as
 well as any other requirement including `PyEDDL
