@@ -1,12 +1,12 @@
-FROM eddl-cudnn
-ARG cv_version=3.4.10
+ARG target
+FROM dhealth/dev-eddl-${target}
 
+ARG cv_version=3.4.10
 RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get update -y -q && \
     apt-get install -y --no-install-recommends \
-        libopenslide-dev
-
-RUN wget -q https://github.com/opencv/opencv/archive/${cv_version}.tar.gz && \
+        git libopenslide-dev && \
+    wget -q https://github.com/opencv/opencv/archive/${cv_version}.tar.gz && \
     tar xf ${cv_version}.tar.gz && \
     cd opencv-${cv_version} && \
     mkdir build && \
@@ -58,21 +58,3 @@ RUN wget -q https://github.com/opencv/opencv/archive/${cv_version}.tar.gz && \
     make install && \
     cd ../.. && \
     rm -rf ${cv_version}.tar.gz opencv-${cv_version}
-
-RUN apt-get install -y --no-install-recommends git
-
-COPY third_party/ecvl /ecvl
-WORKDIR /ecvl
-RUN mkdir build && \
-    cd build && \
-    cmake \
-      -DECVL_SHARED=ON \
-      -DECVL_BUILD_EXAMPLES=ON \
-      -DECVL_WITH_DICOM=ON \
-      -DECVL_WITH_OPENSLIDE=ON \
-      -DECVL_DATASET=ON \
-      -DECVL_GPU=ON \
-      -DECVL_BUILD_EDDL=ON .. && \
-    make -j$(( $(nproc) < 24 ? $(nproc) : 24 )) && \
-    make install && \
-    ldconfig
