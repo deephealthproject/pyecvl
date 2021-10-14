@@ -1,0 +1,11 @@
+FROM dhealth/dev-pyecvl-base-cudnn
+
+ENV EDDL_WITH_CUDA="true"
+
+COPY third_party/pyeddl /pyeddl
+WORKDIR /pyeddl
+RUN python3 setup.py install
+
+COPY . /pyecvl
+WORKDIR /pyecvl
+RUN python3 setup.py install

@@ -27,13 +27,13 @@ ecvl::any toSplit(pybind11::object o) {
     ecvl::any split;
     try {
 	split = o.cast<ecvl::SplitType>();
-    } catch (const pybind11::cast_error) {
+    } catch (const pybind11::cast_error&) {
 	try {
 	    split = o.cast<std::string>();
-	} catch (const pybind11::cast_error) {
+	} catch (const pybind11::cast_error&) {
 	    try {
 		split = o.cast<int>();
-	    } catch (const pybind11::cast_error) {
+	    } catch (const pybind11::cast_error&) {
 		split = -1;
 	    }
 	}

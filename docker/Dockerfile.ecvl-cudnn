@@ -1,0 +1,18 @@
+FROM dhealth/dev-ecvl-base-cudnn
+
+COPY third_party/ecvl /ecvl
+WORKDIR /ecvl
+
+RUN mkdir build && \
+    cd build && \
+    cmake \
+      -DECVL_SHARED=ON \
+      -DECVL_BUILD_EXAMPLES=ON \
+      -DECVL_WITH_DICOM=ON \
+      -DECVL_WITH_OPENSLIDE=ON \
+      -DECVL_DATASET=ON \
+      -DECVL_GPU=ON \
+      -DECVL_BUILD_EDDL=ON .. && \
+    make -j$(nproc) && \
+    make install && \
+    ldconfig

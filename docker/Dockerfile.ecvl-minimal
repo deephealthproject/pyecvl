@@ -1,13 +1,15 @@
-ARG eddl_rev=latest
-FROM eddl:${eddl_rev}
+FROM crs4/cmake:3.21
+
 ARG cv_version=3.4.10
+
+COPY third_party/ecvl /ecvl
+WORKDIR /ecvl
 
 RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get update -y -q && \
     apt-get install -y --no-install-recommends \
-        libopenslide-dev
-
-RUN wget -q https://github.com/opencv/opencv/archive/${cv_version}.tar.gz && \
+        git && \
+    wget -q https://github.com/opencv/opencv/archive/${cv_version}.tar.gz && \
     tar xf ${cv_version}.tar.gz && \
     cd opencv-${cv_version} && \
     mkdir build && \
@@ -55,24 +57,20 @@ RUN wget -q https://github.com/opencv/opencv/archive/${cv_version}.tar.gz && \
           -DWITH_V4L=OFF \
           -DWITH_VTK=OFF \
           -DWITH_WEBP=OFF .. && \
-    make -j$(nproc) && \
+    make -j$(( $(nproc) < 24 ? $(nproc) : 24 )) && \
     make install && \
     cd ../.. && \
-    rm -rf ${cv_version}.tar.gz opencv-${cv_version}
-
-RUN apt-get install -y --no-install-recommends git
-
-COPY third_party/ecvl /ecvl
-WORKDIR /ecvl
-RUN mkdir build && \
+    rm -rf ${cv_version}.tar.gz opencv-${cv_version} && \
+    mkdir build && \
     cd build && \
     cmake \
       -DECVL_SHARED=ON \
       -DECVL_BUILD_EXAMPLES=ON \
-      -DECVL_WITH_DICOM=ON \
-      -DECVL_WITH_OPENSLIDE=ON \
+      -DECVL_TESTS=OFF \
+      -DECVL_WITH_DICOM=OFF \
+      -DECVL_WITH_OPENSLIDE=OFF \
       -DECVL_DATASET=ON \
-      -DECVL_BUILD_EDDL=ON .. && \
+      -DECVL_BUILD_EDDL=OFF .. && \
     make -j$(nproc) && \
     make install && \
     ldconfig

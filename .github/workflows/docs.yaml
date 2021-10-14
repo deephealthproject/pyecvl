@@ -1,0 +1,28 @@
+name: docs
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v2
+      - name: get prebuilt ecvl image
+        run: docker pull dhealth/dev-ecvl-cpu
+      - name: build docs
+        run: |
+          docker build --build-arg target=cpu -t dhealth/dev-pyecvl-base-cpu -f docker/Dockerfile.pyecvl-base .
+          docker build -t dhealth/dev-pyecvl-cpu -f docker/Dockerfile.pyecvl-cpu .
+          docker build -t dhealth/dev-pyecvl-docs -f docker/Dockerfile.docs .
+          docker run --rm dhealth/dev-pyecvl-docs bash -c "tar -c -C /pyecvl/docs/source/_build html" | tar -x -C /tmp
+      # https://github.com/marketplace/actions/github-pages-action
+      - name: publish docs
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: /tmp/html
+          enable_jekyll: false

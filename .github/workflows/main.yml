@@ -29,11 +29,12 @@ jobs:
           pip install flake8
           flake8 -v .
       - name: get prebuilt ecvl image
-        run: |
-          docker pull simleo/ecvl-${{ matrix.tag }}
-          docker tag simleo/ecvl-${{ matrix.tag }} ecvl-${{ matrix.tag }}
+        run: docker pull dhealth/dev-ecvl-${{ matrix.tag }}
+      - name: build pyecvl base image
+        if: ${{ matrix.tag == 'cpu' }}
+        run: docker build --build-arg target=cpu -t dhealth/dev-pyecvl-base-cpu -f docker/Dockerfile.pyecvl-base .
       - name: build pyecvl image
-        run: docker build -t pyecvl -f Dockerfile.${{ matrix.tag }} .
+        run: docker build -t pyecvl -f docker/Dockerfile.pyecvl-${{ matrix.tag }} .
       - name: run tests
         run: docker run --rm pyecvl bash -c "pytest tests"
       - name: run examples
