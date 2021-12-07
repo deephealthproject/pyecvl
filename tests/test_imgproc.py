@@ -538,3 +538,28 @@ def test_ScaleTo(ecvl):
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     tmp = _empty_img(ecvl)
     ecvl.ScaleTo(img, tmp, 1, 254)
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_Pad(ecvl):
+    dims = [20, 40, 3]
+    img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    tmp = _empty_img(ecvl)
+    for padding in [3], [2, 3], [1, 2, 3, 4]:
+        ecvl.Pad(img, tmp, padding)
+    ecvl.Pad(img, tmp, [3], ecvl.BorderType.BORDER_REFLECT_101)
+    ecvl.Pad(img, tmp, [3], ecvl.BorderType.BORDER_CONSTANT, 255)
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_RandomCrop(ecvl):
+    dims = [20, 40, 3]
+    img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    tmp = _empty_img(ecvl)
+    ecvl.RandomCrop(img, tmp, [10, 20])
+    with pytest.raises(RuntimeError):
+        ecvl.RandomCrop(img, tmp, [22, 42])
+    ecvl.RandomCrop(img, tmp, [22, 42], True)
+    ecvl.RandomCrop(img, tmp, [22, 42], True, ecvl.BorderType.BORDER_REFLECT_101)
+    ecvl.RandomCrop(img, tmp, [22, 42], True, ecvl.BorderType.BORDER_CONSTANT, 1)
+    ecvl.RandomCrop(img, tmp, [22, 42], True, ecvl.BorderType.BORDER_CONSTANT, 1, 12345)

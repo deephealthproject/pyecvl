@@ -175,6 +175,10 @@ Image processing
 
 .. autofunction:: pyecvl.ecvl.ScaleTo
 
+.. autofunction:: pyecvl.ecvl.Pad
+
+.. autofunction:: pyecvl.ecvl.RandomCrop
+
 
 DeepHealth dataset parser
 -------------------------
@@ -308,6 +312,10 @@ Augmentations
    :undoc-members:
 
 .. autoclass:: pyecvl.ecvl.AugScaleTo
+   :members:
+   :undoc-members:
+
+.. autoclass:: pyecvl.ecvl.AugRandomCrop
    :members:
    :undoc-members:
 

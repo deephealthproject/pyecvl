@@ -55,6 +55,7 @@ __all__ = [
     "AugToFloat32",
     "AugDivBy255",
     "AugScaleTo",
+    "AugRandomCrop",
 ]
 
 
@@ -743,3 +744,31 @@ class AugScaleTo(_ecvl.AugScaleTo):
         :param new_max: new maximum value
         """
         _ecvl.AugScaleTo.__init__(self, new_min, new_max)
+
+
+class AugRandomCrop(_ecvl.AugRandomCrop):
+    """\
+    Augmentation wrapper for RandomCrop.
+    """
+
+    @staticmethod
+    def fromtext(txt):
+        r"""\
+        Create an AugRandomCrop from a text description, e.g.::
+
+            a = AugRandomCrop('size=(10, 20) border_type=\"constant\" border_value=0')
+        """
+        return _ecvl.AugRandomCrop(txt)
+
+    def __init__(self, size, border_type=BorderType.BORDER_CONSTANT, border_value=0):
+        """\
+        :param size: list of integers [w, h] specifying the output size
+        :param border_type: BorderType to use for pixel extrapolation if the
+          desired size is bigger than the src image
+        :param border_value: pixel value for the border if ``border_type`` is
+          ``BORDER_CONSTANT``
+        """
+        if size is None:
+            _ecvl.AugRandomCrop.__init__(self)
+        else:
+            _ecvl.AugRandomCrop.__init__(self, size)

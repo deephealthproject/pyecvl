@@ -51,6 +51,7 @@ def main(args):
         print("No EDDL support - quitting")
         sys.exit(0)
     img = ecvl.ImRead(args.in_img)
+    tmp = img
     augs = ecvl.SequentialAugmentationContainer([
         ecvl.AugCenterCrop(),  # Make image square
         ecvl.AugRotate([-5, 5]),
@@ -79,7 +80,7 @@ def main(args):
 
     print("Applying augmentations (from text)")
     newdeal_augs = ecvl.AugmentationFactory.create(AUG_TXT)
-    newdeal_augs.Apply(img)
+    newdeal_augs.Apply(tmp)
 
     training_augs = ecvl.SequentialAugmentationContainer([
         ecvl.AugRotate([-5, 5]),
