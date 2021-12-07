@@ -505,7 +505,10 @@ using timedelta = std::chrono::duration<int64_t, std::nano>;
   cl.def("ResetBatch", [](ecvl::DLDataset& d, pybind11::object o, bool shuffle) {
 	  return d.ResetBatch(toSplit(o), shuffle);
   });
-  cl.def("ResetAllBatches", &ecvl::DLDataset::ResetAllBatches);
+  cl.def("ResetAllBatches", [](ecvl::DLDataset& d) {
+	  d.ResetAllBatches();
+  });
+  cl.def("ResetAllBatches", (void (ecvl::DLDataset::*)(bool)) &ecvl::DLDataset::ResetAllBatches, "", pybind11::arg("shuffle") = false);
   cl.def("LoadBatch", [](ecvl::DLDataset& d, Tensor* images, Tensor* labels) {
     d.LoadBatch(images, labels);
   });
@@ -517,7 +520,10 @@ using timedelta = std::chrono::duration<int64_t, std::nano>;
   cl.def("ProduceImageLabel", &ecvl::DLDataset::ProduceImageLabel);
   cl.def("ThreadFunc", &ecvl::DLDataset::ThreadFunc);
   cl.def("GetBatch", &ecvl::DLDataset::GetBatch);
-  cl.def("Start", &ecvl::DLDataset::Start);
+  cl.def("Start", [](ecvl::DLDataset& d) {
+	  d.Start();
+  });
+  cl.def("Start", (void (ecvl::DLDataset::*)(int)) &ecvl::DLDataset::Start, "", pybind11::arg("split_index") = -1);
   cl.def("Stop", &ecvl::DLDataset::Stop);
   cl.def("GetQueueSize", &ecvl::DLDataset::GetQueueSize);
   cl.def("SetAugmentations", &ecvl::DLDataset::SetAugmentations);

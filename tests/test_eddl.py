@@ -27,8 +27,8 @@ import pyecvl.ecvl as ecvl_py
 tensor = pytest.importorskip("pyeddl.tensor")
 
 
-IMAGES = [f"foo_{i}.png" for i in range(2)]
-GROUND_TRUTHS = [f"foo_{i}_gt.png" for i in range(2)]
+IMAGES = [f"foo_{i}.png" for i in range(3)]
+GROUND_TRUTHS = [f"foo_{i}_gt.png" for i in range(3)]
 DATASET = f"""\
 name: Foo
 description: FooDesc
@@ -37,11 +37,14 @@ images:
   label: {GROUND_TRUTHS[0]}
 - location: {IMAGES[1]}
   label: {GROUND_TRUTHS[1]}
+- location: {IMAGES[2]}
+  label: {GROUND_TRUTHS[2]}
 split:
   training:
   - 0
-  test:
   - 1
+  test:
+  - 2
 """
 
 
@@ -206,7 +209,19 @@ def test_DLDataset(ecvl, tmp_path):
     ])
     augs = ecvl.DatasetAugmentations([training_augs, test_augs, validation_augs])
     fn = _build_dataset(tmp_path)
-    d = ecvl.DLDataset(fn, 1, augs)
+    batch_size = 2
+    d = ecvl.DLDataset(fn, batch_size, augs)
     assert d.n_channels_ == 3
     assert d.n_channels_gt_ == 1
+    d.ResetBatch()
+    d.ResetBatch(0)
+    d.ResetBatch(0, True)
+    d.ResetAllBatches()
+    d.ResetAllBatches(True)
+    x = tensor.Tensor([batch_size, d.n_channels_, d.resize_dims_[0], d.resize_dims_[1]])
+    d.LoadBatch(x)
     ecvl.DLDataset.SetSplitSeed(12345)
+    d.ResetBatch()
+    d.Start()
+    assert len(d.GetBatch()) == 3
+    d.Stop()
