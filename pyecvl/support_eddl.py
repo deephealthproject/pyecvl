@@ -74,7 +74,7 @@ class DLDataset(_ecvl.DLDataset):
     :var n_channels_gt\_: number of ground truth image channels
     :var resize_dims\_: dimensions ``[H, W]`` to which images must be resized
     """
-    def __init__(self, filename, batch_size, augs=None, ctype=ColorType.RGB,
+    def __init__(self, filename, batch_size, augs, ctype=ColorType.RGB,
                  ctype_gt=ColorType.GRAY, num_workers=1, queue_ratio_size=1,
                  drop_last=None, verify=False):
         """\
@@ -95,8 +95,6 @@ class DLDataset(_ecvl.DLDataset):
           number of splits.
         :param verify: if True, verify image existence
         """
-        if augs is None:
-            augs = _ecvl.DatasetAugmentations()
         if drop_last is None:
             drop_last = []
         _ecvl.DLDataset.__init__(
