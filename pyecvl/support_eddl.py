@@ -137,7 +137,8 @@ class DLDataset(_ecvl.DLDataset):
             return _ecvl.DLDataset.LoadBatch(self, images)
         return _ecvl.DLDataset.LoadBatch(self, images, labels)
 
-    def SetSplitSeed(self, seed):
+    @staticmethod
+    def SetSplitSeed(seed):
         """\
         Set a fixed seed for the randomly generated values.
 
@@ -145,7 +146,7 @@ class DLDataset(_ecvl.DLDataset):
 
         :param seed: seed for the random engine
         """
-        return _ecvl.DLDataset.SetSplitSeed(self, seed)
+        return _ecvl.DLDataset.SetSplitSeed(seed)
 
     def SetBatchSize(self, bs):
         """\

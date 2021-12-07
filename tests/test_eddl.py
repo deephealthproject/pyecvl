@@ -18,12 +18,46 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import io
 import pytest
 import numpy as np
 
 import pyecvl._core.ecvl as ecvl_core
 import pyecvl.ecvl as ecvl_py
 tensor = pytest.importorskip("pyeddl.tensor")
+
+
+IMAGES = [f"foo_{i}.png" for i in range(2)]
+GROUND_TRUTHS = [f"foo_{i}_gt.png" for i in range(2)]
+DATASET = f"""\
+name: Foo
+description: FooDesc
+images:
+- location: {IMAGES[0]}
+  label: {GROUND_TRUTHS[0]}
+- location: {IMAGES[1]}
+  label: {GROUND_TRUTHS[1]}
+split:
+  training:
+  - 0
+  test:
+  - 1
+"""
+
+
+def _build_dataset(dir_path):
+    fn = str(dir_path / "foo.yml")
+    with io.open(fn, "wt") as f:
+        f.write(DATASET)
+    for name in IMAGES:
+        a = np.random.randint(0, 255, [20, 40, 3], dtype=np.uint8)
+        img = ecvl_py.Image.fromarray(a, "xyc", ecvl_py.ColorType.RGB)
+        ecvl_py.ImWrite(str(dir_path / name), img)
+    for name in GROUND_TRUTHS:
+        a = np.random.randint(0, 255, [20, 40, 1], dtype=np.uint8)
+        img = ecvl_py.Image.fromarray(a, "xyc", ecvl_py.ColorType.GRAY)
+        ecvl_py.ImWrite(str(dir_path / name), img)
+    return fn
 
 
 def _img_fromarray(ecvl, array, channels, colortype, spacings=None):
@@ -157,3 +191,22 @@ def test_TensorToView(ecvl):
     t = tensor.Tensor(shape)
     view = ecvl.TensorToView(t)
     assert view.dims_ == [shape[3], shape[2], shape[0] * shape[1]]
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_DLDataset(ecvl, tmp_path):
+    training_augs = ecvl.SequentialAugmentationContainer([
+        ecvl.AugRotate([-5, 5]),
+    ])
+    test_augs = ecvl.SequentialAugmentationContainer([
+        ecvl.AugCoarseDropout([0, 0.55], [0.02, 0.1], 0),
+    ])
+    validation_augs = ecvl.SequentialAugmentationContainer([
+        ecvl.AugResizeDim([30, 30]),
+    ])
+    augs = ecvl.DatasetAugmentations([training_augs, test_augs, validation_augs])
+    fn = _build_dataset(tmp_path)
+    d = ecvl.DLDataset(fn, 1, augs)
+    assert d.n_channels_ == 3
+    assert d.n_channels_gt_ == 1
+    ecvl.DLDataset.SetSplitSeed(12345)

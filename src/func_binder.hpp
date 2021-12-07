@@ -512,7 +512,7 @@ using timedelta = std::chrono::duration<int64_t, std::nano>;
   cl.def("LoadBatch", [](ecvl::DLDataset& d, Tensor* images) {
     d.LoadBatch(images);
   });
-  cl.def("SetSplitSeed", &ecvl::DLDataset::SetSplitSeed);
+  cl.def_static("SetSplitSeed", &ecvl::DLDataset::SetSplitSeed);
   cl.def("SetBatchSize", &ecvl::DLDataset::SetBatchSize);
   cl.def("ProduceImageLabel", &ecvl::DLDataset::ProduceImageLabel);
   cl.def("ThreadFunc", &ecvl::DLDataset::ThreadFunc);
