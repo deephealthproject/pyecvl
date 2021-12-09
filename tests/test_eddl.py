@@ -29,7 +29,8 @@ tensor = pytest.importorskip("pyeddl.tensor")
 
 IMAGES = [f"foo_{i}.png" for i in range(3)]
 GROUND_TRUTHS = [f"foo_{i}_gt.png" for i in range(3)]
-DATASET = f"""\
+
+SEG_DATASET = f"""\
 name: Foo
 description: FooDesc
 images:
@@ -47,19 +48,41 @@ split:
   - 2
 """
 
+CLS_DATASET = f"""\
+name: Foo
+description: FooDesc
+classes:
+- '0'
+- '1'
+images:
+- location: {IMAGES[0]}
+  label: 0
+- location: {IMAGES[1]}
+  label: 1
+- location: {IMAGES[2]}
+  label: 1
+split:
+  training:
+  - 0
+  - 1
+  test:
+  - 2
+"""
 
-def _build_dataset(dir_path):
+
+def _build_dataset(dir_path, type_="seg"):
     fn = str(dir_path / "foo.yml")
     with io.open(fn, "wt") as f:
-        f.write(DATASET)
+        f.write(SEG_DATASET if type_ == "seg" else CLS_DATASET)
     for name in IMAGES:
         a = np.random.randint(0, 255, [20, 40, 3], dtype=np.uint8)
         img = ecvl_py.Image.fromarray(a, "xyc", ecvl_py.ColorType.RGB)
         ecvl_py.ImWrite(str(dir_path / name), img)
-    for name in GROUND_TRUTHS:
-        a = np.random.randint(0, 255, [20, 40, 1], dtype=np.uint8)
-        img = ecvl_py.Image.fromarray(a, "xyc", ecvl_py.ColorType.GRAY)
-        ecvl_py.ImWrite(str(dir_path / name), img)
+    if type_ == "seg":
+        for name in GROUND_TRUTHS:
+            a = np.random.randint(0, 255, [20, 40, 1], dtype=np.uint8)
+            img = ecvl_py.Image.fromarray(a, "xyc", ecvl_py.ColorType.GRAY)
+            ecvl_py.ImWrite(str(dir_path / name), img)
     return fn
 
 
@@ -197,19 +220,10 @@ def test_TensorToView(ecvl):
 
 
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
-def test_DLDataset(ecvl, tmp_path):
-    training_augs = ecvl.SequentialAugmentationContainer([
-        ecvl.AugRotate([-5, 5]),
-    ])
-    test_augs = ecvl.SequentialAugmentationContainer([
-        ecvl.AugCoarseDropout([0, 0.55], [0.02, 0.1], 0),
-    ])
-    validation_augs = ecvl.SequentialAugmentationContainer([
-        ecvl.AugResizeDim([30, 30]),
-    ])
-    augs = ecvl.DatasetAugmentations([training_augs, test_augs, validation_augs])
-    fn = _build_dataset(tmp_path)
-    batch_size = 2
+def test_DLDataset_seg(ecvl, tmp_path):
+    augs = ecvl.DatasetAugmentations([ecvl.AugFlip(0.5)])
+    fn = _build_dataset(tmp_path, "seg")
+    batch_size = 1
     d = ecvl.DLDataset(fn, batch_size, augs)
     assert d.n_channels_ == 3
     assert d.n_channels_gt_ == 1
@@ -222,8 +236,29 @@ def test_DLDataset(ecvl, tmp_path):
     d.LoadBatch(x)
     ecvl.DLDataset.SetSplitSeed(12345)
     d.ResetBatch()
+    d.SetWorkers(1)
     d.Start()
     assert len(d.GetBatch()) == 3
     d.Stop()
     d.SetNumChannels(1)
     d.SetNumChannels(1, 1)
+    assert d.GetQueueSize() < len(d.samples_)
+    d.SetAugmentations(ecvl.DatasetAugmentations([ecvl.AugFlip(0.9)]))
+    assert d.GetNumBatches() == d.GetNumBatches(ecvl.SplitType.training) == 2
+    assert d.GetNumBatches(ecvl.SplitType.test) == 1
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_DLDataset_cls(ecvl, tmp_path):
+    augs = ecvl.DatasetAugmentations([ecvl.AugFlip(0.5)])
+    fn = _build_dataset(tmp_path, "cls")
+    batch_size = 2
+    d = ecvl.DLDataset(fn, batch_size, augs)
+    assert d.n_channels_ == 3
+    x = tensor.Tensor([batch_size, d.n_channels_, d.resize_dims_[0], d.resize_dims_[1]])
+    y = tensor.Tensor([batch_size, len(d.classes_)])
+    d.LoadBatch(x, y)
+    t = d.ToTensorPlane(d.samples_[0].label_)
+    assert np.allclose(np.array(t), [1, 0])
+    t = d.ToTensorPlane(d.samples_[1].label_)
+    assert np.allclose(np.array(t), [0, 1])
