@@ -351,14 +351,6 @@ EDDL support
    :members:
    :undoc-members:
 
-.. autoclass:: pyecvl.ecvl.LabelClass
-   :members:
-   :undoc-members:
-
-.. autoclass:: pyecvl.ecvl.LabelImage
-   :members:
-   :undoc-members:
-
 .. autoclass:: pyecvl.ecvl.DLDataset
    :members:
    :undoc-members:
