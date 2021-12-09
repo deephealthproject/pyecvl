@@ -73,8 +73,9 @@ def main(args):
 
     print("Labeling connected components")
     labels = ecvl.Image.empty()
-    ecvl.ConnectedComponentsLabeling(tmp, labels)
+    n_obj = ecvl.ConnectedComponentsLabeling(tmp, labels)
     ecvl.ImWrite("%s_labels%s" % (head, ext), labels)
+    print("  number of objects: %d" % n_obj)
 
     print("Finding contours")
     contours = ecvl.FindContours(tmp)
@@ -194,6 +195,14 @@ def main(args):
     print("ScaleTo")
     ecvl.ScaleTo(img, tmp, 100, 155)
     ecvl.ImWrite("%s_scale_to%s" % (head, ext), tmp)
+
+    print("Pad")
+    ecvl.Pad(img, tmp, [30], ecvl.BorderType.BORDER_CONSTANT, 127)
+    ecvl.ImWrite("%s_pad%s" % (head, ext), tmp)
+
+    print("RandomCrop")
+    ecvl.RandomCrop(img, tmp, [200, 300])
+    ecvl.ImWrite("%s_random_crop%s" % (head, ext), tmp)
 
     print("Applying multiple thresholds")
     ecvl.ChangeColorSpace(img, tmp, ecvl.ColorType.GRAY)

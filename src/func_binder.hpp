@@ -39,15 +39,6 @@
 
 
 #ifdef ECVL_EDDL
-class PyLabel : public ecvl::Label {
-public:
-    using ecvl::Label::Label;
-
-    void ToTensorPlane(Tensor* tensor, int offset) override {
-	PYBIND11_OVERLOAD_PURE(void, ecvl::Label, ToTensorPlane, tensor, offset);
-    }
-};
-
 class PyAugmentation : public ecvl::Augmentation {
 public:
     using ecvl::Augmentation::Augmentation;
@@ -151,6 +142,9 @@ using timedelta = std::chrono::duration<int64_t, std::nano>;
     }
   });
   m.def("CenterCrop", (void (*)(const ecvl::Image&, ecvl::Image&, const std::vector<int>&)) &ecvl::CenterCrop, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("size"));
+  m.def("Pad", (void (*)(const ecvl::Image&, ecvl::Image&, const std::vector<int>&, ecvl::BorderType, const int&)) &ecvl::Pad, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("padding"), pybind11::arg("border_type") = ecvl::BorderType::BORDER_CONSTANT, pybind11::arg("border_value") = 0);
+  m.def("RandomCrop", (void (*)(const ecvl::Image&, ecvl::Image&, const std::vector<int>&, bool, ecvl::BorderType, const int&, const unsigned)) &ecvl::RandomCrop, "", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("size"), pybind11::arg("pad_if_needed") = false, pybind11::arg("border_type") = ecvl::BorderType::BORDER_CONSTANT, pybind11::arg("border_value") = 0, pybind11::arg("seed") = std::default_random_engine::default_seed);
+
 
 #ifdef ECVL_EDDL
   // augmentations: AugmentationParam
@@ -415,6 +409,15 @@ using timedelta = std::chrono::duration<int64_t, std::nano>;
     return new ecvl::AugScaleTo(ss);
   }));
   }
+  // augmentations: AugRandomCrop
+  {
+  pybind11::class_<ecvl::AugRandomCrop, std::shared_ptr<ecvl::AugRandomCrop>, ecvl::Augmentation> cl(m, "AugRandomCrop", "Augmentation wrapper for ecvl::RandomCrop.");
+  cl.def(pybind11::init<const std::vector<int>&, ecvl::BorderType, const int&>(), pybind11::arg("size"), pybind11::arg("border_type") = ecvl::BorderType::BORDER_CONSTANT, pybind11::arg("border_value") = 0);
+  cl.def(pybind11::init([](const std::string& s) {
+    std::stringstream ss(s);
+    return new ecvl::AugRandomCrop(ss);
+  }));
+  }
 
   // support_eddl: DatasetAugmentations
   {
@@ -428,46 +431,20 @@ using timedelta = std::chrono::duration<int64_t, std::nano>;
   cl.def("IsEmpty", &ecvl::DatasetAugmentations::IsEmpty);
   }
 
-  // support_eddl: Label
-  {
-  pybind11::class_<ecvl::Label, std::shared_ptr<ecvl::Label>, PyLabel> cl(m, "Label", "Represents a sample label, which may have different representations depending on the task.");
-  cl.def(pybind11::init<>());
-  cl.def("ToTensorPlane", &ecvl::Label::ToTensorPlane);
-  }
-
-  // support_eddl: LabelClass
-  {
-  pybind11::class_<ecvl::LabelClass, std::shared_ptr<ecvl::LabelClass>, ecvl::Label> cl(m, "LabelClass", "Label for classification task");
-  cl.def(pybind11::init<>());
-  cl.def_readwrite("label", &ecvl::LabelClass::label);
-  cl.def("ToTensorPlane", &ecvl::LabelClass::ToTensorPlane);
-  }
-
-  // support_eddl: LabelImage
-  {
-  pybind11::class_<ecvl::LabelImage, std::shared_ptr<ecvl::LabelImage>, ecvl::Label> cl(m, "LabelImage", "Label for segmentation task");
-  cl.def(pybind11::init<>());
-  cl.def_readwrite("gt", &ecvl::LabelImage::gt);
-  cl.def("ToTensorPlane", &ecvl::LabelImage::ToTensorPlane);
-  }
-
   // support_eddl: ProducersConsumerQueue
   {
   pybind11::class_<ecvl::ProducersConsumerQueue, std::shared_ptr<ecvl::ProducersConsumerQueue>> cl(m, "ProducersConsumerQueue", "Manages the producers-consumer queue of samples.");
   cl.def(pybind11::init<>());
   cl.def(pybind11::init<unsigned>(), pybind11::arg("mxsz"));
   cl.def(pybind11::init<unsigned, unsigned>(), pybind11::arg("mxsz"), pybind11::arg("thresh"));
-  cl.def("Push", [](ecvl::ProducersConsumerQueue& q, const ecvl::Sample& sample, pybind11::object image, const std::shared_ptr<ecvl::Label>& label) -> void {
+  cl.def("Push", [](ecvl::ProducersConsumerQueue& q, const ecvl::Sample& sample, Tensor* const image, Tensor* const label) -> void {
    // Cast to ecvl::Image crashes with a segfault for empty images
-   if (image.attr("IsEmpty")().cast<bool>()) {
-     throw std::invalid_argument("image is empty");
-   }
-   q.Push(sample, image.cast<ecvl::Image>(), label);
+   q.Push(sample, image, label);
   });
   cl.def("Pop", [](ecvl::ProducersConsumerQueue& q) -> pybind11::tuple {
     ecvl::Sample sample;
-    ecvl::Image image;
-    std::shared_ptr<ecvl::Label> label;
+    Tensor* image;
+    Tensor* label;
     q.Pop(sample, image, label);
     return pybind11::make_tuple(sample, image, label);
   });
@@ -528,19 +505,25 @@ using timedelta = std::chrono::duration<int64_t, std::nano>;
   cl.def("ResetBatch", [](ecvl::DLDataset& d, pybind11::object o, bool shuffle) {
 	  return d.ResetBatch(toSplit(o), shuffle);
   });
-  cl.def("ResetAllBatches", &ecvl::DLDataset::ResetAllBatches);
+  cl.def("ResetAllBatches", [](ecvl::DLDataset& d) {
+	  d.ResetAllBatches();
+  });
+  cl.def("ResetAllBatches", (void (ecvl::DLDataset::*)(bool)) &ecvl::DLDataset::ResetAllBatches, "", pybind11::arg("shuffle") = false);
   cl.def("LoadBatch", [](ecvl::DLDataset& d, Tensor* images, Tensor* labels) {
     d.LoadBatch(images, labels);
   });
   cl.def("LoadBatch", [](ecvl::DLDataset& d, Tensor* images) {
     d.LoadBatch(images);
   });
-  cl.def("SetSplitSeed", &ecvl::DLDataset::SetSplitSeed);
+  cl.def_static("SetSplitSeed", &ecvl::DLDataset::SetSplitSeed);
   cl.def("SetBatchSize", &ecvl::DLDataset::SetBatchSize);
   cl.def("ProduceImageLabel", &ecvl::DLDataset::ProduceImageLabel);
   cl.def("ThreadFunc", &ecvl::DLDataset::ThreadFunc);
   cl.def("GetBatch", &ecvl::DLDataset::GetBatch);
-  cl.def("Start", &ecvl::DLDataset::Start);
+  cl.def("Start", [](ecvl::DLDataset& d) {
+	  d.Start();
+  });
+  cl.def("Start", (void (ecvl::DLDataset::*)(int)) &ecvl::DLDataset::Start, "", pybind11::arg("split_index") = -1);
   cl.def("Stop", &ecvl::DLDataset::Stop);
   cl.def("GetQueueSize", &ecvl::DLDataset::GetQueueSize);
   cl.def("SetAugmentations", &ecvl::DLDataset::SetAugmentations);
@@ -550,7 +533,16 @@ using timedelta = std::chrono::duration<int64_t, std::nano>;
   cl.def("GetNumBatches", [](ecvl::DLDataset& d, pybind11::object o) {
     return d.GetNumBatches(toSplit(o));
   });
+  cl.def("ToTensorPlane", [](ecvl::DLDataset& d, const std::vector<int>& label) {
+    Tensor* t;
+    d.ToTensorPlane(label, t);
+    return t;
+  });
   cl.def("SetWorkers", &ecvl::DLDataset::SetWorkers);
+  cl.def("SetNumChannels", [](ecvl::DLDataset& d, int n_channels) {
+	  d.SetNumChannels(n_channels);
+  });
+  cl.def("SetNumChannels", (void (ecvl::DLDataset::*)(const int, const int)) &ecvl::DLDataset::SetNumChannels, "", pybind11::arg("n_channels"), pybind11::arg("n_channels_gt") = 1);
   cl.def("sleep_for", [](ecvl::DLDataset& d, timedelta delta) {
     std::this_thread::sleep_for(delta);
   });

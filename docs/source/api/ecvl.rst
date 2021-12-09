@@ -175,6 +175,10 @@ Image processing
 
 .. autofunction:: pyecvl.ecvl.ScaleTo
 
+.. autofunction:: pyecvl.ecvl.Pad
+
+.. autofunction:: pyecvl.ecvl.RandomCrop
+
 
 DeepHealth dataset parser
 -------------------------
@@ -311,6 +315,10 @@ Augmentations
    :members:
    :undoc-members:
 
+.. autoclass:: pyecvl.ecvl.AugRandomCrop
+   :members:
+   :undoc-members:
+
 
 Image I/O
 ---------
@@ -340,14 +348,6 @@ EDDL support
 ------------
 
 .. autoclass:: pyecvl.ecvl.DatasetAugmentations
-   :members:
-   :undoc-members:
-
-.. autoclass:: pyecvl.ecvl.LabelClass
-   :members:
-   :undoc-members:
-
-.. autoclass:: pyecvl.ecvl.LabelImage
    :members:
    :undoc-members:
 

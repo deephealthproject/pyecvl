@@ -202,6 +202,8 @@ EDDL version corresponding to each PyEDDL version):
 +----------------+--------------+----------------+--------------+
 | 0.12.2         | 0.4.2        | 1.1.0          | 1.0.3b       |
 +----------------+--------------+----------------+--------------+
+| 1.0.0          | 1.0.0        | 1.1.0          | 1.0.3b       |
++----------------+--------------+----------------+--------------+
 
 Thus, for instance, to install PyECVL 0.6.0::
 
@@ -216,8 +218,8 @@ ECVL and PyECVL have a number of optional components whose compilation can be di
 build time.  The build settings for these components must match across the two libraries.
 
 .. warning::
-    If you compile both libraries with the their respective default settings
-    the resulting Python extention won't work (you'll have undefined symbols).
+    If you compile both libraries with their respective default settings
+    the resulting Python extension won't work (you'll have undefined symbols).
 
 By default, **PyECVL assumes a complete installation, but ECVL does not**.
 

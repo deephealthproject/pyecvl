@@ -32,8 +32,6 @@ if not _ecvl.ECVL_EDDL:
 __all__ = [
     "DatasetAugmentations",
     "DLDataset",
-    "LabelClass",
-    "LabelImage",
     "MakeGrid",
     "ImageToTensor",
     "ProducersConsumerQueue",
@@ -68,42 +66,6 @@ class DatasetAugmentations(_ecvl.DatasetAugmentations):
         return _ecvl.DatasetAugmentations.Apply(self, st, img, gt)
 
 
-class LabelClass(_ecvl.LabelClass):
-    """\
-    Sample label for classification tasks.
-
-    :var label: list of sample labels
-    """
-    def ToTensorPlane(self, tensor, offset):
-        """\
-        Convert the sample labels to a one-hot encoded tensor and copy it to
-        the batch tensor at the specified offset.
-
-        :param tensor: copy labels to this EDDL Tensor (dimensions:
-          batch_size x num_classes)
-        :param offset: position of the tensor from which to insert the labels
-        """
-        return _ecvl.LabelClass.ToTensorPlane(self, tensor, offset)
-
-
-class LabelImage(_ecvl.LabelImage):
-    """\
-    Sample label for segmentation tasks.
-
-    :var gt: ground truth image
-    """
-    def ToTensorPlane(self, tensor, offset):
-        """\
-        Convert the sample ground truth image to a tensor and copy it to
-        the batch tensor.
-
-        :param tensor: copy ground truth to this EDDL Tensor (dimensions:
-          batch_size x num_classes x height x width)
-        :param offset: position of the tensor from which to insert the gt
-        """
-        return _ecvl.LabelImage.ToTensorPlane(self, tensor, offset)
-
-
 class DLDataset(_ecvl.DLDataset):
     r"""\
     DeepHealth deep learning dataset.
@@ -112,7 +74,7 @@ class DLDataset(_ecvl.DLDataset):
     :var n_channels_gt\_: number of ground truth image channels
     :var resize_dims\_: dimensions ``[H, W]`` to which images must be resized
     """
-    def __init__(self, filename, batch_size, augs=None, ctype=ColorType.RGB,
+    def __init__(self, filename, batch_size, augs, ctype=ColorType.RGB,
                  ctype_gt=ColorType.GRAY, num_workers=1, queue_ratio_size=1,
                  drop_last=None, verify=False):
         """\
@@ -133,8 +95,6 @@ class DLDataset(_ecvl.DLDataset):
           number of splits.
         :param verify: if True, verify image existence
         """
-        if augs is None:
-            augs = _ecvl.DatasetAugmentations()
         if drop_last is None:
             drop_last = []
         _ecvl.DLDataset.__init__(
@@ -175,7 +135,8 @@ class DLDataset(_ecvl.DLDataset):
             return _ecvl.DLDataset.LoadBatch(self, images)
         return _ecvl.DLDataset.LoadBatch(self, images, labels)
 
-    def SetSplitSeed(self, seed):
+    @staticmethod
+    def SetSplitSeed(seed):
         """\
         Set a fixed seed for the randomly generated values.
 
@@ -183,7 +144,7 @@ class DLDataset(_ecvl.DLDataset):
 
         :param seed: seed for the random engine
         """
-        return _ecvl.DLDataset.SetSplitSeed(self, seed)
+        return _ecvl.DLDataset.SetSplitSeed(seed)
 
     def SetBatchSize(self, bs):
         """\
@@ -264,6 +225,14 @@ class DLDataset(_ecvl.DLDataset):
         """
         return _ecvl.DLDataset.GetNumBatches(self, split)
 
+    def ToTensorPlane(self, label):
+        """\
+        Convert the sample labels into a one-hot encoded tensor.
+
+        :param label: list of sample labels
+        """
+        return _ecvl.DLDataset.ToTensorPlane(self, label)
+
     def SetWorkers(self, num_workers):
         """\
         Set the number of workers.
@@ -271,6 +240,18 @@ class DLDataset(_ecvl.DLDataset):
         :param num_workers: number of worker threads to spawn
         """
         return _ecvl.DLDataset.SetWorkers(self, num_workers)
+
+    def SetNumChannels(self, n_channels, n_channels_gt=1):
+        """\
+        Change the number of channels of the image produced by ECVL and update
+        the internal EDDL tensors shape accordingly.
+
+        Useful for custom data loading.
+
+        :param n_channels: number of channels of input image
+        :param n_channels_gt: number of channels of ground truth
+        """
+        return _ecvl.DLDataset.SetNumChannels(self, n_channels, n_channels_gt)
 
     def sleep_for(self, delta):
         """\
@@ -305,8 +286,8 @@ class ProducersConsumerQueue(_ecvl.ProducersConsumerQueue):
         sample, image, label tuple into the queue.
 
         :param sample: sample to push
-        :param image: image to push
-        :param label: label to push
+        :param image: image (as a Tensor) to push
+        :param label: label (as a Tensor) to push
         """
         return _ecvl.ProducersConsumerQueue.Push(self, sample, image, label)
 
@@ -317,7 +298,7 @@ class ProducersConsumerQueue(_ecvl.ProducersConsumerQueue):
         Lock the queue's mutex, wait until the queue is not empty and pop a
         sample, image, label tuple from the queue.
 
-        :return: sample, image, label tuple
+        :return: sample (as a Tensor), image (as a Tensor), label tuple
         """
         return _ecvl.ProducersConsumerQueue.Pop(self)
 

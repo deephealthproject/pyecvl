@@ -74,6 +74,8 @@ __all__ = [
     "Normalize",
     "CenterCrop",
     "ScaleTo",
+    "Pad",
+    "RandomCrop",
 ]
 
 
@@ -458,7 +460,7 @@ def ConnectedComponentsLabeling(src, dst):
 
     :param src: source image
     :param dst: destination image
-    :return: None
+    :return: number of different objects, including the background
     """
     return _ecvl.ConnectedComponentsLabeling(src, dst)
 
@@ -526,7 +528,7 @@ def Morphology(src, dst, op, kernel, anchor=None, iterations=1,
     :param anchor: anchor position within the kernel. A negative value means
       that the anchor is at the center of the kernel
     :param iterations: number of times erosion and dilation are applied
-    :param borderType: pixel extrapolation method, see BorderType.
+    :param border_type: pixel extrapolation method, see BorderType.
       BorderType.BORDER_WRAP is not supported
     :param borderValue: border value in case of a constant border
     :return: None
@@ -830,3 +832,43 @@ def ScaleTo(src, dst, new_min, new_max):
     :param new_max: new maximum value
     """
     return _ecvl.ScaleTo(src, dst, new_min, new_max)
+
+
+def Pad(src, dst, padding, border_type=BorderType.BORDER_CONSTANT, border_value=0):
+    """\
+    Pad an Image.
+
+    Add a border to the four sides of the image. It can be specified equal
+    for all the sides, equal for top and bottom and for left and right or
+    different for all the sides.
+
+    :param src: input image
+    :param dst: output image
+    :param padding: list of integers representing the border sizes. It can
+      have one element (same padding for all sides), two elements (top/bottom,
+      left/right) or four (top, bottom, left, right)
+    :param border_type: a BorderType
+    :param border_value: pixel value for the border if ``border_type`` is
+      ``BORDER_CONSTANT``
+    """
+    return _ecvl.Pad(src, dst, padding, border_type, border_value)
+
+
+def RandomCrop(src, dst, size, pad_if_needed=False, border_type=BorderType.BORDER_CONSTANT,
+               border_value=0, seed=None):
+    """\
+    Crop the source Image to the specified size at a random location.
+
+    :param src: input image.
+    :param dst: output image.
+    :param size: list of intergers representing the desired (width, height) of
+      the output Image.
+    :param pad_if_needed: if the desired size is bigger than the src image and
+      ``pad_if_needed`` is True, pad the image; otherwise, throw an exception.
+    :param border_type: BorderType to use if ```pad_if_needed`` is True.
+    :param border_value: pixel value for the border if ``border_type`` is
+      ``BORDER_CONSTANT`` and ``pad_if_needed`` is True.
+    """
+    if seed is None:
+        return _ecvl.RandomCrop(src, dst, size, pad_if_needed, border_type, border_value)
+    return _ecvl.RandomCrop(src, dst, size, pad_if_needed, border_type, border_value, seed)

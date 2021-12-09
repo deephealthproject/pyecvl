@@ -392,6 +392,24 @@ def test_AugScaleTo(ecvl):
 
 
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_AugRandomCrop(ecvl):
+    img = ecvl.Image([8, 6, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    a = ecvl.AugRandomCrop([4, 3])
+    a.Apply(img)
+    img = ecvl.Image([8, 6, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    a = ecvl.AugRandomCrop([10, 8], ecvl.BorderType.BORDER_REFLECT_101)
+    a.Apply(img)
+    img = ecvl.Image([8, 6, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    a = ecvl.AugRandomCrop([10, 8], ecvl.BorderType.BORDER_CONSTANT, 255)
+    a.Apply(img)
+    # fromtext
+    f = ecvl.AugRandomCrop if ecvl is ecvl_core else \
+        ecvl.AugRandomCrop.fromtext
+    a = f('size=(4,3) border_type=\"constant\" border_value=255')
+    a.Apply(img)
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
 def test_AugmentationFactory(ecvl):
     img = ecvl.Image([5, 4, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     # one arg
