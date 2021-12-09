@@ -225,3 +225,5 @@ def test_DLDataset(ecvl, tmp_path):
     d.Start()
     assert len(d.GetBatch()) == 3
     d.Stop()
+    d.SetNumChannels(1)
+    d.SetNumChannels(1, 1)

@@ -539,7 +539,10 @@ using timedelta = std::chrono::duration<int64_t, std::nano>;
     return t;
   });
   cl.def("SetWorkers", &ecvl::DLDataset::SetWorkers);
-  cl.def("SetNumChannels", &ecvl::DLDataset::SetNumChannels);
+  cl.def("SetNumChannels", [](ecvl::DLDataset& d, int n_channels) {
+	  d.SetNumChannels(n_channels);
+  });
+  cl.def("SetNumChannels", (void (ecvl::DLDataset::*)(const int, const int)) &ecvl::DLDataset::SetNumChannels, "", pybind11::arg("n_channels"), pybind11::arg("n_channels_gt") = 1);
   cl.def("sleep_for", [](ecvl::DLDataset& d, timedelta delta) {
     std::this_thread::sleep_for(delta);
   });
