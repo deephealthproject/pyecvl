@@ -83,6 +83,45 @@ To slice an image:
     sliced = ecvl.Image.fromarray(a, img.channels_, img.colortype_)
     ecvl.ImWrite("sliced.png", sliced)
 
+One thing to note in case you want to display the numpy array as an image, is
+that typical Python frameworks capable of displaying images expect a ``yxc``
+dimension layout and RGB color mode, while images read by ECVL -- by default
+-- have an ``xyc`` layout and BGR color mode. So, if you display the array as
+an image (for instance, with matplotlib's ``imshow`` on Jupyter) you might get
+odd results:
+
+.. code-block:: python
+
+    import matplotlib.pyplot as plt
+    import pyecvl.ecvl as ecvl
+    import numpy as np
+    logo_img = ecvl.ImRead("/usr/local/src/pyecvl/docs/logo.png")
+    plt.imshow(np.array(logo_img))
+
+.. image:: logo_flipped.png
+   :width: 302px
+   :height: 253px
+   :scale: 100%
+   :alt: flipped logo
+   :align: center
+
+To avoid this, change the channels layout and color mode before converting the
+image to an array:
+
+.. code-block:: python
+
+    logo_img_mod = ecvl.Image.empty()
+    ecvl.ChangeColorSpace(logo_img, logo_img_mod, ecvl.ColorType.RGB)
+    ecvl.RearrangeChannels(logo_img_mod, logo_img_mod, "yxc")
+    plt.imshow(np.array(logo_img_mod))
+
+.. image:: logo_restored.png
+   :width: 221px
+   :height: 249px
+   :scale: 100%
+   :alt: restored logo
+   :align: center
+
 
 Image processing
 ----------------
