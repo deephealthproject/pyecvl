@@ -136,6 +136,29 @@ instance, to set all image elements to a value (<code class="docutils literal no
 <span class="n">ecvl</span><span class="o">.</span><span class="n">ImWrite</span><span class="p">(</span><span class="s2">&quot;sliced.png&quot;</span><span class="p">,</span> <span class="n">sliced</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>One thing to note in case you want to display the numpy array as an image, is
+that typical Python frameworks capable of displaying images expect a <code class="docutils literal notranslate"><span class="pre">yxc</span></code>
+dimension layout and RGB color mode, while images read by ECVL – by default
+– have an <code class="docutils literal notranslate"><span class="pre">xyc</span></code> layout and BGR color mode. So, if you display the array as
+an image (for instance, with matplotlib’s <code class="docutils literal notranslate"><span class="pre">imshow</span></code> on Jupyter) you might get
+odd results:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">pyecvl.ecvl</span> <span class="k">as</span> <span class="nn">ecvl</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">logo_img</span> <span class="o">=</span> <span class="n">ecvl</span><span class="o">.</span><span class="n">ImRead</span><span class="p">(</span><span class="s2">&quot;/usr/local/src/pyecvl/docs/logo.png&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">logo_img</span><span class="p">))</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/logo_flipped.png"><img alt="flipped logo" class="align-center" src="_images/logo_flipped.png" style="width: 302.0px; height: 253.0px;" /></a>
+<p>To avoid this, change the channels layout and color mode before converting the
+image to an array:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">logo_img_mod</span> <span class="o">=</span> <span class="n">ecvl</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">empty</span><span class="p">()</span>
+<span class="n">ecvl</span><span class="o">.</span><span class="n">ChangeColorSpace</span><span class="p">(</span><span class="n">logo_img</span><span class="p">,</span> <span class="n">logo_img_mod</span><span class="p">,</span> <span class="n">ecvl</span><span class="o">.</span><span class="n">ColorType</span><span class="o">.</span><span class="n">RGB</span><span class="p">)</span>
+<span class="n">ecvl</span><span class="o">.</span><span class="n">RearrangeChannels</span><span class="p">(</span><span class="n">logo_img_mod</span><span class="p">,</span> <span class="n">logo_img_mod</span><span class="p">,</span> <span class="s2">&quot;yxc&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">logo_img_mod</span><span class="p">))</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/logo_restored.png"><img alt="restored logo" class="align-center" src="_images/logo_restored.png" style="width: 221.0px; height: 249.0px;" /></a>
 </section>
 <section id="image-processing">
 <h2>Image processing<a class="headerlink" href="#image-processing" title="Permalink to this headline"></a></h2>
