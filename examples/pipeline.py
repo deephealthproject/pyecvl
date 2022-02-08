@@ -115,7 +115,7 @@ def main(args):
         ecvl.ColorType.none,
         1,
         args.queue_ratio,
-        [True, False]
+        {"training": False, "test": False}
     )
     for nw in 1, 2, 8:
         print(f"Running with {nw} workers")

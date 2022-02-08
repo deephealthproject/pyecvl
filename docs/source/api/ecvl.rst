@@ -331,9 +331,9 @@ Image I/O
 
 .. autofunction:: pyecvl.ecvl.ImWrite
 
-.. autofunction:: pyecvl.ecvl.OpenSlideGetLevels
-
-.. autofunction:: pyecvl.ecvl.OpenSlideRead
+.. autoclass:: pyecvl.ecvl.OpenSlideImage
+   :members:
+   :undoc-members:
 
 .. autofunction:: pyecvl.ecvl.NiftiRead
 

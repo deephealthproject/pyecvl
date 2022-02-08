@@ -73,6 +73,14 @@ class DLDataset(_ecvl.DLDataset):
     :var n_channels\_: number of image channels
     :var n_channels_gt\_: number of ground truth image channels
     :var resize_dims\_: dimensions ``[H, W]`` to which images must be resized
+
+    :var current_batch\_: Number of batches already loaded for each split
+    :var ctype\_: ColorType of the images
+    :var ctype_gt\_: ColorType of the ground truth images
+    :var augs\_: augmentations to be applied to the images (and ground truth,
+      if existing) for each split
+    :var queue\_: producers-consumer queue
+    :var tensors_shape\_: shape of the sample and label tensor
     """
     def __init__(self, filename, batch_size, augs, ctype=ColorType.RGB,
                  ctype_gt=ColorType.GRAY, num_workers=1, queue_ratio_size=1,
@@ -91,8 +99,8 @@ class DLDataset(_ecvl.DLDataset):
           maximum size equal to ``batch_size`` x ``queue_ratio_size``
           x ``num_workers``
         :param drop_last: For each split, whether to drop the last samples
-          that don't fit the batch size. The vector dimensions must match the
-          number of splits.
+          that don't fit the batch size (dictionary mapping split types to
+          booleans)
         :param verify: if True, verify image existence
         """
         if drop_last is None:

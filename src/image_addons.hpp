@@ -39,12 +39,16 @@ ecvl::Image* bufToImg(const pybind11::buffer_info& b,
 template <typename type_, typename... options>
 void image_addons(pybind11::class_<type_, options...> &cl) {
     cl.def(pybind11::init<const std::vector<int>&, ecvl::DataType, std::string,
-           ecvl::ColorType, const std::vector<float>&, ecvl::Device>(),
+           ecvl::ColorType, const std::vector<float>&, ecvl::Device,
+           const std::unordered_map<std::string, ecvl::MetaData>&>(),
            pybind11::arg("dims"), pybind11::arg("elemtype"),
            pybind11::arg("channels"), pybind11::arg("colortype"),
            pybind11::arg("spacings") = std::vector<float>(),
            pybind11::arg("dev") = ecvl::Device::CPU,
-           pybind11::keep_alive<1, 2>(), pybind11::keep_alive<1, 6>());
+           pybind11::arg("meta") = std::unordered_map<std::string, ecvl::MetaData>(),
+           pybind11::keep_alive<1, 2>(), pybind11::keep_alive<1, 6>(),
+           pybind11::keep_alive<1, 8>());
+    cl.def("GetMeta", &ecvl::Image::GetMeta);
     // def_buffer will be run by numpy, so exceptions will crash the program
     cl.def_buffer([](ecvl::Image &img) -> pybind11::buffer_info {
         if (img.IsEmpty()) {

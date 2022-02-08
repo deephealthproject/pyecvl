@@ -96,6 +96,8 @@ class Image(_ecvl.Image):
 
     :var contiguous\_: whether the image is stored contiguously in memory
 
+    :var meta\_: image metadata
+
     :var dev\_: image Device
     """
 
@@ -124,7 +126,7 @@ class Image(_ecvl.Image):
         return _ecvl.Image(array, channels, colortype, spacings)
 
     def __init__(self, dims, elemtype, channels, colortype, spacings=None,
-                 dev=Device.CPU):
+                 dev=Device.CPU, meta=None):
         """\
         :param dims: image dimensions
         :param elemtype: pixel type, a DataType
@@ -135,8 +137,10 @@ class Image(_ecvl.Image):
         """
         if spacings is None:
             spacings = []
+        if meta is None:
+            meta = {}
         _ecvl.Image.__init__(
-            self, dims, elemtype, channels, colortype, spacings, dev
+            self, dims, elemtype, channels, colortype, spacings, dev, meta
         )
 
     def copy(self):
