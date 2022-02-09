@@ -501,7 +501,8 @@ using timedelta = std::chrono::duration<int64_t, std::nano>;
   cl.def_readwrite("ctype_", &ecvl::DLDataset::ctype_);
   cl.def_readwrite("ctype_gt_", &ecvl::DLDataset::ctype_gt_);
   cl.def_readwrite("augs_", &ecvl::DLDataset::augs_);
-  cl.def_readwrite("queue_", &ecvl::DLDataset::queue_);
+  // error: use of deleted function operator=
+  // cl.def_readwrite("queue_", &ecvl::DLDataset::queue_);
   cl.def_readwrite("tensors_shape_", &ecvl::DLDataset::tensors_shape_);
   cl.def("ResetBatch", [](ecvl::DLDataset& d) {
 	  return d.ResetBatch();

@@ -79,7 +79,6 @@ class DLDataset(_ecvl.DLDataset):
     :var ctype_gt\_: ColorType of the ground truth images
     :var augs\_: augmentations to be applied to the images (and ground truth,
       if existing) for each split
-    :var queue\_: producers-consumer queue
     :var tensors_shape\_: shape of the sample and label tensor
     """
     def __init__(self, filename, batch_size, augs, ctype=ColorType.RGB,
