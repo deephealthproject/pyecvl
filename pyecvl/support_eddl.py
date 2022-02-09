@@ -103,7 +103,7 @@ class DLDataset(_ecvl.DLDataset):
         :param verify: if True, verify image existence
         """
         if drop_last is None:
-            drop_last = []
+            drop_last = {}
         _ecvl.DLDataset.__init__(
             self, filename, batch_size, augs, ctype, ctype_gt, num_workers,
             queue_ratio_size, drop_last, verify

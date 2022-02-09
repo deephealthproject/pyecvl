@@ -1715,6 +1715,7 @@ void bind_ecvl_core_datatype(std::function< pybind11::module &(std::string const
 #include <func_binder.hpp>
 #include <iterator>
 #include <memory>
+#include <metadata_addons.hpp>
 #include <sstream> // __str__
 #include <string>
 #include <typeinfo>
@@ -1738,6 +1739,8 @@ void bind_ecvl_core_metadata(std::function< pybind11::module &(std::string const
 		pybind11::class_<ecvl::MetaData, std::shared_ptr<ecvl::MetaData>> cl(M("ecvl"), "MetaData", "");
 		cl.def( pybind11::init( [](ecvl::MetaData const &o){ return new ecvl::MetaData(o); } ) );
 		cl.def("assign", (class ecvl::MetaData & (ecvl::MetaData::*)(const class ecvl::MetaData &)) &ecvl::MetaData::operator=, "C++: ecvl::MetaData::operator=(const class ecvl::MetaData &) --> class ecvl::MetaData &", pybind11::return_value_policy::automatic, pybind11::arg(""));
+
+		metadata_addons(cl);
 	}
 }
 

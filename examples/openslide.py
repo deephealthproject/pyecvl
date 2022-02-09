@@ -41,17 +41,21 @@ def main(args):
     levels = os_img.GetLevelsDimensions()
     # for each level, extract a region with size = size of the last level
     dims = [0, 0] + levels[-1]  # [x, y, w, h] region to read
+    img = None
     for i in range(len(levels)):
         img = os_img.ReadRegion(i, dims)
         os_img.GetProperties(img)
-        print(f"level {i} metadata:")
-        for k, v in img.meta_:
-            print("  {k}: {v.GetStr()}")
-        mpp_x = img.GetMeta("openslide.mpp-x")
-        print(f"mpp-x: {mpp_x.GetStr()}")
         out_fn = "%s_level_%d.png" % (head, i)
         print("Writing %s" % out_fn)
         ecvl.ImWrite(out_fn, img)
+    os_img.Close()
+    mpp_x = img.GetMeta("openslide.mpp-x")
+    print(f"mpp-x: {mpp_x.GetStr()}")
+    metadata_dump_fn = f"{head}_metadata.txt"
+    print(f"Dumping metadata to {metadata_dump_fn}")
+    with open(metadata_dump_fn, "wt") as dump_f:
+        for k, v in img.meta_.items():
+            dump_f.write(f"{k}: {v.GetStr()}\n")
 
 
 if __name__ == "__main__":

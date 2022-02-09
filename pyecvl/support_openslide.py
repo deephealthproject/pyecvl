@@ -39,7 +39,7 @@ class OpenSlideImage(_ecvl.OpenSlideImage):
         """\
         :param filename: path to the image file
         """
-        _ecvl.OpenSlideImage.__init__(filename)
+        _ecvl.OpenSlideImage.__init__(self, filename)
 
     def GetLevelCount(self):
         """\

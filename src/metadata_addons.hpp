@@ -21,7 +21,7 @@
 #pragma once
 
 #include <pybind11/pybind11.h>
-#include <ecvl/metadata.h>
+#include <ecvl/core/metadata.h>
 
 
 template <typename type_, typename... options>
