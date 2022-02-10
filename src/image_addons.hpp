@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <any>
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
 
@@ -49,6 +50,31 @@ void image_addons(pybind11::class_<type_, options...> &cl) {
            pybind11::keep_alive<1, 2>(), pybind11::keep_alive<1, 6>(),
            pybind11::keep_alive<1, 8>());
     cl.def("GetMeta", &ecvl::Image::GetMeta);
+    cl.def("SetMeta", [](ecvl::Image& img, const std::string& key, const unsigned short& value) {
+      return img.SetMeta(key, std::any(value));
+    });
+    cl.def("SetMeta", [](ecvl::Image& img, const std::string& key, const short& value) {
+      return img.SetMeta(key, std::any(value));
+    });
+    cl.def("SetMeta", [](ecvl::Image& img, const std::string& key, const unsigned int& value) {
+      return img.SetMeta(key, std::any(value));
+    });
+    cl.def("SetMeta", [](ecvl::Image& img, const std::string& key, const int& value) {
+      return img.SetMeta(key, std::any(value));
+    });
+    cl.def("SetMeta", [](ecvl::Image& img, const std::string& key, const long& value) {
+      return img.SetMeta(key, std::any(value));
+    });
+    cl.def("SetMeta", [](ecvl::Image& img, const std::string& key, const long long& value) {
+      return img.SetMeta(key, std::any(value));
+    });
+    // No overload for float (in case of overflow, conversion succeeds and creates an inf)
+    cl.def("SetMeta", [](ecvl::Image& img, const std::string& key, const double& value) {
+      return img.SetMeta(key, std::any(value));
+    });
+    cl.def("SetMeta", [](ecvl::Image& img, const std::string& key, const std::string& value) {
+      return img.SetMeta(key, std::any(value));
+    });
     // def_buffer will be run by numpy, so exceptions will crash the program
     cl.def_buffer([](ecvl::Image &img) -> pybind11::buffer_info {
         if (img.IsEmpty()) {

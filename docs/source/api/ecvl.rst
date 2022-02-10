@@ -180,6 +180,14 @@ Image processing
 .. autofunction:: pyecvl.ecvl.RandomCrop
 
 
+Metadata
+--------
+
+.. autoclass:: pyecvl.ecvl.MetaData
+   :members:
+   :undoc-members:
+
+
 DeepHealth dataset parser
 -------------------------
 

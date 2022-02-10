@@ -249,6 +249,24 @@ class Image(_ecvl.Image):
         """
         return _ecvl.Image.ConvertTo(self, dtype, saturate)
 
+    def GetMeta(self, key):
+        """\
+        Get the metadata value corresponding to ``key``.
+
+        :param key: key string
+        """
+        return _ecvl.Image.GetMeta(self, key)
+
+    def SetMeta(self, key, value):
+        """\
+        Set the metadata value corresponding to ``key``.
+
+        :param key: key string
+        :param value: metadata value (integer, float or string)
+        :return: True if a new entry has been inserted, else False
+        """
+        return _ecvl.Image.SetMeta(self, key, value)
+
 
 class View_int8(_ecvl.View_int8):
     pass

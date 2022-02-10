@@ -26,5 +26,30 @@
 
 template <typename type_, typename... options>
 void metadata_addons(pybind11::class_<type_, options...> &cl) {
+    cl.def(pybind11::init([](const unsigned short& value) {
+      return new ecvl::MetaData(value, 0);
+    }));
+    cl.def(pybind11::init([](const short& value) {
+      return new ecvl::MetaData(value, 0);
+    }));
+    cl.def(pybind11::init([](const unsigned int& value) {
+      return new ecvl::MetaData(value, 0);
+    }));
+    cl.def(pybind11::init([](const int& value) {
+      return new ecvl::MetaData(value, 0);
+    }));
+    cl.def(pybind11::init([](const long& value) {
+      return new ecvl::MetaData(value, 0);
+    }));
+    cl.def(pybind11::init([](const long long& value) {
+      return new ecvl::MetaData(value, 0);
+    }));
+    // No overload for float (in case of overflow, conversion succeeds and creates an inf)
+    cl.def(pybind11::init([](const double& value) {
+      return new ecvl::MetaData(value, 0);
+    }));
+    cl.def(pybind11::init([](const string& value) {
+      return new ecvl::MetaData(value, 0);
+    }));
     cl.def("GetStr", &ecvl::MetaData::GetStr);
 }

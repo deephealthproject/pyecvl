@@ -43,6 +43,15 @@ def dicom_io(fn):
     head, ext = os.path.splitext(os.path.basename(fn))
     print("Reading %s" % fn)
     img = ecvl.DicomRead(fn)
+    key = "foo"
+    img.SetMeta(key, 8)
+    print(f"{key}: {img.GetMeta(key).GetStr()}")
+    print(f"Rows: {img.GetMeta('Rows').GetStr()}")
+    metadata_dump_fn = f"{head}_metadata.txt"
+    print(f"Dumping metadata to {metadata_dump_fn}")
+    with open(metadata_dump_fn, "wt") as dump_f:
+        for k, v in img.meta_.items():
+            dump_f.write(f"{k}: {v.GetStr()}\n")
     ecvl.ChangeColorSpace(img, img, ecvl.ColorType.GRAY)
     thresh = ecvl.OtsuThreshold(img)
     maxval = 255
