@@ -40,6 +40,7 @@ class OpenSlideImage(_ecvl.OpenSlideImage):
         :param filename: path to the image file
         """
         _ecvl.OpenSlideImage.__init__(self, filename)
+        self.closed = False
 
     def GetLevelCount(self):
         """\
@@ -107,4 +108,12 @@ class OpenSlideImage(_ecvl.OpenSlideImage):
 
         :return: None
         """
-        return _ecvl.OpenSlideImage.Close(self)
+        if not self.closed:
+            self.closed = True
+            return _ecvl.OpenSlideImage.Close(self)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *args):
+        self.Close()
