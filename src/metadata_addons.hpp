@@ -48,8 +48,15 @@ void metadata_addons(pybind11::class_<type_, options...> &cl) {
     cl.def(pybind11::init([](const double& value) {
       return new ecvl::MetaData(value, 0);
     }));
-    cl.def(pybind11::init([](const string& value) {
+    cl.def(pybind11::init([](const std::string& value) {
       return new ecvl::MetaData(value, 0);
     }));
+    cl.def("Get", [](ecvl::MetaData& m) -> pybind11::object {
+      std::any value = m.Get();
+      if (const auto it = metadata_conv.find(std::type_index(value.type())); it != metadata_conv.cend()) {
+        return it->second(value);
+      }
+      throw std::runtime_error("Unsupported type");
+    });
     cl.def("GetStr", &ecvl::MetaData::GetStr);
 }

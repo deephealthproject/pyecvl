@@ -45,8 +45,8 @@ def dicom_io(fn):
     img = ecvl.DicomRead(fn)
     key = "foo"
     img.SetMeta(key, 8)
-    print(f"{key}: {img.GetMeta(key).GetStr()}")
-    print(f"Rows: {img.GetMeta('Rows').GetStr()}")
+    print(f"{key}: {img.GetMeta(key).Get()}")
+    print(f"Rows: {img.GetMeta('Rows').Get()}")
     metadata_dump_fn = f"{head}_metadata.txt"
     print(f"Dumping metadata to {metadata_dump_fn}")
     with open(metadata_dump_fn, "wt") as dump_f:

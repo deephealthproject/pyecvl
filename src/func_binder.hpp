@@ -19,6 +19,10 @@
 // SOFTWARE.
 
 #pragma once
+#include <any>
+#include <functional>
+#include <typeindex>
+#include <unordered_map>
 #include <pybind11/pybind11.h>
 #include <pybind11/chrono.h>
 #include <ecvl/core/image.h>
@@ -36,6 +40,40 @@
 #ifdef ECVL_WITH_DICOM
 #include <ecvl/core/support_dcmtk.h>
 #endif
+
+
+std::unordered_map<std::type_index, std::function<pybind11::object(const std::any& value)>> metadata_conv {
+    {std::type_index(typeid(std::string)), [](const std::any& x) {
+      return pybind11::cast(std::any_cast<std::string>(x));
+    }},
+    {std::type_index(typeid(int)), [](const std::any& x) {
+      return pybind11::cast(std::any_cast<int>(x));
+    }},
+    {std::type_index(typeid(float)), [](const std::any& x) {
+      return pybind11::cast(std::any_cast<float>(x));
+    }},
+    {std::type_index(typeid(double)), [](const std::any& x) {
+      return pybind11::cast(std::any_cast<double>(x));
+    }},
+    {std::type_index(typeid(long)), [](const std::any& x) {
+      return pybind11::cast(std::any_cast<long>(x));
+    }},
+    {std::type_index(typeid(long long)), [](const std::any& x) {
+      return pybind11::cast(std::any_cast<long long>(x));
+    }},
+    {std::type_index(typeid(short)), [](const std::any& x) {
+      return pybind11::cast(std::any_cast<short>(x));
+    }},
+    {std::type_index(typeid(unsigned)), [](const std::any& x) {
+      return pybind11::cast(std::any_cast<unsigned>(x));
+    }},
+    {std::type_index(typeid(unsigned int)), [](const std::any& x) {
+      return pybind11::cast(std::any_cast<unsigned int>(x));
+    }},
+    {std::type_index(typeid(unsigned short)), [](const std::any& x) {
+      return pybind11::cast(std::any_cast<unsigned short>(x));
+    }},
+};
 
 
 #ifdef ECVL_EDDL

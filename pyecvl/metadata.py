@@ -35,5 +35,8 @@ class MetaData(_ecvl.MetaData):
         """
         _ecvl.MetaData.__init__(self, value)
 
+    def Get(self):
+        return _ecvl.MetaData.Get(self)
+
     def GetStr(self):
         return _ecvl.MetaData.GetStr(self)

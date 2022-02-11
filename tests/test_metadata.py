@@ -28,7 +28,12 @@ import pyecvl.ecvl as ecvl_py
 def test_MetaData(ecvl):
     for n in -12, 12, -66000, 66000, -4294967300, 4294967300:
         m = ecvl.MetaData(n)
+        assert m.Get() == n
         assert int(m.GetStr()) == n
     for n in -12.0, 12.0, -5e40, 5e40:
         m = ecvl.MetaData(n)
+        assert m.Get() == pytest.approx(n)
         assert float(m.GetStr()) == pytest.approx(n)
+    m = ecvl.MetaData("foo")
+    assert m.Get() == "foo"
+    assert m.GetStr() == "foo"
