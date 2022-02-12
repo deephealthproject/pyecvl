@@ -48,6 +48,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#image">Image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#arithmetic-operations">Arithmetic operations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#image-processing">Image processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#metadata">Metadata</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#deephealth-dataset-parser">DeepHealth dataset parser</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#augmentations">Augmentations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#image-i-o">Image I/O</a></li>
@@ -242,7 +243,7 @@ members if called with no arguments</p>
 <h2>Image<a class="headerlink" href="#image" title="Permalink to this headline"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyecvl.ecvl.Image">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">Image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elemtype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colortype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dev</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Device.CPU</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Image" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">Image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elemtype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colortype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dev</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Device.CPU</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Image" title="Permalink to this definition"></a></dt>
 <dd><p>Image class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Variables</dt>
@@ -268,6 +269,7 @@ have the appropriate value.</p></li>
 axis (list of floats).</p></li>
 <li><p><strong>datasize_</strong> – size of image data in bytes.</p></li>
 <li><p><strong>contiguous_</strong> – whether the image is stored contiguously in memory</p></li>
+<li><p><strong>meta_</strong> – image metadata</p></li>
 <li><p><strong>dev_</strong> – image Device</p></li>
 </ul>
 </dd>
@@ -349,6 +351,17 @@ get to the next pixel/voxel in the corresponding dimension</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="pyecvl.ecvl.Image.GetMeta">
+<span class="sig-name descname"><span class="pre">GetMeta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Image.GetMeta" title="Permalink to this definition"></a></dt>
+<dd><p>Get the metadata value corresponding to <code class="docutils literal notranslate"><span class="pre">key</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>key</strong> – key string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="pyecvl.ecvl.Image.Height">
 <span class="sig-name descname"><span class="pre">Height</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Image.Height" title="Permalink to this definition"></a></dt>
 <dd><p>Get the image height.</p>
@@ -394,6 +407,23 @@ get to the next pixel/voxel in the corresponding dimension</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyecvl.ecvl.Image.SetMeta">
+<span class="sig-name descname"><span class="pre">SetMeta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Image.SetMeta" title="Permalink to this definition"></a></dt>
+<dd><p>Set the metadata value corresponding to <code class="docutils literal notranslate"><span class="pre">key</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – key string</p></li>
+<li><p><strong>value</strong> – metadata value (integer, float or string)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if a new entry has been inserted, else False</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1759,6 +1789,29 @@ the output Image.</p></li>
 </dd></dl>
 
 </section>
+<section id="metadata">
+<h2>Metadata<a class="headerlink" href="#metadata" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyecvl.ecvl.MetaData">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">MetaData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.MetaData" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> – integer, float or string</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyecvl.ecvl.MetaData.Get">
+<span class="sig-name descname"><span class="pre">Get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyecvl._core.ecvl.MetaData</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">object</span></span></span><a class="headerlink" href="#pyecvl.ecvl.MetaData.Get" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyecvl.ecvl.MetaData.GetStr">
+<span class="sig-name descname"><span class="pre">GetStr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyecvl._core.ecvl.MetaData</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#pyecvl.ecvl.MetaData.GetStr" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
 <section id="deephealth-dataset-parser">
 <h2>DeepHealth dataset parser<a class="headerlink" href="#deephealth-dataset-parser" title="Permalink to this headline"></a></h2>
 <dl class="py class">
@@ -2740,39 +2793,111 @@ desired size is bigger than the src image</p></li>
 </dl>
 </dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="pyecvl.ecvl.OpenSlideGetLevels">
-<span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">OpenSlideGetLevels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.OpenSlideGetLevels" title="Permalink to this definition"></a></dt>
-<dd><p>Get the width and height for each level of a whole-slide image.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyecvl.ecvl.OpenSlideImage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">OpenSlideImage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.OpenSlideImage" title="Permalink to this definition"></a></dt>
+<dd><p>Openslide image.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>filename</strong> – image file name</p>
+<dd class="field-odd"><p><strong>filename</strong> – path to the image file</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>a list of pairs representing the width and height of each level</p>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyecvl.ecvl.OpenSlideImage.Close">
+<span class="sig-name descname"><span class="pre">Close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.OpenSlideImage.Close" title="Permalink to this definition"></a></dt>
+<dd><p>Close the file handle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="pyecvl.ecvl.OpenSlideRead">
-<span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">OpenSlideRead</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dims</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.OpenSlideRead" title="Permalink to this definition"></a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyecvl.ecvl.OpenSlideImage.GetBestLevelForDownsample">
+<span class="sig-name descname"><span class="pre">GetBestLevelForDownsample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">downsample</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.OpenSlideImage.GetBestLevelForDownsample" title="Permalink to this definition"></a></dt>
+<dd><p>Get the best level to use for displaying the given downsample.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>downsample</strong> – the desired downsample factor</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>image level, or -1 if an error occurred.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyecvl.ecvl.OpenSlideImage.GetLevelCount">
+<span class="sig-name descname"><span class="pre">GetLevelCount</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.OpenSlideImage.GetLevelCount" title="Permalink to this definition"></a></dt>
+<dd><p>Get the number of levels in the image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>number of levels in the image</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyecvl.ecvl.OpenSlideImage.GetLevelDownsamples">
+<span class="sig-name descname"><span class="pre">GetLevelDownsamples</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.OpenSlideImage.GetLevelDownsamples" title="Permalink to this definition"></a></dt>
+<dd><p>Get the downsampling factor (or -1, if an error occurred) for each
+level.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>list of floats representing the downsampling factor for each
+level</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyecvl.ecvl.OpenSlideImage.GetLevelsDimensions">
+<span class="sig-name descname"><span class="pre">GetLevelsDimensions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.OpenSlideImage.GetLevelsDimensions" title="Permalink to this definition"></a></dt>
+<dd><p>Get the width and height for each level of a whole-slide image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a list of pairs representing the width and height of each level</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyecvl.ecvl.OpenSlideImage.GetProperties">
+<span class="sig-name descname"><span class="pre">GetProperties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dst</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.OpenSlideImage.GetProperties" title="Permalink to this definition"></a></dt>
+<dd><p>Load metadata properties into an ECVL Image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dst</strong> – ECVL Image</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyecvl.ecvl.OpenSlideImage.ReadRegion">
+<span class="sig-name descname"><span class="pre">ReadRegion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dims</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.OpenSlideImage.ReadRegion" title="Permalink to this definition"></a></dt>
 <dd><p>Load a region of a whole-slide image.</p>
-<p>Supported formats are those supported by the OpenSlide library.</p>
+<p>Supported formats are those supported by the OpenSlide library. If
+the region cannot be read for any reason, the function creates an
+empty Image and returns False.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> – image file name</p></li>
-<li><p><strong>level</strong> – image level to extract</p></li>
-<li><p><strong>dims</strong> – <code class="docutils literal notranslate"><span class="pre">[x,</span> <span class="pre">y,</span> <span class="pre">w,</span> <span class="pre">h]</span></code> list representing the region to extract.
-<code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> are the top-left x and y coordinates in the level 0
-reference frame. <code class="docutils literal notranslate"><span class="pre">w</span></code> and <code class="docutils literal notranslate"><span class="pre">h</span></code> are the width and height of the region</p></li>
+<li><p><strong>level</strong> – image level to read</p></li>
+<li><p><strong>dims</strong> – <code class="docutils literal notranslate"><span class="pre">[x,</span> <span class="pre">y,</span> <span class="pre">w,</span> <span class="pre">h]</span></code> list, where: <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> are the top
+left x and y coordinates in the level 0 reference frame; <code class="docutils literal notranslate"><span class="pre">w</span></code> and
+<code class="docutils literal notranslate"><span class="pre">h</span></code> are the width and height of the region.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>an Image object</p>
+<dd class="field-even"><p>ECVL Image (RGB, with a “cxy” layout).</p>
 </dd>
 </dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py function">
@@ -2880,6 +3005,12 @@ should be applied</p></li>
 <li><p><strong>n_channels_</strong> – number of image channels</p></li>
 <li><p><strong>n_channels_gt_</strong> – number of ground truth image channels</p></li>
 <li><p><strong>resize_dims_</strong> – dimensions <code class="docutils literal notranslate"><span class="pre">[H,</span> <span class="pre">W]</span></code> to which images must be resized</p></li>
+<li><p><strong>current_batch_</strong> – Number of batches already loaded for each split</p></li>
+<li><p><strong>ctype_</strong> – ColorType of the images</p></li>
+<li><p><strong>ctype_gt_</strong> – ColorType of the ground truth images</p></li>
+<li><p><strong>augs_</strong> – augmentations to be applied to the images (and ground truth,
+if existing) for each split</p></li>
+<li><p><strong>tensors_shape_</strong> – shape of the sample and label tensor</p></li>
 </ul>
 </dd>
 <dt class="field-even">Parameters</dt>
@@ -2897,8 +3028,8 @@ augmentation is required</p></li>
 maximum size equal to <code class="docutils literal notranslate"><span class="pre">batch_size</span></code> x <code class="docutils literal notranslate"><span class="pre">queue_ratio_size</span></code>
 x <code class="docutils literal notranslate"><span class="pre">num_workers</span></code></p></li>
 <li><p><strong>drop_last</strong> – For each split, whether to drop the last samples
-that don’t fit the batch size. The vector dimensions must match the
-number of splits.</p></li>
+that don’t fit the batch size (dictionary mapping split types to
+booleans)</p></li>
 <li><p><strong>verify</strong> – if True, verify image existence</p></li>
 </ul>
 </dd>
