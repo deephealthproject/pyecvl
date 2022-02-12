@@ -21,23 +21,22 @@
 from . import _core
 _ecvl = _core.ecvl
 
-ECVL_EDDL = _ecvl.ECVL_EDDL
-ECVL_WITH_OPENSLIDE = _ecvl.ECVL_WITH_OPENSLIDE
-ECVL_WITH_DICOM = _ecvl.ECVL_WITH_DICOM
 
-from .arithmetic import *  # noqa: E402,F401,F403
-from .dataset_generator import *  # noqa: E402,F401,F403
-from .dataset_parser import *  # noqa: E402,F401,F403
-from .datatype import *  # noqa: E402,F401,F403
-from .image import *  # noqa: E402,F401,F403
-from .imgproc import *  # noqa: E402,F401,F403
-from .metadata import *  # noqa: E402,F401,F403
-from .support_imgcodecs import *  # noqa: E402,F401,F403
-from .support_nifti import *  # noqa: E402,F401,F403
-if ECVL_EDDL:
-    from .augmentations import *  # noqa: E402,F401,F403
-    from .support_eddl import *  # noqa: E402,F401,F403
-if ECVL_WITH_OPENSLIDE:
-    from .support_openslide import *  # noqa: E402,F401,F403
-if ECVL_WITH_DICOM:
-    from .support_dcmtk import *  # noqa: E402,F401,F403
+__all__ = [
+    "MetaData",
+]
+
+
+class MetaData(_ecvl.MetaData):
+
+    def __init__(self, value):
+        """\
+        :param value: integer, float or string
+        """
+        _ecvl.MetaData.__init__(self, value)
+
+    def Get(self):
+        return _ecvl.MetaData.Get(self)
+
+    def GetStr(self):
+        return _ecvl.MetaData.GetStr(self)

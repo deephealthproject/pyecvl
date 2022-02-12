@@ -96,6 +96,8 @@ class Image(_ecvl.Image):
 
     :var contiguous\_: whether the image is stored contiguously in memory
 
+    :var meta\_: image metadata
+
     :var dev\_: image Device
     """
 
@@ -124,7 +126,7 @@ class Image(_ecvl.Image):
         return _ecvl.Image(array, channels, colortype, spacings)
 
     def __init__(self, dims, elemtype, channels, colortype, spacings=None,
-                 dev=Device.CPU):
+                 dev=Device.CPU, meta=None):
         """\
         :param dims: image dimensions
         :param elemtype: pixel type, a DataType
@@ -135,8 +137,10 @@ class Image(_ecvl.Image):
         """
         if spacings is None:
             spacings = []
+        if meta is None:
+            meta = {}
         _ecvl.Image.__init__(
-            self, dims, elemtype, channels, colortype, spacings, dev
+            self, dims, elemtype, channels, colortype, spacings, dev, meta
         )
 
     def copy(self):
@@ -244,6 +248,24 @@ class Image(_ecvl.Image):
         :param saturate: whether to apply saturation or not
         """
         return _ecvl.Image.ConvertTo(self, dtype, saturate)
+
+    def GetMeta(self, key):
+        """\
+        Get the metadata value corresponding to ``key``.
+
+        :param key: key string
+        """
+        return _ecvl.Image.GetMeta(self, key)
+
+    def SetMeta(self, key, value):
+        """\
+        Set the metadata value corresponding to ``key``.
+
+        :param key: key string
+        :param value: metadata value (integer, float or string)
+        :return: True if a new entry has been inserted, else False
+        """
+        return _ecvl.Image.SetMeta(self, key, value)
 
 
 class View_int8(_ecvl.View_int8):

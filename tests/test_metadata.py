@@ -18,26 +18,22 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from . import _core
-_ecvl = _core.ecvl
+import pytest
 
-ECVL_EDDL = _ecvl.ECVL_EDDL
-ECVL_WITH_OPENSLIDE = _ecvl.ECVL_WITH_OPENSLIDE
-ECVL_WITH_DICOM = _ecvl.ECVL_WITH_DICOM
+import pyecvl._core.ecvl as ecvl_core
+import pyecvl.ecvl as ecvl_py
 
-from .arithmetic import *  # noqa: E402,F401,F403
-from .dataset_generator import *  # noqa: E402,F401,F403
-from .dataset_parser import *  # noqa: E402,F401,F403
-from .datatype import *  # noqa: E402,F401,F403
-from .image import *  # noqa: E402,F401,F403
-from .imgproc import *  # noqa: E402,F401,F403
-from .metadata import *  # noqa: E402,F401,F403
-from .support_imgcodecs import *  # noqa: E402,F401,F403
-from .support_nifti import *  # noqa: E402,F401,F403
-if ECVL_EDDL:
-    from .augmentations import *  # noqa: E402,F401,F403
-    from .support_eddl import *  # noqa: E402,F401,F403
-if ECVL_WITH_OPENSLIDE:
-    from .support_openslide import *  # noqa: E402,F401,F403
-if ECVL_WITH_DICOM:
-    from .support_dcmtk import *  # noqa: E402,F401,F403
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_MetaData(ecvl):
+    for n in -12, 12, -66000, 66000, -4294967300, 4294967300:
+        m = ecvl.MetaData(n)
+        assert m.Get() == n
+        assert int(m.GetStr()) == n
+    for n in -12.0, 12.0, -5e40, 5e40:
+        m = ecvl.MetaData(n)
+        assert m.Get() == pytest.approx(n)
+        assert float(m.GetStr()) == pytest.approx(n)
+    m = ecvl.MetaData("foo")
+    assert m.Get() == "foo"
+    assert m.GetStr() == "foo"

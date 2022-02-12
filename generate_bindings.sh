@@ -4,11 +4,13 @@ set -euo pipefail
 
 this="${BASH_SOURCE:-$0}"
 this_dir=$(cd -P -- "$(dirname -- "${this}")" && pwd -P)
+ecvl_img="dhealth/dev-ecvl-cpu"
 
 pushd "${this_dir}"
 rm -rf include && mkdir include
-docker run --rm ecvl bash -c "tar -c -C /usr/local/include opencv2" | tar -x -C include
-docker run --rm ecvl bash -c "tar -c -C /usr/local/include yaml-cpp" | tar -x -C include
+for d in opencv2 yaml-cpp; do
+    docker run --rm ${ecvl_img} bash -c "tar -c -C /usr/local/include ${d}" | tar -x -C include
+done
 popd
 
 pyecvl_mount=/pyecvl

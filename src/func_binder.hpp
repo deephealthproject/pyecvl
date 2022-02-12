@@ -19,6 +19,10 @@
 // SOFTWARE.
 
 #pragma once
+#include <any>
+#include <functional>
+#include <typeindex>
+#include <unordered_map>
 #include <pybind11/pybind11.h>
 #include <pybind11/chrono.h>
 #include <ecvl/core/image.h>
@@ -36,6 +40,40 @@
 #ifdef ECVL_WITH_DICOM
 #include <ecvl/core/support_dcmtk.h>
 #endif
+
+
+std::unordered_map<std::type_index, std::function<pybind11::object(const std::any& value)>> metadata_conv {
+    {std::type_index(typeid(std::string)), [](const std::any& x) {
+      return pybind11::cast(std::any_cast<std::string>(x));
+    }},
+    {std::type_index(typeid(int)), [](const std::any& x) {
+      return pybind11::cast(std::any_cast<int>(x));
+    }},
+    {std::type_index(typeid(float)), [](const std::any& x) {
+      return pybind11::cast(std::any_cast<float>(x));
+    }},
+    {std::type_index(typeid(double)), [](const std::any& x) {
+      return pybind11::cast(std::any_cast<double>(x));
+    }},
+    {std::type_index(typeid(long)), [](const std::any& x) {
+      return pybind11::cast(std::any_cast<long>(x));
+    }},
+    {std::type_index(typeid(long long)), [](const std::any& x) {
+      return pybind11::cast(std::any_cast<long long>(x));
+    }},
+    {std::type_index(typeid(short)), [](const std::any& x) {
+      return pybind11::cast(std::any_cast<short>(x));
+    }},
+    {std::type_index(typeid(unsigned)), [](const std::any& x) {
+      return pybind11::cast(std::any_cast<unsigned>(x));
+    }},
+    {std::type_index(typeid(unsigned int)), [](const std::any& x) {
+      return pybind11::cast(std::any_cast<unsigned int>(x));
+    }},
+    {std::type_index(typeid(unsigned short)), [](const std::any& x) {
+      return pybind11::cast(std::any_cast<unsigned short>(x));
+    }},
+};
 
 
 #ifdef ECVL_EDDL
@@ -487,15 +525,23 @@ using timedelta = std::chrono::duration<int64_t, std::nano>;
   cl.def(pybind11::init([](const std::string& filename, const int batch_size, ecvl::DatasetAugmentations& augs, ecvl::ColorType ctype, ecvl::ColorType ctype_gt, int num_workers, int queue_ratio_size) {
     return new ecvl::DLDataset(filename, batch_size, augs, ctype, ctype_gt, num_workers, queue_ratio_size);
   }));
-  cl.def(pybind11::init([](const std::string& filename, const int batch_size, ecvl::DatasetAugmentations& augs, ecvl::ColorType ctype, ecvl::ColorType ctype_gt, int num_workers, int queue_ratio_size, std::vector<bool> drop_last) {
+  cl.def(pybind11::init([](const std::string& filename, const int batch_size, ecvl::DatasetAugmentations& augs, ecvl::ColorType ctype, ecvl::ColorType ctype_gt, int num_workers, int queue_ratio_size, std::unordered_map<std::string, bool> drop_last) {
     return new ecvl::DLDataset(filename, batch_size, augs, ctype, ctype_gt, num_workers, queue_ratio_size, drop_last);
   }));
-  cl.def(pybind11::init([](const std::string& filename, const int batch_size, ecvl::DatasetAugmentations& augs, ecvl::ColorType ctype, ecvl::ColorType ctype_gt, int num_workers, int queue_ratio_size, std::vector<bool> drop_last, bool verify) {
+  cl.def(pybind11::init([](const std::string& filename, const int batch_size, ecvl::DatasetAugmentations& augs, ecvl::ColorType ctype, ecvl::ColorType ctype_gt, int num_workers, int queue_ratio_size, std::unordered_map<std::string, bool> drop_last, bool verify) {
     return new ecvl::DLDataset(filename, batch_size, augs, ctype, ctype_gt, num_workers, queue_ratio_size, drop_last, verify);
   }));
   cl.def_readwrite("n_channels_", &ecvl::DLDataset::n_channels_);
   cl.def_readwrite("n_channels_gt_", &ecvl::DLDataset::n_channels_gt_);
   cl.def_readwrite("resize_dims_", &ecvl::DLDataset::resize_dims_);
+  cl.def_readwrite("batch_size_", &ecvl::DLDataset::batch_size_);
+  cl.def_readwrite("current_batch_", &ecvl::DLDataset::current_batch_);
+  cl.def_readwrite("ctype_", &ecvl::DLDataset::ctype_);
+  cl.def_readwrite("ctype_gt_", &ecvl::DLDataset::ctype_gt_);
+  cl.def_readwrite("augs_", &ecvl::DLDataset::augs_);
+  // error: use of deleted function operator=
+  // cl.def_readwrite("queue_", &ecvl::DLDataset::queue_);
+  cl.def_readwrite("tensors_shape_", &ecvl::DLDataset::tensors_shape_);
   cl.def("ResetBatch", [](ecvl::DLDataset& d) {
 	  return d.ResetBatch();
   });
@@ -583,20 +629,34 @@ using timedelta = std::chrono::duration<int64_t, std::nano>;
 
 #endif
 #ifdef ECVL_WITH_OPENSLIDE
-  // support_openslide: OpenSlideRead
-  m.def("OpenSlideRead", [](std::string& filename, const int level, const std::vector<int>& dims) -> ecvl::Image {
+  // support_openslide: OpenSlideImage
+  {
+  pybind11::class_<ecvl::OpenSlideImage, std::shared_ptr<ecvl::OpenSlideImage>> cl(m, "OpenSlideImage", "");
+  cl.def(pybind11::init([](const std::string& filename) {
+    return new ecvl::OpenSlideImage(filename);
+  }));
+  cl.def("GetLevelCount", &ecvl::OpenSlideImage::GetLevelCount);
+  cl.def("GetLevelsDimensions", [](ecvl::OpenSlideImage& im) -> std::vector<std::array<int, 2>> {
+    std::vector<std::array<int, 2>> levels;
+    im.GetLevelsDimensions(levels);
+    return levels;
+  });
+  cl.def("GetLevelDownsamples", [](ecvl::OpenSlideImage& im) -> std::vector<double> {
+    std::vector<double> levels;
+    im.GetLevelDownsamples(levels);
+    return levels;
+  });
+  cl.def("GetBestLevelForDownsample", &ecvl::OpenSlideImage::GetBestLevelForDownsample);
+  cl.def("GetProperties", &ecvl::OpenSlideImage::GetProperties);
+  cl.def("ReadRegion", [](ecvl::OpenSlideImage& im, const int level, const std::vector<int>& dims) -> ecvl::Image {
     ecvl::Image dst;
-    if (!ecvl::OpenSlideRead(filename, dst, level, dims)) {
-	throw std::runtime_error("Can't read " + filename);
+    if (!im.ReadRegion(dst, level, dims)) {
+	throw std::runtime_error("Can't read OpenSlide region");
     }
     return dst;
   });
-  // support_openslide: OpenSlideGetLevels
-  m.def("OpenSlideGetLevels", [](std::string& filename) -> std::vector<std::array<int, 2>> {
-    std::vector<std::array<int, 2>> levels;
-    ecvl::OpenSlideGetLevels(filename, levels);
-    return levels;
-  });
+  cl.def("Close", &ecvl::OpenSlideImage::Close);
+  }
 #endif
   // support_nifti: NiftiRead
   m.def("NiftiRead", [](const std::string& filename) -> ecvl::Image {

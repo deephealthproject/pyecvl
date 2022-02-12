@@ -34,15 +34,27 @@ def main(args):
         print("No OpenSlide support - quitting")
         sys.exit(0)
     head, _ = os.path.splitext(os.path.basename(args.in_fn))
-    levels = ecvl.OpenSlideGetLevels(args.in_fn)
-    # for each level, extract a region with size = size of the last level
-    dims = [0, 0] + levels[-1]  # [x, y, w, h] region to read
     print("Reading %s" % args.in_fn)
-    for i in range(len(levels)):
-        img = ecvl.OpenSlideRead(args.in_fn, i, dims)
-        out_fn = "%s_level_%d.png" % (head, i)
-        print("Writing %s" % out_fn)
-        ecvl.ImWrite(out_fn, img)
+    with ecvl.OpenSlideImage(args.in_fn) as os_img:
+        n_levels = os_img.GetLevelCount()
+        print(f"Number of levels: {n_levels}")
+        levels = os_img.GetLevelsDimensions()
+        # for each level, extract a region with size = size of the last level
+        dims = [0, 0] + levels[-1]  # [x, y, w, h] region to read
+        img = None
+        for i in range(len(levels)):
+            img = os_img.ReadRegion(i, dims)
+            os_img.GetProperties(img)
+            out_fn = "%s_level_%d.png" % (head, i)
+            print("Writing %s" % out_fn)
+            ecvl.ImWrite(out_fn, img)
+    mpp_x = img.GetMeta("openslide.mpp-x")
+    print(f"mpp-x: {mpp_x.GetStr()}")
+    metadata_dump_fn = f"{head}_metadata.txt"
+    print(f"Dumping metadata to {metadata_dump_fn}")
+    with open(metadata_dump_fn, "wt") as dump_f:
+        for k, v in img.meta_.items():
+            dump_f.write(f"{k}: {v.GetStr()}\n")
 
 
 if __name__ == "__main__":
