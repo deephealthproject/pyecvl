@@ -122,6 +122,17 @@ image to an array:
    :alt: restored logo
    :align: center
 
+In the case of OpenSlide images the dimension layout is ``cxy``; however, the
+color mode is already RGB, so you only need the RearrangeChannels step:
+
+.. code-block:: python
+
+    f = ecvl.OpenSlideImage("foo.mrxs")
+    img = f.ReadRegion(0, [0, 0, 256, 256])
+    ecvl.RearrangeChannels(img, img, "yxc")
+    plt.imshow(np.array(img))
+    f.Close()
+
 
 Image processing
 ----------------

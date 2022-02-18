@@ -159,6 +159,15 @@ image to an array:</p>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="_images/logo_restored.png"><img alt="restored logo" class="align-center" src="_images/logo_restored.png" style="width: 221.0px; height: 249.0px;" /></a>
+<p>In the case of OpenSlide images the dimension layout is <code class="docutils literal notranslate"><span class="pre">cxy</span></code>; however, the
+color mode is already RGB, so you only need the RearrangeChannels step:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">ecvl</span><span class="o">.</span><span class="n">OpenSlideImage</span><span class="p">(</span><span class="s2">&quot;foo.mrxs&quot;</span><span class="p">)</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">ReadRegion</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="mi">256</span><span class="p">])</span>
+<span class="n">ecvl</span><span class="o">.</span><span class="n">RearrangeChannels</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">img</span><span class="p">,</span> <span class="s2">&quot;yxc&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">img</span><span class="p">))</span>
+<span class="n">f</span><span class="o">.</span><span class="n">Close</span><span class="p">()</span>
+</pre></div>
+</div>
 </section>
 <section id="image-processing">
 <h2>Image processing<a class="headerlink" href="#image-processing" title="Permalink to this headline"></a></h2>
