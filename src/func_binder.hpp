@@ -89,6 +89,17 @@ public:
 	PYBIND11_OVERLOAD_PURE(std::shared_ptr<Augmentation>, ecvl::Augmentation, Clone);
     }
 };
+
+class PyDLDataset : public ecvl::DLDataset {
+public:
+    using ecvl::DLDataset::DLDataset;
+
+    // deadlock: program hangs indefinitely in this method
+    // when the macro calls pybind11::gil_scoped_acquire
+    void ProduceImageLabel(ecvl::DatasetAugmentations& augs, ecvl::Sample& elem) override {
+	PYBIND11_OVERLOAD(void, ecvl::DLDataset, ProduceImageLabel, augs, elem);
+    }
+};
 #endif
 
 
@@ -509,27 +520,27 @@ using timedelta = std::chrono::duration<int64_t, std::nano>;
 
   // support_eddl: DLDataset
   {
-  pybind11::class_<ecvl::DLDataset, std::shared_ptr<ecvl::DLDataset>, ecvl::Dataset> cl(m, "DLDataset", "Extends the DeepHealth Dataset with deep learning specific members");
+  pybind11::class_<ecvl::DLDataset, std::shared_ptr<ecvl::DLDataset>, ecvl::Dataset, PyDLDataset> cl(m, "DLDataset", "Extends the DeepHealth Dataset with deep learning specific members");
   cl.def(pybind11::init([](const std::string& filename, const int batch_size, ecvl::DatasetAugmentations augs) {
-    return new ecvl::DLDataset(filename, batch_size, augs);
+    return new PyDLDataset(filename, batch_size, augs);
   }));
   cl.def(pybind11::init([](const std::string& filename, const int batch_size, ecvl::DatasetAugmentations augs, ecvl::ColorType ctype) {
-    return new ecvl::DLDataset(filename, batch_size, augs, ctype);
+    return new PyDLDataset(filename, batch_size, augs, ctype);
   }));
   cl.def(pybind11::init([](const std::string& filename, const int batch_size, ecvl::DatasetAugmentations augs, ecvl::ColorType ctype, ecvl::ColorType ctype_gt) {
-    return new ecvl::DLDataset(filename, batch_size, augs, ctype, ctype_gt);
+    return new PyDLDataset(filename, batch_size, augs, ctype, ctype_gt);
   }));
   cl.def(pybind11::init([](const std::string& filename, const int batch_size, ecvl::DatasetAugmentations& augs, ecvl::ColorType ctype, ecvl::ColorType ctype_gt, int num_workers) {
-    return new ecvl::DLDataset(filename, batch_size, augs, ctype, ctype_gt, num_workers);
+    return new PyDLDataset(filename, batch_size, augs, ctype, ctype_gt, num_workers);
   }));
   cl.def(pybind11::init([](const std::string& filename, const int batch_size, ecvl::DatasetAugmentations& augs, ecvl::ColorType ctype, ecvl::ColorType ctype_gt, int num_workers, int queue_ratio_size) {
-    return new ecvl::DLDataset(filename, batch_size, augs, ctype, ctype_gt, num_workers, queue_ratio_size);
+    return new PyDLDataset(filename, batch_size, augs, ctype, ctype_gt, num_workers, queue_ratio_size);
   }));
   cl.def(pybind11::init([](const std::string& filename, const int batch_size, ecvl::DatasetAugmentations& augs, ecvl::ColorType ctype, ecvl::ColorType ctype_gt, int num_workers, int queue_ratio_size, std::unordered_map<std::string, bool> drop_last) {
-    return new ecvl::DLDataset(filename, batch_size, augs, ctype, ctype_gt, num_workers, queue_ratio_size, drop_last);
+    return new PyDLDataset(filename, batch_size, augs, ctype, ctype_gt, num_workers, queue_ratio_size, drop_last);
   }));
   cl.def(pybind11::init([](const std::string& filename, const int batch_size, ecvl::DatasetAugmentations& augs, ecvl::ColorType ctype, ecvl::ColorType ctype_gt, int num_workers, int queue_ratio_size, std::unordered_map<std::string, bool> drop_last, bool verify) {
-    return new ecvl::DLDataset(filename, batch_size, augs, ctype, ctype_gt, num_workers, queue_ratio_size, drop_last, verify);
+    return new PyDLDataset(filename, batch_size, augs, ctype, ctype_gt, num_workers, queue_ratio_size, drop_last, verify);
   }));
   cl.def_readwrite("n_channels_", &ecvl::DLDataset::n_channels_);
   cl.def_readwrite("n_channels_gt_", &ecvl::DLDataset::n_channels_gt_);
