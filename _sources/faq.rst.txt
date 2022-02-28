@@ -3,6 +3,18 @@
 Frequently Asked Questions
 ==========================
 
+TypeError: Unable to convert function return value to a Python type
+-------------------------------------------------------------------
+
+This is likely due to a missing PyEDDL import. Some ECVL functions return EDDL
+types, whose Python bindings are in PyEDDL. To fix this problem, add (at
+least) one of the following imports (even if you're not going to use it):
+
+.. code-block:: python
+
+    import pyeddl.eddl
+    import pyeddl.tensor
+
 Can I use PyEDDL 0.7.0 with PyECVL 0.3.0?
 -----------------------------------------
 
