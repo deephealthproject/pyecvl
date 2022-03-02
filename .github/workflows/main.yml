@@ -36,9 +36,9 @@ jobs:
       - name: build pyecvl image
         run: docker build -t pyecvl -f docker/Dockerfile.pyecvl-${{ matrix.tag }} .
       - name: run tests
-        run: docker run --rm pyecvl bash -c "pytest tests"
+        run: docker run --rm pyecvl bash -c "timeout 60 pytest tests"
       - name: run examples
-        run: docker run --rm pyecvl bash -c "bash examples/run_all.sh /ecvl/examples/data"
+        run: docker run --rm pyecvl bash -c "timeout 300 bash examples/run_all.sh /ecvl/examples/data"
       - name: build dist package
         run: |
           pip install pybind11
