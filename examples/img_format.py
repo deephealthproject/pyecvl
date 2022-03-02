@@ -33,6 +33,7 @@ def nifti_io(fn):
     head, ext = os.path.splitext(os.path.basename(fn))
     print("Reading %s" % fn)
     img = ecvl.NiftiRead(fn)
+    ecvl.ResizeDim(img, img, [256, 256, 256])
     ecvl.GammaContrast(img, img, 3)
     out_fn = "%s_gamma%s" % (head, ext)
     print("Saving %s" % out_fn)

@@ -392,6 +392,18 @@ def test_AugScaleTo(ecvl):
 
 
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_AugScaleFromTo(ecvl):
+    img = ecvl.Image([8, 6, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    a = ecvl.AugScaleFromTo(0, 255, 1, 254)
+    a.Apply(img)
+    # fromtext
+    f = ecvl.AugScaleFromTo if ecvl is ecvl_core else \
+        ecvl.AugScaleFromTo.fromtext
+    a = f('old_min=1 old_max=254 new_min=1 new_max=254')
+    a.Apply(img)
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
 def test_AugRandomCrop(ecvl):
     img = ecvl.Image([8, 6, 3], ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     a = ecvl.AugRandomCrop([4, 3])

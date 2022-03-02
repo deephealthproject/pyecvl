@@ -55,6 +55,7 @@ __all__ = [
     "AugToFloat32",
     "AugDivBy255",
     "AugScaleTo",
+    "AugScaleFromTo",
     "AugRandomCrop",
 ]
 
@@ -744,6 +745,30 @@ class AugScaleTo(_ecvl.AugScaleTo):
         :param new_max: new maximum value
         """
         _ecvl.AugScaleTo.__init__(self, new_min, new_max)
+
+
+class AugScaleFromTo(_ecvl.AugScaleFromTo):
+    """\
+    Augmentation wrapper for ScaleFromTo.
+    """
+
+    @staticmethod
+    def fromtext(txt):
+        r"""\
+        Create an AugScaleFromTo from a text description, e.g.::
+
+            a = AugScaleFromTo('old_min=0 old_max=255 new_min=1 new_max=254')
+        """
+        return _ecvl.AugScaleFromTo(txt)
+
+    def __init__(self, old_min, old_max, new_min, new_max):
+        """\
+        :param old_min: old minimum value
+        :param old_max: old maximum value
+        :param new_min: new minimum value
+        :param new_max: new maximum value
+        """
+        _ecvl.AugScaleFromTo.__init__(self, old_min, old_max, new_min, new_max)
 
 
 class AugRandomCrop(_ecvl.AugRandomCrop):
