@@ -175,6 +175,8 @@ Image processing
 
 .. autofunction:: pyecvl.ecvl.ScaleTo
 
+.. autofunction:: pyecvl.ecvl.ScaleFromTo
+
 .. autofunction:: pyecvl.ecvl.Pad
 
 .. autofunction:: pyecvl.ecvl.RandomCrop
@@ -320,6 +322,10 @@ Augmentations
    :undoc-members:
 
 .. autoclass:: pyecvl.ecvl.AugScaleTo
+   :members:
+   :undoc-members:
+
+.. autoclass:: pyecvl.ecvl.AugScaleFromTo
    :members:
    :undoc-members:
 

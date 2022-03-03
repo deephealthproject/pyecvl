@@ -880,8 +880,8 @@ the specified type.</p>
 <li><p><strong>src</strong> – source image</p></li>
 <li><p><strong>dst</strong> – destination image</p></li>
 <li><p><strong>newdims</strong> – list of integers specifying the new size of each
-dimension. The lenght of the list must match the <code class="docutils literal notranslate"><span class="pre">src</span></code> image
-dimensions, excluding the color channel</p></li>
+dimension, optionally including the depth: <code class="docutils literal notranslate"><span class="pre">[new_width,</span> <span class="pre">new_height]</span></code>
+or <code class="docutils literal notranslate"><span class="pre">[new_width,</span> <span class="pre">new_height,</span> <span class="pre">new_depth]</span></code></p></li>
 <li><p><strong>interp</strong> – InterpolationType to be used</p></li>
 </ul>
 </dd>
@@ -1737,6 +1737,24 @@ representing separate mean and standard deviation for each color channel.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>src</strong> – input image.</p></li>
 <li><p><strong>dst</strong> – output image.</p></li>
+<li><p><strong>new_min</strong> – new minimum value</p></li>
+<li><p><strong>new_max</strong> – new maximum value</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyecvl.ecvl.ScaleFromTo">
+<span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">ScaleFromTo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">old_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">old_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_max</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ScaleFromTo" title="Permalink to this definition"></a></dt>
+<dd><p>Linearly scale an Image to a new range.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – input image.</p></li>
+<li><p><strong>dst</strong> – output image.</p></li>
+<li><p><strong>old_min</strong> – old minimum value</p></li>
+<li><p><strong>old_max</strong> – old maximum value</p></li>
 <li><p><strong>new_min</strong> – new minimum value</p></li>
 <li><p><strong>new_max</strong> – new maximum value</p></li>
 </ul>
@@ -2697,6 +2715,31 @@ divisor (or divisor_gt) parameter.</p>
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fromtext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">txt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugScaleTo.fromtext" title="Permalink to this definition"></a></dt>
 <dd><p>Create an AugScaleTo from a text description, e.g.:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">AugScaleTo</span><span class="p">(</span><span class="s1">&#39;new_min=1 new_max=255&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyecvl.ecvl.AugScaleFromTo">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">AugScaleFromTo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">old_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">old_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_max</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugScaleFromTo" title="Permalink to this definition"></a></dt>
+<dd><p>Augmentation wrapper for ScaleFromTo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>old_min</strong> – old minimum value</p></li>
+<li><p><strong>old_max</strong> – old maximum value</p></li>
+<li><p><strong>new_min</strong> – new minimum value</p></li>
+<li><p><strong>new_max</strong> – new maximum value</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyecvl.ecvl.AugScaleFromTo.fromtext">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fromtext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">txt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugScaleFromTo.fromtext" title="Permalink to this definition"></a></dt>
+<dd><p>Create an AugScaleFromTo from a text description, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">AugScaleFromTo</span><span class="p">(</span><span class="s1">&#39;old_min=0 old_max=255 new_min=1 new_max=254&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
