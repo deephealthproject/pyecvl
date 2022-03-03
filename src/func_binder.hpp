@@ -447,6 +447,15 @@ using timedelta = std::chrono::duration<int64_t, std::nano>;
     return new ecvl::AugScaleTo(ss);
   }));
   }
+  // augmentations: AugScaleFromTo
+  {
+  pybind11::class_<ecvl::AugScaleFromTo, std::shared_ptr<ecvl::AugScaleFromTo>, ecvl::Augmentation> cl(m, "AugScaleFromTo", "Augmentation wrapper for ecvl::ScaleFromTo.");
+  cl.def(pybind11::init<const double&, const double&, const double&, const double&>(), pybind11::arg("old_min"), pybind11::arg("old_max"), pybind11::arg("new_min"), pybind11::arg("new_max"));
+  cl.def(pybind11::init([](const std::string& s) {
+    std::stringstream ss(s);
+    return new ecvl::AugScaleFromTo(ss);
+  }));
+  }
   // augmentations: AugRandomCrop
   {
   pybind11::class_<ecvl::AugRandomCrop, std::shared_ptr<ecvl::AugRandomCrop>, ecvl::Augmentation> cl(m, "AugRandomCrop", "Augmentation wrapper for ecvl::RandomCrop.");

@@ -34,13 +34,17 @@ def _empty_img(ecvl):
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
 def test_ResizeDim(ecvl):
     dims = [20, 40, 3]
-    newdims = [10, 20]  # no color channel
+    newdims = [10, 20, 1]
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     tmp = _empty_img(ecvl)
+    ecvl.ResizeDim(img, tmp, newdims[:2])
+    assert tmp.dims_[:2] == newdims[:2]
+    ecvl.ResizeDim(img, tmp, newdims[:2], ecvl.InterpolationType.nearest)
+    assert tmp.dims_[:2] == newdims[:2]
     ecvl.ResizeDim(img, tmp, newdims)
-    assert tmp.dims_[:2] == newdims
+    assert tmp.dims_ == newdims
     ecvl.ResizeDim(img, tmp, newdims, ecvl.InterpolationType.nearest)
-    assert tmp.dims_[:2] == newdims
+    assert tmp.dims_ == newdims
 
 
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
@@ -538,6 +542,14 @@ def test_ScaleTo(ecvl):
     img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
     tmp = _empty_img(ecvl)
     ecvl.ScaleTo(img, tmp, 1, 254)
+
+
+@pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])
+def test_ScaleFromTo(ecvl):
+    dims = [20, 40, 3]
+    img = ecvl.Image(dims, ecvl.DataType.uint8, "xyc", ecvl.ColorType.BGR)
+    tmp = _empty_img(ecvl)
+    ecvl.ScaleFromTo(img, tmp, 0, 255, 1, 254)
 
 
 @pytest.mark.parametrize("ecvl", [ecvl_core, ecvl_py])

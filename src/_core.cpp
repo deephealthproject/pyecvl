@@ -476,6 +476,19 @@ struct PyCallBack_ecvl_HardwareAbstractionLayer : public ecvl::HardwareAbstracti
 		}
 		return HardwareAbstractionLayer::ScaleTo(a0, a1, a2, a3);
 	}
+	void ScaleFromTo(const class ecvl::Image & a0, class ecvl::Image & a1, const double & a2, const double & a3, const double & a4, const double & a5) override { 
+		pybind11::gil_scoped_acquire gil;
+		pybind11::function overload = pybind11::get_overload(static_cast<const ecvl::HardwareAbstractionLayer *>(this), "ScaleFromTo");
+		if (overload) {
+			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0, a1, a2, a3, a4, a5);
+			if (pybind11::detail::cast_is_temporary_value_reference<void>::value) {
+				static pybind11::detail::overload_caster_t<void> caster;
+				return pybind11::detail::cast_ref<void>(std::move(o), caster);
+			}
+			else return pybind11::detail::cast_safe<void>(std::move(o));
+		}
+		return HardwareAbstractionLayer::ScaleFromTo(a0, a1, a2, a3, a4, a5);
+	}
 	bool IsOwner() const override { 
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const ecvl::HardwareAbstractionLayer *>(this), "IsOwner");
@@ -1626,6 +1639,7 @@ void bind_ecvl_core_datatype(std::function< pybind11::module &(std::string const
 		cl.def("SliceTimingCorrection", (void (ecvl::HardwareAbstractionLayer::*)(const class ecvl::Image &, class ecvl::Image &, bool, bool)) &ecvl::HardwareAbstractionLayer::SliceTimingCorrection, "C++: ecvl::HardwareAbstractionLayer::SliceTimingCorrection(const class ecvl::Image &, class ecvl::Image &, bool, bool) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("odd"), pybind11::arg("down"));
 		cl.def("Normalize", (void (ecvl::HardwareAbstractionLayer::*)(const class ecvl::Image &, class ecvl::Image &, const double &, const double &)) &ecvl::HardwareAbstractionLayer::Normalize, "C++: ecvl::HardwareAbstractionLayer::Normalize(const class ecvl::Image &, class ecvl::Image &, const double &, const double &) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("mean"), pybind11::arg("std"));
 		cl.def("ScaleTo", (void (ecvl::HardwareAbstractionLayer::*)(const class ecvl::Image &, class ecvl::Image &, const double &, const double &)) &ecvl::HardwareAbstractionLayer::ScaleTo, "C++: ecvl::HardwareAbstractionLayer::ScaleTo(const class ecvl::Image &, class ecvl::Image &, const double &, const double &) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("new_min"), pybind11::arg("new_max"));
+		cl.def("ScaleFromTo", (void (ecvl::HardwareAbstractionLayer::*)(const class ecvl::Image &, class ecvl::Image &, const double &, const double &, const double &, const double &)) &ecvl::HardwareAbstractionLayer::ScaleFromTo, "C++: ecvl::HardwareAbstractionLayer::ScaleFromTo(const class ecvl::Image &, class ecvl::Image &, const double &, const double &, const double &, const double &) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("old_min"), pybind11::arg("old_max"), pybind11::arg("new_min"), pybind11::arg("new_max"));
 		cl.def("IsOwner", (bool (ecvl::HardwareAbstractionLayer::*)() const) &ecvl::HardwareAbstractionLayer::IsOwner, "C++: ecvl::HardwareAbstractionLayer::IsOwner() const --> bool");
 		cl.def("Neg", (void (ecvl::HardwareAbstractionLayer::*)(const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Neg, "C++: ecvl::HardwareAbstractionLayer::Neg(const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
 		cl.def("Add", (void (ecvl::HardwareAbstractionLayer::*)(const class ecvl::Image &, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool)) &ecvl::HardwareAbstractionLayer::Add, "C++: ecvl::HardwareAbstractionLayer::Add(const class ecvl::Image &, const class ecvl::Image &, class ecvl::Image &, enum ecvl::DataType, bool) --> void", pybind11::arg("src1"), pybind11::arg("src2"), pybind11::arg("dst"), pybind11::arg("dst_type"), pybind11::arg("saturate"));
@@ -2000,6 +2014,9 @@ void bind_ecvl_core_imgproc_1(std::function< pybind11::module &(std::string cons
 
 	// ecvl::ScaleTo(const class ecvl::Image &, class ecvl::Image &, const double &, const double &) file:ecvl/core/imgproc.h line:683
 	M("ecvl").def("ScaleTo", (void (*)(const class ecvl::Image &, class ecvl::Image &, const double &, const double &)) &ecvl::ScaleTo, "Linearly scale an Image into a new range.\n\nThe function linearly rescale the Image having values in [min,max] into a new arbitrary range [new_min,new_max].\n\n The input Image.\n\n The output resized Image.\n\n double which indicates the new minimum value.\n\n double which indicates the new maximum value.\n\nC++: ecvl::ScaleTo(const class ecvl::Image &, class ecvl::Image &, const double &, const double &) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("new_min"), pybind11::arg("new_max"));
+
+	// ecvl::ScaleFromTo(const class ecvl::Image &, class ecvl::Image &, const double &, const double &, const double &, const double &) file:ecvl/core/imgproc.h line:697
+	M("ecvl").def("ScaleFromTo", (void (*)(const class ecvl::Image &, class ecvl::Image &, const double &, const double &, const double &, const double &)) &ecvl::ScaleFromTo, "Linearly scale an Image from a specified range into a new range.\n\nThe function linearly rescale the Image from the range [old_min,old_max] into a new arbitrary range [new_min,new_max].\nIf the pixel value is less than old_min or greater than old_max it will be replaced with these range boundaries.\n\n The input Image.\n\n The output resized Image.\n\n double which indicates the old minimum value.\n\n double which indicates the old maximum value.\n\n double which indicates the new minimum value.\n\n double which indicates the new maximum value.\n\nC++: ecvl::ScaleFromTo(const class ecvl::Image &, class ecvl::Image &, const double &, const double &, const double &, const double &) --> void", pybind11::arg("src"), pybind11::arg("dst"), pybind11::arg("old_min"), pybind11::arg("old_max"), pybind11::arg("new_min"), pybind11::arg("new_max"));
 
 }
 

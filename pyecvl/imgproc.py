@@ -74,6 +74,7 @@ __all__ = [
     "Normalize",
     "CenterCrop",
     "ScaleTo",
+    "ScaleFromTo",
     "Pad",
     "RandomCrop",
 ]
@@ -141,8 +142,8 @@ def ResizeDim(src, dst, newdims, interp=InterpolationType.linear):
     :param src: source image
     :param dst: destination image
     :param newdims: list of integers specifying the new size of each
-      dimension. The lenght of the list must match the ``src`` image
-      dimensions, excluding the color channel
+      dimension, optionally including the depth: ``[new_width, new_height]``
+      or ``[new_width, new_height, new_depth]``
     :param interp: InterpolationType to be used
     :return: None
     """
@@ -832,6 +833,20 @@ def ScaleTo(src, dst, new_min, new_max):
     :param new_max: new maximum value
     """
     return _ecvl.ScaleTo(src, dst, new_min, new_max)
+
+
+def ScaleFromTo(src, dst, old_min, old_max, new_min, new_max):
+    """\
+    Linearly scale an Image to a new range.
+
+    :param src: input image.
+    :param dst: output image.
+    :param old_min: old minimum value
+    :param old_max: old maximum value
+    :param new_min: new minimum value
+    :param new_max: new maximum value
+    """
+    return _ecvl.ScaleFromTo(src, dst, old_min, old_max, new_min, new_max)
 
 
 def Pad(src, dst, padding, border_type=BorderType.BORDER_CONSTANT, border_value=0):
