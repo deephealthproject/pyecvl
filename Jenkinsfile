@@ -7,7 +7,7 @@ pipeline {
                     agent {
                         docker {
                             label 'docker'
-                            image 'dhealth/dev-pyecvl-base-cpu:5aa2785-4205ad6'
+                            image 'dhealth/dev-pyecvl-base-cpu:5aa2785-ae5a59b'
                         }
                     }
                     stages {
@@ -26,8 +26,8 @@ pipeline {
                         stage('Test') {
                             steps {
 				echo 'Testing'
-				sh 'pytest tests'
-				sh 'bash examples/run_all.sh /ecvl/examples/data'
+				sh 'timeout 60 pytest tests'
+				sh 'timeout 300 bash examples/run_all.sh /ecvl/examples/data'
                             }
                         }
                         stage('linux_end') {
