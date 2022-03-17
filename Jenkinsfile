@@ -26,8 +26,8 @@ pipeline {
                         stage('Test') {
                             steps {
 				echo 'Testing'
-				sh 'pytest tests'
-				sh 'bash examples/run_all.sh /ecvl/examples/data'
+				sh 'timeout 60 pytest tests'
+				sh 'timeout 300 bash examples/run_all.sh /ecvl/examples/data'
                             }
                         }
                         stage('linux_end') {
