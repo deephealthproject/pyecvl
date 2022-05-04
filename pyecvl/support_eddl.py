@@ -298,6 +298,16 @@ class ProducersConsumerQueue(_ecvl.ProducersConsumerQueue):
         """
         return _ecvl.ProducersConsumerQueue.Push(self, sample, image, label)
 
+    def FreeLockedOnPush(self):
+        """\
+        Free threads locked on a push operation.
+
+        To be used in ``Stop`` when the data loading process needs to be
+        stopped before all the elements (batches) of the queue have been
+        consumed.
+        """
+        return _ecvl.ProducersConsumerQueue.FreeLockedOnPush(self)
+
     def Pop(self):
         """\
         Pop a sample.

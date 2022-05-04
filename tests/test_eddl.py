@@ -139,6 +139,7 @@ def test_ProducersConsumerQueue(ecvl):
     assert q.IsFull()
     q.SetSize(8)
     assert not q.IsFull()
+    q.FreeLockedOnPush()
     q.Clear()
     assert q.IsEmpty()
 

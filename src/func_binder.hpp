@@ -488,6 +488,7 @@ using timedelta = std::chrono::duration<int64_t, std::nano>;
    // Cast to ecvl::Image crashes with a segfault for empty images
    q.Push(sample, image, label);
   });
+  cl.def("FreeLockedOnPush", &ecvl::ProducersConsumerQueue::FreeLockedOnPush);
   cl.def("Pop", [](ecvl::ProducersConsumerQueue& q) -> pybind11::tuple {
     ecvl::Sample sample;
     Tensor* image;
