@@ -3308,6 +3308,15 @@ seconds = delta will be attempted.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="pyecvl.ecvl.ProducersConsumerQueue.FreeLockedOnPush">
+<span class="sig-name descname"><span class="pre">FreeLockedOnPush</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ProducersConsumerQueue.FreeLockedOnPush" title="Permalink to this definition"></a></dt>
+<dd><p>Free threads locked on a push operation.</p>
+<p>To be used in <code class="docutils literal notranslate"><span class="pre">Stop</span></code> when the data loading process needs to be
+stopped before all the elements (batches) of the queue have been
+consumed.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="pyecvl.ecvl.ProducersConsumerQueue.IsEmpty">
 <span class="sig-name descname"><span class="pre">IsEmpty</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ProducersConsumerQueue.IsEmpty" title="Permalink to this definition"></a></dt>
 <dd><p>Check whether the queue is empty or not.</p>
