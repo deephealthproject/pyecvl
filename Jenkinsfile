@@ -7,7 +7,7 @@ pipeline {
                     agent {
                         docker {
                             label 'docker'
-                            image 'dhealth/dev-pyecvl-base-cpu:5aa2785-ae5a59b'
+                            image 'dhealth/dev-pyecvl-base-cpu:f15a911-ae5a59b'
                         }
                     }
                     stages {
