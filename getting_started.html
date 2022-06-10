@@ -14,6 +14,7 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -75,11 +76,11 @@
            <div itemprop="articleBody">
              
   <section id="getting-started">
-<span id="id1"></span><h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline"></a></h1>
+<span id="id1"></span><h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this heading"></a></h1>
 <p>This section contains some PyECVL coding examples. Refer to the <a class="reference internal" href="api/ecvl.html#ecvl"><span class="std std-ref">API docs</span></a> for additional details. You can find more examples in the <code class="docutils literal notranslate"><span class="pre">examples</span></code>
 directory of the <a class="reference external" href="https://github.com/deephealthproject/pyecvl">GitHub repo</a>.</p>
 <section id="creating-an-image">
-<h2>Creating an image<a class="headerlink" href="#creating-an-image" title="Permalink to this headline"></a></h2>
+<h2>Creating an image<a class="headerlink" href="#creating-an-image" title="Permalink to this heading"></a></h2>
 <p>Create an empty image:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyecvl.ecvl</span> <span class="k">as</span> <span class="nn">ecvl</span>
 <span class="n">img</span> <span class="o">=</span> <span class="n">ecvl</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">empty</span><span class="p">()</span>
@@ -99,7 +100,7 @@ directory of the <a class="reference external" href="https://github.com/deepheal
 </div>
 </section>
 <section id="to-from-numpy-conversions">
-<h2>To/from NumPy conversions<a class="headerlink" href="#to-from-numpy-conversions" title="Permalink to this headline"></a></h2>
+<h2>To/from NumPy conversions<a class="headerlink" href="#to-from-numpy-conversions" title="Permalink to this heading"></a></h2>
 <p>Create an image with data initialized from a NumPy array:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyecvl.ecvl</span> <span class="k">as</span> <span class="nn">ecvl</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -170,7 +171,7 @@ color mode is already RGB, so you only need the RearrangeChannels step:</p>
 </div>
 </section>
 <section id="image-processing">
-<h2>Image processing<a class="headerlink" href="#image-processing" title="Permalink to this headline"></a></h2>
+<h2>Image processing<a class="headerlink" href="#image-processing" title="Permalink to this heading"></a></h2>
 <p>Read an image from a file, apply some transformations and save it to another
 file:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyecvl.ecvl</span> <span class="k">as</span> <span class="nn">ecvl</span>

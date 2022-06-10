@@ -14,6 +14,7 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -84,12 +85,12 @@
            <div itemprop="articleBody">
              
   <section id="pyecvl-ecvl-ecvl-api">
-<span id="ecvl"></span><h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyecvl.ecvl</span></code> — ecvl API<a class="headerlink" href="#pyecvl-ecvl-ecvl-api" title="Permalink to this headline"></a></h1>
+<span id="ecvl"></span><h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">pyecvl.ecvl</span></code> — ecvl API<a class="headerlink" href="#pyecvl-ecvl-ecvl-api" title="Permalink to this heading"></a></h1>
 <section id="data-types">
-<h2>Data types<a class="headerlink" href="#data-types" title="Permalink to this headline"></a></h2>
+<h2>Data types<a class="headerlink" href="#data-types" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyecvl.ecvl.DataType">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">DataType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyecvl._core.ecvl.DataType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyecvl.ecvl.DataType" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">DataType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyecvl._core.ecvl.DataType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.DataType" title="Permalink to this definition"></a></dt>
 <dd><p>Enum class which defines data types allowed for images.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyecvl.ecvl.DataType.float32">
@@ -167,10 +168,10 @@ members if called with no arguments</p>
 
 </section>
 <section id="color-types">
-<h2>Color types<a class="headerlink" href="#color-types" title="Permalink to this headline"></a></h2>
+<h2>Color types<a class="headerlink" href="#color-types" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyecvl.ecvl.ColorType">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">ColorType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyecvl._core.ecvl.ColorType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyecvl.ecvl.ColorType" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">ColorType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyecvl._core.ecvl.ColorType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ColorType" title="Permalink to this definition"></a></dt>
 <dd><p>Enum class representing the supported color spaces.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyecvl.ecvl.ColorType.BGR">
@@ -211,10 +212,10 @@ members if called with no arguments</p>
 
 </section>
 <section id="device-types">
-<h2>Device types<a class="headerlink" href="#device-types" title="Permalink to this headline"></a></h2>
+<h2>Device types<a class="headerlink" href="#device-types" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyecvl.ecvl.Device">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">Device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyecvl._core.ecvl.Device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyecvl.ecvl.Device" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">Device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyecvl._core.ecvl.Device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Device" title="Permalink to this definition"></a></dt>
 <dd><p>Enum class representing the supported devices.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyecvl.ecvl.Device.CPU">
@@ -240,7 +241,7 @@ members if called with no arguments</p>
 
 </section>
 <section id="image">
-<h2>Image<a class="headerlink" href="#image" title="Permalink to this headline"></a></h2>
+<h2>Image<a class="headerlink" href="#image" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyecvl.ecvl.Image">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">Image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elemtype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colortype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spacings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dev</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Device.CPU</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Image" title="Permalink to this definition"></a></dt>
@@ -611,7 +612,7 @@ it will have the same type as the source image</p></li>
 
 </section>
 <section id="arithmetic-operations">
-<h2>Arithmetic operations<a class="headerlink" href="#arithmetic-operations" title="Permalink to this headline"></a></h2>
+<h2>Arithmetic operations<a class="headerlink" href="#arithmetic-operations" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyecvl.ecvl.Neg">
 <span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">Neg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">DataType.none</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">saturate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Neg" title="Permalink to this definition"></a></dt>
@@ -723,10 +724,10 @@ the specified type.</p>
 
 </section>
 <section id="image-processing">
-<h2>Image processing<a class="headerlink" href="#image-processing" title="Permalink to this headline"></a></h2>
+<h2>Image processing<a class="headerlink" href="#image-processing" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyecvl.ecvl.ThresholdingType">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">ThresholdingType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyecvl._core.ecvl.ThresholdingType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyecvl.ecvl.ThresholdingType" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">ThresholdingType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyecvl._core.ecvl.ThresholdingType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ThresholdingType" title="Permalink to this definition"></a></dt>
 <dd><p>Enum class representing the possible thresholding types.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyecvl.ecvl.ThresholdingType.BINARY">
@@ -742,7 +743,7 @@ the specified type.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pyecvl.ecvl.InterpolationType">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">InterpolationType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyecvl._core.ecvl.InterpolationType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyecvl.ecvl.InterpolationType" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">InterpolationType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyecvl._core.ecvl.InterpolationType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.InterpolationType" title="Permalink to this definition"></a></dt>
 <dd><p>Enum class representing the possible interpolation types.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyecvl.ecvl.InterpolationType.area">
@@ -773,7 +774,7 @@ the specified type.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pyecvl.ecvl.MorphType">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">MorphType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyecvl._core.ecvl.MorphType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyecvl.ecvl.MorphType" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">MorphType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyecvl._core.ecvl.MorphType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.MorphType" title="Permalink to this definition"></a></dt>
 <dd><p>Enum class representing the possible morph types.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyecvl.ecvl.MorphType.MORPH_BLACKHAT">
@@ -819,7 +820,7 @@ the specified type.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pyecvl.ecvl.InpaintType">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">InpaintType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyecvl._core.ecvl.InpaintType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyecvl.ecvl.InpaintType" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">InpaintType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyecvl._core.ecvl.InpaintType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.InpaintType" title="Permalink to this definition"></a></dt>
 <dd><p>Enum class representing the possible inpaint types.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyecvl.ecvl.InpaintType.INPAINT_NS">
@@ -835,7 +836,7 @@ the specified type.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pyecvl.ecvl.BorderType">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">BorderType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyecvl._core.ecvl.BorderType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyecvl.ecvl.BorderType" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">BorderType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyecvl._core.ecvl.BorderType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.BorderType" title="Permalink to this definition"></a></dt>
 <dd><p>Enum class representing the possible border types.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyecvl.ecvl.BorderType.BORDER_CONSTANT">
@@ -1808,7 +1809,7 @@ the output Image.</p></li>
 
 </section>
 <section id="metadata">
-<h2>Metadata<a class="headerlink" href="#metadata" title="Permalink to this headline"></a></h2>
+<h2>Metadata<a class="headerlink" href="#metadata" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyecvl.ecvl.MetaData">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">MetaData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.MetaData" title="Permalink to this definition"></a></dt>
@@ -1831,10 +1832,10 @@ the output Image.</p></li>
 
 </section>
 <section id="deephealth-dataset-parser">
-<h2>DeepHealth dataset parser<a class="headerlink" href="#deephealth-dataset-parser" title="Permalink to this headline"></a></h2>
+<h2>DeepHealth dataset parser<a class="headerlink" href="#deephealth-dataset-parser" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyecvl.ecvl.SplitType">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">SplitType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyecvl._core.ecvl.SplitType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyecvl.ecvl.SplitType" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">SplitType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyecvl._core.ecvl.SplitType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.SplitType" title="Permalink to this definition"></a></dt>
 <dd><p>Enum class representing the supported split types.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyecvl.ecvl.SplitType.test">
@@ -1855,7 +1856,7 @@ the output Image.</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pyecvl.ecvl.Task">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">Task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyecvl._core.ecvl.Task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyecvl.ecvl.Task" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">Task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyecvl._core.ecvl.Task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.Task" title="Permalink to this definition"></a></dt>
 <dd><p>Enum class representing allowed tasks for a dataset.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyecvl.ecvl.Task.classification">
@@ -2045,7 +2046,7 @@ acquisitions of the same image).</p>
 
 </section>
 <section id="augmentations">
-<h2>Augmentations<a class="headerlink" href="#augmentations" title="Permalink to this headline"></a></h2>
+<h2>Augmentations<a class="headerlink" href="#augmentations" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyecvl.ecvl.AugmentationParam">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">AugmentationParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.AugmentationParam" title="Permalink to this definition"></a></dt>
@@ -2774,10 +2775,10 @@ desired size is bigger than the src image</p></li>
 
 </section>
 <section id="image-i-o">
-<h2>Image I/O<a class="headerlink" href="#image-i-o" title="Permalink to this headline"></a></h2>
+<h2>Image I/O<a class="headerlink" href="#image-i-o" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyecvl.ecvl.ImReadMode">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">ImReadMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyecvl._core.ecvl.ImReadMode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pyecvl.ecvl.ImReadMode" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">ImReadMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyecvl._core.ecvl.ImReadMode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.ImReadMode" title="Permalink to this definition"></a></dt>
 <dd><p>Enum class representing the possible image read modes.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyecvl.ecvl.ImReadMode.ANYCOLOR">
@@ -3007,7 +3008,7 @@ left x and y coordinates in the level 0 reference frame; <code class="docutils l
 
 </section>
 <section id="eddl-support">
-<h2>EDDL support<a class="headerlink" href="#eddl-support" title="Permalink to this headline"></a></h2>
+<h2>EDDL support<a class="headerlink" href="#eddl-support" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyecvl.ecvl.DatasetAugmentations">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyecvl.ecvl.</span></span><span class="sig-name descname"><span class="pre">DatasetAugmentations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">augs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyecvl.ecvl.DatasetAugmentations" title="Permalink to this definition"></a></dt>
